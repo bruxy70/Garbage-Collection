@@ -1,0 +1,8 @@
+{
+  "domain": "garbage_collection",
+  "name": "garbage_collection",
+  "documentation": "https://github.com/bruxy70/garbage_collection/",
+  "dependencies": [],
+  "codeowners": ["@bruxy70"],
+  "requirements": []
+}
