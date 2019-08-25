@@ -44,6 +44,7 @@ sensor:
 
 ## STATE AND ATTRIBUTES
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/sensor_state.jpg">
+
 ### State
 The state can be one of
 
