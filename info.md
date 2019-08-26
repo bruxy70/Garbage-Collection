@@ -43,7 +43,7 @@ sensor:
 | `monthly_day_order_number` | Yes | integer 1-4. Used for monthly collection - 1 for 1st `collection-day` each month, 2 for 2nd etc. **Default**: 1
 
 ## STATE AND ATTRIBUTES
-<img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/sensor_state.jpg">
+<img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/sensor.png">
 
 ### State
 The state can be one of
