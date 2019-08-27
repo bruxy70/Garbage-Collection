@@ -62,13 +62,13 @@ sensor:
 |:----------|----------|------------
 | `platform` | No | `garbage_collection`
 | `collection_days` | No | Day three letter abbreviation, list of `"mon"`, `"tue"`, `"wed"`, `"thu"`, `"fri"`, `"sat"`, `"sun"`
-| `frequency` | Yes | `"weekly"`, `"even-weeks"`, `"odd-weeks"` `"every-n-weeks"` or `"monthly"`. **Default**: `"weekly"` (The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representatio of the week)
-| `name` | Yes | Sensor friendly name. **Default**: `"garbage_collection"`
-| `first_month` | Yes | Month three letter abbreviation, e.g. `"jan"`, `"feb"`... **Default**: `"jan"`
-| `last_month` | Yes | Month three letter abbreviation.  **Default**: `"dec"`
-| `monthly_day_order_number` | Yes | (relevant for `monthly_collection`) integer 1-4: 1 for 1st `collection-day` each month, 2 for 2nd etc. **Default**: 1
-| `period` | Yes | (relevant for `every-n-weeks`) integer 1-53: Collection every `"period"` weeks **Default**: 1
-| `first_week` | Yes | (relevant for `every-n-weeks`) integer 1-53: First collection on the `"first_week"` week **Default**: 1<br/>(The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representatio of the week)
+| `frequency` | Yes | `"weekly"`, `"even-weeks"`, `"odd-weeks"` `"every-n-weeks"` or `"monthly"`<br/>**Default**: `"weekly"` (The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representatio of the week)
+| `name` | Yes | Sensor friendly name<br/>**Default**: `"garbage_collection"`
+| `first_month` | Yes | Month three letter abbreviation, e.g. `"jan"`, `"feb"`...<br/>**Default**: `"jan"`
+| `last_month` | Yes | Month three letter abbreviation.<br/>**Default**: `"dec"`
+| `monthly_day_order_number` | Yes | (relevant for `monthly_collection`) integer 1-4: 1 for 1st `collection-day` each month, 2 for 2nd etc.<br/>**Default**: 1
+| `period` | Yes | (relevant for `every-n-weeks`) integer 1-53: Collection every `"period"` weeks<br/>**Default**: 1
+| `first_week` | Yes | (relevant for `every-n-weeks`) integer 1-53: First collection on the `"first_week"` week<br/>**Default**: 1<br/>(The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representatio of the week)
 
 ## STATE AND ATTRIBUTES
 ### State
