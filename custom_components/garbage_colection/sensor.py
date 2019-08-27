@@ -16,13 +16,15 @@ _LOGGER = logging.getLogger(__name__)
 
 DEFAULT_NAME = "garbage_collection"
 
-FREQUENCY_OPTIONS = ["weekly","even-weeks","odd-weeks","monthly"]
+FREQUENCY_OPTIONS = ["weekly","even-weeks","odd-weeks","monthly","every-n-weeks"]
 DAY_OPTIONS = ["mon","tue","wed","thu","fri","sat","sun"]
 MONTH_OPTIONS = ["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"]
 
 DEFAULT_FIRST_MONTH = "jan"
 DEFAULT_LAST_MONTH = "dec"
 DEFAULT_FREQUENCY = "weekly"
+DEFAULT_PERIOD = 1
+DEFAULT_FIRST_WEEK = 1
 
 ICON_TRASH = "mdi:trash-can"
 ICON_TRASH_TODAY = "mdi:delete-restore"
@@ -34,6 +36,8 @@ CONF_LAST_MONTH = "last_month"
 CONF_COLLECTION_DAYS = "collection_days"
 CONF_FREQUENCY = "frequency"
 CONF_MONTHLY_DAY_ORDER_NUMBER = "monthly_day_order_number"
+CONF_PERIOD = "period"
+CONF_FIRST_WEEK = "first_week"
 
 ATTR_NEXT_DATE = "next_date"
 ATTR_DAYS = "days"
@@ -44,6 +48,8 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_LAST_MONTH, default=DEFAULT_LAST_MONTH): vol.In(MONTH_OPTIONS),
     vol.Optional(CONF_FREQUENCY, default=DEFAULT_FREQUENCY): vol.In(FREQUENCY_OPTIONS),
     vol.Optional(CONF_MONTHLY_DAY_ORDER_NUMBER,default=1): vol.All(vol.Coerce(int), vol.Range(min=1, max=5)),
+    vol.Optional(CONF_PERIOD, default=DEFAULT_PERIOD): vol.All(vol.Coerce(int), vol.Range(min=1, max=52)),
+    vol.Optional(CONF_FIRST_WEEK, default=DEFAULT_FIRST_WEEK): vol.All(vol.Coerce(int), vol.Range(min=1, max=52)),
     vol.Optional(CONF_NAME, default=DEFAULT_NAME): cv.string,
 })
 
@@ -60,11 +66,13 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
     last_month = config.get(CONF_LAST_MONTH)
     frequency = config.get(CONF_FREQUENCY)
     monthly_day_order_number = config.get(CONF_MONTHLY_DAY_ORDER_NUMBER)
-    add_devices([garbageSensor(hass, name, collection_days,first_month,last_month,frequency,monthly_day_order_number)])
+    period = config.get(CONF_PERIOD)
+    first_week = config.get(CONF_FIRST_WEEK)
+    add_devices([garbageSensor(hass, name, collection_days,first_month,last_month,frequency,monthly_day_order_number,period,first_week)])
 
 class garbageSensor(Entity):
     """Representation of a openroute service travel time sensor."""
-    def __init__(self, hass, name, collection_days,first_month,last_month,frequency,monthly_day_order_number):
+    def __init__(self, hass, name, collection_days,first_month,last_month,frequency,monthly_day_order_number,period,first_week):
         """Initialize the sensor."""
         self._hass = hass
         self._name = name
@@ -78,7 +86,9 @@ class garbageSensor(Entity):
         else:
             self._last_month = 12                 
         self._frequency = frequency
-        self._monthly_day_order_number = monthly_day_order_number         
+        self._monthly_day_order_number = monthly_day_order_number
+        self._period = period
+        self._first_week = first_week
         self._next_date = None
         self._today = None
         self._days = 0
@@ -100,9 +110,9 @@ class garbageSensor(Entity):
         """Return the state attributes."""
         res = {}
         if self._next_date == None:
-            res[ATTR_NEXT_DATE] = ""
+            res[ATTR_NEXT_DATE] = None
         else:    
-            res[ATTR_NEXT_DATE] = self._next_date.strftime("%x")
+            res[ATTR_NEXT_DATE] = datetime(self._next_date.year,self._next_date.month,self._next_date.day)
         res[ATTR_DAYS] = self._days
         return res
 
@@ -124,28 +134,32 @@ class garbageSensor(Entity):
         day = int(today.strftime('%u'))-1
         month = int(today.strftime('%m'))
         year = int(today.strftime('%Y'))
-        if (week % 2) == 0:
-            even_week=True
-        else:
-            even_week=False    
         
-        if self._frequency=='weekly' or (self._frequency == 'even-weeks' and even_week) or (self._frequency == 'odd-weeks' and not even_week):
+        if self._frequency in ['weekly','even-weeks','odd-weeks','every-n-weeks']:
+            if self._frequency == 'weekly':
+                period = 1
+                first_week = 1
+            elif self._frequency == 'even-weeks':
+                period = 2
+                first_week = 2
+            elif self._frequency == 'odd-weeks':
+                period = 2
+                first_week = 1
+            else:
+                period = self._period
+                first_week = self._first_week
             offset = -1
-            for day_name in self._collection_days:
-                day_index=DAY_OPTIONS.index(day_name)
-                if day_index >= day:
-                    offset = day_index-day
-                    break
-            if offset == -1:
-                if self._frequency=='weekly':
-                    offset = 7-day+DAY_OPTIONS.index(self._collection_days[0])
-                else:
-                    offset = 14-day+DAY_OPTIONS.index(self._collection_days[0])
+            if (week-first_week) % period == 0: # Collection this week
+                for day_name in self._collection_days:
+                    day_index=DAY_OPTIONS.index(day_name)
+                    if day_index >= day: # Collection still did not happen
+                        offset = day_index-day
+                        break
+            if offset == -1: # look in following weeks
+                in_weeks = period - (week-first_week) % period
+                offset = 7*in_weeks-day+DAY_OPTIONS.index(self._collection_days[0])
             self._next_date = today + timedelta(days=offset)
-        elif self._frequency == 'even-weeks' or self._frequency == 'odd-weeks':
-            offset = 7-day+DAY_OPTIONS.index(self._collection_days[0])
-            self._next_date = today + timedelta(days=offset)
-        else:
+        elif self._frequency == 'monthly':
             # Monthly
             first_day=datetime(year,month,1).date()
             first_day_day=int(first_day.strftime('%u'))-1
@@ -166,6 +180,9 @@ class garbageSensor(Entity):
                 else:
                     target_day = first_day + timedelta(days=7-first_day_day+target_day_day+(self._monthly_day_order_number-1)*7)
             self._next_date = target_day
+        else:
+            _LOGGER.info( "(" + self._name + ") Unknown frequency " + self._frequency )
+
 
     def do_update(self, reason):
         """Get the latest data and updates the states."""
