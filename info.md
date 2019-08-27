@@ -46,7 +46,7 @@ sensor:
 |`name` | Yes |Sensor friendly name<br/>**Default**: `"garbage_collection"`
 |`first_month` | Yes |Month three letter abbreviation, e.g. `"jan"`, `"feb"`...<br/>**Default**: `"jan"`
 |`last_month` | Yes |Month three letter abbreviation.<br/>**Default**: `"dec"`
-|`monthly_day_order_number` | Yes |Number of the `collection_day` each month. E.g., if `collection_day` is `"sat"`, 1 will mean 1st Sunday each month, 2 for 2nd Sunday each month etc. (integer 1-4)<br/>**Default**: 1<br/>(relevant for `monthly_collection`)
+|`monthly_day_order_number` | Yes |Number of the `collection_day` each month. E.g., if `collection_day` is `"sat"`, 1 will mean 1<sup>st</sup> Sunday each month, 2 for 2<sup>nd</sup> Sunday each month etc. (integer 1-4)<br/>**Default**: 1<br/>(relevant for `monthly_collection`)
 |`period` | Yes |Collection every `"period"` weeks (integer 1-53)<br/>**Default**: 1<br/>(relevant for `every-n-weeks`)
 |`first_week` | Yes |First collection on the `"first_week"` week (integer 1-53)<br/>**Default**: 1<br/>*(The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representatio of the week)*<br/>(relevant for `every-n-weeks`)
 
