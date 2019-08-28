@@ -52,6 +52,7 @@ sensor:
 
 ## STATE AND ATTRIBUTES
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/sensor.png">
+
 *(The configuration of this screenshot is described in [issue #4](https://github.com/bruxy70/Garbage-Collection/issues/4) )* 
 
 ### State
