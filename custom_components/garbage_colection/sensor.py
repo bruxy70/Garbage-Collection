@@ -137,12 +137,25 @@ class garbageSensor(Entity):
         else:
             _LOGGER.debug( "(" + self._name + ") Skipping the update, already did it today")
 
+    def date_inside(self,dat):
+        month=dat.month
+        if self._first_month <= self._last_month:
+            if month >= self._first_month and month <= self._last_month:
+                return True
+            else:
+                return False
+        else:
+            if month <= self._last_month or month >= self._first_month:
+                return True
+            else:
+                return False
+
     def find_candidate_date(self, day1):
         """Find the next possible date starting from day1, only based on calendar, not lookimg at include/exclude days"""
         week = int(day1.strftime('%V'))
         day = int(day1.strftime('%u'))-1
-        month = int(day1.strftime('%m'))
-        year = int(day1.strftime('%Y'))
+        month = day1.month
+        year = day1.year
         
         if self._frequency in ['weekly','even-weeks','odd-weeks','every-n-weeks']:
             if self._frequency == 'weekly':
@@ -217,23 +230,32 @@ class garbageSensor(Entity):
         """Get the latest data and updates the states."""
         _LOGGER.info( "(" + self._name + ") Calling update due to " + reason )
         today = datetime.now().date()
+        year = today.year
+        month = today.month
         self._today = today
-        month = int(today.strftime('%m'))
-        year = int(today.strftime('%Y'))
-
-        if month >= self._first_month and month <= self._last_month:
+        
+        if self.date_inside(today):
             next_date=self.get_next_date(today)
             if next_date != None:
-                next_date_year=int(next_date.strftime('%Y'))
-                next_date_month=int(next_date.strftime('%m'))
-                if ( (next_date_year==year) and (next_date_month > self._last_month) ) or ( (next_date_year>year) and (next_date_month >= self._first_month) ):
-                    next_year=datetime(year+1,self._first_month,1).date()
-                    next_date=self.get_next_date(next_year)
-                    _LOGGER.debug( "(" + self._name + ") Did not find the date this year, lookig at next year")
+                next_date_year=next_date.year
+                if not self.date_inside(next_date):
+                    if self._first_month<=self._last_month:
+                        next_year=datetime(next_date_year+1,self._first_month,1).date()
+                        next_date=self.get_next_date(next_year)
+                        _LOGGER.debug( "(" + self._name + ") Did not find the date this year, lookig at next year")
+                    else:
+                        next_year=datetime(next_date_year,self._first_month,1).date()
+                        next_date=self.get_next_date(next_year)
+                        _LOGGER.debug( "(" + self._name + ") Arrived to the end of date range, starting at first month")
         else:
-            next_year=datetime(year+1,self._first_month,1).date()
-            next_date=self.get_next_date(next_year)
-            _LOGGER.debug( "(" + self._name + ") Current date is outside of the range, lookig at next year")
+            if self._first_month<=self._last_month and month>self._last_month:
+                next_year=datetime(year+1,self._first_month,1).date()
+                next_date=self.get_next_date(next_year)
+                _LOGGER.debug( "(" + self._name + ") Current date is outside of the range, lookig at next year")
+            else:
+                next_year=datetime(year,self._first_month,1).date()
+                next_date=self.get_next_date(next_year)
+                _LOGGER.debug( "(" + self._name + ") Current date is outside of the range, starting from first month")
         self._next_date = next_date
         if next_date != None:
             self._days=(self._next_date-today).days
