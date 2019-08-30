@@ -33,28 +33,37 @@ Add `garbage_collection` sensor in your `configuration.yaml`. The following exam
 # Example configuration.yaml entry
 sensor:
   - platform: garbage_collection
-    name: waste
+    name: waste # Each week on Monday and Wednesday
     frequency: "weekly"
     collection_days:
     - mon
     - thu
   - platform: garbage_collection
-    name: bio-waste
+    name: "Bio-waste" # Bi-weekly (odd weeks) on Thursday. Between March and November
     frequency: "odd-weeks"
     first_month: "mar"
     last_month: "nov"
     collection_days: "thu"
   - platform: garbage_collection
-    name: large-waste
+    name: "Large waste" # First saturday each month
     frequency: "monthly"
     collection_days: "sat"
     monthly_day_order_number: 1
   - platform: garbage_collection
-    name: paper
+    name: Paper # Every 4 weeks on Tuesday, starting on 4th week each year
     frequency: "every-n-weeks"
     collection_days: "tue"
     period: 4
     first_week: 4
+  - platform: garbage_collection
+    name: "Waste not on Holidays" # No collection on Christmas, added extra collection on the 27th
+    frequency: "weekly"
+    collection_days:
+    - wed
+    exclude_dates:
+    - 2019-12-25
+    include_dates:
+    - 2019-12-27
 ```
 
 ### CONFIGURATION PARAMETERS
@@ -69,6 +78,8 @@ sensor:
 |`monthly_day_order_number` | Yes |Number of the `collection_day` each month. E.g., if `collection_day` is `"sat"`, 1 will mean 1<sup>st</sup> Saturday each month, 2 for 2<sup>nd</sup> Saturday each month etc. (integer 1-4)<br/>**Default**: 1<br/>(relevant for `monthly_collection`)
 |`period` | Yes |Collection every `"period"` weeks (integer 1-53)<br/>**Default**: 1<br/>(relevant for `every-n-weeks`)
 |`first_week` | Yes |First collection on the `"first_week"` week (integer 1-53)<br/>**Default**: 1<br/>*(The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representatio of the week)*<br/>(relevant for `every-n-weeks`)
+| `exclude_dates` | Yes | List of dates with no collection (using international date format yyyy-mm-dd. (See the example above)
+| `include_dates` | Yes | List of extra collection (using international date format yyyy-mm-dd. (See the example above)
 
 ## STATE AND ATTRIBUTES
 ### State
