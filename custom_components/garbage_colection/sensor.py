@@ -74,13 +74,12 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
     first_week = config.get(CONF_FIRST_WEEK)
     include_dates = config.get(CONF_INCLUDE_DATES)
     exclude_dates = config.get(CONF_EXCLUDE_DATES)
-    add_devices([garbageSensor(hass, name, collection_days,first_month,last_month,frequency,monthly_day_order_number,period,first_week,include_dates,exclude_dates)])
+    add_devices([garbageSensor(name, collection_days,first_month,last_month,frequency,monthly_day_order_number,period,first_week,include_dates,exclude_dates)])
 
 class garbageSensor(Entity):
     """Representation of a openroute service travel time sensor."""
-    def __init__(self, hass, name, collection_days,first_month,last_month,frequency,monthly_day_order_number,period,first_week,include_dates,exclude_dates):
+    def __init__(self, name, collection_days,first_month,last_month,frequency,monthly_day_order_number,period,first_week,include_dates,exclude_dates):
         """Initialize the sensor."""
-        self._hass = hass
         self._name = name
         self._collection_days = collection_days
         if first_month in MONTH_OPTIONS:
