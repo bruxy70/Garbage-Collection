@@ -2,6 +2,8 @@
 
 The `garbage_collection` component is a Home Assistant custom sensor for monitoring regular garbage collection schedule. The sensor can be configured for weekly schedule (including multiple collection days), bi-weekly in even or odd weeks, or monthly schedule (nth day each month). You can also configure seasonal callendars (e.g. for bio-waste collection), by configuring the first and last month. 
 
+<img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/sensor.png">
+
 ## Table of Contents
 * [Installation](#installation)
   + [Manual Installation](#manual-installation)
