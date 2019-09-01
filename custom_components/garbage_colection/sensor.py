@@ -4,9 +4,9 @@ from datetime import datetime, date, timedelta
 
 import voluptuous as vol
 from homeassistant.components.sensor import PLATFORM_SCHEMA
-from homeassistant.util import Throttle
 from homeassistant.const import (
-    CONF_NAME
+    CONF_NAME,
+    WEEKDAYS
 )
 from homeassistant.core import HomeAssistant, State
 import homeassistant.helpers.config_validation as cv
@@ -17,7 +17,6 @@ _LOGGER = logging.getLogger(__name__)
 DEFAULT_NAME = "garbage_collection"
 
 FREQUENCY_OPTIONS = ["weekly","even-weeks","odd-weeks","monthly","every-n-weeks"]
-DAY_OPTIONS = ["mon","tue","wed","thu","fri","sat","sun"]
 MONTH_OPTIONS = ["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"]
 
 DEFAULT_FIRST_MONTH = "jan"
@@ -30,7 +29,6 @@ ICON_TRASH = "mdi:trash-can"
 ICON_TRASH_TODAY = "mdi:delete-restore"
 ICON_TRASH_TOMORROW = "mdi:delete-circle"
 
-CONF_NAME = "name"
 CONF_FIRST_MONTH = "first_month"
 CONF_LAST_MONTH = "last_month"
 CONF_COLLECTION_DAYS = "collection_days"
@@ -45,7 +43,7 @@ ATTR_NEXT_DATE = "next_date"
 ATTR_DAYS = "days"
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
-    vol.Required(CONF_COLLECTION_DAYS): vol.All(cv.ensure_list, [vol.In(DAY_OPTIONS)]),
+    vol.Required(CONF_COLLECTION_DAYS): vol.All(cv.ensure_list, [vol.In(WEEKDAYS)]),
     vol.Optional(CONF_FIRST_MONTH, default=DEFAULT_FIRST_MONTH): vol.In(MONTH_OPTIONS),
     vol.Optional(CONF_LAST_MONTH, default=DEFAULT_LAST_MONTH): vol.In(MONTH_OPTIONS),
     vol.Optional(CONF_FREQUENCY, default=DEFAULT_FREQUENCY): vol.In(FREQUENCY_OPTIONS),
@@ -62,7 +60,7 @@ THROTTLE_INTERVAL = timedelta(seconds=60)
 
 TRACKABLE_DOMAINS = ["sensor"]
 
-def setup_platform(hass, config, add_devices, discovery_info=None):
+async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
     """Setup the sensor platform."""
     name = config.get(CONF_NAME)
     collection_days = config.get(CONF_COLLECTION_DAYS)
@@ -74,7 +72,7 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
     first_week = config.get(CONF_FIRST_WEEK)
     include_dates = config.get(CONF_INCLUDE_DATES)
     exclude_dates = config.get(CONF_EXCLUDE_DATES)
-    add_devices([garbageSensor(name, collection_days,first_month,last_month,frequency,monthly_day_order_number,period,first_week,include_dates,exclude_dates)])
+    async_add_entities([garbageSensor(name, collection_days,first_month,last_month,frequency,monthly_day_order_number,period,first_week,include_dates,exclude_dates)],True)
 
 class garbageSensor(Entity):
     """Representation of a openroute service travel time sensor."""
@@ -127,12 +125,11 @@ class garbageSensor(Entity):
     def icon(self):
         return self._icon
 
-    @Throttle(THROTTLE_INTERVAL)
-    def update(self):
+    async def async_update(self):
         """ Call the do_update function based on scan interval and throttle    """
         today = datetime.now().date()
         if self._today == None or self._today != today:
-            self.do_update("Scan Interval")
+            await self.async_do_update("Scan Interval")
         else:
             _LOGGER.debug( "(" + self._name + ") Skipping the update, already did it today")
 
@@ -172,19 +169,19 @@ class garbageSensor(Entity):
             offset = -1
             if (week-first_week) % period == 0: # Collection this week
                 for day_name in self._collection_days:
-                    day_index=DAY_OPTIONS.index(day_name)
+                    day_index=WEEKDAYS.index(day_name)
                     if day_index >= day: # Collection still did not happen
                         offset = day_index-day
                         break
             if offset == -1: # look in following weeks
                 in_weeks = period - (week-first_week) % period
-                offset = 7*in_weeks-day+DAY_OPTIONS.index(self._collection_days[0])
+                offset = 7*in_weeks-day+WEEKDAYS.index(self._collection_days[0])
             return day1 + timedelta(days=offset)
         elif self._frequency == 'monthly':
             # Monthly
             first_day=datetime(year,month,1).date()
             first_day_day=int(first_day.strftime('%u'))-1
-            target_day_day=DAY_OPTIONS.index(self._collection_days[0])
+            target_day_day=WEEKDAYS.index(self._collection_days[0])
             if target_day_day >= first_day_day:
                 target_day = first_day + timedelta(days=target_day_day-first_day_day+(self._monthly_day_order_number-1)*7)
             else:
@@ -195,7 +192,7 @@ class garbageSensor(Entity):
                 else:
                     first_day=datetime(year,month+1,1).date()
                 first_day_day=int(first_day.strftime('%u'))-1
-                target_day_day=DAY_OPTIONS.index(self._collection_days[0])
+                target_day_day=WEEKDAYS.index(self._collection_days[0])
                 if target_day_day >= first_day_day:
                     target_day = first_day + timedelta(days=target_day_day-first_day_day+(self._monthly_day_order_number-1)*7)
                 else:
@@ -225,7 +222,7 @@ class garbageSensor(Entity):
                 break
         return next_date
 
-    def do_update(self, reason):
+    async def async_do_update(self, reason):
         """Get the latest data and updates the states."""
         _LOGGER.info( "(" + self._name + ") Calling update due to " + reason )
         today = datetime.now().date()
