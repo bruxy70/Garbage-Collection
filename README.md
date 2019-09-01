@@ -83,7 +83,7 @@ sensor:
 | `exclude_dates` | Yes | List of dates with no collection (using international date format 'yyyy-mm-dd'. 
 | `include_dates` | Yes | List of extra collection (using international date format 'yyyy-mm-dd'.
 
-**IMPORTANT - put include/exclude within quotes. Dates without quotes might cause Home Assistant not starting, if the date is invalid. I think this is general bug, I am addressing that. (See the example above)**
+**IMPORTANT - put include/exclude dates within quotes. Dates without quotes might cause Home Assistant not loading configuration when starting - in case the date is invalid. Validation for dates within quotes works fine.** I think this is general bug, I am addressing that. (See the example above)
 
 ## STATE AND ATTRIBUTES
 ### State
