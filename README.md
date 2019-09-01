@@ -63,9 +63,9 @@ sensor:
     collection_days:
     - wed
     exclude_dates:
-    - 2019-12-25
+    - '2019-12-25'
     include_dates:
-    - 2019-12-27
+    - '2019-12-27'
 ```
 
 ### CONFIGURATION PARAMETERS
@@ -80,8 +80,10 @@ sensor:
 |`monthly_day_order_number` | Yes |Number of the `collection_day` each month. E.g., if `collection_day` is `"sat"`, 1 will mean 1<sup>st</sup> Saturday each month, 2 for 2<sup>nd</sup> Saturday each month etc. (integer 1-4)<br/>**Default**: 1<br/>(relevant for `monthly_collection`)
 |`period` | Yes |Collection every `"period"` weeks (integer 1-53)<br/>**Default**: 1<br/>(relevant for `every-n-weeks`)
 |`first_week` | Yes |First collection on the `"first_week"` week (integer 1-53)<br/>**Default**: 1<br/>*(The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representatio of the week)*<br/>(relevant for `every-n-weeks`)
-| `exclude_dates` | Yes | List of dates with no collection (using international date format yyyy-mm-dd. (See the example above)
-| `include_dates` | Yes | List of extra collection (using international date format yyyy-mm-dd. (See the example above)
+| `exclude_dates` | Yes | List of dates with no collection (using international date format 'yyyy-mm-dd'. 
+| `include_dates` | Yes | List of extra collection (using international date format 'yyyy-mm-dd'.
+
+**IMPORTANT - put include/exclude within quotes. Dates without quotes might cause Home Assistant not starting, if the date is invalid. I think this is general bug, I am addressing that. ** *(See the example above)*
 
 ## STATE AND ATTRIBUTES
 ### State
