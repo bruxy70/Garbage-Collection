@@ -41,9 +41,9 @@ sensor:
     collection_days:
     - wed
     exclude_dates:
-    - 2019-12-25
+    - '2019-12-25'
     include_dates:
-    - 2019-12-27
+    - '2019-12-27'
 ```
 
 ### CONFIGURATION PARAMETERS
@@ -60,6 +60,8 @@ sensor:
 |`first_week` | Yes |First collection on the `"first_week"` week (integer 1-53)<br/>**Default**: 1<br/>*(The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representatio of the week)*<br/>(relevant for `every-n-weeks`)
 | `exclude_dates` | Yes | List of dates with no collection (using international date format yyyy-mm-dd. (See the example above)
 | `include_dates` | Yes | List of extra collection (using international date format yyyy-mm-dd. (See the example above)
+
+**IMPORTANT - put include/exclude dates within quotes. Dates without quotes might cause Home Assistant not loading configuration when starting - in case the date is invalid. Validation for dates within quotes works fine.** I think this is general bug, I am addressing that. (See the example above)
 
 ## STATE AND ATTRIBUTES
 
