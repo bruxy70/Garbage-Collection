@@ -203,7 +203,7 @@ class garbageSensor(Entity):
             return None
 
     def get_next_date(self, day1):
-        """Find the nexte starting from day1. Looks at include and exclude days"""
+        """Find the next date starting from day1. Looks at include and exclude days"""
         first_day=day1
         i=0
         while True:
