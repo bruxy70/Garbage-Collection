@@ -58,8 +58,12 @@ sensor:
 |`monthly_day_order_number` | Yes |Number of the `collection_day` each month. E.g., if `collection_day` is `"sat"`, 1 will mean 1<sup>st</sup> Saturday each month, 2 for 2<sup>nd</sup> Saturday each month etc. (integer 1-4)<br/>**Default**: 1<br/>(relevant for `monthly_collection`)
 |`period` | Yes |Collection every `"period"` weeks (integer 1-53)<br/>**Default**: 1<br/>(relevant for `every-n-weeks`)
 |`first_week` | Yes |First collection on the `"first_week"` week (integer 1-53)<br/>**Default**: 1<br/>*(The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representatio of the week)*<br/>(relevant for `every-n-weeks`)
-| `exclude_dates` | Yes | List of dates with no collection (using international date format yyyy-mm-dd. (See the example above)
-| `include_dates` | Yes | List of extra collection (using international date format yyyy-mm-dd. (See the example above)
+| `exclude_dates` | Yes | List of dates with no collection (using international date format 'yyyy-mm-dd'. 
+| `include_dates` | Yes | List of extra collection (using international date format 'yyyy-mm-dd'.
+| `icon_normal` | Yes | Default icon **Default**:  `mdi:trash-can`
+| `icon_today` | Yes | Icon if the collection is today **Default**: `mdi:delete-restore`
+| `icon_tomorrow` | Yes | Icon if the collection is tomorrow **Default**: `mdi:delete-circle`
+| `verbose_state` | Yes | The sensor state will show collection date and remaining days, instead of number **Default**: `False`
 
 **IMPORTANT - put include/exclude dates within quotes. Dates without quotes might cause Home Assistant not loading configuration when starting - in case the date is invalid. Validation for dates within quotes works fine.** I think this is general bug, I am addressing that. (See the example above)
 
@@ -73,6 +77,8 @@ The state can be one of
 | 0 | Collection is today
 | 1 | Collection is tomorrow
 | 2 | Collection is later 
+
+If the `verbose_state` parameter is set, it will show date and remaining days, for example "Today" or "Tomorrow" or "on 2019-09-10, in 2 days"
 
 ### Attributes
 | Attribute | Description

@@ -24,11 +24,15 @@ DEFAULT_LAST_MONTH = "dec"
 DEFAULT_FREQUENCY = "weekly"
 DEFAULT_PERIOD = 1
 DEFAULT_FIRST_WEEK = 1
+DEFAULT_ICON_NORMAL = "mdi:trash-can"
+DEFAULT_ICON_TODAY = "mdi:delete-restore"
+DEFAULT_ICON_TOMORROW = "mdi:delete-circle"
+DEFAULT_VERBOSE_STATE = False
 
-ICON_TRASH = "mdi:trash-can"
-ICON_TRASH_TODAY = "mdi:delete-restore"
-ICON_TRASH_TOMORROW = "mdi:delete-circle"
-
+CONF_ICON_NORMAL = "icon_normal"
+CONF_ICON_TODAY = "icon_today"
+CONF_ICON_TOMORROW = "icon_tomorrow"
+CONF_VERBOSE_STATE = "verbose_state"
 CONF_FIRST_MONTH = "first_month"
 CONF_LAST_MONTH = "last_month"
 CONF_COLLECTION_DAYS = "collection_days"
@@ -53,6 +57,10 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_INCLUDE_DATES, default=[]): vol.All(cv.ensure_list, [cv.date]),
     vol.Optional(CONF_EXCLUDE_DATES, default=[]): vol.All(cv.ensure_list, [cv.date]),
     vol.Optional(CONF_NAME, default=DEFAULT_NAME): cv.string,
+    vol.Optional(CONF_ICON_NORMAL, default=DEFAULT_ICON_NORMAL): cv.icon,
+    vol.Optional(CONF_ICON_TODAY, default=DEFAULT_ICON_TODAY): cv.icon,
+    vol.Optional(CONF_ICON_TOMORROW, default=DEFAULT_ICON_TOMORROW): cv.icon,
+    vol.Optional(CONF_VERBOSE_STATE, default=DEFAULT_VERBOSE_STATE): cv.boolean,
 })
 
 SCAN_INTERVAL = timedelta(seconds=60)
@@ -62,43 +70,33 @@ TRACKABLE_DOMAINS = ["sensor"]
 
 async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
     """Setup the sensor platform."""
-    name = config.get(CONF_NAME)
-    collection_days = config.get(CONF_COLLECTION_DAYS)
-    first_month = config.get(CONF_FIRST_MONTH)
-    last_month = config.get(CONF_LAST_MONTH)
-    frequency = config.get(CONF_FREQUENCY)
-    monthly_day_order_number = config.get(CONF_MONTHLY_DAY_ORDER_NUMBER)
-    period = config.get(CONF_PERIOD)
-    first_week = config.get(CONF_FIRST_WEEK)
-    include_dates = config.get(CONF_INCLUDE_DATES)
-    exclude_dates = config.get(CONF_EXCLUDE_DATES)
-    async_add_entities([garbageSensor(name, collection_days,first_month,last_month,frequency,monthly_day_order_number,period,first_week,include_dates,exclude_dates)],True)
+    async_add_entities([garbageSensor(config)],True)
 
 class garbageSensor(Entity):
     """Representation of a openroute service travel time sensor."""
-    def __init__(self, name, collection_days,first_month,last_month,frequency,monthly_day_order_number,period,first_week,include_dates,exclude_dates):
+    def __init__(self, config):
         """Initialize the sensor."""
-        self._name = name
-        self._collection_days = collection_days
-        if first_month in MONTH_OPTIONS:
-            self._first_month = MONTH_OPTIONS.index(first_month)+1
-        else:
-            self._first_month = 1
-        if last_month in MONTH_OPTIONS:
-            self._last_month = MONTH_OPTIONS.index(last_month)+1
-        else:
-            self._last_month = 12                 
-        self._frequency = frequency
-        self._monthly_day_order_number = monthly_day_order_number
-        self._include_dates = include_dates
-        self._exclude_dates = exclude_dates
-        self._period = period
-        self._first_week = first_week
+        self._name = config.get(CONF_NAME)
+        self._collection_days = config.get(CONF_COLLECTION_DAYS)
+        first_month = config.get(CONF_FIRST_MONTH)
+        self._first_month = MONTH_OPTIONS.index(first_month)+1 if first_month in MONTH_OPTIONS else 1
+        last_month = config.get(CONF_LAST_MONTH)
+        self._last_month = MONTH_OPTIONS.index(last_month)+1 if last_month in MONTH_OPTIONS else 12
+        self._frequency = config.get(CONF_FREQUENCY)
+        self._monthly_day_order_number = config.get(CONF_MONTHLY_DAY_ORDER_NUMBER)
+        self._include_dates = config.get(CONF_INCLUDE_DATES)
+        self._exclude_dates = config.get(CONF_EXCLUDE_DATES)
+        self._period = config.get(CONF_PERIOD)
+        self._first_week = config.get(CONF_FIRST_WEEK)
         self._next_date = None
         self._today = None
         self._days = 0
-        self._state = 2
-        self._icon = ICON_TRASH
+        self._verbose_state = config.get(CONF_VERBOSE_STATE)
+        self._state = '' if bool(self._verbose_state) else 2
+        self._icon_normal = config.get(CONF_ICON_NORMAL)
+        self._icon_today = config.get(CONF_ICON_TODAY)
+        self._icon_tomorrow = config.get(CONF_ICON_TOMORROW)
+        self._icon = self._icon_normal
 
     @property
     def name(self):
@@ -114,10 +112,7 @@ class garbageSensor(Entity):
     def device_state_attributes(self):
         """Return the state attributes."""
         res = {}
-        if self._next_date == None:
-            res[ATTR_NEXT_DATE] = None
-        else:    
-            res[ATTR_NEXT_DATE] = datetime(self._next_date.year,self._next_date.month,self._next_date.day)
+        res[ATTR_NEXT_DATE] = None if self._next_date == None else datetime(self._next_date.year,self._next_date.month,self._next_date.day)
         res[ATTR_DAYS] = self._days
         return res
 
@@ -136,15 +131,9 @@ class garbageSensor(Entity):
     def date_inside(self,dat):
         month=dat.month
         if self._first_month <= self._last_month:
-            if month >= self._first_month and month <= self._last_month:
-                return True
-            else:
-                return False
+            return bool(month >= self._first_month and month <= self._last_month)
         else:
-            if month <= self._last_month or month >= self._first_month:
-                return True
-            else:
-                return False
+            return bool(month <= self._last_month or month >= self._first_month)
 
     def find_candidate_date(self, day1):
         """Find the next possible date starting from day1, only based on calendar, not lookimg at include/exclude days"""
@@ -187,10 +176,7 @@ class garbageSensor(Entity):
             else:
                 target_day = first_day + timedelta(days=7-first_day_day+target_day_day+(self._monthly_day_order_number-1)*7)
             if target_day < day1:
-                if month==12:
-                    first_day=datetime(year+1,1,1).date()
-                else:
-                    first_day=datetime(year,month+1,1).date()
+                first_day = first_day=datetime(year+1,1,1).date() if month==12 else datetime(year,month+1,1).date()
                 first_day_day=int(first_day.strftime('%u'))-1
                 target_day_day=WEEKDAYS.index(self._collection_days[0])
                 if target_day_day >= first_day_day:
@@ -199,7 +185,7 @@ class garbageSensor(Entity):
                     target_day = first_day + timedelta(days=7-first_day_day+target_day_day+(self._monthly_day_order_number-1)*7)
             return target_day
         else:
-            _LOGGER.debug( "(%s) Unknown frequency %s",self._name,self._frequency )
+            _LOGGER.debug( f"({self._name}) Unknown frequency {self._frequency}")
             return None
 
     def get_next_date(self, day1):
@@ -255,15 +241,17 @@ class garbageSensor(Entity):
         self._next_date = next_date
         if next_date != None:
             self._days=(self._next_date-today).days
-            _LOGGER.debug( "(%s) Found next date: %s, that is in %d days",self._name,self._next_date.strftime("%d-%b-%Y"),self._days)
+            next_date_txt=self._next_date.strftime("%d-%b-%Y")
+            _LOGGER.debug( "(%s) Found next date: %s, that is in %d days",self._name,next_date_txt,self._days)
             if self._days > 1:
-                self._state = 2
-                self._icon = ICON_TRASH
+                self._state = f'on {next_date_txt}, in {self._days} days' if bool(self._verbose_state) else  2
+                self._icon = self._icon_normal
             else:
-                self._state = self._days
                 if self._days == 0:
-                    self._icon = ICON_TRASH_TODAY
+                    self._state = f'Today' if bool(self._verbose_state) else self._days
+                    self._icon = self._icon_today
                 elif self._days == 1:
-                    self._icon = ICON_TRASH_TOMORROW
+                    self._state = f'Tomorrow' if bool(self._verbose_state) else self._days
+                    self._icon = self._icon_tomorrow
         else:
             self._days=None
