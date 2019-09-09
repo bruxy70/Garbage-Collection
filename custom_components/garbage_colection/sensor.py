@@ -73,7 +73,7 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
     async_add_entities([garbageSensor(config)],True)
 
 class garbageSensor(Entity):
-    """Representation of a openroute service travel time sensor."""
+
     def __init__(self, config):
         """Initialize the sensor."""
         self._name = config.get(CONF_NAME)
@@ -119,14 +119,6 @@ class garbageSensor(Entity):
     @property
     def icon(self):
         return self._icon
-
-    async def async_update(self):
-        """ Call the do_update function based on scan interval and throttle    """
-        today = datetime.now().date()
-        if self._today == None or self._today != today:
-            await self.async_do_update("Scan Interval")
-        else:
-            _LOGGER.debug( "(%s) Skipping the update, already did it today",self._name)
 
     def date_inside(self,dat):
         month=dat.month
@@ -208,14 +200,17 @@ class garbageSensor(Entity):
                 break
         return next_date
 
-    async def async_do_update(self, reason):
+    async def async_update(self):
         """Get the latest data and updates the states."""
-        _LOGGER.debug( "(%s) Calling update due to %s",self._name,reason )
+        today = datetime.now().date()
+        if self._today == None or self._today == today:
+            # _LOGGER.debug( "(%s) Skipping the update, already did it today",self._name)
+            return
+        _LOGGER.debug( "(%s) Calling update",self._name)
         today = datetime.now().date()
         year = today.year
         month = today.month
         self._today = today
-        
         if self.date_inside(today):
             next_date=self.get_next_date(today)
             if next_date != None:
