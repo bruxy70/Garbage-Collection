@@ -4,9 +4,6 @@ The `garbage_collection` component is a Home Assistant custom sensor for monitor
 
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/sensor.png">
 
-*(The configuration of this screenshot is described in [issue #4](https://github.com/bruxy70/Garbage-Collection/issues/4) )* 
-
-
 ## Configuration
 Add `garbage_collection` sensor in your `configuration.yaml`. The following example adds three sensors - bio-waste with bi-weekly schedule, waste with weekly schedule and large-waste with monthly schedule on 1st Saturday each month:
 ```yaml
