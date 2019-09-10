@@ -203,7 +203,7 @@ class garbageSensor(Entity):
     async def async_update(self):
         """Get the latest data and updates the states."""
         today = datetime.now().date()
-        if self._today == None or self._today == today:
+        if self._today != None and self._today == today:
             # _LOGGER.debug( "(%s) Skipping the update, already did it today",self._name)
             return
         _LOGGER.debug( "(%s) Calling update",self._name)
