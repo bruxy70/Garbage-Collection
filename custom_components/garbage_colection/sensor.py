@@ -51,7 +51,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_FIRST_MONTH, default=DEFAULT_FIRST_MONTH): vol.In(MONTH_OPTIONS),
     vol.Optional(CONF_LAST_MONTH, default=DEFAULT_LAST_MONTH): vol.In(MONTH_OPTIONS),
     vol.Optional(CONF_FREQUENCY, default=DEFAULT_FREQUENCY): vol.In(FREQUENCY_OPTIONS),
-    vol.Optional(CONF_MONTHLY_DAY_ORDER_NUMBER,default=[1]): vol.All(cv.ensure_list, vol.Coerce(int), vol.Range(min=1, max=5)),
+    vol.Optional(CONF_MONTHLY_DAY_ORDER_NUMBER,default=[1]): vol.All(cv.ensure_list, [vol.All(vol.Coerce(int), vol.Range(min=1, max=5))]),
     vol.Optional(CONF_PERIOD, default=DEFAULT_PERIOD): vol.All(vol.Coerce(int), vol.Range(min=1, max=52)),
     vol.Optional(CONF_FIRST_WEEK, default=DEFAULT_FIRST_WEEK): vol.All(vol.Coerce(int), vol.Range(min=1, max=52)),
     vol.Optional(CONF_INCLUDE_DATES, default=[]): vol.All(cv.ensure_list, [cv.date]),
