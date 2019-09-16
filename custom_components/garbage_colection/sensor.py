@@ -73,7 +73,7 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
     async_add_entities([garbageSensor(config)],True)
 
 def nth_weekday_date(n,date_of_month,collection_day):
-    first_of_month = datetime(date.year(),date.month(),1).date()
+    first_of_month = datetime(date.year,date.month,1).date()
     month_starts_on = first_of_month.weekday
     if collection_day >= month_starts_on: # 1st of the month is before the day of collection (so 1st collection week the week when month starts)
         return first_of_month + timedelta(days=collection_day-month_starts_on+(n-1)*7)
@@ -169,7 +169,7 @@ class garbageSensor(Entity):
                 candidate_date=nth_weekday_date(monthly_day_order_number,day1,WEEKDAYS.index(self._collection_days[0]))
                 if candidate_date >= day1: # date is today or in the future -> we have the date  
                     return candidate_date
-            next_collection_month = datetime(day1.year()+1,1,1).date() if day1.month()==12 else datetime(day1.year(),day1.month()+1,1).date()
+            next_collection_month = datetime(day1.year+1,1,1).date() if day1.month==12 else datetime(day1.year,day1.month+1,1).date()
             return(nth_weekday_date(self._monthly_day_order_numbers[0], next_collection_month,WEEKDAYS.index(self._collection_days[0])))            
         else:
             _LOGGER.debug( f"({self._name}) Unknown frequency {self._frequency}")
