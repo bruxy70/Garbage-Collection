@@ -138,7 +138,7 @@ class garbageSensor(Entity):
     def find_candidate_date(self, day1):
         """Find the next possible date starting from day1, only based on calendar, not lookimg at include/exclude days"""
         week = day1.isocalendar()[1]
-        day = day1.weekday
+        weekday = day1.weekday
         if self._frequency in ['weekly','even-weeks','odd-weeks','every-n-weeks']:
             if self._frequency == 'weekly':
                 period = 1
@@ -156,12 +156,12 @@ class garbageSensor(Entity):
             if (week-first_week) % period == 0: # Collection this week
                 for day_name in self._collection_days:
                     day_index=WEEKDAYS.index(day_name)
-                    if day_index >= day: # Collection still did not happen
-                        offset = day_index-day
+                    if day_index >= weekday: # Collection still did not happen
+                        offset = day_index-weekday
                         break
             if offset == -1: # look in following weeks
                 in_weeks = period - (week-first_week) % period
-                offset = 7*in_weeks-day+WEEKDAYS.index(self._collection_days[0])
+                offset = 7*in_weeks-weekday+WEEKDAYS.index(self._collection_days[0])
             return day1 + timedelta(days=offset)
         elif self._frequency == 'monthly':
             # Monthly
