@@ -166,9 +166,9 @@ class garbageSensor(Entity):
         elif self._frequency == 'monthly':
             # Monthly
             for monthly_day_order_number in self._monthly_day_order_numbers:
-                nth_weekday_date=nth_weekday_date(monthly_day_order_number,day1,WEEKDAYS.index(self._collection_days[0]))
-                if nth_weekday_date >= day1: # date is today or in the future -> we have the date  
-                    return nth_weekday_date
+                candidate_date=nth_weekday_date(monthly_day_order_number,day1,WEEKDAYS.index(self._collection_days[0]))
+                if candidate_date >= day1: # date is today or in the future -> we have the date  
+                    return candidate_date
             next_collection_month = datetime(day1.year()+1,1,1).date() if day1.month()==12 else datetime(day1.year(),day1.month()+1,1).date()
             return(nth_weekday_date(self._monthly_day_order_numbers[0], next_collection_month,WEEKDAYS.index(self._collection_days[0])))            
         else:
