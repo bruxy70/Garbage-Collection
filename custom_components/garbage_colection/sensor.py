@@ -73,7 +73,7 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
     async_add_entities([garbageSensor(config)],True)
 
 def nth_weekday_date(n,date_of_month,collection_day):
-    first_of_month = datetime(date.year,date.month,1).date()
+    first_of_month = datetime(date_of_month.year,date_of_month.month,1).date()
     month_starts_on = first_of_month.weekday
     if collection_day >= month_starts_on: # 1st of the month is before the day of collection (so 1st collection week the week when month starts)
         return first_of_month + timedelta(days=collection_day-month_starts_on+(n-1)*7)
