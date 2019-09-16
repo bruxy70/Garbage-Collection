@@ -39,7 +39,7 @@ sensor:
     frequency: "weekly"
     collection_days:
     - mon
-    - thu
+    - wed
   - platform: garbage_collection
     name: "Bio-waste" # Bi-weekly (odd weeks) on Thursday. Between March and November
     frequency: "odd-weeks"
@@ -47,10 +47,12 @@ sensor:
     last_month: "nov"
     collection_days: "thu"
   - platform: garbage_collection
-    name: "Large waste" # First saturday each month
+    name: "Large waste" # First and third saturday each month
     frequency: "monthly"
     collection_days: "sat"
-    monthly_day_order_number: 1
+    monthly_day_order_number: 
+    - 1
+    - 3
   - platform: garbage_collection
     name: Paper # Every 4 weeks on Tuesday, starting on 4th week each year
     frequency: "every-n-weeks"
@@ -71,15 +73,15 @@ sensor:
 ### CONFIGURATION PARAMETERS
 |Attribute |Optional|Description
 |:----------|----------|------------
-|`platform` | No |`garbage_collection`
+|`platform` | No | `garbage_collection`
 |`collection_days` | No |Day three letter abbreviation, list of `"mon"`, `"tue"`, `"wed"`, `"thu"`, `"fri"`, `"sat"`, `"sun"`
-|`frequency` | Yes |`"weekly"`, `"even-weeks"`, `"odd-weeks"` `"every-n-weeks"` or `"monthly"`<br/>**Default**: `"weekly"`<br/>*(The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representatio of the week)*
-|`name` | Yes |Sensor friendly name<br/>**Default**: `"garbage_collection"`
-|`first_month` | Yes |Month three letter abbreviation, e.g. `"jan"`, `"feb"`...<br/>**Default**: `"jan"`
-|`last_month` | Yes |Month three letter abbreviation.<br/>**Default**: `"dec"`
-|`monthly_day_order_number` | Yes |Number of the `collection_day` each month. E.g., if `collection_day` is `"sat"`, 1 will mean 1<sup>st</sup> Saturday each month, 2 for 2<sup>nd</sup> Saturday each month etc. (integer 1-4)<br/>**Default**: 1<br/>(relevant for `monthly_collection`)
-|`period` | Yes |Collection every `"period"` weeks (integer 1-53)<br/>**Default**: 1<br/>(relevant for `every-n-weeks`)
-|`first_week` | Yes |First collection on the `"first_week"` week (integer 1-53)<br/>**Default**: 1<br/>*(The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representatio of the week)*<br/>(relevant for `every-n-weeks`)
+|`frequency` | Yes | `"weekly"`, `"even-weeks"`, `"odd-weeks"` `"every-n-weeks"` or `"monthly"`<br/>**Default**: `"weekly"`<br/>*(The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representatio of the week)*
+|`name` | Yes | Sensor friendly name<br/>**Default**: `"garbage_collection"`
+|`first_month` | Yes | Month three letter abbreviation, e.g. `"jan"`, `"feb"`...<br/>**Default**: `"jan"`
+|`last_month` | Yes | Month three letter abbreviation.<br/>**Default**: `"dec"`
+|`monthly_day_order_number` | Yes | List of week numbers of `collection_day` each month. E.g., if `collection_day` is `"sat"`, 1 will mean 1<sup>st</sup> Saturday each month (integer 1-4)<br/>**Default**: 1<br/>(relevant for `monthly_collection`)
+|`period` | Yes | Collection every `"period"` weeks (integer 1-53)<br/>**Default**: 1<br/>(relevant for `every-n-weeks`)
+|`first_week` | Yes | First collection on the `"first_week"` week (integer 1-53)<br/>**Default**: 1<br/>*(The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representatio of the week)*<br/>(relevant for `every-n-weeks`)
 | `exclude_dates` | Yes | List of dates with no collection (using international date format 'yyyy-mm-dd'. 
 | `include_dates` | Yes | List of extra collection (using international date format 'yyyy-mm-dd'.
 | `icon_normal` | Yes | Default icon **Default**:  `mdi:trash-can`

@@ -51,7 +51,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_FIRST_MONTH, default=DEFAULT_FIRST_MONTH): vol.In(MONTH_OPTIONS),
     vol.Optional(CONF_LAST_MONTH, default=DEFAULT_LAST_MONTH): vol.In(MONTH_OPTIONS),
     vol.Optional(CONF_FREQUENCY, default=DEFAULT_FREQUENCY): vol.In(FREQUENCY_OPTIONS),
-    vol.Optional(CONF_MONTHLY_DAY_ORDER_NUMBER,default=1): vol.All(vol.Coerce(int), vol.Range(min=1, max=5)),
+    vol.Optional(CONF_MONTHLY_DAY_ORDER_NUMBER,default=[1]): vol.All(cv.ensure_list, [vol.All(vol.Coerce(int), vol.Range(min=1, max=5))]),
     vol.Optional(CONF_PERIOD, default=DEFAULT_PERIOD): vol.All(vol.Coerce(int), vol.Range(min=1, max=52)),
     vol.Optional(CONF_FIRST_WEEK, default=DEFAULT_FIRST_WEEK): vol.All(vol.Coerce(int), vol.Range(min=1, max=52)),
     vol.Optional(CONF_INCLUDE_DATES, default=[]): vol.All(cv.ensure_list, [cv.date]),
@@ -72,6 +72,14 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
     """Setup the sensor platform."""
     async_add_entities([garbageSensor(config)],True)
 
+def nth_weekday_date(n,date_of_month,collection_day):
+    first_of_month = datetime(date_of_month.year,date_of_month.month,1).date()
+    month_starts_on = first_of_month.weekday()
+    if collection_day >= month_starts_on: # 1st of the month is before the day of collection (so 1st collection week the week when month starts)
+        return first_of_month + timedelta(days=collection_day-month_starts_on+(n-1)*7)
+    else: # Next week
+        return first_of_month + timedelta(days=7-month_starts_on+collection_day+(n-1)*7)
+
 class garbageSensor(Entity):
 
     def __init__(self, config):
@@ -83,7 +91,7 @@ class garbageSensor(Entity):
         last_month = config.get(CONF_LAST_MONTH)
         self._last_month = MONTH_OPTIONS.index(last_month)+1 if last_month in MONTH_OPTIONS else 12
         self._frequency = config.get(CONF_FREQUENCY)
-        self._monthly_day_order_number = config.get(CONF_MONTHLY_DAY_ORDER_NUMBER)
+        self._monthly_day_order_numbers = config.get(CONF_MONTHLY_DAY_ORDER_NUMBER)
         self._include_dates = config.get(CONF_INCLUDE_DATES)
         self._exclude_dates = config.get(CONF_EXCLUDE_DATES)
         self._period = config.get(CONF_PERIOD)
@@ -129,11 +137,8 @@ class garbageSensor(Entity):
 
     def find_candidate_date(self, day1):
         """Find the next possible date starting from day1, only based on calendar, not lookimg at include/exclude days"""
-        week = int(day1.strftime('%V'))
-        day = int(day1.strftime('%u'))-1
-        month = day1.month
-        year = day1.year
-        
+        week = day1.isocalendar()[1]
+        weekday = day1.weekday()
         if self._frequency in ['weekly','even-weeks','odd-weeks','every-n-weeks']:
             if self._frequency == 'weekly':
                 period = 1
@@ -151,31 +156,21 @@ class garbageSensor(Entity):
             if (week-first_week) % period == 0: # Collection this week
                 for day_name in self._collection_days:
                     day_index=WEEKDAYS.index(day_name)
-                    if day_index >= day: # Collection still did not happen
-                        offset = day_index-day
+                    if day_index >= weekday: # Collection still did not happen
+                        offset = day_index-weekday
                         break
             if offset == -1: # look in following weeks
                 in_weeks = period - (week-first_week) % period
-                offset = 7*in_weeks-day+WEEKDAYS.index(self._collection_days[0])
+                offset = 7*in_weeks-weekday+WEEKDAYS.index(self._collection_days[0])
             return day1 + timedelta(days=offset)
         elif self._frequency == 'monthly':
             # Monthly
-            first_day=datetime(year,month,1).date()
-            first_day_day=int(first_day.strftime('%u'))-1
-            target_day_day=WEEKDAYS.index(self._collection_days[0])
-            if target_day_day >= first_day_day:
-                target_day = first_day + timedelta(days=target_day_day-first_day_day+(self._monthly_day_order_number-1)*7)
-            else:
-                target_day = first_day + timedelta(days=7-first_day_day+target_day_day+(self._monthly_day_order_number-1)*7)
-            if target_day < day1:
-                first_day = first_day=datetime(year+1,1,1).date() if month==12 else datetime(year,month+1,1).date()
-                first_day_day=int(first_day.strftime('%u'))-1
-                target_day_day=WEEKDAYS.index(self._collection_days[0])
-                if target_day_day >= first_day_day:
-                    target_day = first_day + timedelta(days=target_day_day-first_day_day+(self._monthly_day_order_number-1)*7)
-                else:
-                    target_day = first_day + timedelta(days=7-first_day_day+target_day_day+(self._monthly_day_order_number-1)*7)
-            return target_day
+            for monthly_day_order_number in self._monthly_day_order_numbers:
+                candidate_date=nth_weekday_date(monthly_day_order_number,day1,WEEKDAYS.index(self._collection_days[0]))
+                if candidate_date >= day1: # date is today or in the future -> we have the date  
+                    return candidate_date
+            next_collection_month = datetime(day1.year+1,1,1).date() if day1.month==12 else datetime(day1.year,day1.month+1,1).date()
+            return(nth_weekday_date(self._monthly_day_order_numbers[0], next_collection_month,WEEKDAYS.index(self._collection_days[0])))            
         else:
             _LOGGER.debug( f"({self._name}) Unknown frequency {self._frequency}")
             return None
