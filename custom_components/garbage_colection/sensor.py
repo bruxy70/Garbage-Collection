@@ -154,7 +154,7 @@ class garbageSensor(Entity):
                 period = self._period
                 first_week = self._first_week
             offset = -1
-            if (week-first_week) % period == 0: # Collection this week
+            if (week - first_week) % period == 0: # Collection this week
                 for day_name in self._collection_days:
                     day_index = WEEKDAYS.index(day_name)
                     if day_index >= weekday: # Collection still did not happen
