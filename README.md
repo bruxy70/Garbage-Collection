@@ -39,7 +39,7 @@ sensor:
     frequency: "weekly"
     collection_days:
     - mon
-    - thu
+    - wed
   - platform: garbage_collection
     name: "Bio-waste" # Bi-weekly (odd weeks) on Thursday. Between March and November
     frequency: "odd-weeks"
