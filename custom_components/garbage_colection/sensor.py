@@ -51,7 +51,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_FIRST_MONTH, default=DEFAULT_FIRST_MONTH): vol.In(MONTH_OPTIONS),
     vol.Optional(CONF_LAST_MONTH, default=DEFAULT_LAST_MONTH): vol.In(MONTH_OPTIONS),
     vol.Optional(CONF_FREQUENCY, default=DEFAULT_FREQUENCY): vol.In(FREQUENCY_OPTIONS),
-    vol.Optional(CONF_MONTHLY_DAY_ORDER_NUMBER,default=[1]): vol.All(cv.ensure_list, [vol.All(vol.Coerce(int), vol.Range(min=1, max=5))]),
+    vol.Optional(CONF_MONTHLY_DAY_ORDER_NUMBER, default=[1]): vol.All(cv.ensure_list, [vol.All(vol.Coerce(int), vol.Range(min=1, max=5))]),
     vol.Optional(CONF_PERIOD, default=DEFAULT_PERIOD): vol.All(vol.Coerce(int), vol.Range(min=1, max=52)),
     vol.Optional(CONF_FIRST_WEEK, default=DEFAULT_FIRST_WEEK): vol.All(vol.Coerce(int), vol.Range(min=1, max=52)),
     vol.Optional(CONF_INCLUDE_DATES, default=[]): vol.All(cv.ensure_list, [cv.date]),
@@ -70,14 +70,15 @@ TRACKABLE_DOMAINS = ["sensor"]
 
 async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
     """Setup the sensor platform."""
-    async_add_entities([garbageSensor(config)],True)
+    async_add_entities([garbageSensor(config)], True)
+
 
 def nth_weekday_date(n, date_of_month, collection_day):
     first_of_month = datetime(date_of_month.year, date_of_month.month, 1).date()
     month_starts_on = first_of_month.weekday()
-    if collection_day >= month_starts_on: # 1st of the month is before the day of collection (so 1st collection week the week when month starts)
+    if collection_day >= month_starts_on:  # 1st of the month is before the day of collection (so 1st collection week the week when month starts)
         return first_of_month + timedelta(days=collection_day-month_starts_on+(n-1)*7)
-    else: # Next week
+    else:  # Next week
         return first_of_month + timedelta(days=7-month_starts_on+collection_day+(n-1)*7)
 
 
@@ -129,8 +130,8 @@ class garbageSensor(Entity):
     def icon(self):
         return self._icon
 
-    def date_inside(self,dat):
-        month=dat.month
+    def date_inside(self, dat):
+        month = dat.month
         if self._first_month <= self._last_month:
             return bool(month >= self._first_month and month <= self._last_month)
         else:
@@ -154,13 +155,13 @@ class garbageSensor(Entity):
                 period = self._period
                 first_week = self._first_week
             offset = -1
-            if (week - first_week) % period == 0: # Collection this week
+            if (week - first_week) % period == 0:  # Collection this week
                 for day_name in self._collection_days:
                     day_index = WEEKDAYS.index(day_name)
-                    if day_index >= weekday: # Collection still did not happen
+                    if day_index >= weekday:  # Collection still did not happen
                         offset = day_index-weekday
                         break
-            if offset == -1: # look in following weeks
+            if offset == -1:  # look in following weeks
                 in_weeks = period - (week-first_week) % period
                 offset = 7*in_weeks - weekday + WEEKDAYS.index(self._collection_days[0])
             return day1 + timedelta(days=offset)
@@ -168,10 +169,10 @@ class garbageSensor(Entity):
             # Monthly
             for monthly_day_order_number in self._monthly_day_order_numbers:
                 candidate_date = nth_weekday_date(monthly_day_order_number, day1, WEEKDAYS.index(self._collection_days[0]))
-                if candidate_date >= day1: # date is today or in the future -> we have the date  
+                if candidate_date >= day1:  # date is today or in the future -> we have the date
                     return candidate_date
             next_collection_month = datetime(day1.year+1, 1, 1).date() if day1.month == 12 else datetime(day1.year, day1.month+1, 1).date()
-            return(nth_weekday_date(self._monthly_day_order_numbers[0], next_collection_month, WEEKDAYS.index(self._collection_days[0])))            
+            return(nth_weekday_date(self._monthly_day_order_numbers[0], next_collection_month, WEEKDAYS.index(self._collection_days[0])))
         else:
             _LOGGER.debug(f"({self._name}) Unknown frequency {self._frequency}")
             return None
@@ -183,7 +184,7 @@ class garbageSensor(Entity):
         while True:
             next_date = self.find_candidate_date(first_day)
             include_dates = list(filter(lambda date: date >= day1, self._include_dates))
-            if len(include_dates)>0 and include_dates[0] < next_date:
+            if len(include_dates) > 0 and include_dates[0] < next_date:
                 next_date = include_dates[0]
             if next_date not in self._exclude_dates:
                 break
@@ -202,14 +203,14 @@ class garbageSensor(Entity):
         if self._today is not None and self._today == today:
             # _LOGGER.debug("(%s) Skipping the update, already did it today",self._name)
             return
-        _LOGGER.debug("(%s) Calling update",self._name)
+        _LOGGER.debug("(%s) Calling update", self._name)
         today = datetime.now().date()
         year = today.year
         month = today.month
         self._today = today
         if self.date_inside(today):
             next_date = self.get_next_date(today)
-            if next_date != None:
+            if next_date is not None:
                 next_date_year = next_date.year
                 if not self.date_inside(next_date):
                     if self._first_month <= self._last_month:
@@ -226,16 +227,16 @@ class garbageSensor(Entity):
                 next_date = self.get_next_date(next_year)
                 _LOGGER.debug("(%s) Current date is outside of the range, lookig at next year", self._name)
             else:
-                next_year = datetime(year,self._first_month,1).date()
+                next_year = datetime(year, self._first_month, 1).date()
                 next_date = self.get_next_date(next_year)
                 _LOGGER.debug("(%s) Current date is outside of the range, starting from first month", self._name)
         self._next_date = next_date
-        if next_date != None:
+        if next_date is not None:
             self._days = (self._next_date-today).days
             next_date_txt = self._next_date.strftime("%d-%b-%Y")
             _LOGGER.debug("(%s) Found next date: %s, that is in %d days", self._name, next_date_txt, self._days)
             if self._days > 1:
-                self._state = f'on {next_date_txt}, in {self._days} days' if bool(self._verbose_state) else  2
+                self._state = f'on {next_date_txt}, in {self._days} days' if bool(self._verbose_state) else 2
                 self._icon = self._icon_normal
             else:
                 if self._days == 0:
