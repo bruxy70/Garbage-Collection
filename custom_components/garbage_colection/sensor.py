@@ -1,6 +1,7 @@
 """Support for garbage_collection sensors."""
 import logging
 from datetime import datetime, date, timedelta
+from slugify import slugify
 
 import voluptuous as vol
 from homeassistant.components.sensor import PLATFORM_SCHEMA
@@ -15,6 +16,7 @@ from homeassistant.helpers.entity import Entity
 _LOGGER = logging.getLogger(__name__)
 
 DEFAULT_NAME = "garbage_collection"
+DOMAIN = 'garbage_collection'
 
 FREQUENCY_OPTIONS = [
     "weekly",
@@ -104,7 +106,9 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_ICON_TODAY, default=DEFAULT_ICON_TODAY): cv.icon,
     vol.Optional(CONF_ICON_TOMORROW, default=DEFAULT_ICON_TOMORROW): cv.icon,
     vol.Optional(CONF_VERBOSE_STATE, default=DEFAULT_VERBOSE_STATE): cv.boolean,
-})
+    },
+    extra=vol.ALLOW_EXTRA,
+)
 
 SCAN_INTERVAL = timedelta(seconds=60)
 THROTTLE_INTERVAL = timedelta(seconds=60)
@@ -168,6 +172,14 @@ class garbageSensor(Entity):
         self.__icon_today = config.get(CONF_ICON_TODAY)
         self.__icon_tomorrow = config.get(CONF_ICON_TOMORROW)
         self.__icon = self.__icon_normal
+        # I neeed to find a better way to create unique ID
+        # There is nothing preventing user to create duplicite names right now
+        self.__unique_id = slugify(self.__name)
+
+    @property
+    def unique_id(self):
+        """Return a unique identifier for this switch."""
+        return self.__unique_id
 
     @property
     def name(self):
