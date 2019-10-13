@@ -23,10 +23,7 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
         if self.hass.data.get(DOMAIN):
             return self.async_abort(reason="single_instance_allowed")
         if user_input is not None:
-            valid = await self._test_credentials(
-                user_input["username"], user_input["password"]
-            )
-            if valid:
+            if "frequency" in user_input:
                 return self.async_create_entry(title="", data=user_input)
             else:
                 self._errors["base"] = "auth"

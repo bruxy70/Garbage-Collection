@@ -1,6 +1,6 @@
 {
-  "domain": "garbage_collection",
   "name": "Garbage Collection",
+  "domain": "garbage_collection",
   "documentation": "https://github.com/bruxy70/Garbage-Collection/",
   "dependencies": [],
   "config_flow": true,
