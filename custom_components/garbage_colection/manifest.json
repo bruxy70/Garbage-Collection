@@ -3,6 +3,11 @@
   "name": "Garbage Collection",
   "documentation": "https://github.com/bruxy70/Garbage-Collection/",
   "dependencies": [],
+  "config_flow": true,
   "codeowners": ["@bruxy70"],
-  "requirements": []
+  "requirements": [
+    "sampleclient",
+    "integrationhelper"
+  ],
+  "homeassistant": "0.96.0"
 }
