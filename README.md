@@ -40,7 +40,7 @@ There are 2 ways to configure the integration:
 ```yaml
 # Example configuration.yaml entry
 garbage_collection:
-  sensor:
+  sensors:
   - name: waste # Each week on Monday and Wednesday. No collection on Christmas, added extra collection on the 27th
     frequency: "weekly"
     collection_days:
