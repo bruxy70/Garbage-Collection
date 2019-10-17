@@ -1,48 +1,301 @@
-import voluptuous as vol
-from homeassistant import config_entries
+"""Adds config flow for GarbageCollection."""
 from collections import OrderedDict
-from sampleclient.client import Client
-from .const import DOMAIN
+import logging
+from homeassistant.core import callback
+import voluptuous as vol
+import homeassistant.helpers.config_validation as cv
+from homeassistant import config_entries
+from datetime import datetime
+import uuid
+
+from .const import (
+    DOMAIN,
+    FREQUENCY_OPTIONS,
+    MONTH_OPTIONS,
+    WEEKLY_FREQUENCY,
+    WEEKLY_FREQUENCY_X,
+    MONTHLY_FREQUENCY,
+    ANNUAL_FREQUENCY,
+    DEFAULT_FIRST_MONTH,
+    DEFAULT_LAST_MONTH,
+    DEFAULT_FREQUENCY,
+    DEFAULT_ICON_NORMAL,
+    DEFAULT_ICON_TOMORROW,
+    DEFAULT_ICON_TODAY,
+    DEFAULT_VERBOSE_STATE,
+    CONF_SENSOR,
+    CONF_ENABLED,
+    CONF_FREQUENCY,
+    CONF_ICON_NORMAL,
+    CONF_ICON_TODAY,
+    CONF_ICON_TOMORROW,
+    CONF_VERBOSE_STATE,
+    CONF_FIRST_MONTH,
+    CONF_LAST_MONTH,
+    CONF_COLLECTION_DAYS,
+    CONF_WEEKDAY_ORDER_NUMBER,
+    CONF_DATE,
+    CONF_EXCLUDE_DATES,
+    CONF_INCLUDE_DATES,
+    CONF_PERIOD,
+    CONF_FIRST_WEEK,
+    CONF_SENSORS,
+)
+
+from homeassistant.const import CONF_NAME, WEEKDAYS
+
+_LOGGER = logging.getLogger(__name__)
+
 
 @config_entries.HANDLERS.register(DOMAIN)
 class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
+    """Config flow for garbage_collection."""
+
     VERSION = 1
     CONNECTION_CLASS = config_entries.CONN_CLASS_LOCAL_POLL
 
     def __init__(self):
         """Initialize."""
         self._errors = {}
+        self._data = {}
+        self._data["unique_id"] = str(uuid.uuid4())
 
     async def async_step_user(
         self, user_input={}
     ):  # pylint: disable=dangerous-default-value
-        """Handle a flow initialized by the user."""
+        """
+
+        C O N F I G U R A T I O N   S T E P   1
+
+        """
         self._errors = {}
-        if self._async_current_entries():
-            return self.async_abort(reason="single_instance_allowed")
-        if self.hass.data.get(DOMAIN):
-            return self.async_abort(reason="single_instance_allowed")
         if user_input is not None:
-            if "frequency" in user_input:
-                return self.async_create_entry(title="", data=user_input)
+            if user_input[CONF_NAME] != "":
+                # Remember Frequency
+                self._data.update(user_input)
+                # Call next step
+                if user_input[CONF_FREQUENCY] in ANNUAL_FREQUENCY:
+                    return await self.async_step_detail_annual()
+                else:
+                    return await self.async_step_detail()
             else:
-                self._errors["base"] = "auth"
-            return await self._show_config_form(user_input)
-        return await self._show_config_form(user_input)
+                self._errors["base"] = "name"
+            return await self._show_user_form(user_input)
+        return await self._show_user_form(user_input)
 
-    async def _show_config_form(self, user_input):
-        """Show the configuration form to edit location data."""
+    async def _show_user_form(self, user_input):
+        """Configuration STEP 1 - SHOW FORM"""
         # Defaults
-        frequency = ""
-
+        name = ""
+        frequency = DEFAULT_FREQUENCY
+        icon_normal = DEFAULT_ICON_NORMAL
+        icon_tomorrow = DEFAULT_ICON_TOMORROW
+        icon_today = DEFAULT_ICON_TODAY
+        verbose_state = DEFAULT_VERBOSE_STATE
         if user_input is not None:
-            if "frequency" in user_input:
-                frequency = user_input["frequency"]
-
+            if CONF_NAME in user_input:
+                name = user_input[CONF_NAME]
+            if CONF_FREQUENCY in user_input:
+                frequency = user_input[CONF_FREQUENCY]
+            if CONF_ICON_NORMAL in user_input:
+                icon_normal = user_input[CONF_ICON_NORMAL]
+            if CONF_ICON_TOMORROW in user_input:
+                icon_tomorrow = user_input[CONF_ICON_TOMORROW]
+            if CONF_ICON_TODAY in user_input:
+                icon_today = user_input[CONF_ICON_TODAY]
+            if CONF_VERBOSE_STATE in user_input:
+                verbose_state = user_input[CONF_VERBOSE_STATE]
         data_schema = OrderedDict()
-        data_schema[vol.Required("frequency", default=frequency)] = str
+        data_schema[vol.Required(CONF_NAME, default=name)] = str
+        data_schema[vol.Required(CONF_FREQUENCY, default=frequency)] = vol.In(
+            FREQUENCY_OPTIONS
+        )
+        data_schema[vol.Required(CONF_ICON_NORMAL, default=icon_normal)] = str
+        data_schema[vol.Required(CONF_ICON_TOMORROW, default=icon_tomorrow)] = str
+        data_schema[vol.Required(CONF_ICON_TODAY, default=icon_today)] = str
+        data_schema[vol.Required(CONF_VERBOSE_STATE, default=verbose_state)] = bool
         return self.async_show_form(
             step_id="user", data_schema=vol.Schema(data_schema), errors=self._errors
+        )
+
+    async def async_step_detail(
+        self, user_input={}
+    ):  # pylint: disable=dangerous-default-value
+        """
+
+        C O N F I G U R A T I O N   S T E P   2
+
+        """
+        self._errors = {}
+        if user_input is not None and user_input != {}:
+            day_selected = False
+            detail_info = {}
+            detail_info[CONF_COLLECTION_DAYS] = []
+            for day in WEEKDAYS:
+                if user_input[f"collection_days_{day.lower()}"]:
+                    day_selected = True
+                    detail_info[CONF_COLLECTION_DAYS].append(day)
+            if day_selected:
+                # Remember Detail
+                self._data.update(detail_info)
+                # Call last step
+                return await self.async_step_final()
+            else:
+                self._errors["base"] = "days"
+        return await self._show_detail_form(user_input)
+
+    async def _show_detail_form(self, user_input):
+        """Configuration STEP 2 - SHOW FORM"""
+        data_schema = OrderedDict()
+        for day in WEEKDAYS:
+            data_schema[
+                vol.Required(
+                    f"collection_days_{day.lower()}",
+                    default=bool(
+                        user_input is not None
+                        and user_input != {}
+                        and user_input[f"collection_days_{day.lower()}"]
+                    ),
+                )
+            ] = bool
+        return self.async_show_form(
+            step_id="detail", data_schema=vol.Schema(data_schema), errors=self._errors
+        )
+
+    async def async_step_detail_annual(
+        self, user_input={}
+    ):  # pylint: disable=dangerous-default-value
+        """
+
+        C O N F I G U R A T I O N   S T E P   2a
+
+        """
+        self._errors = {}
+        if user_input is not None and user_input != {}:
+            if is_month_day(user_input[CONF_DATE]):
+                # Remember Frequency
+                self._data.update(user_input)
+                # Call last step
+                return self.async_create_entry(
+                    title=self._data["name"], data=self._data
+                )
+            else:
+                self._errors["base"] = "month_day"
+        return await self._show_detail_annual_form(user_input)
+
+    async def _show_detail_annual_form(self, user_input):
+        """Configuration STEP 2a - SHOW FORM"""
+        # Defaults
+        date = ""
+        if user_input is not None:
+            if CONF_DATE in user_input:
+                date = user_input[CONF_DATE]
+        data_schema = OrderedDict()
+        data_schema[vol.Optional(CONF_DATE, default=date)] = str
+        return self.async_show_form(
+            step_id="detail_annual",
+            data_schema=vol.Schema(data_schema),
+            errors=self._errors,
+        )
+
+    async def async_step_final(
+        self, user_input={}
+    ):  # pylint: disable=dangerous-default-value
+        """
+
+        C O N F I G U R A T I O N   S T E P   3
+
+        """
+        self._errors = {}
+        if user_input is not None and user_input != {}:
+            final_info = {}
+            final_info[CONF_FIRST_MONTH] = user_input[CONF_FIRST_MONTH]
+            final_info[CONF_LAST_MONTH] = user_input[CONF_LAST_MONTH]
+            if self._data[CONF_FREQUENCY] in MONTHLY_FREQUENCY:
+                day_selected = False
+                final_info[CONF_WEEKDAY_ORDER_NUMBER] = []
+                for i in range(4):
+                    if user_input[f"weekday_order_number_{i+1}"]:
+                        day_selected = True
+                        final_info[CONF_WEEKDAY_ORDER_NUMBER].append(i + 1)
+                if not day_selected:
+                    self._errors["base"] = CONF_WEEKDAY_ORDER_NUMBER
+            final_info[CONF_INCLUDE_DATES] = string_to_list(
+                user_input[CONF_INCLUDE_DATES]
+            )
+            final_info[CONF_EXCLUDE_DATES] = string_to_list(
+                user_input[CONF_EXCLUDE_DATES]
+            )
+            if not is_dates(final_info[CONF_INCLUDE_DATES]) or not is_dates(
+                final_info[CONF_EXCLUDE_DATES]
+            ):
+                self._errors["base"] = "date"
+            if self._data[CONF_FREQUENCY] in WEEKLY_FREQUENCY_X:
+                # if False:
+                #     self._errors["base"] = CONF_PERIOD
+                # if False:
+                #     self._errors["base"] = CONF_FIRST_WEEK
+                final_info[CONF_PERIOD] = user_input[CONF_PERIOD]
+                final_info[CONF_FIRST_WEEK] = user_input[CONF_FIRST_WEEK]
+            if self._errors == {}:
+                self._data.update(final_info)
+                return self.async_create_entry(
+                    title=self._data["name"], data=self._data
+                )
+        return await self._show_final_form(user_input)
+
+    async def _show_final_form(self, user_input):
+        """Configuration STEP 3 - SHOW FORM"""
+        # Defaults
+        first_month = DEFAULT_FIRST_MONTH
+        last_month = DEFAULT_LAST_MONTH
+        include_dates = ""
+        exclude_dates = ""
+        period = 1
+        first_week = 1
+        if user_input is not None:
+            if CONF_FIRST_MONTH in user_input:
+                first_month = user_input[CONF_FIRST_MONTH]
+            if CONF_LAST_MONTH in user_input:
+                last_month = user_input[CONF_LAST_MONTH]
+            if CONF_PERIOD in user_input:
+                period = user_input[CONF_PERIOD]
+            if CONF_FIRST_WEEK in user_input:
+                first_week = user_input[CONF_FIRST_WEEK]
+            if CONF_INCLUDE_DATES in user_input:
+                include_dates = user_input[CONF_INCLUDE_DATES]
+            if CONF_EXCLUDE_DATES in user_input:
+                exclude_dates = user_input[CONF_EXCLUDE_DATES]
+        data_schema = OrderedDict()
+        data_schema[vol.Optional(CONF_FIRST_MONTH, default=first_month)] = vol.In(
+            MONTH_OPTIONS
+        )
+        data_schema[vol.Optional(CONF_LAST_MONTH, default=last_month)] = vol.In(
+            MONTH_OPTIONS
+        )
+        if self._data[CONF_FREQUENCY] in WEEKLY_FREQUENCY_X:
+            data_schema[vol.Required(CONF_PERIOD, default=period)] = vol.All(
+                vol.Coerce(int), vol.Range(min=1, max=52)
+            )
+            data_schema[vol.Required(CONF_FIRST_WEEK, default=first_week)] = vol.All(
+                vol.Coerce(int), vol.Range(min=1, max=52)
+            )
+        if self._data[CONF_FREQUENCY] in MONTHLY_FREQUENCY:
+            for i in range(4):
+                data_schema[
+                    vol.Required(
+                        f"weekday_order_number_{i+1}",
+                        default=bool(
+                            user_input is not None
+                            and user_input != {}
+                            and user_input[f"weekday_order_number_{i+1}"]
+                        ),
+                    )
+                ] = bool
+        data_schema[vol.Optional(CONF_INCLUDE_DATES, default=include_dates)] = str
+        data_schema[vol.Optional(CONF_EXCLUDE_DATES, default=exclude_dates)] = str
+        return self.async_show_form(
+            step_id="final", data_schema=vol.Schema(data_schema), errors=self._errors
         )
 
     async def async_step_import(self, user_input):  # pylint: disable=unused-argument
@@ -55,12 +308,91 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
 
         return self.async_create_entry(title="configuration.yaml", data={})
 
-    async def _test_credentials(self, username, password):
-        """Return true if credentials is valid."""
-        try:
-            client = Client(username, password)
-            client.get_data()
-            return True
-        except Exception:  # pylint: disable=broad-except
-            pass
+    @staticmethod
+    @callback
+    def async_get_options_flow(config_entry):
+        if config_entry.options.get("unique_id", None) is not None:
+            return OptionsFlowHandler(config_entry)
+        else:
+            return EmptyOptions(config_entry)
+
+
+def is_month_day(date):
+    """Validates mm/dd format"""
+    try:
+        date = datetime.strptime(date, "%m/%d")
+        return True
+    except ValueError:
         return False
+
+
+def is_date(date):
+    """Validates yyyy-mm-dd format"""
+    if date == "":
+        return True
+    try:
+        datetime.strptime(date, "%Y-%m-%d")
+        return True
+    except ValueError:
+        return False
+
+
+def string_to_list(dates):
+    if dates is None or dates == "":
+        return []
+    return list(map(lambda x: x.strip(), dates.split(",")))
+
+
+def is_dates(dates):
+    """Validates list of dates (yyyy-mm-dd, yyyy-mm-dd)"""
+    if dates == []:
+        return True
+    check = True
+    for date in dates:
+        if not is_date(date):
+            check = False
+    return check
+
+
+class OptionsFlowHandler(config_entries.OptionsFlow):
+    def __init__(self, config_entry):
+        self.config_entry = config_entry
+
+    async def async_step_init(self, user_input=None):
+        """Manage the options."""
+        return await self.async_step_user()
+
+    async def async_step_user(self, user_input=None):
+        """Handle a flow initialized by the user."""
+        self._errors = {}
+        if user_input is not None:
+            include_dates = string_to_list(user_input[CONF_INCLUDE_DATES])
+            exclude_dates = string_to_list(user_input[CONF_EXCLUDE_DATES])
+            if not is_dates(include_dates) or not is_dates(exclude_dates):
+                self._errors["base"] = "date"
+            else:
+                self.config_entry.options[CONF_INCLUDE_DATES] = include_dates
+                self.config_entry.options[CONF_EXCLUDE_DATES] = exclude_dates
+                return self.async_create_entry(title="", data=self.config_entry.options)
+
+        data_schema = OrderedDict()
+        data_schema[
+            vol.Optional(
+                CONF_INCLUDE_DATES,
+                default=",".join(self.config_entry.options.get(CONF_INCLUDE_DATES)),
+            )
+        ] = str
+        data_schema[
+            vol.Optional(
+                CONF_EXCLUDE_DATES,
+                default=",".join(self.config_entry.options.get(CONF_EXCLUDE_DATES)),
+            )
+        ] = str
+        return self.async_show_form(
+            step_id="user", data_schema=vol.Schema(data_schema), errors=self._errors
+        )
+
+
+class EmptyOptions(config_entries.OptionsFlow):
+    def __init__(self, config_entry):
+        self.config_entry = config_entry
