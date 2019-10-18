@@ -4,42 +4,35 @@
 
 # Garbage Collection
 
-The `garbage_collection` component is a Home Assistant custom sensor for monitoring regular garbage collection schedule. The sensor can be configured for weekly schedule (including multiple collection days), bi-weekly in even or odd weeks, or monthly schedule (nth day each month). You can also configure seasonal calendars (e.g. for bio-waste collection), by configuring the first and last month. 
+The `garbage_collection` component is a Home Assistant custom sensor for monitoring regular garbage collection schedule. The sensor can be configured for weekly schedule (including multiple collection days), bi-weekly in even or odd weeks, or monthly schedule (nth day each month) or anual (e.g. birthdays). You can also configure seasonal calendars (e.g. for bio-waste collection), by configuring the first and last month. 
 
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/sensor.png">
 
 ## Configuration
-Add `garbage_collection` sensor in your `configuration.yaml`. The following example adds three sensors - bio-waste with bi-weekly schedule, waste with weekly schedule and large-waste with monthly schedule on 1st Saturday each month:
+There are 2 ways to configure the integration:
+1. Using *Config Flow*: in `Configuration/Integrations` click on the `+` button, select `Garbage Collection` and configure the sensor.
+2. Using *YAML*: add `garbage_collection` integration in your `configuration.yaml` and add individual sensors. The following example adds 4 sensors - bio-waste with bi-weekly schedule, waste with weekly schedule and large-waste with monthly schedule on 1st Saturday each month. And a birthday:
 ```yaml
 # Example configuration.yaml entry
-sensor:
-  - platform: garbage_collection
-    name: waste # Each week on Wednesday
+garbage_collection:
+  sensors:
+  - name: Waste # Each week on Wednesday
     frequency: "weekly"
     collection_days: wed
+  - name: Bio # Each week on Wednesday
+    frequency: "odd-weeks"
+    collection_days: thu
+    first_month: "mar"
+    last_month: "nov"
+  - name: Large Waste
+    frequency: "monthly"
+    collection_days: sat
+    weekday_order_number: 1
+  - name: 'Someone's birthday'
+    frequency: 'annual'
+    date: '11/24'
 ```
-For more examples check the [README.md](https://github.com/bruxy70/Garbage-Collection/blob/development/README.md) file
-
-### CONFIGURATION PARAMETERS
-|Attribute |Optional|Description
-|:----------|----------|------------
-|`platform` | No | `garbage_collection`
-|`collection_days` | No |Day three letter abbreviation, list of `"mon"`, `"tue"`, `"wed"`, `"thu"`, `"fri"`, `"sat"`, `"sun"`
-|`frequency` | Yes | `"weekly"`, `"even-weeks"`, `"odd-weeks"` `"every-n-weeks"` or `"monthly"`<br/>**Default**: `"weekly"`<br/>*(The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representatio of the week)*
-|`name` | Yes | Sensor friendly name<br/>**Default**: `"garbage_collection"`
-|`first_month` | Yes | Month three letter abbreviation, e.g. `"jan"`, `"feb"`...<br/>**Default**: `"jan"`
-|`last_month` | Yes | Month three letter abbreviation.<br/>**Default**: `"dec"`
-|`monthly_day_order_number` | Yes | List of week numbers of `collection_day` each month. E.g., if `collection_day` is `"sat"`, 1 will mean 1<sup>st</sup> Saturday each month (integer 1-4)<br/>**Default**: 1<br/>(relevant for `monthly_collection`)
-|`period` | Yes | Collection every `"period"` weeks (integer 1-53)<br/>**Default**: 1<br/>(relevant for `every-n-weeks`)
-|`first_week` | Yes | First collection on the `"first_week"` week (integer 1-53)<br/>**Default**: 1<br/>*(The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representatio of the week)*<br/>(relevant for `every-n-weeks`)
-| `exclude_dates` | Yes | List of dates with no collection (using international date format 'yyyy-mm-dd'. 
-| `include_dates` | Yes | List of extra collection (using international date format 'yyyy-mm-dd'.
-| `icon_normal` | Yes | Default icon **Default**:  `mdi:trash-can`
-| `icon_today` | Yes | Icon if the collection is today **Default**: `mdi:delete-restore`
-| `icon_tomorrow` | Yes | Icon if the collection is tomorrow **Default**: `mdi:delete-circle`
-| `verbose_state` | Yes | The sensor state will show collection date and remaining days, instead of number **Default**: `False`
-
-**IMPORTANT - put include/exclude dates within quotes. Dates without quotes might cause Home Assistant not loading configuration when starting - in case the date is invalid. Validation for dates within quotes works fine.** I think this is general bug, I am addressing that. (See the example above)
+For more examples and configuration documentation check the [README.md](https://github.com/bruxy70/Garbage-Collection/blob/development/README.md) file
 
 ## STATE AND ATTRIBUTES
 
