@@ -10,8 +10,9 @@ The `garbage_collection` component is a Home Assistant custom sensor for monitor
 
 ## Configuration
 There are 2 ways to configure the integration:
-1. Using *Config Flow*: in `Configuration/Integrations` click on the `+` button, select `Garbage Collection` and configure the sensor.
-2. Using *YAML*: add `garbage_collection` integration in your `configuration.yaml` and add individual sensors. The following example adds 4 sensors - bio-waste with bi-weekly schedule, waste with weekly schedule and large-waste with monthly schedule on 1st Saturday each month. And a birthday:
+1. Using *Config Flow*: in `Configuration/Integrations` click on the `+` button, select `Garbage Collection` and configure the sensor (prefered). If you configure Garbage Collection using Config Flow, you can change the entity_name, name and change the sensor parameters from the Integrations configuration. The changes are instant and do not require HA restart.
+2. Using *YAML*: add `garbage_collection` integration in your `configuration.yaml` and add individual sensors. Example:
+
 ```yaml
 # Example configuration.yaml entry
 garbage_collection:
@@ -32,7 +33,7 @@ garbage_collection:
     frequency: 'annual'
     date: '11/24'
 ```
-For more examples and configuration documentation check the [README.md](https://github.com/bruxy70/Garbage-Collection/blob/development/README.md) file
+For more examples and configuration documentation check the <a href="https://github.com/bruxy70/Garbage-Collection/blob/development/README.md">README.md</a> file
 
 ## STATE AND ATTRIBUTES
 

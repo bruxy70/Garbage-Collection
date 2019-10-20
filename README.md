@@ -35,8 +35,9 @@ The `garbage_collection` component is a Home Assistant custom sensor for monitor
 
 ## Configuration
 There are 2 ways to configure the integration:
-1. Using *Config Flow*: in `Configuration/Integrations` click on the `+` button, select `Garbage Collection` and configure the sensor (prefered). If you configure Garbage Collection using Config Flow, you can change the entity_name, name and the include/exclude dates from the Integrations configuration. The changes are instant and do not require HA restart.
+1. Using *Config Flow*: in `Configuration/Integrations` click on the `+` button, select `Garbage Collection` and configure the sensor (prefered). If you configure Garbage Collection using Config Flow, you can change the entity_name, name and change the sensor parameters from the Integrations configuration. The changes are instant and do not require HA restart.
 2. Using *YAML*: add `garbage_collection` integration in your `configuration.yaml` and add individual sensors. Example:
+
 ```yaml
 # Example configuration.yaml entry
 garbage_collection:
