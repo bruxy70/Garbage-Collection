@@ -56,7 +56,7 @@ garbage_collection:
     first_month: "mar"
     last_month: "nov"
     collection_days: "thu"
-  - name: "Large waste summer" # First and third saturday each month
+  - name: "Large waste summer" # First and third Saturday each month
     frequency: "monthly"
     collection_days: "sat"
     weekday_order_number: 
@@ -64,7 +64,7 @@ garbage_collection:
     - 3
     first_month: "may"
     last_month: "oct"
-  - name: "Large waste winter" # First and third saturday each month
+  - name: "Large waste winter" # First Saturday each month only
     frequency: "monthly"
     collection_days: "sat"
     weekday_order_number: 
