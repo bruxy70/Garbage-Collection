@@ -11,7 +11,7 @@ THROTTLE_INTERVAL = timedelta(seconds=60)
 ATTR_NEXT_DATE = "next_date"
 ATTR_DAYS = "days"
 
-from homeassistant.const import CONF_NAME, WEEKDAYS
+from homeassistant.const import CONF_NAME, WEEKDAYS, CONF_ENTITIES
 from .const import (
     ATTRIBUTION,
     DEFAULT_NAME,
@@ -108,12 +108,15 @@ class GarbageCollection(Entity):
         self.__today = None
         self.__days = 0
         self.__date = config.get(CONF_DATE)
+        self.__entities = config.get(CONF_ENTITIES)
         self.__verbose_state = config.get(CONF_VERBOSE_STATE)
         self.__state = "" if bool(self.__verbose_state) else 2
         self.__icon_normal = config.get(CONF_ICON_NORMAL)
         self.__icon_today = config.get(CONF_ICON_TODAY)
         self.__icon_tomorrow = config.get(CONF_ICON_TOMORROW)
         self.__icon = self.__icon_normal
+        self.__today = "Today"
+        self.__tomorrow = "Tomorrow"
 
     @property
     def unique_id(self):
@@ -232,6 +235,16 @@ class GarbageCollection(Entity):
                     year + 1, conf_date.month, conf_date.day
                 ).date()
             return candidate_date
+        elif self.__frequency == "group":
+            if self.__entities is None:
+                _LOGGER.error("(%s) Please add entities for the group.", self.__name)
+                return None
+            candidate_date = None
+            for entity in self.__entities:
+                d = self.hass.states.get(entity).attributes.get(ATTR_NEXT_DATE).date()
+                if candidate_date is None or d < candidate_date:
+                    candidate_date = d
+            return candidate_date
         else:
             _LOGGER.debug(f"({self.__name}) Unknown frequency {self.__frequency}")
             return None
@@ -331,13 +344,13 @@ class GarbageCollection(Entity):
             else:
                 if self.__days == 0:
                     if bool(self.__verbose_state):
-                        self.__state = "Today"
+                        self.__state = self.__today
                     else:
                         self.__state = self.__days
                     self.__icon = self.__icon_today
                 elif self.__days == 1:
                     if bool(self.__verbose_state):
-                        self.__state = "Tomorrow"
+                        self.__state = self.__tomorrow
                     else:
                         self.__state = self.__days
                     self.__icon = self.__icon_tomorrow

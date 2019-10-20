@@ -27,11 +27,12 @@
                     "collection_days_sun": "Sunday"
                 }
             },
-            "detail_annual": {
-                "title": "Garbage Collection - Collection day",
+            "detail_final": {
+                "title": "Garbage Collection - Additional parameters",
                 "description": "Enter the collection day date (e.g. 11/20 for November 20)",
                 "data": {
-                    "date": "Date (mm/dd)"
+                    "date": "Date (mm/dd)",
+                    "entities": "List of entities (comma separated)"
                 }
             },
             "final": {
@@ -54,6 +55,7 @@
         "error": {
             "name": "The sensor name cannot be empty. Please enter the sensor name.",
             "days": "Select 1 or more days!",
+            "entities": "Entity does not exist!",
             "month_day": "Invalid date format!",
             "weekday_order_number": "Select 1 or more days",
             "period": "Period must be a number between 1 and 52",
@@ -91,11 +93,12 @@
                     "collection_days_sun": "Sunday"
                 }
             },
-            "detail_annual": {
-                "title": "Garbage Collection - Collection day",
+            "detail_final": {
+                "title": "Garbage Collection - Additional parameters",
                 "description": "Enter the collection day date (e.g. 11/20 for November 20)",
                 "data": {
-                    "date": "Date (mm/dd)"
+                    "date": "Date (mm/dd)",
+                    "entities": "List of entities (comma separated)"
                 }
             },
             "final": {
@@ -116,7 +119,8 @@
             }
         },
         "error": {
-            "date": "Invalid date format!"
+            "date": "Invalid date format!",
+            "entities": "Entity does not exist!"
         }
     }
 

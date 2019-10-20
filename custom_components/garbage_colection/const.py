@@ -1,7 +1,7 @@
 import voluptuous as vol
 from datetime import datetime, date
 import homeassistant.helpers.config_validation as cv
-from homeassistant.const import CONF_NAME, WEEKDAYS
+from homeassistant.const import CONF_NAME, WEEKDAYS, CONF_ENTITIES
 
 """Constants for blueprint."""
 # Base component constants
@@ -59,6 +59,7 @@ FREQUENCY_OPTIONS = [
     "every-n-weeks",
     "monthly",
     "annual",
+    "group",
 ]
 
 MONTH_OPTIONS = [
@@ -116,6 +117,7 @@ SENSOR_SCHEMA = vol.Schema(
             vol.Coerce(int), vol.Range(min=1, max=52)
         ),
         vol.Optional(CONF_DATE): month_day_text,
+        vol.Optional(CONF_ENTITIES): cv.entity_ids,
         vol.Optional(CONF_INCLUDE_DATES, default=[]): vol.All(
             cv.ensure_list, [date_text]
         ),
@@ -143,3 +145,4 @@ WEEKLY_FREQUENCY = ["weekly", "even-weeks", "odd-weeks"]
 WEEKLY_FREQUENCY_X = ["every-n-weeks"]
 MONTHLY_FREQUENCY = ["monthly"]
 ANNUAL_FREQUENCY = ["annual"]
+GROUP_FREQUENCY = ["group"]

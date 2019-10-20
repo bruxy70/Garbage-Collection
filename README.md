@@ -4,7 +4,7 @@
 
 # Garbage Collection
 
-The `garbage_collection` component is a Home Assistant custom sensor for monitoring regular garbage collection schedule. The sensor can be configured for weekly schedule (including multiple collection days), bi-weekly in even or odd weeks, monthly schedule (nth day each month), or annualy (e.g. birthdays). You can also configure seasonal calendars (e.g. for bio-waste collection), by configuring the first and last month. 
+The `garbage_collection` component is a Home Assistant custom sensor for monitoring regular garbage collection schedule. The sensor can be configured for weekly schedule (including multiple collection days), bi-weekly in even or odd weeks, monthly schedule (nth day each month), or annualy (e.g. birthdays). You can also configure seasonal calendars (e.g. for bio-waste collection), by configuring the first and last month. And you can also group entities, which will merge multile schedules into one sensor.
 
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/sensor.png">
 
@@ -56,12 +56,26 @@ garbage_collection:
     first_month: "mar"
     last_month: "nov"
     collection_days: "thu"
-  - name: "Large waste" # First and third saturday each month
+  - name: "Large waste summer" # First and third saturday each month
     frequency: "monthly"
     collection_days: "sat"
     weekday_order_number: 
     - 1
     - 3
+    first_month: "may"
+    last_month: "oct"
+  - name: "Large waste winter" # First and third saturday each month
+    frequency: "monthly"
+    collection_days: "sat"
+    weekday_order_number: 
+    - 1
+    first_month: "nov"
+    last_month: "apr"
+  - name: "Large waste" # Combination of winter and summer sensors
+    frequency: "group"
+    entities:
+    - sensor.large_waste_summer
+    - sensor.large_waste_winter
   - name: Paper # Every 4 weeks on Tuesday, starting on 4th week each year
     frequency: "every-n-weeks"
     collection_days: "tue"
@@ -78,7 +92,7 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 |Attribute |Optional|Description
 |:----------|----------|------------
 | `name` | No | Sensor friendly name
-| `frequency` | Yes | `"weekly"`, `"even-weeks"`, `"odd-weeks"`, `"every-n-weeks"`, `"monthly"` or `"annual"`
+| `frequency` | Yes | `"weekly"`, `"even-weeks"`, `"odd-weeks"`, `"every-n-weeks"`, `"monthly"`, `"annual"` or `"group"`
 | `icon_normal` | Yes | Default icon **Default**:  `mdi:trash-can`
 | `icon_today` | Yes | Icon if the collection is today **Default**: `mdi:delete-restore`
 | `icon_tomorrow` | Yes | Icon if the collection is tomorrow **Default**: `mdi:delete-circle`
@@ -108,6 +122,11 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 |Attribute |Optional|Description
 |:----------|----------|------------
 |`date` | No | Date of the collection using format `'mm/dd'` (e.g. '11/24' for November 24 each year)
+
+#### PARAMETERS FOR GROUP
+|Attribute |Optional|Description
+|:----------|----------|------------
+|`entities` | No | List of `entity_id`s to merge
 
 
 **IMPORTANT - put include/exclude dates within quotes. Dates without quotes might cause Home Assistant not loading configuration when starting - in case the date is invalid. Validation for dates within quotes works fine.** I think this is general bug, I am addressing that. (See the example above)
