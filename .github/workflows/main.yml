@@ -17,7 +17,7 @@ jobs:
           sed -i 's|refs/tags/||' custom_components/garbage_colection/const.py
 
       # Pack the HACS dir as a zip and upload to the release
-      - name: ZIP HACS Dir
+      - name: ZIP garbage_collection Dir
         run: |
           cd /home/runner/work/Garbage-Collection/Garbage-Collection/custom_components/garbage_colection
           zip garbage_colection.zip -r ./
