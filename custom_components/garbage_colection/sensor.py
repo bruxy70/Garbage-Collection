@@ -35,6 +35,8 @@ from .const import (
     CONF_SENSORS,
     MONTH_OPTIONS,
     FREQUENCY_OPTIONS,
+    STATE_TODAY,
+    STATE_TOMORROW,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -52,7 +54,7 @@ async def async_setup_entry(hass, config_entry, async_add_devices):
     async_add_devices([GarbageCollection(hass, config_entry.data)], True)
 
 
-def nth_weekday_date(n, date_of_month, collection_day):
+def nth_weekday_date(n: int, date_of_month: date, collection_day: int) -> date:
     first_of_month = datetime(date_of_month.year, date_of_month.month, 1).date()
     month_starts_on = first_of_month.weekday()
     # 1st of the month is before the day of collection
@@ -115,8 +117,6 @@ class GarbageCollection(Entity):
         self.__icon_today = config.get(CONF_ICON_TODAY)
         self.__icon_tomorrow = config.get(CONF_ICON_TOMORROW)
         self.__icon = self.__icon_normal
-        self.__today = "Today"
-        self.__tomorrow = "Tomorrow"
 
     @property
     def unique_id(self):
@@ -159,14 +159,14 @@ class GarbageCollection(Entity):
         res[ATTR_DAYS] = self.__days
         return res
 
-    def date_inside(self, dat):
+    def date_inside(self, dat: date) -> bool:
         month = dat.month
         if self.__first_month <= self.__last_month:
             return bool(month >= self.__first_month and month <= self.__last_month)
         else:
             return bool(month <= self.__last_month or month >= self.__first_month)
 
-    def find_candidate_date(self, day1):
+    def find_candidate_date(self, day1: date) -> date:
         """Find the next possible date starting from day1,
         only based on calendar, not lookimg at include/exclude days"""
         week = day1.isocalendar()[1]
@@ -249,7 +249,7 @@ class GarbageCollection(Entity):
             _LOGGER.debug(f"({self.__name}) Unknown frequency {self.__frequency}")
             return None
 
-    def get_next_date(self, day1):
+    def get_next_date(self, day1: date) -> date:
         """Find the next date starting from day1.
         Looks at include and exclude days"""
         first_day = day1
@@ -338,19 +338,20 @@ class GarbageCollection(Entity):
             if self.__days > 1:
                 if bool(self.__verbose_state):
                     self.__state = f"on {next_date_txt}, in {self.__days} days"
+                    # self.__state = "on_date"
                 else:
                     self.__state = 2
                 self.__icon = self.__icon_normal
             else:
                 if self.__days == 0:
                     if bool(self.__verbose_state):
-                        self.__state = self.__today
+                        self.__state = STATE_TODAY
                     else:
                         self.__state = self.__days
                     self.__icon = self.__icon_today
                 elif self.__days == 1:
                     if bool(self.__verbose_state):
-                        self.__state = self.__tomorrow
+                        self.__state = STATE_TOMORROW
                     else:
                         self.__state = self.__days
                     self.__icon = self.__icon_tomorrow
