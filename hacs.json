@@ -1,5 +1,7 @@
 {
   "name": "Garbage Collection",
+  "zip_release": true,
+  "filename": "garbage_colection.zip",
   "domains": ["garbage_collection", "sensor"],
   "iot_class": "Local Push"
 }

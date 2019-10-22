@@ -3,7 +3,7 @@ from datetime import datetime, date
 import homeassistant.helpers.config_validation as cv
 from homeassistant.const import CONF_NAME, WEEKDAYS, CONF_ENTITIES
 
-"""Constants for blueprint."""
+"""Constants for garbage_collection."""
 # Base component constants
 DOMAIN = "garbage_collection"
 DOMAIN_DATA = f"{DOMAIN}_data"
