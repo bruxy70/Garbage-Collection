@@ -36,6 +36,8 @@ CONF_INCLUDE_DATES = "include_dates"
 CONF_PERIOD = "period"
 CONF_FIRST_WEEK = "first_week"
 CONF_SENSORS = "sensors"
+CONF_VERBOSE_FORMAT = "verbose_format"
+CONF_DATE_FORMAT = "date_format"
 
 # Defaults
 DEFAULT_NAME = DOMAIN
@@ -45,6 +47,8 @@ DEFAULT_FREQUENCY = "weekly"
 DEFAULT_PERIOD = 1
 DEFAULT_FIRST_WEEK = 1
 DEFAULT_VERBOSE_STATE = False
+DEFAULT_DATE_FORMAT = "%d-%b-%Y"
+DEFAULT_VERBOSE_FORMAT = "on {date}, in {days} days"
 
 # Icons
 DEFAULT_ICON_NORMAL = "mdi:trash-can"
@@ -132,6 +136,8 @@ SENSOR_SCHEMA = vol.Schema(
         vol.Optional(CONF_ICON_TODAY, default=DEFAULT_ICON_TODAY): cv.icon,
         vol.Optional(CONF_ICON_TOMORROW, default=DEFAULT_ICON_TOMORROW): cv.icon,
         vol.Optional(CONF_VERBOSE_STATE, default=DEFAULT_VERBOSE_STATE): cv.boolean,
+        vol.Optional(CONF_DATE_FORMAT, default=DEFAULT_DATE_FORMAT): cv.string,
+        vol.Optional(CONF_VERBOSE_FORMAT, default=DEFAULT_VERBOSE_FORMAT): cv.string,
     }
 )
 
