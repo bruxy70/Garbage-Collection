@@ -12,7 +12,7 @@
                     "icon_tomorrow": "Icon collectio tomorrow",
                     "icon_today": "Icon collection today",
                     "verbose_state": "Verbose state (text, instead of number)",
-                    "verbose_format": "Verbose format (using {date} and {days} variables",
+                    "verbose_format": "Verbose format (using `date` and `days` variables (in squary brackets))",
                     "date_format": "Date format (see http://strftime.org/)"
                 }
             },
@@ -80,7 +80,7 @@
                     "icon_tomorrow": "Icon collectio tomorrow",
                     "icon_today": "Icon collection today",
                     "verbose_state": "Verbose state (text, instead of number)",
-                    "verbose_format": "Verbose format (using {date} and {days} variables",
+                    "verbose_format": "Verbose format (using `date` and `days` variables (in squary brackets))",
                     "date_format": "Date format (see http://strftime.org/)"
                 }
             },

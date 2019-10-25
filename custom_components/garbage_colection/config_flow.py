@@ -129,7 +129,7 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
         data_schema[vol.Required(CONF_ICON_TOMORROW, default=icon_tomorrow)] = str
         data_schema[vol.Required(CONF_ICON_TODAY, default=icon_today)] = str
         data_schema[vol.Required(CONF_VERBOSE_STATE, default=verbose_state)] = bool
-        data_schema[vol.Required(CONF_VERBOSE_FORMAT, default=date_format)] = str
+        data_schema[vol.Required(CONF_VERBOSE_FORMAT, default=verbose_format)] = str
         data_schema[vol.Required(CONF_DATE_FORMAT, default=date_format)] = str
         return self.async_show_form(
             step_id="user", data_schema=vol.Schema(data_schema), errors=self._errors
