@@ -23,6 +23,8 @@ from .const import (
     CONF_ICON_TODAY,
     CONF_ICON_TOMORROW,
     CONF_VERBOSE_STATE,
+    CONF_VERBOSE_FORMAT,
+    CONF_DATE_FORMAT,
     CONF_FIRST_MONTH,
     CONF_LAST_MONTH,
     CONF_COLLECTION_DAYS,
@@ -116,6 +118,8 @@ class GarbageCollection(Entity):
         self.__icon_normal = config.get(CONF_ICON_NORMAL)
         self.__icon_today = config.get(CONF_ICON_TODAY)
         self.__icon_tomorrow = config.get(CONF_ICON_TOMORROW)
+        self.__date_format = config.get(CONF_DATE_FORMAT, DEFAULT_DATE_FORMAT)
+        self.__verbose_format = config.get(CONF_VERBOSE_FORMAT, DEFAULT_VERBOSE_FORMAT)
         self.__icon = self.__icon_normal
 
     @property
@@ -328,7 +332,7 @@ class GarbageCollection(Entity):
         self.__next_date = next_date
         if next_date is not None:
             self.__days = (self.__next_date - today).days
-            next_date_txt = self.__next_date.strftime("%d-%b-%Y")
+            next_date_txt = self.__next_date.strftime(self.__date_format)
             _LOGGER.debug(
                 "(%s) Found next date: %s, that is in %d days",
                 self.__name,
@@ -337,7 +341,9 @@ class GarbageCollection(Entity):
             )
             if self.__days > 1:
                 if bool(self.__verbose_state):
-                    self.__state = f"on {next_date_txt}, in {self.__days} days"
+                    self.__state = self.__verbose_format.format(
+                        date=next_date_txt,
+                        days=self.__days)
                     # self.__state = "on_date"
                 else:
                     self.__state = 2
