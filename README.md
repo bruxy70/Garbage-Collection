@@ -97,6 +97,9 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 | `icon_today` | Yes | Icon if the collection is today **Default**: `mdi:delete-restore`
 | `icon_tomorrow` | Yes | Icon if the collection is tomorrow **Default**: `mdi:delete-circle`
 | `verbose_state` | Yes | The sensor state will show collection date and remaining days, instead of number **Default**: `False`
+| `verbose_format` | Yes | (relevant when `verbose_state` is `True`). Verbose status formatting string. Can use placeholders `{date}` and `{days}` to show the date of next collection and remaining days. **Default**: `'on {date}, in {days} days'` (when the collection is today or tomorrow, it will show `Today` or `Tomorrow` - (currently in English, French and Czech). 
+| `date_format` | Yes | In the `verbose_format`, you can configure the format of date (using [strftime](http://strftime.org/) format)  **Default**: `'%d-%b-%Y'`
+
 
 #### PARAMETERS FOR ALL FREQUENCIES EXCEPT ANNUAL
 |Attribute |Optional|Description
@@ -141,7 +144,7 @@ The state can be one of
 | 1 | Collection is tomorrow
 | 2 | Collection is later 
 
-If the `verbose_state` parameter is set, it will show date and remaining days, for example "Today" or "Tomorrow" or "on 10-Sep-2019, in 2 days"
+If the `verbose_state` parameter is set, it will show date and remaining days, for example "Today" or "Tomorrow" or "on 10-Sep-2019, in 2 days" (configurable)
 
 ### Attributes
 | Attribute | Description
