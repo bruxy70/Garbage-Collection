@@ -101,6 +101,8 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
         icon_tomorrow = DEFAULT_ICON_TOMORROW
         icon_today = DEFAULT_ICON_TODAY
         verbose_state = DEFAULT_VERBOSE_STATE
+        verbose_format = DEFAULT_VERBOSE_FORMAT
+        date_format = DEFAULT_DATE_FORMAT
         if user_input is not None:
             if CONF_NAME in user_input:
                 name = user_input[CONF_NAME]
@@ -114,6 +116,10 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
                 icon_today = user_input[CONF_ICON_TODAY]
             if CONF_VERBOSE_STATE in user_input:
                 verbose_state = user_input[CONF_VERBOSE_STATE]
+            if CONF_VERBOSE_FORMAT in user_input:
+                verbose_format = user_input[CONF_VERBOSE_FORMAT]
+            if CONF_DATE_FORMAT in user_input:
+                date_format = user_input[CONF_DATE_FORMAT]
         data_schema = OrderedDict()
         data_schema[vol.Required(CONF_NAME, default=name)] = str
         data_schema[vol.Required(CONF_FREQUENCY, default=frequency)] = vol.In(
@@ -123,6 +129,8 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
         data_schema[vol.Required(CONF_ICON_TOMORROW, default=icon_tomorrow)] = str
         data_schema[vol.Required(CONF_ICON_TODAY, default=icon_today)] = str
         data_schema[vol.Required(CONF_VERBOSE_STATE, default=verbose_state)] = bool
+        data_schema[vol.Required(CONF_VERBOSE_FORMAT, default=date_format)] = str
+        data_schema[vol.Required(CONF_DATE_FORMAT, default=date_format)] = str
         return self.async_show_form(
             step_id="user", data_schema=vol.Schema(data_schema), errors=self._errors
         )
@@ -441,6 +449,18 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
                 default=self.config_entry.options.get(CONF_VERBOSE_STATE),
             )
         ] = bool
+        data_schema[
+            vol.Required(
+                CONF_VERBOSE_FORMAT,
+                default=self.config_entry.options.get(CONF_VERBOSE_FORMAT),
+            )
+        ] = str
+        data_schema[
+            vol.Required(
+                CONF_DATE_FORMAT,
+                default=self.config_entry.options.get(CONF_DATE_FORMAT),
+            )
+        ] = str
         return self.async_show_form(
             step_id="init", data_schema=vol.Schema(data_schema), errors=self._errors
         )

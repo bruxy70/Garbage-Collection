@@ -11,7 +11,9 @@
                     "icon_normal": "Icon",
                     "icon_tomorrow": "Icon collectio tomorrow",
                     "icon_today": "Icon collection today",
-                    "verbose_state": "Verbose state (text, instead of number)"
+                    "verbose_state": "Verbose state (text, instead of number)",
+                    "verbose_format": "Verbose format (using {date} and {days} variables",
+                    "date_format": "Date format (see http://strftime.org/)"
                 }
             },
             "detail": {
@@ -77,7 +79,9 @@
                     "icon_normal": "Icon",
                     "icon_tomorrow": "Icon collectio tomorrow",
                     "icon_today": "Icon collection today",
-                    "verbose_state": "Verbose state (text, instead of number)"
+                    "verbose_state": "Verbose state (text, instead of number)",
+                    "verbose_format": "Verbose format (using {date} and {days} variables",
+                    "date_format": "Date format (see http://strftime.org/)"
                 }
             },
             "detail": {
