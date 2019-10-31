@@ -58,8 +58,8 @@ async def async_setup_entry(hass, config_entry, async_add_devices):
     async_add_devices([GarbageCollection(hass, config_entry.data)], True)
 
 
-def nth_weekday_date(n: int, date_of_month: date, collection_day: int) -> date:
-    first_of_month = datetime(date_of_month.year, date_of_month.month, 1).date()
+def nth_weekday_date(n: int, date_of_month: datetime, collection_day: int) -> datetime:
+    first_of_month = datetime(date_of_month.year, date_of_month.month, 1)
     month_starts_on = first_of_month.weekday()
     # 1st of the month is before the day of collection
     # (so 1st collection week the week when month starts)
@@ -74,14 +74,14 @@ def nth_weekday_date(n: int, date_of_month: date, collection_day: int) -> date:
 
 
 def to_dates(dates):
-    # Convert list of text to dates, if not already dates
+    # Convert list of text to datetimes, if not already datetimes
     converted = []
     for day in dates:
-        if type(day) == date:
+        if type(day) == datetime:
             converted.append(day)
         else:
             try:
-                converted.append(datetime.strptime(day, "%Y-%m-%d").date())
+                converted.append(datetime.strptime(day, "%Y-%m-%d"))
             except ValueError:
                 continue
     return converted
@@ -158,23 +158,22 @@ class GarbageCollection(Entity):
         res[ATTR_NEXT_DATE] = (
             None
             if self.__next_date is None
-            else datetime(
-                self.__next_date.year, self.__next_date.month, self.__next_date.day
-            )
+            else self.__next_date.astimezone()
         )
         res[ATTR_DAYS] = self.__days
         return res
 
-    def date_inside(self, dat: date) -> bool:
+    def date_inside(self, dat: datetime) -> bool:
         month = dat.month
         if self.__first_month <= self.__last_month:
             return bool(month >= self.__first_month and month <= self.__last_month)
         else:
             return bool(month <= self.__last_month or month >= self.__first_month)
 
-    def find_candidate_date(self, day1: date) -> date:
+    def find_candidate_date(self, day1: datetime) -> datetime:
         """Find the next possible date starting from day1,
         only based on calendar, not lookimg at include/exclude days"""
+        day1 = day1
         week = day1.isocalendar()[1]
         weekday = day1.weekday()
         year = day1.year
@@ -215,12 +214,12 @@ class GarbageCollection(Entity):
                     WEEKDAYS.index(self.__collection_days[0]),
                 )
                 # date is today or in the future -> we have the date
-                if candidate_date >= day1:
+                if candidate_date.date() >= day1.date():
                     return candidate_date
             if day1.month == 12:
-                next_collection_month = datetime(year + 1, 1, 1).date()
+                next_collection_month = datetime(year + 1, 1, 1)
             else:
-                next_collection_month = datetime(year, day1.month + 1, 1).date()
+                next_collection_month = datetime(year, day1.month + 1, 1)
             return nth_weekday_date(
                 self.__monthly_day_order_numbers[0],
                 next_collection_month,
@@ -234,12 +233,12 @@ class GarbageCollection(Entity):
                     self.__name,
                 )
                 return None
-            conf_date = datetime.strptime(self.__date, "%m/%d").date()
-            candidate_date = datetime(year, conf_date.month, conf_date.day).date()
-            if candidate_date < day1:
+            conf_date = datetime.strptime(self.__date, "%m/%d")
+            candidate_date = datetime(year, conf_date.month, conf_date.day)
+            if candidate_date.date() < day1.date():
                 candidate_date = datetime(
                     year + 1, conf_date.month, conf_date.day
-                ).date()
+                )
             return candidate_date
         elif self.__frequency == "group":
             if self.__entities is None:
@@ -247,15 +246,15 @@ class GarbageCollection(Entity):
                 return None
             candidate_date = None
             for entity in self.__entities:
-                d = self.hass.states.get(entity).attributes.get(ATTR_NEXT_DATE).date()
-                if candidate_date is None or d < candidate_date:
+                d = self.hass.states.get(entity).attributes.get(ATTR_NEXT_DATE)
+                if candidate_date is None or d.date() < candidate_date.date():
                     candidate_date = d
             return candidate_date
         else:
             _LOGGER.debug(f"({self.__name}) Unknown frequency {self.__frequency}")
             return None
 
-    def get_next_date(self, day1: date) -> date:
+    def get_next_date(self, day1: datetime) -> datetime:
         """Find the next date starting from day1.
         Looks at include and exclude days"""
         first_day = day1
@@ -280,14 +279,13 @@ class GarbageCollection(Entity):
 
     async def async_update(self):
         """Get the latest data and updates the states."""
-        today = datetime.now().date()
-        if self.__today is not None and self.__today == today:
+        today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        if self.__today is not None and self.__today.date() == today.date():
             # _LOGGER.debug(
             #     "(%s) Skipping the update, already did it today",
             #     self.__name)
             return
         _LOGGER.debug("(%s) Calling update", self.__name)
-        today = datetime.now().date()
         year = today.year
         month = today.month
         self.__today = today
@@ -299,7 +297,7 @@ class GarbageCollection(Entity):
                     if self.__first_month <= self.__last_month:
                         next_year = datetime(
                             next_date_year + 1, self.__first_month, 1
-                        ).date()
+                        )
                         next_date = self.get_next_date(next_year)
                         _LOGGER.debug(
                             "(%s) Did not find the date this year, "
@@ -309,7 +307,7 @@ class GarbageCollection(Entity):
                     else:
                         next_year = datetime(
                             next_date_year, self.__first_month, 1
-                        ).date()
+                        )
                         next_date = self.get_next_date(next_year)
                         _LOGGER.debug(
                             "(%s) Arrived to the end of date range, "
@@ -318,23 +316,23 @@ class GarbageCollection(Entity):
                         )
         else:
             if self.__first_month <= self.__last_month and month > self.__last_month:
-                next_year = datetime(year + 1, self.__first_month, 1).date()
+                next_year = datetime(year + 1, self.__first_month, 1)
                 next_date = self.get_next_date(next_year)
                 _LOGGER.debug(
                     "(%s) Date outside range, lookig at next year", self.__name
                 )
             else:
-                next_year = datetime(year, self.__first_month, 1).date()
+                next_year = datetime(year, self.__first_month, 1)
                 next_date = self.get_next_date(next_year)
                 _LOGGER.debug(
                     "(%s) Current date is outside of the range, "
                     "starting from first month",
                     self.__name,
                 )
-        self.__next_date = next_date
+        self.__next_date = datetime(next_date.year, next_date.month, next_date.day)
         if next_date is not None:
-            self.__days = (self.__next_date - today).days
-            next_date_txt = self.__next_date.strftime(self.__date_format)
+            self.__days = (next_date - today).days
+            next_date_txt = next_date.strftime(self.__date_format)
             _LOGGER.debug(
                 "(%s) Found next date: %s, that is in %d days",
                 self.__name,
