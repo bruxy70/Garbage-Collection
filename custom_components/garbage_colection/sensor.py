@@ -3,6 +3,7 @@ from homeassistant.helpers.entity import Entity
 import logging
 from datetime import datetime, date, timedelta
 from homeassistant.core import HomeAssistant, State
+from typing import List, Any
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -73,7 +74,7 @@ def nth_weekday_date(n: int, date_of_month: datetime, collection_day: int) -> da
         )
 
 
-def to_dates(dates):
+def to_dates(dates:List[Any]) -> List[datetime]:
     # Convert list of text to datetimes, if not already datetimes
     converted = []
     for day in dates:
@@ -277,7 +278,7 @@ class GarbageCollection(Entity):
                 break
         return next_date
 
-    async def async_update(self):
+    async def async_update(self) -> None:
         """Get the latest data and updates the states."""
         today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
         if self.__today is not None and self.__today.date() == today.date():
