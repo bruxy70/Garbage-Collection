@@ -4,7 +4,7 @@
 
 # Garbage Collection
 
-The `garbage_collection` component is a Home Assistant custom sensor for monitoring regular garbage collection schedule. The sensor can be configured for weekly schedule (including multiple collection days), bi-weekly in even or odd weeks, monthly schedule (nth day each month), or annualy (e.g. birthdays). You can also configure seasonal calendars (e.g. for bio-waste collection), by configuring the first and last month. 
+The `garbage_collection` component is a Home Assistant custom sensor for monitoring regular garbage collection schedule. The sensor can be configured for weekly schedule (including multiple collection days), bi-weekly in even or odd weeks, monthly schedule (nth day each month), or annualy (e.g. birthdays). You can also configure seasonal calendars (e.g. for bio-waste collection), by configuring the first and last month. And you can also group entities, which will merge multile schedules into one sensor.
 
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/sensor.png">
 
@@ -35,8 +35,9 @@ The `garbage_collection` component is a Home Assistant custom sensor for monitor
 
 ## Configuration
 There are 2 ways to configure the integration:
-1. Using *Config Flow*: in `Configuration/Integrations` click on the `+` button, select `Garbage Collection` and configure the sensor (prefered). If you configure Garbage Collection using Config Flow, you can change the entity_name, name and the include/exclude dates from the Integrations configuration. The changes are instant and do not require HA restart.
+1. Using *Config Flow*: in `Configuration/Integrations` click on the `+` button, select `Garbage Collection` and configure the sensor (prefered). If you configure Garbage Collection using Config Flow, you can change the entity_name, name and change the sensor parameters from the Integrations configuration. The changes are instant and do not require HA restart.
 2. Using *YAML*: add `garbage_collection` integration in your `configuration.yaml` and add individual sensors. Example:
+
 ```yaml
 # Example configuration.yaml entry
 garbage_collection:
@@ -55,12 +56,26 @@ garbage_collection:
     first_month: "mar"
     last_month: "nov"
     collection_days: "thu"
-  - name: "Large waste" # First and third saturday each month
+  - name: "Large waste summer" # First and third Saturday each month
     frequency: "monthly"
     collection_days: "sat"
     weekday_order_number: 
     - 1
     - 3
+    first_month: "may"
+    last_month: "oct"
+  - name: "Large waste winter" # First Saturday each month only
+    frequency: "monthly"
+    collection_days: "sat"
+    weekday_order_number: 
+    - 1
+    first_month: "nov"
+    last_month: "apr"
+  - name: "Large waste" # Combination of winter and summer sensors
+    frequency: "group"
+    entities:
+    - sensor.large_waste_summer
+    - sensor.large_waste_winter
   - name: Paper # Every 4 weeks on Tuesday, starting on 4th week each year
     frequency: "every-n-weeks"
     collection_days: "tue"
@@ -77,11 +92,14 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 |Attribute |Optional|Description
 |:----------|----------|------------
 | `name` | No | Sensor friendly name
-| `frequency` | Yes | `"weekly"`, `"even-weeks"`, `"odd-weeks"`, `"every-n-weeks"`, `"monthly"` or `"annual"`
+| `frequency` | Yes | `"weekly"`, `"even-weeks"`, `"odd-weeks"`, `"every-n-weeks"`, `"monthly"`, `"annual"` or `"group"`
 | `icon_normal` | Yes | Default icon **Default**:  `mdi:trash-can`
 | `icon_today` | Yes | Icon if the collection is today **Default**: `mdi:delete-restore`
 | `icon_tomorrow` | Yes | Icon if the collection is tomorrow **Default**: `mdi:delete-circle`
 | `verbose_state` | Yes | The sensor state will show collection date and remaining days, instead of number **Default**: `False`
+| `verbose_format` | Yes | (relevant when `verbose_state` is `True`). Verbose status formatting string. Can use placeholders `{date}` and `{days}` to show the date of next collection and remaining days. **Default**: `'on {date}, in {days} days'`</br>*When the collection is today or tomorrow, it will show `Today` or `Tomorrow`*</br>*(currently in English, French and Czech).*
+| `date_format` | Yes | In the `verbose_format`, you can configure the format of date (using [strftime](http://strftime.org/) format)  **Default**: `'%d-%b-%Y'`
+
 
 #### PARAMETERS FOR ALL FREQUENCIES EXCEPT ANNUAL
 |Attribute |Optional|Description
@@ -108,6 +126,11 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 |:----------|----------|------------
 |`date` | No | Date of the collection using format `'mm/dd'` (e.g. '11/24' for November 24 each year)
 
+#### PARAMETERS FOR GROUP
+|Attribute |Optional|Description
+|:----------|----------|------------
+|`entities` | No | List of `entity_id`s to merge
+
 
 **IMPORTANT - put include/exclude dates within quotes. Dates without quotes might cause Home Assistant not loading configuration when starting - in case the date is invalid. Validation for dates within quotes works fine.** I think this is general bug, I am addressing that. (See the example above)
 
@@ -121,7 +144,7 @@ The state can be one of
 | 1 | Collection is tomorrow
 | 2 | Collection is later 
 
-If the `verbose_state` parameter is set, it will show date and remaining days, for example "Today" or "Tomorrow" or "on 10-Sep-2019, in 2 days"
+If the `verbose_state` parameter is set, it will show date and remaining days, for example "Today" or "Tomorrow" or "on 10-Sep-2019, in 2 days" (configurable)
 
 ### Attributes
 | Attribute | Description

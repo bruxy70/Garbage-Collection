@@ -11,7 +11,7 @@ from homeassistant.helpers import discovery
 from homeassistant.util import Throttle
 from .sensor import GarbageCollection
 
-from integrationhelper.const import CC_STARTUP_VERSION
+# from integrationhelper.const import CC_STARTUP_VERSION
 
 from homeassistant.const import CONF_NAME
 
@@ -40,9 +40,9 @@ async def async_setup(hass, config):
         return True
 
     # Print startup message
-    _LOGGER.info(
-        CC_STARTUP_VERSION.format(name=DOMAIN, version=VERSION, issue_link=ISSUE_URL)
-    )
+    # _LOGGER.info(
+    #     CC_STARTUP_VERSION.format(name=DOMAIN, version=VERSION, issue_link=ISSUE_URL)
+    # )
     platform_config = config[DOMAIN].get(CONF_SENSORS, {})
 
     # If platform is not enabled, skip.

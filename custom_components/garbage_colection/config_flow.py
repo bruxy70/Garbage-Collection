@@ -16,6 +16,7 @@ from .const import (
     WEEKLY_FREQUENCY_X,
     MONTHLY_FREQUENCY,
     ANNUAL_FREQUENCY,
+    GROUP_FREQUENCY,
     DEFAULT_FIRST_MONTH,
     DEFAULT_LAST_MONTH,
     DEFAULT_FREQUENCY,
@@ -23,6 +24,8 @@ from .const import (
     DEFAULT_ICON_TOMORROW,
     DEFAULT_ICON_TODAY,
     DEFAULT_VERBOSE_STATE,
+    DEFAULT_VERBOSE_FORMAT,
+    DEFAULT_DATE_FORMAT,
     CONF_SENSOR,
     CONF_ENABLED,
     CONF_FREQUENCY,
@@ -30,6 +33,8 @@ from .const import (
     CONF_ICON_TODAY,
     CONF_ICON_TOMORROW,
     CONF_VERBOSE_STATE,
+    CONF_VERBOSE_FORMAT,
+    CONF_DATE_FORMAT,
     CONF_FIRST_MONTH,
     CONF_LAST_MONTH,
     CONF_COLLECTION_DAYS,
@@ -40,9 +45,10 @@ from .const import (
     CONF_PERIOD,
     CONF_FIRST_WEEK,
     CONF_SENSORS,
+    ATTR_NEXT_DATE,
 )
 
-from homeassistant.const import CONF_NAME, WEEKDAYS
+from homeassistant.const import CONF_NAME, WEEKDAYS, CONF_ENTITIES
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -74,8 +80,11 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
                 # Remember Frequency
                 self._data.update(user_input)
                 # Call next step
-                if user_input[CONF_FREQUENCY] in ANNUAL_FREQUENCY:
-                    return await self.async_step_detail_annual()
+                if (
+                    user_input[CONF_FREQUENCY] in ANNUAL_FREQUENCY
+                    or user_input[CONF_FREQUENCY] in GROUP_FREQUENCY
+                ):
+                    return await self.async_step_detail_final()
                 else:
                     return await self.async_step_detail()
             else:
@@ -92,6 +101,8 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
         icon_tomorrow = DEFAULT_ICON_TOMORROW
         icon_today = DEFAULT_ICON_TODAY
         verbose_state = DEFAULT_VERBOSE_STATE
+        verbose_format = DEFAULT_VERBOSE_FORMAT
+        date_format = DEFAULT_DATE_FORMAT
         if user_input is not None:
             if CONF_NAME in user_input:
                 name = user_input[CONF_NAME]
@@ -105,6 +116,10 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
                 icon_today = user_input[CONF_ICON_TODAY]
             if CONF_VERBOSE_STATE in user_input:
                 verbose_state = user_input[CONF_VERBOSE_STATE]
+            if CONF_VERBOSE_FORMAT in user_input:
+                verbose_format = user_input[CONF_VERBOSE_FORMAT]
+            if CONF_DATE_FORMAT in user_input:
+                date_format = user_input[CONF_DATE_FORMAT]
         data_schema = OrderedDict()
         data_schema[vol.Required(CONF_NAME, default=name)] = str
         data_schema[vol.Required(CONF_FREQUENCY, default=frequency)] = vol.In(
@@ -114,6 +129,8 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
         data_schema[vol.Required(CONF_ICON_TOMORROW, default=icon_tomorrow)] = str
         data_schema[vol.Required(CONF_ICON_TODAY, default=icon_today)] = str
         data_schema[vol.Required(CONF_VERBOSE_STATE, default=verbose_state)] = bool
+        data_schema[vol.Required(CONF_VERBOSE_FORMAT, default=verbose_format)] = str
+        data_schema[vol.Required(CONF_DATE_FORMAT, default=date_format)] = str
         return self.async_show_form(
             step_id="user", data_schema=vol.Schema(data_schema), errors=self._errors
         )
@@ -162,7 +179,7 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
             step_id="detail", data_schema=vol.Schema(data_schema), errors=self._errors
         )
 
-    async def async_step_detail_annual(
+    async def async_step_detail_final(
         self, user_input={}
     ):  # pylint: disable=dangerous-default-value
         """
@@ -171,29 +188,48 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
 
         """
         self._errors = {}
+        updates = {}
         if user_input is not None and user_input != {}:
-            if is_month_day(user_input[CONF_DATE]):
+            if self._data[CONF_FREQUENCY] in ANNUAL_FREQUENCY:
+                updates[CONF_DATE] = user_input[CONF_DATE]
+                if not is_month_day(user_input[CONF_DATE]):
+                    self._errors["base"] = "month_day"
+            else:
+                updates[CONF_ENTITIES] = string_to_list(user_input[CONF_ENTITIES])
+                checked = True
+                for entity in updates[CONF_ENTITIES]:
+                    try:
+                        self.hass.states.get(entity).attributes.get(ATTR_NEXT_DATE)
+                    except:
+                        checked = False
+                if not checked:
+                    self._errors["base"] = "entities"
+            if self._errors == {}:
                 # Remember Frequency
-                self._data.update(user_input)
+                self._data.update(updates)
                 # Call last step
                 return self.async_create_entry(
                     title=self._data["name"], data=self._data
                 )
-            else:
-                self._errors["base"] = "month_day"
-        return await self._show_detail_annual_form(user_input)
+        return await self._show_detail_final_form(user_input)
 
-    async def _show_detail_annual_form(self, user_input):
+    async def _show_detail_final_form(self, user_input):
         """Configuration STEP 2a - SHOW FORM"""
         # Defaults
         date = ""
+        entities = ""
         if user_input is not None:
             if CONF_DATE in user_input:
                 date = user_input[CONF_DATE]
+            if CONF_ENTITIES in user_input:
+                entities = user_input[CONF_ENTITIES]
         data_schema = OrderedDict()
-        data_schema[vol.Optional(CONF_DATE, default=date)] = str
+        if self._data[CONF_FREQUENCY] in ANNUAL_FREQUENCY:
+            data_schema[vol.Required(CONF_DATE, default=date)] = str
+        else:
+            data_schema[vol.Required(CONF_ENTITIES, default=entities)] = str
         return self.async_show_form(
-            step_id="detail_annual",
+            step_id="detail_final",
             data_schema=vol.Schema(data_schema),
             errors=self._errors,
         )
@@ -337,10 +373,10 @@ def is_date(date):
         return False
 
 
-def string_to_list(dates):
-    if dates is None or dates == "":
+def string_to_list(string):
+    if string is None or string == "":
         return []
-    return list(map(lambda x: x.strip(), dates.split(",")))
+    return list(map(lambda x: x.strip(), string.split(",")))
 
 
 def is_dates(dates):
@@ -370,8 +406,11 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
             # Remember Frequency
             self._data.update(user_input)
             # Call next step
-            if user_input[CONF_FREQUENCY] in ANNUAL_FREQUENCY:
-                return await self.async_step_detail_annual()
+            if (
+                user_input[CONF_FREQUENCY] in ANNUAL_FREQUENCY
+                or user_input[CONF_FREQUENCY] in GROUP_FREQUENCY
+            ):
+                return await self.async_step_detail_final()
             else:
                 return await self.async_step_detail()
             return await self._show_init_form(user_input)
@@ -410,6 +449,18 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
                 default=self.config_entry.options.get(CONF_VERBOSE_STATE),
             )
         ] = bool
+        data_schema[
+            vol.Required(
+                CONF_VERBOSE_FORMAT,
+                default=self.config_entry.options.get(CONF_VERBOSE_FORMAT),
+            )
+        ] = str
+        data_schema[
+            vol.Required(
+                CONF_DATE_FORMAT,
+                default=self.config_entry.options.get(CONF_DATE_FORMAT),
+            )
+        ] = str
         return self.async_show_form(
             step_id="init", data_schema=vol.Schema(data_schema), errors=self._errors
         )
@@ -457,34 +508,57 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
             step_id="detail", data_schema=vol.Schema(data_schema), errors=self._errors
         )
 
-    async def async_step_detail_annual(
+    async def async_step_detail_final(
         self, user_input={}
     ):  # pylint: disable=dangerous-default-value
         """
 
-        C O N F I G U R A T I O N   S T E P   2a
+        O P T I O N S   S T E P   2a
 
         """
         self._errors = {}
+        updates = {}
         if user_input is not None and user_input != {}:
-            if is_month_day(user_input[CONF_DATE]):
+            if self._data[CONF_FREQUENCY] in ANNUAL_FREQUENCY:
+                updates[CONF_DATE] = user_input[CONF_DATE]
+                if not is_month_day(user_input[CONF_DATE]):
+                    self._errors["base"] = "month_day"
+            else:
+                updates[CONF_ENTITIES] = string_to_list(user_input[CONF_ENTITIES])
+                checked = True
+                for entity in updates[CONF_ENTITIES]:
+                    try:
+                        self.hass.states.get(entity).attributes.get(ATTR_NEXT_DATE)
+                    except:
+                        checked = False
+                if not checked:
+                    self._errors["base"] = "entities"
+            if self._errors == {}:
                 # Remember Frequency
-                self._data.update(user_input)
+                self._data.update(updates)
                 # Call last step
                 return self.async_create_entry(title="", data=self._data)
-            else:
-                self._errors["base"] = "month_day"
-        return await self._show_detail_annual_form(user_input)
+        return await self._show_detail_final_form(user_input)
 
-    async def _show_detail_annual_form(self, user_input):
+    async def _show_detail_final_form(self, user_input):
         """Configuration STEP 2a - SHOW FORM"""
         # Defaults
         data_schema = OrderedDict()
-        data_schema[
-            vol.Optional(CONF_DATE, default=self.config_entry.options.get(CONF_DATE))
-        ] = str
+        if self._data[CONF_FREQUENCY] in ANNUAL_FREQUENCY:
+            data_schema[
+                vol.Optional(
+                    CONF_DATE, default=self.config_entry.options.get(CONF_DATE)
+                )
+            ] = str
+        else:
+            data_schema[
+                vol.Required(
+                    CONF_ENTITIES,
+                    default=",".join(self.config_entry.options.get(CONF_ENTITIES)),
+                )
+            ] = str
         return self.async_show_form(
-            step_id="detail_annual",
+            step_id="detail_final",
             data_schema=vol.Schema(data_schema),
             errors=self._errors,
         )
@@ -540,8 +614,7 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         ] = vol.In(MONTH_OPTIONS)
         data_schema[
             vol.Optional(
-                CONF_LAST_MONTH,
-                default=self.config_entry.options.get(CONF_LAST_MONTH),
+                CONF_LAST_MONTH, default=self.config_entry.options.get(CONF_LAST_MONTH)
             )
         ] = vol.In(MONTH_OPTIONS)
         if self._data[CONF_FREQUENCY] in WEEKLY_FREQUENCY_X:

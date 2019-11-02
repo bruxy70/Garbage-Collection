@@ -1,9 +1,9 @@
 import voluptuous as vol
 from datetime import datetime, date
 import homeassistant.helpers.config_validation as cv
-from homeassistant.const import CONF_NAME, WEEKDAYS
+from homeassistant.const import CONF_NAME, WEEKDAYS, CONF_ENTITIES
 
-"""Constants for blueprint."""
+"""Constants for garbage_collection."""
 # Base component constants
 DOMAIN = "garbage_collection"
 DOMAIN_DATA = f"{DOMAIN}_data"
@@ -36,6 +36,8 @@ CONF_INCLUDE_DATES = "include_dates"
 CONF_PERIOD = "period"
 CONF_FIRST_WEEK = "first_week"
 CONF_SENSORS = "sensors"
+CONF_VERBOSE_FORMAT = "verbose_format"
+CONF_DATE_FORMAT = "date_format"
 
 # Defaults
 DEFAULT_NAME = DOMAIN
@@ -45,12 +47,18 @@ DEFAULT_FREQUENCY = "weekly"
 DEFAULT_PERIOD = 1
 DEFAULT_FIRST_WEEK = 1
 DEFAULT_VERBOSE_STATE = False
+DEFAULT_DATE_FORMAT = "%d-%b-%Y"
+DEFAULT_VERBOSE_FORMAT = "on {date}, in {days} days"
 
 # Icons
 DEFAULT_ICON_NORMAL = "mdi:trash-can"
 DEFAULT_ICON_TODAY = "mdi:delete-restore"
 DEFAULT_ICON_TOMORROW = "mdi:delete-circle"
 ICON = DEFAULT_ICON_NORMAL
+
+#States
+STATE_TODAY = "Today"
+STATE_TOMORROW = "Tomorrow"
 
 FREQUENCY_OPTIONS = [
     "weekly",
@@ -59,6 +67,7 @@ FREQUENCY_OPTIONS = [
     "every-n-weeks",
     "monthly",
     "annual",
+    "group",
 ]
 
 MONTH_OPTIONS = [
@@ -116,6 +125,7 @@ SENSOR_SCHEMA = vol.Schema(
             vol.Coerce(int), vol.Range(min=1, max=52)
         ),
         vol.Optional(CONF_DATE): month_day_text,
+        vol.Optional(CONF_ENTITIES): cv.entity_ids,
         vol.Optional(CONF_INCLUDE_DATES, default=[]): vol.All(
             cv.ensure_list, [date_text]
         ),
@@ -126,6 +136,8 @@ SENSOR_SCHEMA = vol.Schema(
         vol.Optional(CONF_ICON_TODAY, default=DEFAULT_ICON_TODAY): cv.icon,
         vol.Optional(CONF_ICON_TOMORROW, default=DEFAULT_ICON_TOMORROW): cv.icon,
         vol.Optional(CONF_VERBOSE_STATE, default=DEFAULT_VERBOSE_STATE): cv.boolean,
+        vol.Optional(CONF_DATE_FORMAT, default=DEFAULT_DATE_FORMAT): cv.string,
+        vol.Optional(CONF_VERBOSE_FORMAT, default=DEFAULT_VERBOSE_FORMAT): cv.string,
     }
 )
 
@@ -143,3 +155,4 @@ WEEKLY_FREQUENCY = ["weekly", "even-weeks", "odd-weeks"]
 WEEKLY_FREQUENCY_X = ["every-n-weeks"]
 MONTHLY_FREQUENCY = ["monthly"]
 ANNUAL_FREQUENCY = ["annual"]
+GROUP_FREQUENCY = ["group"]
