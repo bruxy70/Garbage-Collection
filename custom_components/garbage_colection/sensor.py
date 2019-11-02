@@ -159,7 +159,8 @@ class GarbageCollection(Entity):
         res[ATTR_NEXT_DATE] = (
             None
             if self.__next_date is None
-            else self.__next_date.astimezone()
+            else self.__next_date
+            # else self.__next_date.astimezone()
         )
         res[ATTR_DAYS] = self.__days
         return res
