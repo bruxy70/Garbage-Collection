@@ -74,7 +74,7 @@ def nth_weekday_date(n: int, date_of_month: datetime, collection_day: int) -> da
         )
 
 
-def to_dates(dates:List[Any]) -> List[datetime]:
+def to_dates(dates: List[Any]) -> List[datetime]:
     # Convert list of text to datetimes, if not already datetimes
     converted = []
     for day in dates:
@@ -283,7 +283,11 @@ class GarbageCollection(Entity):
 
     async def async_update(self) -> None:
         """Get the latest data and updates the states."""
-        today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0).astimezone()
+        today = (
+            datetime.now()
+            .replace(hour=0, minute=0, second=0, microsecond=0)
+            .astimezone()
+        )
         if self.__today is not None and self.__today.date() == today.date():
             # _LOGGER.debug(
             #     "(%s) Skipping the update, already did it today",
@@ -333,7 +337,9 @@ class GarbageCollection(Entity):
                     "starting from first month",
                     self.__name,
                 )
-        self.__next_date = datetime(next_date.year, next_date.month, next_date.day).astimezone()
+        self.__next_date = datetime(
+            next_date.year, next_date.month, next_date.day
+        ).astimezone()
         if next_date is not None:
             self.__days = (next_date - today).days
             next_date_txt = next_date.strftime(self.__date_format)
@@ -346,8 +352,8 @@ class GarbageCollection(Entity):
             if self.__days > 1:
                 if bool(self.__verbose_state):
                     self.__state = self.__verbose_format.format(
-                        date=next_date_txt,
-                        days=self.__days)
+                        date=next_date_txt, days=self.__days
+                    )
                     # self.__state = "on_date"
                 else:
                     self.__state = 2

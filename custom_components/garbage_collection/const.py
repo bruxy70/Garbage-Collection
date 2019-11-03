@@ -56,7 +56,7 @@ DEFAULT_ICON_TODAY = "mdi:delete-restore"
 DEFAULT_ICON_TOMORROW = "mdi:delete-circle"
 ICON = DEFAULT_ICON_NORMAL
 
-#States
+# States
 STATE_TODAY = "Today"
 STATE_TOMORROW = "Tomorrow"
 
