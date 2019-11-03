@@ -60,7 +60,7 @@ async def async_setup_entry(hass, config_entry, async_add_devices):
 
 
 def nth_weekday_date(n: int, date_of_month: datetime, collection_day: int) -> datetime:
-    first_of_month = datetime(date_of_month.year, date_of_month.month, 1)
+    first_of_month = datetime(date_of_month.year, date_of_month.month, 1).astimezone()
     month_starts_on = first_of_month.weekday()
     # 1st of the month is before the day of collection
     # (so 1st collection week the week when month starts)
@@ -80,9 +80,11 @@ def to_dates(dates:List[Any]) -> List[datetime]:
     for day in dates:
         if type(day) == datetime:
             converted.append(day)
+        elif type(day) == date:
+            converted.append(datetime(day.year, day.month, day.day).astimezone())
         else:
             try:
-                converted.append(datetime.strptime(day, "%Y-%m-%d"))
+                converted.append(datetime.strptime(day, "%Y-%m-%d").astimezone())
             except ValueError:
                 continue
     return converted
@@ -219,9 +221,9 @@ class GarbageCollection(Entity):
                 if candidate_date.date() >= day1.date():
                     return candidate_date
             if day1.month == 12:
-                next_collection_month = datetime(year + 1, 1, 1)
+                next_collection_month = datetime(year + 1, 1, 1).astimezone()
             else:
-                next_collection_month = datetime(year, day1.month + 1, 1)
+                next_collection_month = datetime(year, day1.month + 1, 1).astimezone()
             return nth_weekday_date(
                 self.__monthly_day_order_numbers[0],
                 next_collection_month,
@@ -236,11 +238,11 @@ class GarbageCollection(Entity):
                 )
                 return None
             conf_date = datetime.strptime(self.__date, "%m/%d")
-            candidate_date = datetime(year, conf_date.month, conf_date.day)
+            candidate_date = datetime(year, conf_date.month, conf_date.day).astimezone()
             if candidate_date.date() < day1.date():
                 candidate_date = datetime(
                     year + 1, conf_date.month, conf_date.day
-                )
+                ).astimezone()
             return candidate_date
         elif self.__frequency == "group":
             if self.__entities is None:
@@ -281,7 +283,7 @@ class GarbageCollection(Entity):
 
     async def async_update(self) -> None:
         """Get the latest data and updates the states."""
-        today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0).astimezone()
         if self.__today is not None and self.__today.date() == today.date():
             # _LOGGER.debug(
             #     "(%s) Skipping the update, already did it today",
@@ -299,7 +301,7 @@ class GarbageCollection(Entity):
                     if self.__first_month <= self.__last_month:
                         next_year = datetime(
                             next_date_year + 1, self.__first_month, 1
-                        )
+                        ).astimezone()
                         next_date = self.get_next_date(next_year)
                         _LOGGER.debug(
                             "(%s) Did not find the date this year, "
@@ -309,7 +311,7 @@ class GarbageCollection(Entity):
                     else:
                         next_year = datetime(
                             next_date_year, self.__first_month, 1
-                        )
+                        ).astimezone()
                         next_date = self.get_next_date(next_year)
                         _LOGGER.debug(
                             "(%s) Arrived to the end of date range, "
@@ -318,20 +320,20 @@ class GarbageCollection(Entity):
                         )
         else:
             if self.__first_month <= self.__last_month and month > self.__last_month:
-                next_year = datetime(year + 1, self.__first_month, 1)
+                next_year = datetime(year + 1, self.__first_month, 1).astimezone()
                 next_date = self.get_next_date(next_year)
                 _LOGGER.debug(
                     "(%s) Date outside range, lookig at next year", self.__name
                 )
             else:
-                next_year = datetime(year, self.__first_month, 1)
+                next_year = datetime(year, self.__first_month, 1).astimezone()
                 next_date = self.get_next_date(next_year)
                 _LOGGER.debug(
                     "(%s) Current date is outside of the range, "
                     "starting from first month",
                     self.__name,
                 )
-        self.__next_date = datetime(next_date.year, next_date.month, next_date.day)
+        self.__next_date = datetime(next_date.year, next_date.month, next_date.day).astimezone()
         if next_date is not None:
             self.__days = (next_date - today).days
             next_date_txt = next_date.strftime(self.__date_format)
