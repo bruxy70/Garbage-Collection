@@ -12,21 +12,21 @@ jobs:
       - uses: actions/checkout@v1
       - name: "Set version numbmer"
         run: |
-          sed -i '/VERSION = /c\VERSION = "${{ github.ref }}"' custom_components/garbage_colection/const.py
-          sed -i 's|refs/heads/||' custom_components/garbage_colection/const.py
-          sed -i 's|refs/tags/||' custom_components/garbage_colection/const.py
+          sed -i '/VERSION = /c\VERSION = "${{ github.ref }}"' custom_components/garbage_collection/const.py
+          sed -i 's|refs/heads/||' custom_components/garbage_collection/const.py
+          sed -i 's|refs/tags/||' custom_components/garbage_collection/const.py
 
       # Pack the HACS dir as a zip and upload to the release
       - name: ZIP garbage_collection Dir
         run: |
-          cd /home/runner/work/Garbage-Collection/Garbage-Collection/custom_components/garbage_colection
-          zip garbage_colection.zip -r ./
+          cd /home/runner/work/Garbage-Collection/Garbage-Collection/custom_components/garbage_collection
+          zip garbage_collection.zip -r ./
       - name: Upload zip to release
         uses: svenstaro/upload-release-action@v1-release
 
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: /home/runner/work/Garbage-Collection/Garbage-Collection/custom_components/garbage_colection/garbage_colection.zip
-          asset_name: garbage_colection.zip
+          file: /home/runner/work/Garbage-Collection/Garbage-Collection/custom_components/garbage_collection/garbage_collection.zip
+          asset_name: garbage_collection.zip
           tag: ${{ github.ref }}
           overwrite: true
