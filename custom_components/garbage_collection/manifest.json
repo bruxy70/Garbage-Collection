@@ -8,11 +8,10 @@
     "@bruxy70"
   ],
   "requirements": [
-    "collections",
     "datetime",
     "integrationhelper",
     "typing",
-    "uuid",
+    "uuid", 
     "voluptuous"
   ],
   "homeassistant": "0.96.0"
