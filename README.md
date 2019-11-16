@@ -120,7 +120,7 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 |Attribute |Optional|Description
 |:----------|----------|------------
 |`weekday_order_number` | Yes | List of week numbers of `collection_day` each month. E.g., if `collection_day` is `"sat"`, 1 will mean 1<sup>st</sup> Saturday each month (integer 1-4)<br/>**Default**: 1
-|`week_order_number` | Yes | Similar to `weekday_order_number`, but instead of nth weekday of the month, take the weekday of the nth week of each month. So if the month starts on Friday, the 1st Wednedsay of the 1st week would actually be last Wednesday of last month and the Wednesday of 2nd week will be the 1st Wednesday of the month.<br/>**Default**: False
+|`week_order_number` | Yes | Similar to `weekday_order_number`, but instead of nth weekday of each month, take the weekday of the nth week of each month. So if the month starts on Friday, the 1st Wednedsay of the 1st week would actually be last Wednesday of last month and the Wednesday of 2nd week will be the 1st Wednesday of the month.
 
 #### PARAMETERS FOR ANNUAL COLLECTION
 |Attribute |Optional|Description
