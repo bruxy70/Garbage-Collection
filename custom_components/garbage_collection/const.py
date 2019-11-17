@@ -29,7 +29,9 @@ CONF_VERBOSE_STATE = "verbose_state"
 CONF_FIRST_MONTH = "first_month"
 CONF_LAST_MONTH = "last_month"
 CONF_COLLECTION_DAYS = "collection_days"
+CONF_FORCE_WEEK_NUMBERS = "force_week_order_numbers"
 CONF_WEEKDAY_ORDER_NUMBER = "weekday_order_number"
+CONF_WEEK_ORDER_NUMBER = "week_order_number"
 CONF_DATE = "date"
 CONF_EXCLUDE_DATES = "exclude_dates"
 CONF_INCLUDE_DATES = "include_dates"
@@ -116,6 +118,9 @@ SENSOR_SCHEMA = vol.Schema(
             MONTH_OPTIONS
         ),
         vol.Optional(CONF_WEEKDAY_ORDER_NUMBER, default=[1]): vol.All(
+            cv.ensure_list, [vol.All(vol.Coerce(int), vol.Range(min=1, max=5))]
+        ),
+        vol.Optional(CONF_WEEK_ORDER_NUMBER, default=[]): vol.All(
             cv.ensure_list, [vol.All(vol.Coerce(int), vol.Range(min=1, max=5))]
         ),
         vol.Optional(CONF_PERIOD, default=DEFAULT_PERIOD): vol.All(

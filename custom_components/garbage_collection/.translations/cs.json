@@ -16,6 +16,14 @@
                     "date_format": "Formát data(see http://strftime.org/)"
                 }
             },
+            "annual_group": {
+                "title": "Garbage Collection - Další parametry",
+                "description": "Zadej datum svozu (např. 11/20 pro 20. listoped)",
+                "data": {
+                    "date": "Datum (mm/dd)",
+                    "entities": "Seznam entit (odděleno čárkou)"
+                }
+            },
             "detail": {
                 "title": "Garbage Collection - Dny svozu",
                 "description": "Vyber jeden nebo více dnů svozu. Více na: https://github.com/bruxy70/Garbage-Collection",
@@ -26,15 +34,8 @@
                     "collection_days_thu": "Thursday",
                     "collection_days_fri": "Friday",
                     "collection_days_sat": "Saturday",
-                    "collection_days_sun": "Sunday"
-                }
-            },
-            "detail_final": {
-                "title": "Garbage Collection - Další parametry",
-                "description": "Zadej datum svozu (např. 11/20 pro 20. listoped)",
-                "data": {
-                    "date": "Datum (mm/dd)",
-                    "entities": "Seznam entit (odděleno čárkou)"
+                    "collection_days_sun": "Sunday",
+                    "force_week_order_numbers": "Číslo týdne v měsící místo čísla dne"
                 }
             },
             "final": {
@@ -49,6 +50,12 @@
                     "weekday_order_number_2": "Druhý den v měsíci",
                     "weekday_order_number_3": "Třetí den v měsíci",
                     "weekday_order_number_4": "Čtvrtý den v měsíci",
+                    "weekday_order_number_5": "Pátý den v měsíci",
+                    "week_order_number_1": "Prvn týden v měsíci",
+                    "week_order_number_2": "Druhý týden v měsíci",
+                    "week_order_number_3": "Třetí týden v měsíci",
+                    "week_order_number_4": "Čtvrtý týden v měsíci",
+                    "week_order_number_5": "Pátý týden v měsíci",
                     "include_dates": "Přidané datumy (volitelné)",
                     "exclude_dates": "Zakázané datumy (volitelné)"
                 }
@@ -84,6 +91,14 @@
                     "date_format": "Formát data(see http://strftime.org/)"
                 }
             },
+            "annual_group": {
+                "title": "Garbage Collection - Další parametry",
+                "description": "Zadej datum svozu (např. 11/20 pro 20. listoped)",
+                "data": {
+                    "date": "Datum (mm/dd)",
+                    "entities": "Seznam entit (odděleno čárkou)"
+                }
+            },
             "detail": {
                 "title": "Garbage Collection - Dny svozu",
                 "description": "Vyber jeden nebo více dnů svozu. Více na: https://github.com/bruxy70/Garbage-Collection",
@@ -94,15 +109,9 @@
                     "collection_days_thu": "Thursday",
                     "collection_days_fri": "Friday",
                     "collection_days_sat": "Saturday",
-                    "collection_days_sun": "Sunday"
-                }
-            },
-            "detail_final": {
-                "title": "Garbage Collection - Další parametry",
-                "description": "Zadej datum svozu (např. 11/20 pro 20. listoped)",
-                "data": {
-                    "date": "Datum (mm/dd)",
-                    "entities": "Seznam entit (odděleno čárkou)"
+                    "collection_days_sun": "Sunday",
+                    "force_week_order_numbers": "Číslo týdne v měsící místo čísla dne"
+
                 }
             },
             "final": {
@@ -117,6 +126,12 @@
                     "weekday_order_number_2": "Druhý den v měsíci",
                     "weekday_order_number_3": "Třetí den v měsíci",
                     "weekday_order_number_4": "Čtvrtý den v měsíci",
+                    "weekday_order_number_5": "Pátý den v měsíci",
+                    "week_order_number_1": "Prvn týden v měsíci",
+                    "week_order_number_2": "Druhý týden v měsíci",
+                    "week_order_number_3": "Třetí týden v měsíci",
+                    "week_order_number_4": "Čtvrtý týden v měsíci",
+                    "week_order_number_5": "Pátý týden v měsíci",
                     "include_dates": "Přidané datumy (volitelné)",
                     "exclude_dates": "Zakázané datumy (volitelné)"
                 }
