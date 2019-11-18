@@ -117,12 +117,12 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 |`first_week` | Yes | First collection on the `"first_week"` week (integer 1-53)<br/>**Default**: 1<br/>*(The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representatio of the week)*
 
 #### PARAMETERS FOR MONTHLY COLLECTION
-The monthly schedule has two flavors: it can trigger either on the **nth occurence of the weekday** in a month, or on the weekday in the **nth week** of each month.
+The monthly schedule has two flavors: it can trigger either on the **n<sup>th</sup> occurence of the weekday** in a month, or on the weekday in the **n<sup>th</sup> week** of each month.
 
 |Attribute |Optional|Description
 |:----------|----------|------------
 |`weekday_order_number` | Yes | List of week numbers of `collection_day` each month. E.g., if `collection_day` is `"sat"`, 1 will mean 1<sup>st</sup> Saturday each month (integer 1-4)<br/>**Default**: 1
-|`week_order_number` | Yes | Similar to `weekday_order_number`, but instead of nth weekday of each month, take the weekday of the nth week of each month. So if the month starts on Friday, the 1st Wednedsay of the 1st week would actually be last Wednesday of the previous month and the Wednesday of 2nd week will be the 1st Wednesday of the month.
+|`week_order_number` | Yes | Similar to `weekday_order_number`, but instead of n<sup>th</sup> weekday of each month, take the weekday of the n<sup>th</sup> week of each month. So if the month starts on Friday, the Wednedsay of the 1<sup>st</sup> week would actually be last Wednesday of the previous month and the Wednesday of 2<sup>nd</sup> week will be the 1<sup>st</sup> Wednesday of the month.
 
 *You cannot combine both options in one sensor - if you configure both, it will only take the `week_order_number` parameter.*
 
