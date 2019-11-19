@@ -16,6 +16,14 @@
                     "date_format": "Date format (see http://strftime.org/)"
                 }
             },
+            "annual_group": {
+                "title": "Garbage Collection - Additional parameters",
+                "description": "Enter the collection day date (e.g. 11/20 for November 20)",
+                "data": {
+                    "date": "Date (mm/dd)",
+                    "entities": "List of entities (comma separated)"
+                }
+            },
             "detail": {
                 "title": "Garbage Collection - Collection days",
                 "description": "Select one or more collection days. More details here: https://github.com/bruxy70/Garbage-Collection",
@@ -26,15 +34,8 @@
                     "collection_days_thu": "Thursday",
                     "collection_days_fri": "Friday",
                     "collection_days_sat": "Saturday",
-                    "collection_days_sun": "Sunday"
-                }
-            },
-            "detail_final": {
-                "title": "Garbage Collection - Additional parameters",
-                "description": "Enter the collection day date (e.g. 11/20 for November 20)",
-                "data": {
-                    "date": "Date (mm/dd)",
-                    "entities": "List of entities (comma separated)"
+                    "collection_days_sun": "Sunday",
+                    "force_week_order_numbers": "Order of week in a month instead of order of weekday"
                 }
             },
             "final": {
@@ -49,6 +50,12 @@
                     "weekday_order_number_2": "2nd weekday of month",
                     "weekday_order_number_3": "3rd weekday of month",
                     "weekday_order_number_4": "4th weekday of month",
+                    "weekday_order_number_5": "5th weekday of month",
+                    "week_order_number_1": "1st week of month",
+                    "week_order_number_2": "2nd week of month",
+                    "week_order_number_3": "3rd week of month",
+                    "week_order_number_4": "4th week of month",
+                    "week_order_number_5": "5th week of month",
                     "include_dates": "Include dates (optional)",
                     "exclude_dates": "Exclude dates (optional)"
                 }
@@ -84,6 +91,14 @@
                     "date_format": "Date format (see http://strftime.org/)"
                 }
             },
+            "annual_group": {
+                "title": "Garbage Collection - Additional parameters",
+                "description": "Enter the collection day date (e.g. 11/20 for November 20)",
+                "data": {
+                    "date": "Date (mm/dd)",
+                    "entities": "List of entities (comma separated)"
+                }
+            },
             "detail": {
                 "title": "Garbage Collection - Collection days",
                 "description": "Select one or more collection days. More details here: https://github.com/bruxy70/Garbage-Collection",
@@ -94,15 +109,8 @@
                     "collection_days_thu": "Thursday",
                     "collection_days_fri": "Friday",
                     "collection_days_sat": "Saturday",
-                    "collection_days_sun": "Sunday"
-                }
-            },
-            "detail_final": {
-                "title": "Garbage Collection - Additional parameters",
-                "description": "Enter the collection day date (e.g. 11/20 for November 20)",
-                "data": {
-                    "date": "Date (mm/dd)",
-                    "entities": "List of entities (comma separated)"
+                    "collection_days_sun": "Sunday",
+                    "force_week_order_numbers": "Order of week in a month instead of order of weekday"
                 }
             },
             "final": {
@@ -117,6 +125,12 @@
                     "weekday_order_number_2": "2nd weekday of month",
                     "weekday_order_number_3": "3rd weekday of month",
                     "weekday_order_number_4": "4th weekday of month",
+                    "weekday_order_number_5": "5th weekday of month",
+                    "week_order_number_1": "1st week of month",
+                    "week_order_number_2": "2nd week of month",
+                    "week_order_number_3": "3rd week of month",
+                    "week_order_number_4": "4th week of month",
+                    "week_order_number_5": "5th week of month",
                     "include_dates": "Include dates (optional)",
                     "exclude_dates": "Exclude dates (optional)"
                 }

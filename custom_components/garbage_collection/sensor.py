@@ -31,7 +31,9 @@ from .const import (
     CONF_FIRST_MONTH,
     CONF_LAST_MONTH,
     CONF_COLLECTION_DAYS,
+    CONF_FORCE_WEEK_NUMBERS,
     CONF_WEEKDAY_ORDER_NUMBER,
+    CONF_WEEK_ORDER_NUMBER,
     CONF_DATE,
     CONF_EXCLUDE_DATES,
     CONF_INCLUDE_DATES,
@@ -59,7 +61,17 @@ async def async_setup_entry(hass, config_entry, async_add_devices):
     async_add_devices([GarbageCollection(hass, config_entry.data)], True)
 
 
+def nth_week_date(n: int, date_of_month: datetime, collection_day: int) -> datetime:
+    """Find weekday in the nth week of the month"""
+    first_of_month = datetime(date_of_month.year, date_of_month.month, 1).astimezone()
+    month_starts_on = first_of_month.weekday()
+    return first_of_month + timedelta(
+        days=collection_day - month_starts_on + (n - 1) * 7
+    )
+
+
 def nth_weekday_date(n: int, date_of_month: datetime, collection_day: int) -> datetime:
+    """Find nth weekday of the month"""
     first_of_month = datetime(date_of_month.year, date_of_month.month, 1).astimezone()
     month_starts_on = first_of_month.weekday()
     # 1st of the month is before the day of collection
@@ -74,7 +86,7 @@ def nth_weekday_date(n: int, date_of_month: datetime, collection_day: int) -> da
         )
 
 
-def to_dates(dates:List[Any]) -> List[datetime]:
+def to_dates(dates: List[Any]) -> List[datetime]:
     # Convert list of text to datetimes, if not already datetimes
     converted = []
     for day in dates:
@@ -108,7 +120,11 @@ class GarbageCollection(Entity):
             self.__last_month = MONTH_OPTIONS.index(last_month) + 1
         else:
             self.__last_month = 12
-        self.__monthly_day_order_numbers = config.get(CONF_WEEKDAY_ORDER_NUMBER)
+        self._weekday_order_numbers = config.get(CONF_WEEKDAY_ORDER_NUMBER)
+        self._week_order_numbers = config.get(CONF_WEEK_ORDER_NUMBER)
+        self.__monthly_force_week_numbers = bool(
+            self._week_order_numbers is not None and len(self._week_order_numbers) != 0
+        )
         self.__include_dates = to_dates(config.get(CONF_INCLUDE_DATES, []))
         self.__exclude_dates = to_dates(config.get(CONF_EXCLUDE_DATES, []))
         self.__period = config.get(CONF_PERIOD)
@@ -211,24 +227,42 @@ class GarbageCollection(Entity):
             return day1 + timedelta(days=offset)
         elif self.__frequency == "monthly":
             # Monthly
-            for monthly_day_order_number in self.__monthly_day_order_numbers:
-                candidate_date = nth_weekday_date(
-                    monthly_day_order_number,
-                    day1,
-                    WEEKDAYS.index(self.__collection_days[0]),
-                )
-                # date is today or in the future -> we have the date
-                if candidate_date.date() >= day1.date():
-                    return candidate_date
+            if self.__monthly_force_week_numbers:
+                for week_order_number in self._week_order_numbers:
+                    candidate_date = nth_week_date(
+                        week_order_number,
+                        day1,
+                        WEEKDAYS.index(self.__collection_days[0]),
+                    )
+                    # date is today or in the future -> we have the date
+                    if candidate_date.date() >= day1.date():
+                        return candidate_date
+            else:
+                for weekday_order_number in self._weekday_order_numbers:
+                    candidate_date = nth_weekday_date(
+                        weekday_order_number,
+                        day1,
+                        WEEKDAYS.index(self.__collection_days[0]),
+                    )
+                    # date is today or in the future -> we have the date
+                    if candidate_date.date() >= day1.date():
+                        return candidate_date
             if day1.month == 12:
                 next_collection_month = datetime(year + 1, 1, 1).astimezone()
             else:
                 next_collection_month = datetime(year, day1.month + 1, 1).astimezone()
-            return nth_weekday_date(
-                self.__monthly_day_order_numbers[0],
-                next_collection_month,
-                WEEKDAYS.index(self.__collection_days[0]),
-            )
+            if self.__monthly_force_week_numbers:
+                return nth_week_date(
+                    self._week_order_numbers[0],
+                    next_collection_month,
+                    WEEKDAYS.index(self.__collection_days[0]),
+                )
+            else:
+                return nth_weekday_date(
+                    self._weekday_order_numbers[0],
+                    next_collection_month,
+                    WEEKDAYS.index(self.__collection_days[0]),
+                )
         elif self.__frequency == "annual":
             # Annual
             if self.__date is None:
@@ -283,7 +317,11 @@ class GarbageCollection(Entity):
 
     async def async_update(self) -> None:
         """Get the latest data and updates the states."""
-        today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0).astimezone()
+        today = (
+            datetime.now()
+            .replace(hour=0, minute=0, second=0, microsecond=0)
+            .astimezone()
+        )
         if self.__today is not None and self.__today.date() == today.date():
             # _LOGGER.debug(
             #     "(%s) Skipping the update, already did it today",
@@ -333,7 +371,9 @@ class GarbageCollection(Entity):
                     "starting from first month",
                     self.__name,
                 )
-        self.__next_date = datetime(next_date.year, next_date.month, next_date.day).astimezone()
+        self.__next_date = datetime(
+            next_date.year, next_date.month, next_date.day
+        ).astimezone()
         if next_date is not None:
             self.__days = (next_date - today).days
             next_date_txt = next_date.strftime(self.__date_format)
@@ -346,8 +386,8 @@ class GarbageCollection(Entity):
             if self.__days > 1:
                 if bool(self.__verbose_state):
                     self.__state = self.__verbose_format.format(
-                        date=next_date_txt,
-                        days=self.__days)
+                        date=next_date_txt, days=self.__days
+                    )
                     # self.__state = "on_date"
                 else:
                     self.__state = 2

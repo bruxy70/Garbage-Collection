@@ -11,7 +11,7 @@ The `garbage_collection` component is a Home Assistant custom sensor for monitor
 ## Table of Contents
 * [Installation](#installation)
   + [Manual Installation](#manual-installation)
-  + [Installation via HACS](#installation-via-hacs)
+  + [Installation via Home Assistant Community Store (HACS)](#installation-via-hacs)
 * [Configuration](#configuration)
   + [Configuration Parameters](#configuration-parameters)
 * [State and Attributes](#state-and-attributes)
@@ -27,8 +27,8 @@ The `garbage_collection` component is a Home Assistant custom sensor for monitor
 3. Configure the `garbage_collection` sensor.
 4. Restart Home Assistant.
 
-### INSTALLATION VIA HACS
-1. Ensure that [HACS](https://custom-components.github.io/hacs/) is installed.
+### INSTALLATION VIA Home Assistant Community Store (HACS)
+1. Ensure that [HACS](https://hacs.xyz/) is installed.
 2. Search for and install the "Garbage Collection" integration.
 3. Configure the `garbage_collection` sensor.
 4. Restart Home Assistant.
@@ -117,9 +117,14 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 |`first_week` | Yes | First collection on the `"first_week"` week (integer 1-53)<br/>**Default**: 1<br/>*(The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representatio of the week)*
 
 #### PARAMETERS FOR MONTHLY COLLECTION
+The monthly schedule has two flavors: it can trigger either on the **n<sup>th</sup> occurence of the weekday** in a month, or on the weekday in the **n<sup>th</sup> week** of each month.
+
 |Attribute |Optional|Description
 |:----------|----------|------------
-|`weekday_order_number` | Yes | List of week numbers of `collection_day` each month. E.g., if `collection_day` is `"sat"`, 1 will mean 1<sup>st</sup> Saturday each month (integer 1-4)<br/>**Default**: 1
+|`weekday_order_number` | Yes | List of week numbers of `collection_day` each month. E.g., if `collection_day` is `"sat"`, 1 will mean 1<sup>st</sup> Saturday each month (integer 1-5)<br/>**Default**: 1
+|`week_order_number` | Yes | Similar to `weekday_order_number`, but instead of n<sup>th</sup> weekday of each month, take the weekday of the n<sup>th</sup> week of each month.</br>So if the month starts on Friday, the Wednesday of the 1<sup>st</sup> week would actually be last Wednesday of the previous month and the Wednesday of 2<sup>nd</sup> week will be the 1<sup>st</sup> Wednesday of the month.
+
+*You cannot combine both options in one sensor - if you configure both, it will only take the `week_order_number` parameter.*
 
 #### PARAMETERS FOR ANNUAL COLLECTION
 |Attribute |Optional|Description
