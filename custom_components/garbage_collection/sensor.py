@@ -5,6 +5,8 @@ from datetime import datetime, date, timedelta
 from homeassistant.core import HomeAssistant, State
 from typing import List, Any
 
+import homeassistant.util.dt as dt_util
+
 _LOGGER = logging.getLogger(__name__)
 
 SCAN_INTERVAL = timedelta(seconds=60)
@@ -318,9 +320,8 @@ class GarbageCollection(Entity):
     async def async_update(self) -> None:
         """Get the latest data and updates the states."""
         today = (
-            datetime.now()
+            dt_util.now()
             .replace(hour=0, minute=0, second=0, microsecond=0)
-            .astimezone()
         )
         if self.__today is not None and self.__today.date() == today.date():
             # _LOGGER.debug(
@@ -371,9 +372,7 @@ class GarbageCollection(Entity):
                     "starting from first month",
                     self.__name,
                 )
-        self.__next_date = datetime(
-            next_date.year, next_date.month, next_date.day
-        ).astimezone()
+        self.__next_date = dt_util.as_local(next_date)
         if next_date is not None:
             self.__days = (next_date - today).days
             next_date_txt = next_date.strftime(self.__date_format)
