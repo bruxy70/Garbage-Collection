@@ -1,11 +1,10 @@
 """Sensor platform for garbage_collection."""
 from homeassistant.helpers.entity import Entity
+import homeassistant.util.dt as dt_util
 import logging
 from datetime import datetime, date, timedelta
 from homeassistant.core import HomeAssistant, State
 from typing import List, Any
-
-import homeassistant.util.dt as dt_util
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -65,7 +64,7 @@ async def async_setup_entry(hass, config_entry, async_add_devices):
 
 def nth_week_date(n: int, date_of_month: datetime, collection_day: int) -> datetime:
     """Find weekday in the nth week of the month"""
-    first_of_month = datetime(date_of_month.year, date_of_month.month, 1).astimezone()
+    first_of_month = datetime(date_of_month.year, date_of_month.month, 1)
     month_starts_on = first_of_month.weekday()
     return first_of_month + timedelta(
         days=collection_day - month_starts_on + (n - 1) * 7
@@ -74,7 +73,7 @@ def nth_week_date(n: int, date_of_month: datetime, collection_day: int) -> datet
 
 def nth_weekday_date(n: int, date_of_month: datetime, collection_day: int) -> datetime:
     """Find nth weekday of the month"""
-    first_of_month = datetime(date_of_month.year, date_of_month.month, 1).astimezone()
+    first_of_month = datetime(date_of_month.year, date_of_month.month, 1)
     month_starts_on = first_of_month.weekday()
     # 1st of the month is before the day of collection
     # (so 1st collection week the week when month starts)
@@ -95,10 +94,10 @@ def to_dates(dates: List[Any]) -> List[datetime]:
         if type(day) == datetime:
             converted.append(day)
         elif type(day) == date:
-            converted.append(datetime(day.year, day.month, day.day).astimezone())
+            converted.append(datetime(day.year, day.month, day.day))
         else:
             try:
-                converted.append(datetime.strptime(day, "%Y-%m-%d").astimezone())
+                converted.append(datetime.strptime(day, "%Y-%m-%d"))
             except ValueError:
                 continue
     return converted
@@ -180,7 +179,6 @@ class GarbageCollection(Entity):
             None
             if self.__next_date is None
             else self.__next_date
-            # else self.__next_date.astimezone()
         )
         res[ATTR_DAYS] = self.__days
         return res
@@ -250,9 +248,9 @@ class GarbageCollection(Entity):
                     if candidate_date.date() >= day1.date():
                         return candidate_date
             if day1.month == 12:
-                next_collection_month = datetime(year + 1, 1, 1).astimezone()
+                next_collection_month = datetime(year + 1, 1, 1)
             else:
-                next_collection_month = datetime(year, day1.month + 1, 1).astimezone()
+                next_collection_month = datetime(year, day1.month + 1, 1)
             if self.__monthly_force_week_numbers:
                 return nth_week_date(
                     self._week_order_numbers[0],
@@ -274,11 +272,11 @@ class GarbageCollection(Entity):
                 )
                 return None
             conf_date = datetime.strptime(self.__date, "%m/%d")
-            candidate_date = datetime(year, conf_date.month, conf_date.day).astimezone()
+            candidate_date = datetime(year, conf_date.month, conf_date.day)
             if candidate_date.date() < day1.date():
                 candidate_date = datetime(
                     year + 1, conf_date.month, conf_date.day
-                ).astimezone()
+                )
             return candidate_date
         elif self.__frequency == "group":
             if self.__entities is None:
@@ -340,7 +338,7 @@ class GarbageCollection(Entity):
                     if self.__first_month <= self.__last_month:
                         next_year = datetime(
                             next_date_year + 1, self.__first_month, 1
-                        ).astimezone()
+                        )
                         next_date = self.get_next_date(next_year)
                         _LOGGER.debug(
                             "(%s) Did not find the date this year, "
@@ -350,7 +348,7 @@ class GarbageCollection(Entity):
                     else:
                         next_year = datetime(
                             next_date_year, self.__first_month, 1
-                        ).astimezone()
+                        )
                         next_date = self.get_next_date(next_year)
                         _LOGGER.debug(
                             "(%s) Arrived to the end of date range, "
@@ -359,13 +357,13 @@ class GarbageCollection(Entity):
                         )
         else:
             if self.__first_month <= self.__last_month and month > self.__last_month:
-                next_year = datetime(year + 1, self.__first_month, 1).astimezone()
+                next_year = datetime(year + 1, self.__first_month, 1)
                 next_date = self.get_next_date(next_year)
                 _LOGGER.debug(
                     "(%s) Date outside range, lookig at next year", self.__name
                 )
             else:
-                next_year = datetime(year, self.__first_month, 1).astimezone()
+                next_year = datetime(year, self.__first_month, 1)
                 next_date = self.get_next_date(next_year)
                 _LOGGER.debug(
                     "(%s) Current date is outside of the range, "
