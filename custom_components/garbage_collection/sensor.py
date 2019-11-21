@@ -175,11 +175,7 @@ class GarbageCollection(Entity):
     def device_state_attributes(self):
         """Return the state attributes."""
         res = {}
-        res[ATTR_NEXT_DATE] = (
-            None
-            if self.__next_date is None
-            else self.__next_date
-        )
+        res[ATTR_NEXT_DATE] = None if self.__next_date is None else self.__next_date
         res[ATTR_DAYS] = self.__days
         return res
 
@@ -274,9 +270,7 @@ class GarbageCollection(Entity):
             conf_date = datetime.strptime(self.__date, "%m/%d")
             candidate_date = datetime(year, conf_date.month, conf_date.day)
             if candidate_date.date() < day1.date():
-                candidate_date = datetime(
-                    year + 1, conf_date.month, conf_date.day
-                )
+                candidate_date = datetime(year + 1, conf_date.month, conf_date.day)
             return candidate_date
         elif self.__frequency == "group":
             if self.__entities is None:
@@ -317,10 +311,7 @@ class GarbageCollection(Entity):
 
     async def async_update(self) -> None:
         """Get the latest data and updates the states."""
-        today = (
-            dt_util.now()
-            .replace(hour=0, minute=0, second=0, microsecond=0)
-        )
+        today = dt_util.now().replace(hour=0, minute=0, second=0, microsecond=0)
         if self.__today is not None and self.__today.date() == today.date():
             # _LOGGER.debug(
             #     "(%s) Skipping the update, already did it today",
@@ -336,9 +327,7 @@ class GarbageCollection(Entity):
                 next_date_year = next_date.year
                 if not self.date_inside(next_date):
                     if self.__first_month <= self.__last_month:
-                        next_year = datetime(
-                            next_date_year + 1, self.__first_month, 1
-                        )
+                        next_year = datetime(next_date_year + 1, self.__first_month, 1)
                         next_date = self.get_next_date(next_year)
                         _LOGGER.debug(
                             "(%s) Did not find the date this year, "
@@ -346,9 +335,7 @@ class GarbageCollection(Entity):
                             self.__name,
                         )
                     else:
-                        next_year = datetime(
-                            next_date_year, self.__first_month, 1
-                        )
+                        next_year = datetime(next_date_year, self.__first_month, 1)
                         next_date = self.get_next_date(next_year)
                         _LOGGER.debug(
                             "(%s) Arrived to the end of date range, "
@@ -370,7 +357,7 @@ class GarbageCollection(Entity):
                     "starting from first month",
                     self.__name,
                 )
-        
+
         self.__next_date = next_date = dt_util.as_local(next_date)
         if next_date is not None:
             self.__days = (next_date - today).days
