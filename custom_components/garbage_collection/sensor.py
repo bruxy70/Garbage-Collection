@@ -370,7 +370,8 @@ class GarbageCollection(Entity):
                     "starting from first month",
                     self.__name,
                 )
-        self.__next_date = dt_util.as_local(next_date)
+        
+        self.__next_date = next_date = dt_util.as_local(next_date)
         if next_date is not None:
             self.__days = (next_date - today).days
             next_date_txt = next_date.strftime(self.__date_format)
