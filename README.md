@@ -117,7 +117,7 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 |`first_week` | Yes | First collection on the `"first_week"` week (integer 1-53)<br/>**Default**: 1<br/>*(The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representatio of the week)*
 
 #### PARAMETERS FOR MONTHLY COLLECTION
-The monthly schedule has two flavors: it can trigger either on the **n<sup>th</sup> occurence of the weekday** in a month, or on the weekday in the **n<sup>th</sup> week** of each month.
+The monthly schedule has two flavors: it can trigger either on the **n<sup>th</sup> occurrence of the weekday** in a month, or on the weekday in the **n<sup>th</sup> week** of each month.
 
 |Attribute |Optional|Description
 |:----------|----------|------------
