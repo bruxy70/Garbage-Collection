@@ -28,13 +28,13 @@
                 "title": "Garbage Collection - Dny svozu",
                 "description": "Vyber jeden nebo více dnů svozu. Více na: https://github.com/bruxy70/Garbage-Collection",
                 "data": {
-                    "collection_days_mon": "Monday",
-                    "collection_days_tue": "Tuesday",
-                    "collection_days_wed": "Wednesday",
-                    "collection_days_thu": "Thursday",
-                    "collection_days_fri": "Friday",
-                    "collection_days_sat": "Saturday",
-                    "collection_days_sun": "Sunday",
+                    "collection_days_mon": "Pondělí",
+                    "collection_days_tue": "Úterý",
+                    "collection_days_wed": "Středa",
+                    "collection_days_thu": "Čtvrtek",
+                    "collection_days_fri": "Pátek",
+                    "collection_days_sat": "Sobota",
+                    "collection_days_sun": "Neděle",
                     "force_week_order_numbers": "Číslo týdne v měsící místo čísla dne"
                 }
             },
@@ -103,13 +103,13 @@
                 "title": "Garbage Collection - Dny svozu",
                 "description": "Vyber jeden nebo více dnů svozu. Více na: https://github.com/bruxy70/Garbage-Collection",
                 "data": {
-                    "collection_days_mon": "Monday",
-                    "collection_days_tue": "Tuesday",
-                    "collection_days_wed": "Wednesday",
-                    "collection_days_thu": "Thursday",
-                    "collection_days_fri": "Friday",
-                    "collection_days_sat": "Saturday",
-                    "collection_days_sun": "Sunday",
+                    "collection_days_mon": "Pondělí",
+                    "collection_days_tue": "Úterý",
+                    "collection_days_wed": "Středa",
+                    "collection_days_thu": "Čtvrtek",
+                    "collection_days_fri": "Pátek",
+                    "collection_days_sat": "Sobota",
+                    "collection_days_sun": "Neděle",
                     "force_week_order_numbers": "Číslo týdne v měsící místo čísla dne"
 
                 }
