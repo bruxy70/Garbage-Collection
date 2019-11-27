@@ -305,7 +305,10 @@ class GarbageCollection(Entity):
             )
             if len(include_dates) > 0 and include_dates[0] < next_date:
                 next_date = include_dates[0]
-            if next_date not in self.__exclude_dates:
+            exclude_dates = list(
+                filter(lambda date: date.date() == next_date.date(), self.__exclude_dates)
+            )
+            if len(exclude_dates) == 0:
                 break
             else:
                 first_day = next_date + timedelta(days=1)
