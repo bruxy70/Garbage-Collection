@@ -12,7 +12,7 @@
                     "icon_tomorrow": "Icona raccolta domani",
                     "icon_today": "Icona raccolta oggi",
                     "verbose_state": "Stato Verbale (testo, al posto di numeri)",
-                    "verbose_format": "Formato Verbale (usare veriabili `date` e `days` (in parentesi quadre))",
+                    "verbose_format": "Formato Verbale (usare le variabili `date` e `days` (in parentesi graffe))",
                     "date_format": "Formato Data (vedere http://strftime.org/)"
                 }
             },
@@ -40,7 +40,7 @@
             },
             "final": {
                 "title": "Raccolta Differenziata - Parametri aggiuntivi",
-                "description": "Includi ed escludi date sono liste di date separate da virgole, nel formato yyyy-mm-dd. Maggiori info su https://github.com/bruxy70/Garbage-Collection",
+                "description": "'Includi ed escludi date' sono liste di date separate da virgole, nel formato yyyy-mm-dd. Maggiori informazioni su https://github.com/bruxy70/Garbage-Collection",
                 "data": {
                     "first_month": "Prima raccolta del mese",
                     "last_month": "Ultima raccolta del mese",
@@ -63,10 +63,10 @@
         },
         "error": {
             "name": "Il nome del sensore non può essere vuoto. Immettere il nome del sensore.",
-            "days": "Seleziona 1 o più giorni!",
+            "days": "Seleziona uno o più giorni!",
             "entities": "L'entità non esiste!",
             "month_day": "Formato data non valido!",
-            "weekday_order_number": "Seleziona 1 o più giorni",
+            "weekday_order_number": "Seleziona uno o più giorni",
             "period": "Il periodo deve essere un numero compreso tra 1 e 52",
             "first_week": "La prima settimana deve essere un numero tra 1 e 52",
             "date": "Formato data non valido!"
@@ -80,14 +80,14 @@
         "step": {
             "init": {
                 "title": "Raccolta Differenziata - Frequenza di raccolta",
-                "description": "Cambia i parametri del sensore. Maggiori info su https://github.com/bruxy70/Garbage-Collection",
+                "description": "Cambia i parametri del sensore. Maggiori informazioni su https://github.com/bruxy70/Garbage-Collection",
                 "data": {
                     "frequency": "Frequenza",
                     "icon_normal": "Icona",
                     "icon_tomorrow": "Icona raccolta domani",
                     "icon_today": "Icona raccolta oggi",
                     "verbose_state": "Stato Verbale (testo, al posto di numeri)",
-                    "verbose_format": "Formato Verbale (usare veriabili `date` e `days` (in parentesi quadre))",
+                    "verbose_format": "Formato Verbale (usare le variabili `date` e `days` (in parentesi graffe))",
                     "date_format": "Formato Data (vedere http://strftime.org/)"
                 }
             },
@@ -115,7 +115,7 @@
             },
             "final": {
                 "title": "Raccolta Differenziata - Parametri aggiuntivi",
-                "description": "Includi ed escludi date sono liste di date separate da virgole, nel formato yyyy-mm-dd. Maggiori info su https://github.com/bruxy70/Garbage-Collection",
+                "description": "'Includi ed escludi date' sono liste di date separate da virgole, nel formato yyyy-mm-dd. Maggiori informazioni su https://github.com/bruxy70/Garbage-Collection",
                 "data": {
                     "first_month": "Prima raccolta del mese",
                     "last_month": "Ultima raccolta del mese",
