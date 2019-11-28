@@ -178,10 +178,8 @@ class GarbageCollection(Entity):
         if self.__next_date is None:
             res[ATTR_NEXT_DATE] = None
         else:
-            res[ATTR_NEXT_DATE] = dt_util.as_local(
-                datetime(
-                    self.__next_date.year, self.__next_date.month, self.__next_date.day
-                )
+            res[ATTR_NEXT_DATE] = datetime(
+                self.__next_date.year, self.__next_date.month, self.__next_date.day
             )
         res[ATTR_DAYS] = self.__days
         return res
