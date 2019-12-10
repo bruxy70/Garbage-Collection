@@ -88,7 +88,6 @@ garbage_collection:
 Entity_id change is not possible using the YAML configuration. Changing other paratemers require restarting Home Assistant.
 
 ### CONFIGURATION PARAMETERS
-
 #### SENSOR PARAMETERS
 |Attribute |Optional|Description
 |:----------|----------|------------
