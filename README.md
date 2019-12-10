@@ -88,7 +88,10 @@ garbage_collection:
 Entity_id change is not possible using the YAML configuration. Changing other paratemers require restarting Home Assistant.
 
 ### CONFIGURATION PARAMETERS
-#### GENERAL PARAMETERS
+|Attribute |Optional|Description
+|:----------|----------|------------
+| `country_code' | Yes | For date locale. *Example: 'cs_CZ' or 'fr_FR'*
+#### SENSOR PARAMETERS
 |Attribute |Optional|Description
 |:----------|----------|------------
 | `name` | No | Sensor friendly name
