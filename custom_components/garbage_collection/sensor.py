@@ -2,6 +2,7 @@
 from homeassistant.helpers.entity import Entity
 import homeassistant.util.dt as dt_util
 import logging
+import locale
 from datetime import datetime, date, timedelta
 from homeassistant.core import HomeAssistant, State
 from typing import List, Any
@@ -41,6 +42,7 @@ from .const import (
     CONF_PERIOD,
     CONF_FIRST_WEEK,
     CONF_SENSORS,
+    CONF_COUNTRY_CODE,
     MONTH_OPTIONS,
     FREQUENCY_OPTIONS,
     STATE_TODAY,
@@ -142,6 +144,7 @@ class GarbageCollection(Entity):
         self.__icon_tomorrow = config.get(CONF_ICON_TOMORROW)
         self.__date_format = config.get(CONF_DATE_FORMAT, DEFAULT_DATE_FORMAT)
         self.__verbose_format = config.get(CONF_VERBOSE_FORMAT, DEFAULT_VERBOSE_FORMAT)
+        self.__country_code = config.get(CONF_COUNTRY_CODE)
         self.__icon = self.__icon_normal
 
     @property
@@ -365,6 +368,8 @@ class GarbageCollection(Entity):
         self.__next_date = next_date
         if next_date is not None:
             self.__days = (next_date - today).days
+            if self.__country_code is not None:
+                locale.setlocale(locale.LC_ALL, self.__country_code)
             next_date_txt = next_date.strftime(self.__date_format)
             _LOGGER.debug(
                 "(%s) Found next date: %s, that is in %d days",

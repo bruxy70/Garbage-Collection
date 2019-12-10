@@ -40,6 +40,7 @@ CONF_FIRST_WEEK = "first_week"
 CONF_SENSORS = "sensors"
 CONF_VERBOSE_FORMAT = "verbose_format"
 CONF_DATE_FORMAT = "date_format"
+CONF_COUNTRY_CODE = "country_code"
 
 # Defaults
 DEFAULT_NAME = DOMAIN
@@ -148,8 +149,12 @@ SENSOR_SCHEMA = vol.Schema(
 
 CONFIG_SCHEMA = vol.Schema(
     {
+        
         DOMAIN: vol.Schema(
-            {vol.Optional(CONF_SENSORS): vol.All(cv.ensure_list, [SENSOR_SCHEMA])}
+            {
+                vol.Optional(CONF_COUNTRY_CODE): cv.string,
+                vol.Optional(CONF_SENSORS): vol.All(cv.ensure_list, [SENSOR_SCHEMA])
+            }
         )
     },
     extra=vol.ALLOW_EXTRA,
