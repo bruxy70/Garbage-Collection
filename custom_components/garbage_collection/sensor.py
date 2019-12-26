@@ -2,6 +2,7 @@
 from homeassistant.helpers.entity import Entity
 import homeassistant.util.dt as dt_util
 import logging
+import locale
 from datetime import datetime, date, timedelta
 from homeassistant.core import HomeAssistant, State
 from typing import List, Any

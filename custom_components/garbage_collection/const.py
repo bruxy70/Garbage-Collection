@@ -148,8 +148,11 @@ SENSOR_SCHEMA = vol.Schema(
 
 CONFIG_SCHEMA = vol.Schema(
     {
+        
         DOMAIN: vol.Schema(
-            {vol.Optional(CONF_SENSORS): vol.All(cv.ensure_list, [SENSOR_SCHEMA])}
+            {
+                vol.Optional(CONF_SENSORS): vol.All(cv.ensure_list, [SENSOR_SCHEMA])
+            }
         )
     },
     extra=vol.ALLOW_EXTRA,
