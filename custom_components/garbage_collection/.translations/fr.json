@@ -40,7 +40,7 @@
             },
             "final": {
                 "title": "Garbage Collection - Paramètres additionnels",
-                "description": "Liste de dates, séparées par des virgules, d'incluston et d'exclusion. Les dates sont au formatyyyy-mm-dd. Plus d'info sur https://github.com/bruxy70/Garbage-Collection",
+                "description": "Liste de dates, séparées par des virgules, d'incluston et d'exclusion. Les dates sont au format yyyy-mm-dd. Plus d'info sur https://github.com/bruxy70/Garbage-Collection",
                 "data": {
                     "first_month": "Premier mois de la collecte",
                     "last_month": "Dernier mois de la collecte",
@@ -115,7 +115,7 @@
             },
             "final": {
                 "title": "Garbage Collection -  Paramètres additionnels",
-                "description": "Liste de dates, séparées par des virgules, d'incluston et d'exclusion. Les dates sont au formatyyyy-mm-dd. Plus d'info sur https://github.com/bruxy70/Garbage-Collection",
+                "description": "Liste de dates, séparées par des virgules, d'incluston et d'exclusion. Les dates sont au format yyyy-mm-dd. Plus d'info sur https://github.com/bruxy70/Garbage-Collection",
                 "data": {
                     "first_month": "Premier mois de la collecte",
                     "last_month": "Dernier mois de la collecte",
