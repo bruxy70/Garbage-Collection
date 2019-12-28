@@ -1,6 +1,7 @@
 """Sensor platform for garbage_collection."""
 from homeassistant.helpers.entity import Entity
 import homeassistant.util.dt as dt_util
+import holidays
 import logging
 import locale
 from datetime import datetime, date, timedelta
@@ -39,6 +40,7 @@ from .const import (
     CONF_DATE,
     CONF_EXCLUDE_DATES,
     CONF_INCLUDE_DATES,
+    CONF_INCLUDE_COUNTRY_HOLIDAYS,
     CONF_PERIOD,
     CONF_FIRST_WEEK,
     CONF_SENSORS,
@@ -129,7 +131,14 @@ class GarbageCollection(Entity):
         )
         self.__include_dates = to_dates(config.get(CONF_INCLUDE_DATES, []))
         self.__exclude_dates = to_dates(config.get(CONF_EXCLUDE_DATES, []))
+        country_holidays = config.get(CONF_INCLUDE_COUNTRY_HOLIDAYS)
         self.__holidays = []
+        if country_holidays is not None and country_holidays != "":
+            try:
+                for date, name in holidays.CountryHoliday(country_holidays).items():
+                    self.__holidays.append(date)
+            except KeyError:
+                _LOGGER.error("Invalid country code (%s)", country_holidays)
         self.__period = config.get(CONF_PERIOD)
         self.__first_week = config.get(CONF_FIRST_WEEK)
         self.__next_date = None

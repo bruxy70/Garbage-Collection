@@ -57,7 +57,8 @@
                     "week_order_number_4": "Čtvrtý týden v měsíci",
                     "week_order_number_5": "Pátý týden v měsíci",
                     "include_dates": "Přidané datumy (volitelné)",
-                    "exclude_dates": "Zakázané datumy (volitelné)"
+                    "exclude_dates": "Zakázané datumy (volitelné)",
+                    "exclude_country_holidays": "Exclude holidays in country (optional)"
                 }
             }
         },
@@ -133,7 +134,8 @@
                     "week_order_number_4": "Čtvrtý týden v měsíci",
                     "week_order_number_5": "Pátý týden v měsíci",
                     "include_dates": "Přidané datumy (volitelné)",
-                    "exclude_dates": "Zakázané datumy (volitelné)"
+                    "exclude_dates": "Zakázané datumy (volitelné)",
+                    "exclude_country_holidays": "Exclude holidays in country (optional)"
                 }
             }
         },
