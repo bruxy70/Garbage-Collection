@@ -129,6 +129,7 @@ class GarbageCollection(Entity):
         )
         self.__include_dates = to_dates(config.get(CONF_INCLUDE_DATES, []))
         self.__exclude_dates = to_dates(config.get(CONF_EXCLUDE_DATES, []))
+        self.__holidays = []
         self.__period = config.get(CONF_PERIOD)
         self.__first_week = config.get(CONF_FIRST_WEEK)
         self.__next_date = None
@@ -291,28 +292,31 @@ class GarbageCollection(Entity):
             _LOGGER.debug(f"({self.__name}) Unknown frequency {self.__frequency}")
             return None
 
+    def __insert_include_date(self, day1: date, next_date: date) -> date:
+        include_dates = list(filter(lambda date: date >= day1, self.__include_dates))
+        if len(include_dates) > 0 and include_dates[0] < next_date:
+            return include_dates[0]
+        else:
+            return next_date
+
+    def __skip_holiday(self, day: date) -> date:
+        return day + timedelta(days=1)
+
     def get_next_date(self, day1: date) -> date:
-        """Find the next date starting from day1.
-        Looks at include and exclude days"""
+        """Find the next date starting from day1."""
         first_day = day1
         i = 0
-        while True:
+        while i < 365:
             next_date = self.find_candidate_date(first_day)
-            include_dates = list(
-                filter(lambda date: date >= day1, self.__include_dates)
-            )
-            if len(include_dates) > 0 and include_dates[0] < next_date:
-                next_date = include_dates[0]
+            while next_date in self.__holidays:
+                next_date = self.__skip_holiday(next_date)
+            next_date = self.__insert_include_date(first_day, next_date)
             if next_date not in self.__exclude_dates:
-                break
-            else:
-                first_day = next_date + timedelta(days=1)
+                return next_date
+            first_day = next_date + timedelta(days=1)
             i += 1
-            if i > 365:
-                _LOGGER.error("(%s) Cannot find any suitable date", self.__name)
-                next_date = None
-                break
-        return next_date
+        _LOGGER.error("(%s) Cannot find any suitable date", self.__name)
+        return None
 
     async def async_update(self) -> None:
         """Get the latest data and updates the states."""
