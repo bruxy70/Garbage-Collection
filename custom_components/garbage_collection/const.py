@@ -35,6 +35,7 @@ CONF_WEEK_ORDER_NUMBER = "week_order_number"
 CONF_DATE = "date"
 CONF_EXCLUDE_DATES = "exclude_dates"
 CONF_INCLUDE_DATES = "include_dates"
+CONF_MOVE_COUNTRY_HOLIDAYS = "move_country_holidays"
 CONF_PERIOD = "period"
 CONF_FIRST_WEEK = "first_week"
 CONF_SENSORS = "sensors"
@@ -87,6 +88,57 @@ MONTH_OPTIONS = [
     "dec",
 ]
 
+COUNTRY_CODES = [
+    "AR",
+    "AT",
+    "AU",
+    "AW",
+    "BE",
+    "BG",
+    "BR",
+    "BY",
+    "CA",
+    "CH",
+    "CO",
+    "CZ",
+    "DE",
+    "DK",
+    "DO",
+    "ECB",
+    "EE",
+    "ES",
+    "FI",
+    "FRA",
+    "HR",
+    "HU",
+    "IE",
+    "IND",
+    "IS",
+    "IT",
+    "JP",
+    "KE",
+    "LT",
+    "LU",
+    "MX",
+    "NG",
+    "NI",
+    "NL",
+    "NO",
+    "NZ",
+    "PE",
+    "PL",
+    "PT",
+    "PTE",
+    "RU",
+    "SE",
+    "SI",
+    "SK",
+    "UA",
+    "UK",
+    "US",
+    "ZA",
+]
+
 
 def date_text(value):
     if value is None or value == "":
@@ -137,6 +189,7 @@ SENSOR_SCHEMA = vol.Schema(
         vol.Optional(CONF_EXCLUDE_DATES, default=[]): vol.All(
             cv.ensure_list, [date_text]
         ),
+        vol.Optional(CONF_MOVE_COUNTRY_HOLIDAYS): vol.In(COUNTRY_CODES),
         vol.Optional(CONF_ICON_NORMAL, default=DEFAULT_ICON_NORMAL): cv.icon,
         vol.Optional(CONF_ICON_TODAY, default=DEFAULT_ICON_TODAY): cv.icon,
         vol.Optional(CONF_ICON_TOMORROW, default=DEFAULT_ICON_TOMORROW): cv.icon,
@@ -148,11 +201,8 @@ SENSOR_SCHEMA = vol.Schema(
 
 CONFIG_SCHEMA = vol.Schema(
     {
-        
         DOMAIN: vol.Schema(
-            {
-                vol.Optional(CONF_SENSORS): vol.All(cv.ensure_list, [SENSOR_SCHEMA])
-            }
+            {vol.Optional(CONF_SENSORS): vol.All(cv.ensure_list, [SENSOR_SCHEMA])}
         )
     },
     extra=vol.ALLOW_EXTRA,

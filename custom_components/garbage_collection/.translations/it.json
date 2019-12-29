@@ -57,7 +57,8 @@
                     "week_order_number_4": "4° settimana del mese",
                     "week_order_number_5": "5° settimana del mese",
                     "include_dates": "Includi date (opzionale)",
-                    "exclude_dates": "Escludi date (opzionale)"
+                    "exclude_dates": "Escludi date (opzionale)",
+                    "move_country_holidays": "Move holidays to next day (optional)"
                 }
             }
         },
@@ -132,7 +133,8 @@
                     "week_order_number_4": "4° settimana del mese",
                     "week_order_number_5": "5° settimana del mese",
                     "include_dates": "Includi date (opzionale)",
-                    "exclude_dates": "Escludi date (opzionale)"
+                    "exclude_dates": "Escludi date (opzionale)",
+                    "move_country_holidays": "Move holidays to next day (optional)"
                 }
             }
         },
