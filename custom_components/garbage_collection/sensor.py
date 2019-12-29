@@ -308,6 +308,9 @@ class GarbageCollection(Entity):
     def __insert_include_date(self, day1: date, next_date: date) -> date:
         include_dates = list(filter(lambda date: date >= day1, self.__include_dates))
         if len(include_dates) > 0 and include_dates[0] < next_date:
+            _LOGGER.debug(
+                "(%s) Inserting include_date %s", self.__name, include_dates[0]
+            )
             return include_dates[0]
         else:
             return next_date
@@ -322,10 +325,14 @@ class GarbageCollection(Entity):
         while i < 365:
             next_date = self.find_candidate_date(first_day)
             while next_date in self.__holidays:
+                _LOGGER.debug(
+                    "(%s) Skipping public holiday on %s", self.__name, next_date
+                )
                 next_date = self.__skip_holiday(next_date)
             next_date = self.__insert_include_date(first_day, next_date)
             if next_date not in self.__exclude_dates:
                 return next_date
+            _LOGGER.debug("(%s) Skipping exclude_date %s", self.__name, next_date)
             first_day = next_date + timedelta(days=1)
             i += 1
         _LOGGER.error("(%s) Cannot find any suitable date", self.__name)
