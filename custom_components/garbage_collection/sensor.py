@@ -40,7 +40,7 @@ from .const import (
     CONF_DATE,
     CONF_EXCLUDE_DATES,
     CONF_INCLUDE_DATES,
-    CONF_INCLUDE_COUNTRY_HOLIDAYS,
+    CONF_MOVE_COUNTRY_HOLIDAYS,
     CONF_PERIOD,
     CONF_FIRST_WEEK,
     CONF_SENSORS,
@@ -131,11 +131,15 @@ class GarbageCollection(Entity):
         )
         self.__include_dates = to_dates(config.get(CONF_INCLUDE_DATES, []))
         self.__exclude_dates = to_dates(config.get(CONF_EXCLUDE_DATES, []))
-        country_holidays = config.get(CONF_INCLUDE_COUNTRY_HOLIDAYS)
+        country_holidays = config.get(CONF_MOVE_COUNTRY_HOLIDAYS)
         self.__holidays = []
         if country_holidays is not None and country_holidays != "":
+            this_year = dt_util.now().date().year
+            years = [this_year, this_year + 1]
             try:
-                for date, name in holidays.CountryHoliday(country_holidays).items():
+                for date, name in holidays.CountryHoliday(
+                    country_holidays, years=years
+                ).items():
                     self.__holidays.append(date)
             except KeyError:
                 _LOGGER.error("Invalid country code (%s)", country_holidays)

@@ -45,7 +45,7 @@ from .const import (
     CONF_DATE,
     CONF_EXCLUDE_DATES,
     CONF_INCLUDE_DATES,
-    CONF_INCLUDE_COUNTRY_HOLIDAYS,
+    CONF_MOVE_COUNTRY_HOLIDAYS,
     CONF_PERIOD,
     CONF_FIRST_WEEK,
     CONF_SENSORS,
@@ -288,8 +288,8 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
             final_info[CONF_EXCLUDE_DATES] = string_to_list(
                 user_input[CONF_EXCLUDE_DATES]
             )
-            final_info[CONF_INCLUDE_COUNTRY_HOLIDAYS] = user_input[
-                CONF_INCLUDE_COUNTRY_HOLIDAYS
+            final_info[CONF_MOVE_COUNTRY_HOLIDAYS] = user_input[
+                CONF_MOVE_COUNTRY_HOLIDAYS
             ]
             if not is_dates(final_info[CONF_INCLUDE_DATES]) or not is_dates(
                 final_info[CONF_EXCLUDE_DATES]
@@ -332,8 +332,8 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
                 include_dates = user_input[CONF_INCLUDE_DATES]
             if CONF_EXCLUDE_DATES in user_input:
                 exclude_dates = user_input[CONF_EXCLUDE_DATES]
-            if CONF_INCLUDE_COUNTRY_HOLIDAYS in user_input:
-                include_country_holidays = user_input[CONF_INCLUDE_COUNTRY_HOLIDAYS]
+            if CONF_MOVE_COUNTRY_HOLIDAYS in user_input:
+                include_country_holidays = user_input[CONF_MOVE_COUNTRY_HOLIDAYS]
         data_schema = OrderedDict()
         data_schema[vol.Optional(CONF_FIRST_MONTH, default=first_month)] = vol.In(
             MONTH_OPTIONS
@@ -375,9 +375,7 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
         data_schema[vol.Optional(CONF_INCLUDE_DATES, default=include_dates)] = str
         data_schema[vol.Optional(CONF_EXCLUDE_DATES, default=exclude_dates)] = str
         data_schema[
-            vol.Optional(
-                CONF_INCLUDE_COUNTRY_HOLIDAYS, default=include_country_holidays
-            )
+            vol.Optional(CONF_MOVE_COUNTRY_HOLIDAYS, default=include_country_holidays)
         ] = vol.In(COUNTRY_CODES)
         return self.async_show_form(
             step_id="final", data_schema=vol.Schema(data_schema), errors=self._errors
@@ -680,8 +678,8 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
                 final_info[CONF_EXCLUDE_DATES]
             ):
                 self._errors["base"] = "date"
-            final_info[CONF_INCLUDE_COUNTRY_HOLIDAYS] = user_input[
-                CONF_INCLUDE_COUNTRY_HOLIDAYS
+            final_info[CONF_MOVE_COUNTRY_HOLIDAYS] = user_input[
+                CONF_MOVE_COUNTRY_HOLIDAYS
             ]
             if self._data[CONF_FREQUENCY] in WEEKLY_FREQUENCY_X:
                 final_info[CONF_PERIOD] = user_input[CONF_PERIOD]
@@ -755,8 +753,8 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         ] = str
         data_schema[
             vol.Optional(
-                CONF_INCLUDE_COUNTRY_HOLIDAYS,
-                default=self.config_entry.options.get(CONF_INCLUDE_COUNTRY_HOLIDAYS),
+                CONF_MOVE_COUNTRY_HOLIDAYS,
+                default=self.config_entry.options.get(CONF_MOVE_COUNTRY_HOLIDAYS),
             )
         ] = vol.In(COUNTRY_CODES)
         return self.async_show_form(

@@ -58,7 +58,7 @@
                     "week_order_number_5": "Pátý týden v měsíci",
                     "include_dates": "Přidané datumy (volitelné)",
                     "exclude_dates": "Zakázané datumy (volitelné)",
-                    "exclude_country_holidays": "Exclude holidays in country (optional)"
+                    "move_country_holidays": "Přesunout svátky na další den (volitelné)"
                 }
             }
         },
@@ -135,7 +135,7 @@
                     "week_order_number_5": "Pátý týden v měsíci",
                     "include_dates": "Přidané datumy (volitelné)",
                     "exclude_dates": "Zakázané datumy (volitelné)",
-                    "exclude_country_holidays": "Exclude holidays in country (optional)"
+                    "move_country_holidays": "Pčesunout svátky na další den (volitelné)"
                 }
             }
         },
