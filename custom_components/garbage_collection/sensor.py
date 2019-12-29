@@ -134,15 +134,18 @@ class GarbageCollection(Entity):
         country_holidays = config.get(CONF_MOVE_COUNTRY_HOLIDAYS)
         self.__holidays = []
         if country_holidays is not None and country_holidays != "":
-            this_year = dt_util.now().date().year
+            today = dt_util.now().date()
+            this_year = today.year
             years = [this_year, this_year + 1]
             try:
                 for date, name in holidays.CountryHoliday(
                     country_holidays, years=years
                 ).items():
-                    self.__holidays.append(date)
+                    if date >= today:
+                        self.__holidays.append(date)
             except KeyError:
                 _LOGGER.error("Invalid country code (%s)", country_holidays)
+            _LOGGER.debug("(%s) Found these holidays %s", self.__name, self.__holidays)
         self.__period = config.get(CONF_PERIOD)
         self.__first_week = config.get(CONF_FIRST_WEEK)
         self.__next_date = None
@@ -358,7 +361,7 @@ class GarbageCollection(Entity):
                         next_year = date(year + 1, self.__first_month, 1)
                         next_date = self.get_next_date(next_year)
                         _LOGGER.debug(
-                            "(%s) Did not find the date this year, "
+                            "(%s) Did not find a date this year, "
                             "lookig at next year",
                             self.__name,
                         )
@@ -366,9 +369,10 @@ class GarbageCollection(Entity):
                         next_year = date(year, self.__first_month, 1)
                         next_date = self.get_next_date(next_year)
                         _LOGGER.debug(
-                            "(%s) Arrived to the end of date range, "
-                            "starting at first month",
+                            "(%s) Date not within the range, "
+                            "searching again from %s",
                             self.__name,
+                            MONTH_OPTIONS[self.__first_month - 1],
                         )
         else:
             if self.__first_month <= self.__last_month and month > self.__last_month:
