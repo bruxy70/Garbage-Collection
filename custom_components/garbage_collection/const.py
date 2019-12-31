@@ -91,6 +91,7 @@ MONTH_OPTIONS = [
 ]
 
 COUNTRY_CODES = [
+    "",
     "AR",
     "AT",
     "AU",

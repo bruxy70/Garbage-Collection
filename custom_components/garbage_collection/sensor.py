@@ -255,9 +255,10 @@ class GarbageCollection(Entity):
                     self.__name,
                 )
                 return None
-            if (day1 - self.__first_date) % self.__period == 0:
+            
+            if (day1 - self.__first_date).days % self.__period == 0:
                 return day1
-            offset = self.__period - ((day1 - self.__first_date) % self.__period)
+            offset = self.__period - ((day1 - self.__first_date).days % self.__period)
             return day1 + timedelta(days=offset)
         elif self.__frequency == "monthly":
             # Monthly
