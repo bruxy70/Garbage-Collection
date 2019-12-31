@@ -4,7 +4,15 @@
 
 # Garbage Collection
 
-The `garbage_collection` component is a Home Assistant custom sensor for monitoring regular garbage collection schedule. The sensor can be configured for weekly schedule (including multiple collection days), bi-weekly in even or odd weeks, monthly schedule (nth day each month), or annualy (e.g. birthdays). You can also configure seasonal calendars (e.g. for bio-waste collection), by configuring the first and last month. And you can also group entities, which will merge multile schedules into one sensor.
+The `garbage_collection` component is a Home Assistant custom sensor for monitoring regular garbage collection schedule. The sensor can be configured for number of different schedules:
+- weekly schedule (including multiple collection days, e.g. on Tuesday and Thursday)
+- every "n" weeks
+- bi-weekly in even or odd weeks (technically, it is the same as every 2 weeks with 1<sup>st</sup> or 2<sup>nd</sup> first_week)
+- every "n" days (repeats regurarly from given first date). If n is multiply of 7, it works similar to weekly or every-n-weeks, with the difference that it ignores the week numbers (trat restart each year) but continues infinitely from the initial date.
+- monthly schedule (n<sup>th</sup> day each month)
+- annualy (e.g. birthdays). 
+You can also configure seasonal calendars (e.g. for bio-waste collection), by configuring the first and last month. 
+And you can group entities, which will merge multile schedules into one sensor.
 
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/sensor.png">
 
@@ -92,7 +100,7 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 |Attribute |Optional|Description
 |:----------|----------|------------
 | `name` | No | Sensor friendly name
-| `frequency` | Yes | `"weekly"`, `"even-weeks"`, `"odd-weeks"`, `"every-n-weeks"`, `"monthly"`, `"annual"` or `"group"`
+| `frequency` | Yes | `"weekly"`, `"even-weeks"`, `"odd-weeks"`, `"every-n-weeks"`, `"every-n-days"`, `"monthly"`, `"annual"` or `"group"`
 | `icon_normal` | Yes | Default icon **Default**:  `mdi:trash-can`
 | `icon_today` | Yes | Icon if the collection is today **Default**: `mdi:delete-restore`
 | `icon_tomorrow` | Yes | Icon if the collection is tomorrow **Default**: `mdi:delete-circle`
@@ -117,6 +125,14 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 |:----------|----------|------------
 |`period` | Yes | Collection every `"period"` weeks (integer 1-53)<br/>**Default**: 1
 |`first_week` | Yes | First collection on the `"first_week"` week (integer 1-53)<br/>**Default**: 1<br/>*(The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representatio of the week)*
+
+
+#### PARAMETERS FOR COLLECTION EVERY-N-DAYS
+|Attribute |Optional|Description
+|:----------|----------|------------
+|`period` | Yes | Collection every `"period"` days (warning - in this configuration it is days, not weeks!)<br/>**Default**: 1 (daily, which makes no sense I suppose)
+|`first_date` | No | Repeats every n days from this first date
+
 
 #### PARAMETERS FOR MONTHLY COLLECTION
 The monthly schedule has two flavors: it can trigger either on the **n<sup>th</sup> occurrence of the weekday** in a month, or on the weekday in the **n<sup>th</sup> week** of each month.

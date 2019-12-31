@@ -43,6 +43,7 @@ from .const import (
     CONF_MOVE_COUNTRY_HOLIDAYS,
     CONF_PERIOD,
     CONF_FIRST_WEEK,
+    CONF_FIRST_DATE,
     CONF_SENSORS,
     MONTH_OPTIONS,
     FREQUENCY_OPTIONS,
@@ -89,20 +90,23 @@ def nth_weekday_date(n: int, date_of_month: date, collection_day: int) -> date:
             days=7 - month_starts_on + collection_day + (n - 1) * 7
         )
 
+def to_date(day: Any) -> date:
+    if day is None:
+        return None
+    if type(day) == date:
+        return day
+    if type(day) == datetime:
+        return day.date()
+    return date.fromisoformat(day)
 
 def to_dates(dates: List[Any]) -> List[date]:
     # Convert list of text to datetimes, if not already datetimes
     converted = []
     for day in dates:
-        if type(day) == date:
-            converted.append(day)
-        elif type(day) == datetime:
-            converted.append(day.date())
-        else:
-            try:
-                converted.append(date.fromisoformat(day))
-            except ValueError:
-                continue
+        try:
+            converted.append(to_date(day))
+        except ValueError:
+            continue
     return converted
 
 
@@ -148,6 +152,7 @@ class GarbageCollection(Entity):
             _LOGGER.debug("(%s) Found these holidays %s", self.__name, self.__holidays)
         self.__period = config.get(CONF_PERIOD)
         self.__first_week = config.get(CONF_FIRST_WEEK)
+        self.__first_date = to_date(config.get(CONF_FIRST_DATE))
         self.__next_date = None
         self.__today = None
         self.__days = 0
@@ -242,6 +247,17 @@ class GarbageCollection(Entity):
                 offset = (
                     7 * in_weeks - weekday + WEEKDAYS.index(self.__collection_days[0])
                 )
+            return day1 + timedelta(days=offset)
+        elif self.__frequency == "every-n-days":
+            if self.__first_date is None or self.__period is None:
+                _LOGGER.error(
+                    "(%s) Please configure first_date and period for every-n-days collection frequency.",
+                    self.__name,
+                )
+                return None
+            if (day1 - self.__first_date) % self.__period == 0:
+                return day1
+            offset = self.__period - ((day1 - self.__first_date) % self.__period)
             return day1 + timedelta(days=offset)
         elif self.__frequency == "monthly":
             # Monthly

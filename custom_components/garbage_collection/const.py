@@ -38,6 +38,7 @@ CONF_INCLUDE_DATES = "include_dates"
 CONF_MOVE_COUNTRY_HOLIDAYS = "move_country_holidays"
 CONF_PERIOD = "period"
 CONF_FIRST_WEEK = "first_week"
+CONF_FIRST_DATE = "first_date"
 CONF_SENSORS = "sensors"
 CONF_VERBOSE_FORMAT = "verbose_format"
 CONF_DATE_FORMAT = "date_format"
@@ -68,6 +69,7 @@ FREQUENCY_OPTIONS = [
     "even-weeks",
     "odd-weeks",
     "every-n-weeks",
+    "every-n-days",
     "monthly",
     "annual",
     "group",
@@ -181,6 +183,7 @@ SENSOR_SCHEMA = vol.Schema(
         vol.Optional(CONF_FIRST_WEEK, default=DEFAULT_FIRST_WEEK): vol.All(
             vol.Coerce(int), vol.Range(min=1, max=52)
         ),
+        vol.Optional(CONF_FIRST_DATE): date_text,
         vol.Optional(CONF_DATE): month_day_text,
         vol.Optional(CONF_ENTITIES): cv.entity_ids,
         vol.Optional(CONF_INCLUDE_DATES, default=[]): vol.All(
@@ -211,6 +214,7 @@ CONFIG_SCHEMA = vol.Schema(
 
 WEEKLY_FREQUENCY = ["weekly", "even-weeks", "odd-weeks"]
 WEEKLY_FREQUENCY_X = ["every-n-weeks"]
+DAILY_FREQUENCY = ["every-n-days"]
 MONTHLY_FREQUENCY = ["monthly"]
 ANNUAL_FREQUENCY = ["annual"]
 GROUP_FREQUENCY = ["group"]
