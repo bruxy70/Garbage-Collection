@@ -44,8 +44,9 @@
                 "data": {
                     "first_month": "First collection month",
                     "last_month": "Last collection month",
-                    "period": "Collection every n weeks: (1-52)",
+                    "period": "Collection every n weeks/days: (1-52)",
                     "first_week": "First collection week (1-52)",
+                    "first_date": "First date",
                     "weekday_order_number_1": "1st weekday of month",
                     "weekday_order_number_2": "2nd weekday of month",
                     "weekday_order_number_3": "3rd weekday of month",
@@ -120,8 +121,9 @@
                 "data": {
                     "first_month": "First collection month",
                     "last_month": "Last collection month",
-                    "period": "Collection every n weeks: (1-52)",
+                    "period": "Collection every n weeks/days: (1-52)",
                     "first_week": "First collection week (1-52)",
+                    "first_date": "First date",
                     "weekday_order_number_1": "1st weekday of month",
                     "weekday_order_number_2": "2nd weekday of month",
                     "weekday_order_number_3": "3rd weekday of month",
