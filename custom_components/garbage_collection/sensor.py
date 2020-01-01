@@ -43,6 +43,7 @@ from .const import (
     CONF_MOVE_COUNTRY_HOLIDAYS,
     CONF_PERIOD,
     CONF_FIRST_WEEK,
+    CONF_FIRST_DATE,
     CONF_SENSORS,
     MONTH_OPTIONS,
     FREQUENCY_OPTIONS,
@@ -90,19 +91,24 @@ def nth_weekday_date(n: int, date_of_month: date, collection_day: int) -> date:
         )
 
 
+def to_date(day: Any) -> date:
+    if day is None:
+        return None
+    if type(day) == date:
+        return day
+    if type(day) == datetime:
+        return day.date()
+    return date.fromisoformat(day)
+
+
 def to_dates(dates: List[Any]) -> List[date]:
     # Convert list of text to datetimes, if not already datetimes
     converted = []
     for day in dates:
-        if type(day) == date:
-            converted.append(day)
-        elif type(day) == datetime:
-            converted.append(day.date())
-        else:
-            try:
-                converted.append(date.fromisoformat(day))
-            except ValueError:
-                continue
+        try:
+            converted.append(to_date(day))
+        except ValueError:
+            continue
     return converted
 
 
@@ -134,17 +140,21 @@ class GarbageCollection(Entity):
         country_holidays = config.get(CONF_MOVE_COUNTRY_HOLIDAYS)
         self.__holidays = []
         if country_holidays is not None and country_holidays != "":
-            this_year = dt_util.now().date().year
+            today = dt_util.now().date()
+            this_year = today.year
             years = [this_year, this_year + 1]
             try:
                 for date, name in holidays.CountryHoliday(
                     country_holidays, years=years
                 ).items():
-                    self.__holidays.append(date)
+                    if date >= today:
+                        self.__holidays.append(date)
             except KeyError:
                 _LOGGER.error("Invalid country code (%s)", country_holidays)
+            _LOGGER.debug("(%s) Found these holidays %s", self.__name, self.__holidays)
         self.__period = config.get(CONF_PERIOD)
         self.__first_week = config.get(CONF_FIRST_WEEK)
+        self.__first_date = to_date(config.get(CONF_FIRST_DATE))
         self.__next_date = None
         self.__today = None
         self.__days = 0
@@ -240,6 +250,18 @@ class GarbageCollection(Entity):
                     7 * in_weeks - weekday + WEEKDAYS.index(self.__collection_days[0])
                 )
             return day1 + timedelta(days=offset)
+        elif self.__frequency == "every-n-days":
+            if self.__first_date is None or self.__period is None:
+                _LOGGER.error(
+                    "(%s) Please configure first_date and period for every-n-days collection frequency.",
+                    self.__name,
+                )
+                return None
+
+            if (day1 - self.__first_date).days % self.__period == 0:
+                return day1
+            offset = self.__period - ((day1 - self.__first_date).days % self.__period)
+            return day1 + timedelta(days=offset)
         elif self.__frequency == "monthly":
             # Monthly
             if self.__monthly_force_week_numbers:
@@ -308,6 +330,9 @@ class GarbageCollection(Entity):
     def __insert_include_date(self, day1: date, next_date: date) -> date:
         include_dates = list(filter(lambda date: date >= day1, self.__include_dates))
         if len(include_dates) > 0 and include_dates[0] < next_date:
+            _LOGGER.debug(
+                "(%s) Inserting include_date %s", self.__name, include_dates[0]
+            )
             return include_dates[0]
         else:
             return next_date
@@ -322,10 +347,14 @@ class GarbageCollection(Entity):
         while i < 365:
             next_date = self.find_candidate_date(first_day)
             while next_date in self.__holidays:
+                _LOGGER.debug(
+                    "(%s) Skipping public holiday on %s", self.__name, next_date
+                )
                 next_date = self.__skip_holiday(next_date)
             next_date = self.__insert_include_date(first_day, next_date)
             if next_date not in self.__exclude_dates:
                 return next_date
+            _LOGGER.debug("(%s) Skipping exclude_date %s", self.__name, next_date)
             first_day = next_date + timedelta(days=1)
             i += 1
         _LOGGER.error("(%s) Cannot find any suitable date", self.__name)
@@ -351,7 +380,7 @@ class GarbageCollection(Entity):
                         next_year = date(year + 1, self.__first_month, 1)
                         next_date = self.get_next_date(next_year)
                         _LOGGER.debug(
-                            "(%s) Did not find the date this year, "
+                            "(%s) Did not find a date this year, "
                             "lookig at next year",
                             self.__name,
                         )
@@ -359,9 +388,10 @@ class GarbageCollection(Entity):
                         next_year = date(year, self.__first_month, 1)
                         next_date = self.get_next_date(next_year)
                         _LOGGER.debug(
-                            "(%s) Arrived to the end of date range, "
-                            "starting at first month",
+                            "(%s) Date not within the range, "
+                            "searching again from %s",
                             self.__name,
+                            MONTH_OPTIONS[self.__first_month - 1],
                         )
         else:
             if self.__first_month <= self.__last_month and month > self.__last_month:

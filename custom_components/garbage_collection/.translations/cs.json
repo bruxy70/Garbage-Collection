@@ -44,8 +44,9 @@
                 "data": {
                     "first_month": "První měsíc svozu",
                     "last_month": "Poslední měsíc scozu",
-                    "period": "Perioda (svoz každých n týdnů): (1-52)",
+                    "period": "Perioda (svoz každých n týdnů/dnů): (1-52)",
                     "first_week": "První týden svozu (1-52)",
+                    "first_date": "První datum",
                     "weekday_order_number_1": "Prvn den v měsíci",
                     "weekday_order_number_2": "Druhý den v měsíci",
                     "weekday_order_number_3": "Třetí den v měsíci",
@@ -121,8 +122,9 @@
                 "data": {
                     "first_month": "První měsíc svozu",
                     "last_month": "Poslední měsíc scozu",
-                    "period": "Perioda (svoz každých n týdnů): (1-52)",
+                    "period": "Perioda (svoz každých n týdnů-dnů): (1-52)",
                     "first_week": "První týden svozu (1-52)",
+                    "first_date": "První datum",
                     "weekday_order_number_1": "Prvn den v měsíci",
                     "weekday_order_number_2": "Druhý den v měsíci",
                     "weekday_order_number_3": "Třetí den v měsíci",
