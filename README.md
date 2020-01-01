@@ -131,7 +131,7 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 |Attribute |Optional|Description
 |:----------|----------|------------
 |`period` | Yes | Collection every `"period"` days (warning - in this configuration it is days, not weeks!)<br/>**Default**: 1 (daily, which makes no sense I suppose)
-|`first_date` | No | Repeats every n days from this first date (date in the international ISO format `'yyyy-mm-dd'`).
+|`first_date` | No | Repeats every n days from this first date<br>(date in the international ISO format `'yyyy-mm-dd'`).
 
 
 #### PARAMETERS FOR MONTHLY COLLECTION
