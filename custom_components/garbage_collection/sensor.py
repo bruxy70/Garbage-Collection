@@ -90,6 +90,7 @@ def nth_weekday_date(n: int, date_of_month: date, collection_day: int) -> date:
             days=7 - month_starts_on + collection_day + (n - 1) * 7
         )
 
+
 def to_date(day: Any) -> date:
     if day is None:
         return None
@@ -98,6 +99,7 @@ def to_date(day: Any) -> date:
     if type(day) == datetime:
         return day.date()
     return date.fromisoformat(day)
+
 
 def to_dates(dates: List[Any]) -> List[date]:
     # Convert list of text to datetimes, if not already datetimes
@@ -255,7 +257,7 @@ class GarbageCollection(Entity):
                     self.__name,
                 )
                 return None
-            
+
             if (day1 - self.__first_date).days % self.__period == 0:
                 return day1
             offset = self.__period - ((day1 - self.__first_date).days % self.__period)

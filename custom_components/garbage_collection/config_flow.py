@@ -59,6 +59,12 @@ from homeassistant.const import CONF_NAME, WEEKDAYS, CONF_ENTITIES
 _LOGGER = logging.getLogger(__name__)
 
 
+def clean_optional(dict, key):
+    """Remove optional keys before update"""
+    if key in dict:
+        del dict[key]
+
+
 @config_entries.HANDLERS.register(DOMAIN)
 class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
     """Config flow for garbage_collection."""
@@ -355,7 +361,7 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
             data_schema[vol.Required(CONF_PERIOD, default=period)] = vol.All(
                 vol.Coerce(int), vol.Range(min=1, max=52)
             )
-            data_schema[vol.Required(CONF_FIRST_DATE, default=first_date)] = str 
+            data_schema[vol.Required(CONF_FIRST_DATE, default=first_date)] = str
         if self._data[CONF_FREQUENCY] in WEEKLY_FREQUENCY_X:
             data_schema[vol.Required(CONF_PERIOD, default=period)] = vol.All(
                 vol.Coerce(int), vol.Range(min=1, max=52)
@@ -573,6 +579,7 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
                     self._errors["base"] = "entities"
             if self._errors == {}:
                 # Remember Frequency
+                clean_optional(self._data, CONF_DATE)
                 self._data.update(updates)
                 # Call last step
                 return self.async_create_entry(title="", data=self._data)
@@ -708,6 +715,12 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
                 final_info[CONF_PERIOD] = user_input[CONF_PERIOD]
                 final_info[CONF_FIRST_WEEK] = user_input[CONF_FIRST_WEEK]
             if self._errors == {}:
+                clean_optional(self._data, CONF_FIRST_MONTH)
+                clean_optional(self._data, CONF_LAST_MONTH)
+                clean_optional(self._data, CONF_INCLUDE_DATES)
+                clean_optional(self._data, CONF_EXCLUDE_DATES)
+                clean_optional(self._data, CONF_MOVE_COUNTRY_HOLIDAYS)
+                # _LOGGER.debug("final_info %s",final_info)
                 self._data.update(final_info)
                 return self.async_create_entry(title="", data=self._data)
         return await self._show_final_form(user_input)
@@ -763,10 +776,17 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
                         )
                     ] = bool
         if self._data[CONF_FREQUENCY] in DAILY_FREQUENCY:
-            data_schema[vol.Required(CONF_PERIOD, default=self.config_entry.options.get(CONF_PERIOD))] = vol.All(
-                vol.Coerce(int), vol.Range(min=1, max=52)
-            )
-            data_schema[vol.Required(CONF_FIRST_DATE, default=self.config_entry.options.get(CONF_FIRST_DATE))] = str       
+            data_schema[
+                vol.Required(
+                    CONF_PERIOD, default=self.config_entry.options.get(CONF_PERIOD)
+                )
+            ] = vol.All(vol.Coerce(int), vol.Range(min=1, max=52))
+            data_schema[
+                vol.Required(
+                    CONF_FIRST_DATE,
+                    default=self.config_entry.options.get(CONF_FIRST_DATE),
+                )
+            ] = str
         data_schema[
             vol.Optional(
                 CONF_INCLUDE_DATES,
@@ -782,7 +802,7 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         data_schema[
             vol.Optional(
                 CONF_MOVE_COUNTRY_HOLIDAYS,
-                default=self.config_entry.options.get(CONF_MOVE_COUNTRY_HOLIDAYS),
+                default=self.config_entry.options.get(CONF_MOVE_COUNTRY_HOLIDAYS, ""),
             )
         ] = vol.In(COUNTRY_CODES)
         return self.async_show_form(
