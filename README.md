@@ -1,18 +1,18 @@
-[![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://github.com/custom-components/hacs) [![Garbage-Collection](https://img.shields.io/github/v/release/bruxy70/Garbage-Collection.svg?1)](https://github.com/bruxy70/Garbage-Collection) ![Maintenance](https://img.shields.io/maintenance/yes/2019.svg)
+[![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://github.com/custom-components/hacs) [![Garbage-Collection](https://img.shields.io/github/v/release/bruxy70/Garbage-Collection.svg?1)](https://github.com/bruxy70/Garbage-Collection) ![Maintenance](https://img.shields.io/maintenance/yes/2020.svg)
 
 [![Buy me a coffee](https://img.shields.io/static/v1.svg?label=Buy%20me%20a%20coffee&message=🥨&color=black&logo=buy%20me%20a%20coffee&logoColor=white&labelColor=6f4e37)](https://www.buymeacoffee.com/3nXx0bJDP)
 
 # Garbage Collection
 
 The `garbage_collection` component is a Home Assistant custom sensor for monitoring regular garbage collection schedule. The sensor can be configured for number of different schedules:
-- weekly schedule (including multiple collection days, e.g. on Tuesday and Thursday)
-- every "n" weeks
-- bi-weekly in even or odd weeks (technically, it is the same as every 2 weeks with 1<sup>st</sup> or 2<sup>nd</sup> first_week)
-- every "n" days (repeats regurarly from given first date). If n is multiply of 7, it works similar to weekly or every-n-weeks, with the difference that it ignores the week numbers (that restart each year) but continues infinitely from the initial date.
-- monthly schedule (n<sup>th</sup> day each month)
-- annualy (e.g. birthdays). 
+- `weekly` schedule (including multiple collection days, e.g. on Tuesday and Thursday)
+- `every-n-weeks`
+- bi-weekly in `even-weeks` or `odd-weeks` (technically, it is the same as every 2 weeks with 1<sup>st</sup> or 2<sup>nd</sup> first_week)
+- `every-n-days` (repeats regularly from the given first date). If n is multiply of 7, it works similar to `weekly` or `every-n-weeks`, with the difference that it ignores the week numbers (that restart each year) but continues infinitely from the initial date.
+- `monthly` schedule (n<sup>th</sup> day each month)
+- `annualy` (e.g. birthdays). 
 You can also configure seasonal calendars (e.g. for bio-waste collection), by configuring the first and last month. 
-And you can group entities, which will merge multile schedules into one sensor.
+And you can `group` entities, which will merge multile schedules into one sensor.
 
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/sensor.png">
 
@@ -131,7 +131,7 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 |Attribute |Optional|Description
 |:----------|----------|------------
 |`period` | Yes | Collection every `"period"` days (warning - in this configuration it is days, not weeks!)<br/>**Default**: 1 (daily, which makes no sense I suppose)
-|`first_date` | No | Repeats every n days from this first date (date in the international ISO format `'yyyy-mm-dd'`).
+|`first_date` | No | Repeats every n days from this first date<br>(date in the international ISO format `'yyyy-mm-dd'`).
 
 
 #### PARAMETERS FOR MONTHLY COLLECTION
