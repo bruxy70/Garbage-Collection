@@ -218,6 +218,7 @@ garbage_collection:
     frequency: 'weekly'
     collection_days: wed
     verbose_state: True
+  etc...
 ```
 Lovelace configuration
 ```yaml
@@ -231,13 +232,33 @@ Lovelace configuration
 # Icon view (glance)
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/sensor.png">
 
-Configuration
+Integration configuration
+```yaml
+garbage_collection:
+  sensors:
+  - name: General Waste
+    frequency: 'weekly'
+    collection_days: wed
+    verbose_state: True
+    verbose_format: "on {date}\n(in {days} days)"
+  etc...
+```
+
+Configuration (I use style to allow line-break in the state)
 ```yaml
       - type: glance
+        style: |
+          "#entity": |
+            $: |
+             :host {}
+             div {
+              #  white-space: pre-line
+             }
         entities:
-        - sensor.general-waste
-        - sensor.bio
-        - sensor.large-waste
+          - sensor.smes
+          - sensor.bioodpad
+          - sensor.papir
+          - sensor.plasty
 ```
 
 # Custom Garbage Collection Card
