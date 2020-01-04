@@ -17,9 +17,9 @@ And you can `group` entities, which will merge multile schedules into one sensor
 These are some examples using this sensor. The Lovelace config examples are included below.
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/picture-entity.png">
 
-<img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/sensor.png">
-
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/entities.png">
+
+<img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/sensor.png">
 
 ## Table of Contents
 * [Installation](#installation)
