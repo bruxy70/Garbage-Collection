@@ -1,20 +1,25 @@
-[![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://github.com/custom-components/hacs) [![Garbage-Collection](https://img.shields.io/github/v/release/bruxy70/Garbage-Collection.svg?1)](https://github.com/bruxy70/Garbage-Collection) ![Maintenance](https://img.shields.io/maintenance/yes/2019.svg)
+[![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://github.com/custom-components/hacs) [![Garbage-Collection](https://img.shields.io/github/v/release/bruxy70/Garbage-Collection.svg?1)](https://github.com/bruxy70/Garbage-Collection) ![Maintenance](https://img.shields.io/maintenance/yes/2020.svg)
 
 [![Buy me a coffee](https://img.shields.io/static/v1.svg?label=Buy%20me%20a%20coffee&message=🥨&color=black&logo=buy%20me%20a%20coffee&logoColor=white&labelColor=6f4e37)](https://www.buymeacoffee.com/3nXx0bJDP)
 
 # Garbage Collection
 
 The `garbage_collection` component is a Home Assistant custom sensor for monitoring regular garbage collection schedule. The sensor can be configured for number of different schedules:
-- weekly schedule (including multiple collection days, e.g. on Tuesday and Thursday)
-- every "n" weeks
-- bi-weekly in even or odd weeks (technically, it is the same as every 2 weeks with 1<sup>st</sup> or 2<sup>nd</sup> first_week)
-- every "n" days (repeats regurarly from given first date). If n is multiply of 7, it works similar to weekly or every-n-weeks, with the difference that it ignores the week numbers (that restart each year) but continues infinitely from the initial date.
-- monthly schedule (n<sup>th</sup> day each month)
-- annualy (e.g. birthdays). 
+- `weekly` schedule (including multiple collection days, e.g. on Tuesday and Thursday)
+- `every-n-weeks`
+- bi-weekly in `even-weeks` or `odd-weeks` (technically, it is the same as every 2 weeks with 1<sup>st</sup> or 2<sup>nd</sup> first_week)
+- `every-n-days` (repeats regularly from the given first date). If n is multiply of 7, it works similar to `weekly` or `every-n-weeks`, with the difference that it ignores the week numbers (that restart each year) but continues infinitely from the initial date.
+- `monthly` schedule (n<sup>th</sup> day each month)
+- `annualy` (e.g. birthdays). 
 You can also configure seasonal calendars (e.g. for bio-waste collection), by configuring the first and last month. 
-And you can group entities, which will merge multile schedules into one sensor.
+And you can `group` entities, which will merge multile schedules into one sensor.
+
+These are some examples using this sensor. The Lovelace config examples are included below.
+<img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/picture-entity.png">
 
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/sensor.png">
+
+<img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/entities.png">
 
 ## Table of Contents
 * [Installation](#installation)
@@ -23,6 +28,7 @@ And you can group entities, which will merge multile schedules into one sensor.
 * [Configuration](#configuration)
   + [Configuration Parameters](#configuration-parameters)
 * [State and Attributes](#state-and-attributes)
+* [Lovelace configuration examples](#lovekace-config-examples)
 
 ## Installation
 
@@ -174,3 +180,47 @@ If the `verbose_state` parameter is set, it will show date and remaining days, f
 |:----------|------------
 | `next_date` | The date of next collection
 | `days` | Days till the next collection
+
+# Lovelace config examples
+
+I like images. So I use a horizontal stack of picture-entities, using `card-templater` plugin to show number of days:
+<img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/picture-entity.png">
+(The `state` is designed to bew used like traffic lights, this is why it has 3 values)
+This is the configuration
+```yaml
+      - type: 'custom:card-templater'
+        card:
+          type: picture-entity
+          name_template: >-
+            {{ states.sensor.bio.attributes.days }} days
+          show_name: True
+          show_state: False
+          entity: sensor.bio
+          state_image:
+            "0": "/local/containers/bio_today.png"
+            "1": "/local/containers/bio_tomorrow.png"
+            "2": "/local/containers/bio_off.png"
+        entities:
+          - sensor.bio
+```
+
+The simplest visualisation is to use entities. In this case, I use `verbose_output` to show `state` as text.
+<img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/entities.png">
+```yaml
+      - type: entities
+        entities:
+        - sensor.general-waste
+        - sensor.bio
+        - sensor.large-waste
+```
+or
+<img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/sensor.png">
+```yaml
+      - type: glance
+        entities:
+        - sensor.general-waste
+        - sensor.bio
+        - sensor.large-waste
+```
+
+Or, you can use the custom  [garbage collection card](https://github.com/amaximus/garbage-collection-card) developped by maximus.
