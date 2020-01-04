@@ -28,7 +28,7 @@ These are some examples using this sensor. The Lovelace config examples are incl
 * [Configuration](#configuration)
   + [Configuration Parameters](#configuration-parameters)
 * [State and Attributes](#state-and-attributes)
-* [Lovelace configuration examples](#lovekace-config-examples)
+* [Lovelace configuration examples](#lovelace-config-examples)
 
 ## Installation
 
@@ -182,10 +182,12 @@ If the `verbose_state` parameter is set, it will show date and remaining days, f
 | `days` | Days till the next collection
 
 # Lovelace config examples
-
+## With images
 I like images. So I use a horizontal stack of picture-entities, using `card-templater` plugin to show number of days:
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/picture-entity.png">
+
 (The `state` is designed to bew used like traffic lights, this is why it has 3 values)
+
 This is the configuration
 ```yaml
       - type: 'custom:card-templater'
@@ -204,8 +206,11 @@ This is the configuration
           - sensor.bio
 ```
 
+# List view (entities)
 The simplest visualisation is to use entities. In this case, I use `verbose_output` to show `state` as text.
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/entities.png">
+
+Lovelace configuration
 ```yaml
       - type: entities
         entities:
@@ -213,8 +218,11 @@ The simplest visualisation is to use entities. In this case, I use `verbose_outp
         - sensor.bio
         - sensor.large-waste
 ```
-or
+
+# Icon view (glance)
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/sensor.png">
+
+Configuration
 ```yaml
       - type: glance
         entities:
@@ -223,4 +231,6 @@ or
         - sensor.large-waste
 ```
 
+# Custom Garbage Collection Card
 Or, you can use the custom  [garbage collection card](https://github.com/amaximus/garbage-collection-card) developped by maximus.
+<img src="https://github.com/amaximus/garbage-collection-card/blob/master/garbage_collection_lovelace.jpg">
