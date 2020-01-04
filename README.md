@@ -247,12 +247,12 @@ garbage_collection:
 Configuration (I use style to allow line-break in the state)
 ```yaml
       - type: glance
-        style: |
-          "#entity": |
+        style: 
+          ".entity": 
             $: |
              :host {}
-             div {
-              #  white-space: pre-line
+             div:nth-of-type(2) {
+               white-space: inherit !important
              }
         entities:
           - sensor.smes
