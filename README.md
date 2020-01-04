@@ -207,9 +207,18 @@ This is the configuration
 ```
 
 # List view (entities)
-The simplest visualisation is to use entities. In this case, I use `verbose_output` to show `state` as text.
+The simplest visualisation is to use entities. In this case, I use `verbose_state` to show `state` as text.
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/entities.png">
 
+Integration configuration (you can customise state text by `verbose_format` and `date_format` parameters)
+```yaml
+garbage_collection:
+  sensors:
+  - name: General Waste
+    frequency: 'weekly'
+    collection_days: wed
+    verbose_state: True
+```
 Lovelace configuration
 ```yaml
       - type: entities
