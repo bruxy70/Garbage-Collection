@@ -6,7 +6,13 @@
 
 The `garbage_collection` component is a Home Assistant custom sensor for monitoring regular garbage collection schedule. The sensor can be configured for weekly schedule (including multiple collection days), bi-weekly in even or odd weeks, or monthly schedule (nth day each month) or anual (e.g. birthdays). You can also configure seasonal calendars (e.g. for bio-waste collection), by configuring the first and last month. And you can also group entities, which will merge multile schedules into one sensor.
 
+<img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/picture-entity.png">
+
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/sensor.png">
+
+<img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/entities.png">
+
+Look to the <a href="https://github.com/bruxy70/Garbage-Collection/blob/development/README.md">README.md</a> for examples of Lovelace configuration.
 
 ## Configuration
 There are 2 ways to configure the integration:

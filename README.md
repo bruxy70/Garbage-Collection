@@ -14,7 +14,12 @@ The `garbage_collection` component is a Home Assistant custom sensor for monitor
 You can also configure seasonal calendars (e.g. for bio-waste collection), by configuring the first and last month. 
 And you can `group` entities, which will merge multile schedules into one sensor.
 
+These are some examples using this sensor. The Lovelace config examples are included below.
+<img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/picture-entity.png">
+
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/sensor.png">
+
+<img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/entities.png">
 
 ## Table of Contents
 * [Installation](#installation)
@@ -23,6 +28,7 @@ And you can `group` entities, which will merge multile schedules into one sensor
 * [Configuration](#configuration)
   + [Configuration Parameters](#configuration-parameters)
 * [State and Attributes](#state-and-attributes)
+* [Lovelace configuration examples](#lovekace-config-examples)
 
 ## Installation
 
@@ -174,3 +180,47 @@ If the `verbose_state` parameter is set, it will show date and remaining days, f
 |:----------|------------
 | `next_date` | The date of next collection
 | `days` | Days till the next collection
+
+# Lovelace config examples
+
+I like images. So I use a horizontal stack of picture-entities, using `card-templater` plugin to show number of days:
+<img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/picture-entity.png">
+(The `state` is designed to bew used like traffic lights, this is why it has 3 values)
+This is the configuration
+```yaml
+      - type: 'custom:card-templater'
+        card:
+          type: picture-entity
+          name_template: >-
+            {{ states.sensor.bio.attributes.days }} days
+          show_name: True
+          show_state: False
+          entity: sensor.bio
+          state_image:
+            "0": "/local/containers/bio_today.png"
+            "1": "/local/containers/bio_tomorrow.png"
+            "2": "/local/containers/bio_off.png"
+        entities:
+          - sensor.bio
+```
+
+The simplest visualisation is to use entities. In this case, I use `verbose_output` to show `state` as text.
+<img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/entities.png">
+```yaml
+      - type: entities
+        entities:
+        - sensor.general-waste
+        - sensor.bio
+        - sensor.large-waste
+```
+or
+<img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/sensor.png">
+```yaml
+      - type: glance
+        entities:
+        - sensor.general-waste
+        - sensor.bio
+        - sensor.large-waste
+```
+
+Or, you can use the custom  [garbage collection card](https://github.com/amaximus/garbage-collection-card) developped by maximus.
