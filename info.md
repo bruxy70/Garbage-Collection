@@ -8,8 +8,10 @@ The `garbage_collection` component is a Home Assistant custom sensor for monitor
 
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/picture-entity.png">
 <br>
+
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/sensor.png">
 <br>
+
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/entities.png">
 
 Look to the <a href="https://github.com/bruxy70/Garbage-Collection">repository</a> for examples of Lovelace configuration.
