@@ -12,7 +12,7 @@ The `garbage_collection` component is a Home Assistant custom sensor for monitor
 
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/entities.png">
 
-Look to the <a href="https://github.com/bruxy70/Garbage-Collection/blob/development/README.md">README.md</a> for examples of Lovelace configuration.
+Look to the <a href="https://github.com/bruxy70/Garbage-Collection">repository</a> for examples of Lovelace configuration.
 
 ## Configuration
 There are 2 ways to configure the integration:
@@ -39,7 +39,7 @@ garbage_collection:
     frequency: 'annual'
     date: '11/24'
 ```
-For more examples and configuration documentation check the <a href="https://github.com/bruxy70/Garbage-Collection/blob/development/README.md">README.md</a> file
+For more examples and configuration documentation check the <a href="https://github.com/bruxy70/Garbage-Collection">repository</a> file
 
 ## STATE AND ATTRIBUTES
 
