@@ -182,7 +182,7 @@ If the `verbose_state` parameter is set, it will show date and remaining days, f
 | `days` | Days till the next collection
 
 # Lovelace config examples
-## With images
+## With images (picture-entity)
 I like images. So I use a horizontal stack of picture-entities, using `card-templater` plugin to show number of days:
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/picture-entity.png">
 
@@ -206,7 +206,7 @@ This is the configuration
           - sensor.bio
 ```
 
-# List view (entities)
+## List view (entities)
 The simplest visualisation is to use entities. In this case, I use `verbose_state` to show `state` as text.
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/entities.png">
 
@@ -229,7 +229,7 @@ Lovelace configuration
         - sensor.large-waste
 ```
 
-# Icon view (glance)
+## Icon view (glance)
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/sensor.png">
 
 Integration configuration
