@@ -130,7 +130,7 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 |Attribute |Optional|Description
 |:----------|----------|------------
 |`period` | Yes | Collection every `"period"` weeks (integer 1-53)<br/>**Default**: 1
-|`first_week` | Yes | First collection on the `"first_week"` week (integer 1-53)<br/>**Default**: 1<br/>*(The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representatio of the week)*
+|`first_week` | Yes | First collection on the `"first_week"` week (integer 1-53)<br/>**Default**: 1<br/>*(The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representatio of the week)<br/>Note: This parameter cannot be used to set the beginning of the collection period (for that use the `first_month` parameter). Its purpose is to simply 'offset' the week number, so that the collection every n weeks does not always trigger on week numbers that are multiply of n. Technically, the value of this parameter shall be less than `period`, otherwise it will give weird results.*
 
 
 #### PARAMETERS FOR COLLECTION EVERY-N-DAYS
