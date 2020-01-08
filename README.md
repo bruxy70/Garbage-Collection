@@ -21,6 +21,8 @@ These are some examples using this sensor. The Lovelace config examples are incl
 
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/sensor.png">
 
+<img src="https://github.com/amaximus/garbage-collection-card/blob/master/garbage_collection_lovelace.jpg">
+
 ## Table of Contents
 * [Installation](#installation)
   + [Manual Installation](#manual-installation)
