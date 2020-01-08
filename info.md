@@ -16,6 +16,9 @@ The `garbage_collection` component is a Home Assistant custom sensor for monitor
 ### Icon view (glance)
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/entities.png">
 
+### Garbage Collection custom card
+<img src="https://github.com/amaximus/garbage-collection-card/blob/master/garbage_collection_lovelace.jpg">
+
 Look to the <a href="https://github.com/bruxy70/Garbage-Collection">repository</a> for examples of Lovelace configuration.
 
 ## Configuration

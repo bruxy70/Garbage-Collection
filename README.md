@@ -183,7 +183,7 @@ If the `verbose_state` parameter is set, it will show date and remaining days, f
 
 # Lovelace config examples
 
-## Custom Garbage Collection Card
+## Garbage Collection custom card
 You can use the custom  [garbage collection card](https://github.com/amaximus/garbage-collection-card) developped by maximus.
 
 <img src="https://github.com/amaximus/garbage-collection-card/blob/master/garbage_collection_lovelace.jpg">
