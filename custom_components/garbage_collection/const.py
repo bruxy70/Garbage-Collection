@@ -61,8 +61,8 @@ DEFAULT_ICON_TOMORROW = "mdi:delete-circle"
 ICON = DEFAULT_ICON_NORMAL
 
 # States
-STATE_TODAY = "Today"
-STATE_TOMORROW = "Tomorrow"
+STATE_TODAY = "today"
+STATE_TOMORROW = "tomorrow"
 
 FREQUENCY_OPTIONS = [
     "weekly",
