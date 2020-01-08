@@ -185,11 +185,13 @@ If the `verbose_state` parameter is set, it will show date and remaining days, f
 
 ## Custom Garbage Collection Card
 You can use the custom  [garbage collection card](https://github.com/amaximus/garbage-collection-card) developped by maximus.
+
 <img src="https://github.com/amaximus/garbage-collection-card/blob/master/garbage_collection_lovelace.jpg">
 
 
 ## With images (picture-entity)
-This is what I use - I like images. So I use a horizontal stack of picture-entities, using `card-templater` plugin to show number of days:
+This is what I use (I like images). I use a horizontal stack of picture-entities, with `card-templater` plugin to show number of days:
+
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/picture-entity.png">
 
 (The `state` is designed to bew used like traffic lights, this is why it has 3 values)
@@ -214,6 +216,7 @@ This is the configuration
 
 ## List view (entities)
 The simplest visualisation is to use entities. In this case, I use `verbose_state` to show `state` as text.
+
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/entities.png">
 
 Integration configuration (you can customise state text by `verbose_format` and `date_format` parameters)
