@@ -130,7 +130,7 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 |Attribute |Optional|Description
 |:----------|----------|------------
 |`period` | Yes | Collection every `"period"` weeks (integer 1-53)<br/>**Default**: 1
-|`first_week` | Yes | First collection on the `"first_week"` week (integer 1-53)<br/>**Default**: 1<br/>*(The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representatio of the week)*
+|`first_week` | Yes | First collection on the `"first_week"` week (integer 1-53)<br/>**Default**: 1<br/>*(The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representatio of the week)<br/><br/>Note: This parameter cannot be used to set the beginning of the collection period (use the `first_month` parameter for that). The purpose of `first_week` is to simply 'offset' the week number, so that the collection every n weeks does not always trigger on week numbers that are multiply of n. Technically, the value of this parameter shall be less than `period`, otherwise it will give weird results.*
 
 
 #### PARAMETERS FOR COLLECTION EVERY-N-DAYS
@@ -182,8 +182,16 @@ If the `verbose_state` parameter is set, it will show date and remaining days, f
 | `days` | Days till the next collection
 
 # Lovelace config examples
+
+## Garbage Collection custom card
+You can use the custom  [garbage collection card](https://github.com/amaximus/garbage-collection-card) developped by maximus.
+
+<img src="https://github.com/amaximus/garbage-collection-card/blob/master/garbage_collection_lovelace.jpg">
+
+
 ## With images (picture-entity)
-I like images. So I use a horizontal stack of picture-entities, using `card-templater` plugin to show number of days:
+This is what I use (I like images). I use a horizontal stack of picture-entities, with `card-templater` plugin to show number of days:
+
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/picture-entity.png">
 
 (The `state` is designed to bew used like traffic lights, this is why it has 3 values)
@@ -208,6 +216,7 @@ This is the configuration
 
 ## List view (entities)
 The simplest visualisation is to use entities. In this case, I use `verbose_state` to show `state` as text.
+
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/entities.png">
 
 Integration configuration (you can customise state text by `verbose_format` and `date_format` parameters)
@@ -260,7 +269,3 @@ Configuration (I use style to allow line-break in the state)
           - sensor.papir
           - sensor.plasty
 ```
-
-# Custom Garbage Collection Card
-Or, you can use the custom  [garbage collection card](https://github.com/amaximus/garbage-collection-card) developped by maximus.
-<img src="https://github.com/amaximus/garbage-collection-card/blob/master/garbage_collection_lovelace.jpg">

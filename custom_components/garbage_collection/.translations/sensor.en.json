@@ -1,6 +1,6 @@
 {
     "state": {
-        "Today": "Today",
-        "Tomorrow": "Tomorrow"
+        "today": "Today",
+        "tomorrow": "Tomorrow"
     }
 }

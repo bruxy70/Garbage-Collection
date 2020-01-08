@@ -1,6 +1,6 @@
 {
     "state": {
-        "Today": "Aujourd'hui",
-        "Tomorrow": "Demain"
+        "today": "Aujourd'hui",
+        "tomorrow": "Demain"
     }
 }
