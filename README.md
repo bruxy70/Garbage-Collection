@@ -182,8 +182,14 @@ If the `verbose_state` parameter is set, it will show date and remaining days, f
 | `days` | Days till the next collection
 
 # Lovelace config examples
+
+## Custom Garbage Collection Card
+You can use the custom  [garbage collection card](https://github.com/amaximus/garbage-collection-card) developped by maximus.
+<img src="https://github.com/amaximus/garbage-collection-card/blob/master/garbage_collection_lovelace.jpg">
+
+
 ## With images (picture-entity)
-I like images. So I use a horizontal stack of picture-entities, using `card-templater` plugin to show number of days:
+This is what I use - I like images. So I use a horizontal stack of picture-entities, using `card-templater` plugin to show number of days:
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/picture-entity.png">
 
 (The `state` is designed to bew used like traffic lights, this is why it has 3 values)
@@ -260,7 +266,3 @@ Configuration (I use style to allow line-break in the state)
           - sensor.papir
           - sensor.plasty
 ```
-
-# Custom Garbage Collection Card
-Or, you can use the custom  [garbage collection card](https://github.com/amaximus/garbage-collection-card) developped by maximus.
-<img src="https://github.com/amaximus/garbage-collection-card/blob/master/garbage_collection_lovelace.jpg">
