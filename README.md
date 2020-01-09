@@ -10,9 +10,9 @@ The `garbage_collection` component is a Home Assistant custom sensor for monitor
 - bi-weekly in `even-weeks` or `odd-weeks` (technically, it is the same as every 2 weeks with 1<sup>st</sup> or 2<sup>nd</sup> first_week)
 - `every-n-days` (repeats regularly from the given first date). If n is multiply of 7, it works similar to `weekly` or `every-n-weeks`, with the difference that it ignores the week numbers (that restart each year) but continues infinitely from the initial date.
 - `monthly` schedule (n<sup>th</sup> day each month)
-- `annualy` (e.g. birthdays). 
+- `annually` (e.g. birthdays). 
 You can also configure seasonal calendars (e.g. for bio-waste collection), by configuring the first and last month. 
-And you can `group` entities, which will merge multile schedules into one sensor.
+And you can `group` entities, which will merge multiple schedules into one sensor.
 
 These are some examples using this sensor. The Lovelace config examples are included below.
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/picture-entity.png">
