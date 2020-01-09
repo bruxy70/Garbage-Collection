@@ -1,0 +1,149 @@
+{
+    "config": {
+        "title": "Garbage Collection",
+        "step": {
+            "user": {
+                "title": "Garbage Collection - Collection frequency",
+                "description": "Enter the sensor name and configure sensor parameters. More info on https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "name": "Friendly name",
+                    "frequency": "Frequency",
+                    "icon_normal": "Icon",
+                    "icon_tomorrow": "Icon collectio tomorrow",
+                    "icon_today": "Icon collection today",
+                    "verbose_state": "Verbose state (text, instead of number)",
+                    "verbose_format": "Verbose format (using `date` and `days` variables (in squary brackets))",
+                    "date_format": "Date format (see http://strftime.org/)"
+                }
+            },
+            "annual_group": {
+                "title": "Garbage Collection - Additional parameters",
+                "description": "Enter the collection day date (e.g. 11/20 for November 20)",
+                "data": {
+                    "date": "Date (mm/dd)",
+                    "entities": "List of entities (comma separated)"
+                }
+            },
+            "detail": {
+                "title": "Garbage Collection - Collection days",
+                "description": "Select one or more collection days. More details here: https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "collection_days_mon": "Monday",
+                    "collection_days_tue": "Tuesday",
+                    "collection_days_wed": "Wednesday",
+                    "collection_days_thu": "Thursday",
+                    "collection_days_fri": "Friday",
+                    "collection_days_sat": "Saturday",
+                    "collection_days_sun": "Sunday",
+                    "force_week_order_numbers": "Order of week in a month instead of order of weekday"
+                }
+            },
+            "final": {
+                "title": "Garbage Collection - Additional parameters",
+                "description": "Include and exclude dates are comma separated lists of dates, in format yyyy-mm-dd. More info on https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "first_month": "First collection month",
+                    "last_month": "Last collection month",
+                    "period": "Collection every n weeks/days: (1-52)",
+                    "first_week": "First collection week (1-52)",
+                    "first_date": "First date",
+                    "weekday_order_number_1": "1st weekday of month",
+                    "weekday_order_number_2": "2nd weekday of month",
+                    "weekday_order_number_3": "3rd weekday of month",
+                    "weekday_order_number_4": "4th weekday of month",
+                    "weekday_order_number_5": "5th weekday of month",
+                    "week_order_number_1": "1st week of month",
+                    "week_order_number_2": "2nd week of month",
+                    "week_order_number_3": "3rd week of month",
+                    "week_order_number_4": "4th week of month",
+                    "week_order_number_5": "5th week of month",
+                    "include_dates": "Include dates (optional)",
+                    "exclude_dates": "Exclude dates (optional)",
+                    "move_country_holidays": "Move holidays to next day (optional)"
+                }
+            }
+        },
+        "error": {
+            "name": "The sensor name cannot be empty. Please enter the sensor name.",
+            "days": "Select 1 or more days!",
+            "entities": "Entity does not exist!",
+            "month_day": "Invalid date format!",
+            "weekday_order_number": "Select 1 or more days",
+            "period": "Period must be a number between 1 and 52",
+            "first_week": "Firsr week must be a number between 1 and 52",
+            "date": "Invalid date format!"
+            
+        },
+        "abort": {
+            "single_instance_allowed": "Only a single configuration of Garbage Collection is allowed."
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "title": "Garbage Collection - Collection frequency",
+                "description": "Change sensor parameters. More info on https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "frequency": "Frequency",
+                    "icon_normal": "Icon",
+                    "icon_tomorrow": "Icon collectio tomorrow",
+                    "icon_today": "Icon collection today",
+                    "verbose_state": "Verbose state (text, instead of number)",
+                    "verbose_format": "Verbose format (using `date` and `days` variables (in squary brackets))",
+                    "date_format": "Date format (see http://strftime.org/)"
+                }
+            },
+            "annual_group": {
+                "title": "Garbage Collection - Additional parameters",
+                "description": "Enter the collection day date (e.g. 11/20 for November 20)",
+                "data": {
+                    "date": "Date (mm/dd)",
+                    "entities": "List of entities (comma separated)"
+                }
+            },
+            "detail": {
+                "title": "Garbage Collection - Collection days",
+                "description": "Select one or more collection days. More details here: https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "collection_days_mon": "Monday",
+                    "collection_days_tue": "Tuesday",
+                    "collection_days_wed": "Wednesday",
+                    "collection_days_thu": "Thursday",
+                    "collection_days_fri": "Friday",
+                    "collection_days_sat": "Saturday",
+                    "collection_days_sun": "Sunday",
+                    "force_week_order_numbers": "Order of week in a month instead of order of weekday"
+                }
+            },
+            "final": {
+                "title": "Garbage Collection - Additional parameters",
+                "description": "Include and exclude dates are comma separated lists of dates, in format yyyy-mm-dd. More info on https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "first_month": "First collection month",
+                    "last_month": "Last collection month",
+                    "period": "Collection every n weeks/days: (1-52)",
+                    "first_week": "First collection week (1-52)",
+                    "first_date": "First date",
+                    "weekday_order_number_1": "1st weekday of month",
+                    "weekday_order_number_2": "2nd weekday of month",
+                    "weekday_order_number_3": "3rd weekday of month",
+                    "weekday_order_number_4": "4th weekday of month",
+                    "weekday_order_number_5": "5th weekday of month",
+                    "week_order_number_1": "1st week of month",
+                    "week_order_number_2": "2nd week of month",
+                    "week_order_number_3": "3rd week of month",
+                    "week_order_number_4": "4th week of month",
+                    "week_order_number_5": "5th week of month",
+                    "include_dates": "Include dates (optional)",
+                    "exclude_dates": "Exclude dates (optional)",
+                    "move_country_holidays": "Move holidays to next day (optional)"
+                }
+            }
+        },
+        "error": {
+            "date": "Invalid date format!",
+            "entities": "Entity does not exist!"
+        }
+    }
+
+}

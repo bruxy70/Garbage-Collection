@@ -1,0 +1,149 @@
+{
+    "config": {
+        "title": "Garbage Collection",
+        "step": {
+            "user": {
+                "title": "Garbage Collection - Fréquence de la collecte",
+                "description": "Définir le nom du capteur et configurer les paramètres du capteur. Plus d'info sur https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "name": "Friendly name",
+                    "frequency": "Fréquence",
+                    "icon_normal": "Icone",
+                    "icon_tomorrow": "Icone pour collecte à jour J+1",
+                    "icon_today": "Icone pour collecte au jour J",
+                    "verbose_state": "Etat verbeux (texte, au lieu du chiffre)",
+                    "verbose_format": "Format état verbeux (utilisation des variables `date` et `days` (entre caractères accolade {})",
+                    "date_format": "Format de date (voir http://strftime.org/)"
+                }
+            },
+            "annual_group": {
+                "title": "Garbage Collection - Paramètres additionnels",
+                "description": "Entrer la date du jour de collecte (Ex: 11/20 pour le 20 Novembre)",
+                "data": {
+                    "date": "Date (mm/dd)",
+                    "entities": "Liste des entités (séparées par une virgule)"
+                }
+            },
+            "detail": {
+                "title": "Garbage Collection - Jours de collecte",
+                "description": "Choisir un ou plusieurs jours de collecte. Plus de détail ici: https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "collection_days_mon": "Lundi",
+                    "collection_days_tue": "Mardi",
+                    "collection_days_wed": "Mercredi",
+                    "collection_days_thu": "Jeudi",
+                    "collection_days_fri": "Vendredi",
+                    "collection_days_sat": "Samedi",
+                    "collection_days_sun": "Dimance",
+                    "force_week_order_numbers": "Nième occurrence du jour de la semaine dans un mois, au lieu du jour de la semaine dans la Nième semaine de chaque mois. Plus d'info sur https://github.com/bruxy70/Garbage-Collection#parameters-for-monthly-collection"
+                }
+            },
+            "final": {
+                "title": "Garbage Collection - Paramètres additionnels",
+                "description": "Liste de dates, séparées par des virgules, d'incluston et d'exclusion. Les dates sont au format yyyy-mm-dd. Plus d'info sur https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "first_month": "Premier mois de la collecte",
+                    "last_month": "Dernier mois de la collecte",
+                    "period": "Collecte toutes les n semaines/jours: (1-52)",
+                    "first_week": "Première semaine de la collecte (1-52)",
+                    "first_date": "Première date",
+                    "weekday_order_number_1": "1er jour de semaine du mois",
+                    "weekday_order_number_2": "2ème jour de semaine du mois",
+                    "weekday_order_number_3": "3ème jour de semaine du mois",
+                    "weekday_order_number_4": "4ème jour de semaine du mois",
+                    "weekday_order_number_5": "5th jour de semaine du mois",
+                    "week_order_number_1": "1ère semaine du mois",
+                    "week_order_number_2": "2ème semaine du mois",
+                    "week_order_number_3": "3ème semaine du mois",
+                    "week_order_number_4": "4ème semaine du mois",
+                    "week_order_number_5": "5ème semaine du mois",
+                    "include_dates": "Inclusion de dates (optionel)",
+                    "exclude_dates": "Exclusion de dates (optionel)",
+                    "move_country_holidays": "Move holidays to next day (optional)"
+                }
+            }
+        },
+        "error": {
+            "name": "Le nom du capteur ne peut pas être vide. Merci d'entrer un nom pour le capteur.",
+            "days": "Choisir un ou plusieurs jours!",
+            "entities": "L'entité n'existe pas!",
+            "month_day": "Format de date invalide!",
+            "weekday_order_number": "Choisir un ou plusieurs jours",
+            "period": "Period doit être un nombre entre 1 et 52",
+            "first_week": "La première semaine doit être un nombre entre 1 et 52",
+            "date": "Format de date invalide!"
+            
+        },
+        "abort": {
+            "single_instance_allowed": "Une seule configuration de Garbage Collection est autorisée"
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "title": "Garbage Collection - Fréquence de la collecte",
+                "description": "Modifier les paramètres des capteur. Plus d'infos sur https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "frequency": "Fréquence",
+                    "icon_normal": "Icone",
+                    "icon_tomorrow": "Icone pour collecte à jour J+1",
+                    "icon_today": "Icone pour collecte au jour J",
+                    "verbose_state": "Etat verbeux (texte, au lieu du chiffre)",
+                    "verbose_format": "Format état verbeux (utilisation des variables `date` et `days` (entre caractères accolade {})",
+                    "date_format": "Format de date (voir http://strftime.org/)"
+                }
+            },
+            "annual_group": {
+                "title": "Garbage Collection - Paramètres additionnels",
+                "description": "Entrer la date du jour de collecte (Ex: 11/20 pour le 20 Novembre)",
+                "data": {
+                    "date": "Date (mm/dd)",
+                    "entities": "Liste des entités (séparées par une virgule)"
+                }
+            },
+            "detail": {
+                "title": "Garbage Collection - Collection days",
+                "description": "Choisir un ou plusieurs jours de collecte. Plus de détail ici: https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "collection_days_mon": "Lundi",
+                    "collection_days_tue": "Mardi",
+                    "collection_days_wed": "Mercredi",
+                    "collection_days_thu": "Jeudi",
+                    "collection_days_fri": "Vendredi",
+                    "collection_days_sat": "Samedi",
+                    "collection_days_sun": "Dimance",
+                    "force_week_order_numbers": "Nième occurrence du jour de la semaine dans un mois, au lieu du jour de la semaine dans la Nième semaine de chaque mois. Plus d'info sur https://github.com/bruxy70/Garbage-Collection#parameters-for-monthly-collection"
+                }
+            },
+            "final": {
+                "title": "Garbage Collection -  Paramètres additionnels",
+                "description": "Liste de dates, séparées par des virgules, d'incluston et d'exclusion. Les dates sont au format yyyy-mm-dd. Plus d'info sur https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "first_month": "Premier mois de la collecte",
+                    "last_month": "Dernier mois de la collecte",
+                    "period": "Collecte toutes les n semaines/jours: (1-52)",
+                    "first_week": "Première semaine de la collecte (1-52)",
+                    "first_date": "Première date",
+                    "weekday_order_number_1": "1er jour de semaine du mois",
+                    "weekday_order_number_2": "2ème jour de semaine du mois",
+                    "weekday_order_number_3": "3ème jour de semaine du mois",
+                    "weekday_order_number_4": "4ème jour de semaine du mois",
+                    "weekday_order_number_5": "5th jour de semaine du mois",
+                    "week_order_number_1": "1ère semaine du mois",
+                    "week_order_number_2": "2ème semaine du mois",
+                    "week_order_number_3": "3ème semaine du mois",
+                    "week_order_number_4": "4ème semaine du mois",
+                    "week_order_number_5": "5ème semaine du mois",
+                    "include_dates": "Inclusion de dates (optionel)",
+                    "exclude_dates": "Exclusion de dates (optionel)",
+                    "move_country_holidays": "Move holidays to next day (optional)"
+                }
+            }
+        },
+        "error": {
+            "date": "Format de date invalide!",
+            "entities": "L'entité n'existe pas!"
+        }
+    }
+
+}

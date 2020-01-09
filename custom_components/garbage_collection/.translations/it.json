@@ -1,0 +1,149 @@
+{
+    "config": {
+        "title": "Raccolta Differenziata",
+        "step": {
+            "user": {
+                "title": "Raccolta Differenziata - Frequenza di raccolta",
+                "description": "Immetti il nome del sensore e configura i suoi parametri. Maggiori informazioni su https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "name": "Nome personalizzato",
+                    "frequency": "Frequenza",
+                    "icon_normal": "Icona",
+                    "icon_tomorrow": "Icona raccolta domani",
+                    "icon_today": "Icona raccolta oggi",
+                    "verbose_state": "Stato Verbale (testo, al posto di numeri)",
+                    "verbose_format": "Formato Verbale (usare le variabili `date` e `days` (in parentesi graffe))",
+                    "date_format": "Formato Data (vedere http://strftime.org/)"
+                }
+            },
+            "annual_group": {
+                "title": "Raccolta Differenziata - Parametri aggiuntivi",
+                "description": "Inserire la data del giorno della raccolta (es. 11/20 per Novembre 20)",
+                "data": {
+                    "date": "Data (mm/dd)",
+                    "entities": "Lista di entità (separate da virgole)"
+                }
+            },
+            "detail": {
+                "title": "Raccolta Differenziata - Giorni di raccolta",
+                "description": "Seleziona uno o più giorni di raccolta. Maggiori dettagli qui: https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "collection_days_mon": "Lunedì",
+                    "collection_days_tue": "Martedì",
+                    "collection_days_wed": "Mercoledì",
+                    "collection_days_thu": "Giovedì",
+                    "collection_days_fri": "Venerdì",
+                    "collection_days_sat": "Sabato",
+                    "collection_days_sun": "Domenica",
+                    "force_week_order_numbers": "Ordina per settimana in un mese anziché per giorno della settimana"
+                }
+            },
+            "final": {
+                "title": "Raccolta Differenziata - Parametri aggiuntivi",
+                "description": "'Includi ed escludi date' sono liste di date separate da virgole, nel formato yyyy-mm-dd. Maggiori informazioni su https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "first_month": "Prima raccolta del mese",
+                    "last_month": "Ultima raccolta del mese",
+                    "period": "Raccolta ogni n settimane/giorno: (1-52)",
+                    "first_week": "Prima raccolta della settimana (1-52)",
+                    "first_date": "Prima date",
+                    "weekday_order_number_1": "1° giorno della settimana del mese",
+                    "weekday_order_number_2": "2° giorno della settimana del mese",
+                    "weekday_order_number_3": "3° giorno della settimana del mese",
+                    "weekday_order_number_4": "4° giorno della settimana del mese",
+                    "weekday_order_number_5": "5° giorno della settimana del mese",
+                    "week_order_number_1": "1° settimana del mese",
+                    "week_order_number_2": "2° settimana del mese",
+                    "week_order_number_3": "3° settimana del mese",
+                    "week_order_number_4": "4° settimana del mese",
+                    "week_order_number_5": "5° settimana del mese",
+                    "include_dates": "Includi date (opzionale)",
+                    "exclude_dates": "Escludi date (opzionale)",
+                    "move_country_holidays": "Move holidays to next day (optional)"
+                }
+            }
+        },
+        "error": {
+            "name": "Il nome del sensore non può essere vuoto. Immettere il nome del sensore.",
+            "days": "Seleziona uno o più giorni!",
+            "entities": "L'entità non esiste!",
+            "month_day": "Formato data non valido!",
+            "weekday_order_number": "Seleziona uno o più giorni",
+            "period": "Il periodo deve essere un numero compreso tra 1 e 52",
+            "first_week": "La prima settimana deve essere un numero tra 1 e 52",
+            "date": "Formato data non valido!"
+            
+        },
+        "abort": {
+            "single_instance_allowed": "E' consentita solo una singola configurazione di Raccolta Differenziata."
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "title": "Raccolta Differenziata - Frequenza di raccolta",
+                "description": "Cambia i parametri del sensore. Maggiori informazioni su https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "frequency": "Frequenza",
+                    "icon_normal": "Icona",
+                    "icon_tomorrow": "Icona raccolta domani",
+                    "icon_today": "Icona raccolta oggi",
+                    "verbose_state": "Stato Verbale (testo, al posto di numeri)",
+                    "verbose_format": "Formato Verbale (usare le variabili `date` e `days` (in parentesi graffe))",
+                    "date_format": "Formato Data (vedere http://strftime.org/)"
+                }
+            },
+            "annual_group": {
+                "title": "Raccolta Differenziata - Parametri aggiuntivi",
+                "description": "Inserire la data del giorno della raccolta (es. 11/20 per Novembre 20)",
+                "data": {
+                    "date": "Data (mm/dd)",
+                    "entities": "Lista di entità (separate da virgole)"
+                }
+            },
+            "detail": {
+                "title": "Raccolta Differenziata - Giorni di raccolta",
+                "description": "Seleziona uno o più giorni di raccolta. Maggiori dettagli qui: https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "collection_days_mon": "Lunedì",
+                    "collection_days_tue": "Martedì",
+                    "collection_days_wed": "Mercoledì",
+                    "collection_days_thu": "Giovedì",
+                    "collection_days_fri": "Venerdì",
+                    "collection_days_sat": "Sabato",
+                    "collection_days_sun": "Domenica",
+                    "force_week_order_numbers": "Ordina per settimana in un mese anziché per giorno della settimana"
+                }
+            },
+            "final": {
+                "title": "Raccolta Differenziata - Parametri aggiuntivi",
+                "description": "'Includi ed escludi date' sono liste di date separate da virgole, nel formato yyyy-mm-dd. Maggiori informazioni su https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "first_month": "Prima raccolta del mese",
+                    "last_month": "Ultima raccolta del mese",
+                    "period": "Raccolta ogni n settimane/giorno: (1-52)",
+                    "first_week": "Prima raccolta della settimana (1-52)",
+                    "first_date": "Prima date",
+                    "weekday_order_number_1": "1° giorno della settimana del mese",
+                    "weekday_order_number_2": "2° giorno della settimana del mese",
+                    "weekday_order_number_3": "3° giorno della settimana del mese",
+                    "weekday_order_number_4": "4° giorno della settimana del mese",
+                    "weekday_order_number_5": "5° giorno della settimana del mese",
+                    "week_order_number_1": "1° settimana del mese",
+                    "week_order_number_2": "2° settimana del mese",
+                    "week_order_number_3": "3° settimana del mese",
+                    "week_order_number_4": "4° settimana del mese",
+                    "week_order_number_5": "5° settimana del mese",
+                    "include_dates": "Includi date (opzionale)",
+                    "exclude_dates": "Escludi date (opzionale)",
+                    "move_country_holidays": "Move holidays to next day (optional)"
+                }
+            }
+        },
+        "error": {
+            "date": "Formato data non valido!",
+            "entities": "L'entità non esiste!"
+        }
+    }
+
+}
