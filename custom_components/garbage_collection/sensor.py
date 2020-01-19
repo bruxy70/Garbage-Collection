@@ -41,6 +41,9 @@ from .const import (
     CONF_EXCLUDE_DATES,
     CONF_INCLUDE_DATES,
     CONF_MOVE_COUNTRY_HOLIDAYS,
+    CONF_PROV,
+    CONF_STATE,
+    CONF_OBSERVED,
     CONF_PERIOD,
     CONF_FIRST_WEEK,
     CONF_FIRST_DATE,
@@ -143,10 +146,33 @@ class GarbageCollection(Entity):
             today = dt_util.now().date()
             this_year = today.year
             years = [this_year, this_year + 1]
+            prov = config.get(CONF_PROV)
+            state = config.get(CONF_STATE)
+            observed = config.get(CONF_OBSERVED, True)
+            if state is None or state == "":
+                if prov is None or prov == "":
+                    hol = holidays.CountryHoliday(
+                        country_holidays, years=years, observed=observed
+                    ).items()
+                else:
+                    hol = holidays.CountryHoliday(
+                        country_holidays, years=years, prov=prov, observed=observed
+                    ).items()
+            else:
+                if prov is None or prov == "":
+                    hol = holidays.CountryHoliday(
+                        country_holidays, years=years, state=state, observed=observed
+                    ).items()
+                else:
+                    hol = holidays.CountryHoliday(
+                        country_holidays,
+                        years=years,
+                        state=state,
+                        prov=prov,
+                        observed=observed,
+                    ).items()
             try:
-                for date, name in holidays.CountryHoliday(
-                    country_holidays, years=years
-                ).items():
+                for date, name in hol:
                     if date >= today:
                         self.__holidays.append(date)
             except KeyError:

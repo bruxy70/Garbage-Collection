@@ -36,6 +36,9 @@ CONF_DATE = "date"
 CONF_EXCLUDE_DATES = "exclude_dates"
 CONF_INCLUDE_DATES = "include_dates"
 CONF_MOVE_COUNTRY_HOLIDAYS = "move_country_holidays"
+CONF_PROV = "prov"
+CONF_STATE = "state"
+CONF_OBSERVED = "observed"
 CONF_PERIOD = "period"
 CONF_FIRST_WEEK = "first_week"
 CONF_FIRST_DATE = "first_date"
@@ -194,6 +197,9 @@ SENSOR_SCHEMA = vol.Schema(
             cv.ensure_list, [date_text]
         ),
         vol.Optional(CONF_MOVE_COUNTRY_HOLIDAYS): vol.In(COUNTRY_CODES),
+        vol.Optional(CONF_PROV): cv.string,
+        vol.Optional(CONF_STATE): cv.string,
+        vol.Optional(CONF_OBSERVED, default=True): bool,
         vol.Optional(CONF_ICON_NORMAL, default=DEFAULT_ICON_NORMAL): cv.icon,
         vol.Optional(CONF_ICON_TODAY, default=DEFAULT_ICON_TODAY): cv.icon,
         vol.Optional(CONF_ICON_TOMORROW, default=DEFAULT_ICON_TOMORROW): cv.icon,
