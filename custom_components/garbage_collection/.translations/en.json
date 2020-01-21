@@ -59,7 +59,10 @@
                     "week_order_number_5": "5th week of month",
                     "include_dates": "Include dates (optional)",
                     "exclude_dates": "Exclude dates (optional)",
-                    "move_country_holidays": "Move holidays to next day (optional)"
+                    "move_country_holidays": "Move holidays to next day (optional)",
+                    "prov": "Country holidays - prov (optional)",
+                    "state": "Country holidays - state (optional)",
+                    "observed": "Country holidays - observed (optional)"
                 }
             }
         },
@@ -136,7 +139,10 @@
                     "week_order_number_5": "5th week of month",
                     "include_dates": "Include dates (optional)",
                     "exclude_dates": "Exclude dates (optional)",
-                    "move_country_holidays": "Move holidays to next day (optional)"
+                    "move_country_holidays": "Move holidays to next day (optional)",
+                    "prov": "Country holidays - prov (optional)",
+                    "state": "Country holidays - state (optional)",
+                    "observed": "Country holidays - observed (optional)"
                 }
             }
         },
