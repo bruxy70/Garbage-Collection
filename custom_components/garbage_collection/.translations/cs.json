@@ -59,7 +59,11 @@
                     "week_order_number_5": "Pátý týden v měsíci",
                     "include_dates": "Přidané datumy (volitelné)",
                     "exclude_dates": "Zakázané datumy (volitelné)",
-                    "move_country_holidays": "Přesunout svátky na další den (volitelné)"
+                    "move_country_holidays": "Státní svátky - země (volitelné)",
+                    "prov": "Státní svátky - provincie (volitelné)",
+                    "state": "Státní svátky - stát (volitelné)",
+                    "observed": "Státní svátky - observed (volitelné)"
+
                 }
             }
         },
@@ -137,7 +141,10 @@
                     "week_order_number_5": "Pátý týden v měsíci",
                     "include_dates": "Přidané datumy (volitelné)",
                     "exclude_dates": "Zakázané datumy (volitelné)",
-                    "move_country_holidays": "Pčesunout svátky na další den (volitelné)"
+                    "move_country_holidays": "Státní svátky - země (volitelné)",
+                    "prov": "Státní svátky - provincie (volitelné)",
+                    "state": "Státní svátky - stát (volitelné)",
+                    "observed": "Státní svátky - observed (volitelné)"
                 }
             }
         },
