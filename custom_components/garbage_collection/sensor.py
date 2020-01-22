@@ -142,6 +142,7 @@ class GarbageCollection(Entity):
         self.__exclude_dates = to_dates(config.get(CONF_EXCLUDE_DATES, []))
         country_holidays = config.get(CONF_MOVE_COUNTRY_HOLIDAYS)
         self.__holidays = []
+        holidays_log = ""
         if country_holidays is not None and country_holidays != "":
             today = dt_util.now().date()
             this_year = today.year
@@ -175,9 +176,10 @@ class GarbageCollection(Entity):
                 for date, name in hol:
                     if date >= today:
                         self.__holidays.append(date)
+                        holidays_log += f"\n  {date}: {name}"
             except KeyError:
                 _LOGGER.error("Invalid country code (%s)", country_holidays)
-            _LOGGER.debug("(%s) Found these holidays %s", self.__name, self.__holidays)
+            _LOGGER.debug("(%s) Found these holidays: %s", self.__name, holidays_log)
         self.__period = config.get(CONF_PERIOD)
         self.__first_week = config.get(CONF_FIRST_WEEK)
         self.__first_date = to_date(config.get(CONF_FIRST_DATE))
