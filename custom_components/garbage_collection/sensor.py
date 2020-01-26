@@ -150,7 +150,13 @@ class GarbageCollection(Entity):
             prov = config.get(CONF_PROV)
             state = config.get(CONF_STATE)
             observed = config.get(CONF_OBSERVED, True)
-            _LOGGER.debug("(%s) Country Holidays with parameters: prov: %s, state: %s, observed: %s",self.__name, prov, state, observed)
+            _LOGGER.debug(
+                "(%s) Country Holidays with parameters: prov: %s, state: %s, observed: %s",
+                self.__name,
+                prov,
+                state,
+                observed
+            )
             if state is None or state == "":
                 if prov is None or prov == "":
                     hol = holidays.CountryHoliday(
@@ -179,7 +185,9 @@ class GarbageCollection(Entity):
                         self.__holidays.append(date)
                         holidays_log += f"\n  {date}: {name}"
             except KeyError:
-                _LOGGER.error("(%s) Invalid country code (%s)", self.__name, country_holidays)
+                _LOGGER.error(
+                    "(%s) Invalid country code (%s)", self.__name, country_holidays
+                )
             _LOGGER.debug("(%s) Found these holidays: %s", self.__name, holidays_log)
         self.__period = config.get(CONF_PERIOD)
         self.__first_week = config.get(CONF_FIRST_WEEK)

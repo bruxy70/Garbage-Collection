@@ -842,8 +842,7 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         ] = str
         data_schema[
             vol.Optional(
-                CONF_OBSERVED,
-                default=self.config_entry.options.get(CONF_OBSERVED, ""),
+                CONF_OBSERVED, default=self.config_entry.options.get(CONF_OBSERVED, True),
             )
         ] = bool
         return self.async_show_form(
