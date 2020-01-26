@@ -125,10 +125,10 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 | `last_month` | Yes | Month three letter abbreviation.<br/>**Default**: `"dec"`
 | `exclude_dates` | Yes | List of dates with no collection (using international date format `'yyyy-mm-dd'`. 
 | `include_dates` | Yes | List of extra collection (using international date format `'yyyy-mm-dd'`.
-| `move_country_holidays` | Yes | A country code (see [holidays](https://github.com/dr-prodigy/python-holidays) for the list of valid country codes).<br/>Automatically move garbage collection on public holidays to the following day.<br/>*Example:* `US`   
-| `prov` | Yes | see [holidays](https://github.com/dr-prodigy/python-holidays).
-| `state` | Yes | see [holidays](https://github.com/dr-prodigy/python-holidays).
-| `observed` | Yes | see [holidays](https://github.com/dr-prodigy/python-holidays).
+| `move_country_holidays` | Yes | Country holidays - the country code (see [holidays](https://github.com/dr-prodigy/python-holidays) for the list of valid country codes).<br/>Automatically move garbage collection on public holidays to the following day.<br/>*Example:* `US`   
+| `prov` | Yes | Country holidays - province (see [holidays](https://github.com/dr-prodigy/python-holidays) ).
+| `state` | Yes | Country holidays - state (see [holidays](https://github.com/dr-prodigy/python-holidays) ).
+| `observed` | Yes | Country holidays - observed (see [holidays](https://github.com/dr-prodigy/python-holidays) ).
 
 #### PARAMETERS FOR COLLECTION EVERY-N-WEEKS
 |Attribute |Optional|Description
