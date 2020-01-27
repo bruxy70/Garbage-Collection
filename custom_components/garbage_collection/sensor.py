@@ -151,8 +151,9 @@ class GarbageCollection(Entity):
             state = config.get(CONF_STATE)
             observed = config.get(CONF_OBSERVED, True)
             _LOGGER.debug(
-                "(%s) Country Holidays with parameters: prov: %s, state: %s, observed: %s",
+                "(%s) Country Holidays with parameters: country: %s, prov: %s, state: %s, observed: %s",
                 self.__name,
+                country_holidays,
                 prov,
                 state,
                 observed,
@@ -162,7 +163,7 @@ class GarbageCollection(Entity):
                 kwargs["state"] = state
             if prov is not None and prov != "":
                 kwargs["prov"] = prov
-            if len(kwargs) > 1 and observed is not None and type(observed) == bool:
+            if observed is not None and type(observed) == bool and observed == False:
                 kwargs["observed"] = observed
             hol = holidays.CountryHoliday(country_holidays, **kwargs).items()
             try:
