@@ -157,28 +157,17 @@ class GarbageCollection(Entity):
                 state,
                 observed
             )
-            if state is None or state == "":
-                if prov is None or prov == "":
-                    hol = holidays.CountryHoliday(
-                        country_holidays, years=years, observed=observed
-                    ).items()
-                else:
-                    hol = holidays.CountryHoliday(
-                        country_holidays, years=years, prov=prov, observed=observed
-                    ).items()
-            else:
-                if prov is None or prov == "":
-                    hol = holidays.CountryHoliday(
-                        country_holidays, years=years, state=state, observed=observed
-                    ).items()
-                else:
-                    hol = holidays.CountryHoliday(
-                        country_holidays,
-                        years=years,
-                        state=state,
-                        prov=prov,
-                        observed=observed
-                    ).items()
+            kwargs = {"years": years}
+            if state is not None and state != "":
+                kwargs["state"] = state
+            if prov is not None and prov != "":
+                kwargs["prov"] = prov
+            if observed is not None:
+                kwargs["observed"] = observed
+            hol = holidays.CountryHoliday(
+                country_holidays,
+                **kwargs
+            ).items()
             try:
                 for date, name in hol:
                     if date >= today:
