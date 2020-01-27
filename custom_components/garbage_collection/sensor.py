@@ -155,19 +155,16 @@ class GarbageCollection(Entity):
                 self.__name,
                 prov,
                 state,
-                observed
+                observed,
             )
             kwargs = {"years": years}
             if state is not None and state != "":
                 kwargs["state"] = state
             if prov is not None and prov != "":
                 kwargs["prov"] = prov
-            if observed is not None:
+            if observed is not None and type(observed) == bool:
                 kwargs["observed"] = observed
-            hol = holidays.CountryHoliday(
-                country_holidays,
-                **kwargs
-            ).items()
+            hol = holidays.CountryHoliday(country_holidays, **kwargs).items()
             try:
                 for date, name in hol:
                     if date >= today:
