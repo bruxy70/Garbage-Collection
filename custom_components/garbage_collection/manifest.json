@@ -9,8 +9,8 @@
   ],
   "requirements": [
     "datetime",
-    "integrationhelper",
-    "holidays",
+    "integrationhelper>=0.2.2",
+    "holidays>=0.10.1",
     "typing",
     "uuid", 
     "voluptuous"

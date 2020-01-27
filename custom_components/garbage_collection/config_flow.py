@@ -832,17 +832,18 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         ] = vol.In(COUNTRY_CODES)
         data_schema[
             vol.Optional(
-                CONF_PROV, default=self.config_entry.options.get(CONF_PROV, ""),
+                CONF_PROV, default=self.config_entry.options.get(CONF_PROV, "")
             )
         ] = str
         data_schema[
             vol.Optional(
-                CONF_STATE, default=self.config_entry.options.get(CONF_STATE, ""),
+                CONF_STATE, default=self.config_entry.options.get(CONF_STATE, "")
             )
         ] = str
         data_schema[
             vol.Optional(
-                CONF_OBSERVED, default=self.config_entry.options.get(CONF_OBSERVED, True),
+                CONF_OBSERVED,
+                default=self.config_entry.options.get(CONF_OBSERVED, True),
             )
         ] = bool
         return self.async_show_form(
