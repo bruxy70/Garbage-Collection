@@ -162,7 +162,7 @@ class GarbageCollection(Entity):
                 kwargs["state"] = state
             if prov is not None and prov != "":
                 kwargs["prov"] = prov
-            if observed is not None and type(observed) == bool:
+            if len(kwargs) > 1 and observed is not None and type(observed) == bool:
                 kwargs["observed"] = observed
             hol = holidays.CountryHoliday(country_holidays, **kwargs).items()
             try:
