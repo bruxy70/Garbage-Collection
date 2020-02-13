@@ -257,7 +257,7 @@ garbage_collection:
   etc...
 ```
 
-Configuration (I use style to allow line-break in the state)
+Configuration (I use style (by card-mod plugin) to allow line-break in the state)
 ```yaml
       - type: glance
         style: 
