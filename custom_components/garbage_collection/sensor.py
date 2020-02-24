@@ -5,6 +5,7 @@ import holidays
 import logging
 import locale
 from datetime import datetime, date, timedelta
+from dateutil.relativedelta import relativedelta
 from homeassistant.core import HomeAssistant, State
 from typing import List, Any
 
@@ -73,7 +74,7 @@ def nth_week_date(n: int, date_of_month: date, collection_day: int) -> date:
     """Find weekday in the nth week of the month"""
     first_of_month = date(date_of_month.year, date_of_month.month, 1)
     month_starts_on = first_of_month.weekday()
-    return first_of_month + timedelta(
+    return first_of_month + relativedelta(
         days=collection_day - month_starts_on + (n - 1) * 7
     )
 
@@ -85,11 +86,11 @@ def nth_weekday_date(n: int, date_of_month: date, collection_day: int) -> date:
     # 1st of the month is before the day of collection
     # (so 1st collection week the week when month starts)
     if collection_day >= month_starts_on:
-        return first_of_month + timedelta(
+        return first_of_month + relativedelta(
             days=collection_day - month_starts_on + (n - 1) * 7
         )
     else:  # Next week
-        return first_of_month + timedelta(
+        return first_of_month + relativedelta(
             days=7 - month_starts_on + collection_day + (n - 1) * 7
         )
 
@@ -273,7 +274,7 @@ class GarbageCollection(Entity):
                 offset = (
                     7 * in_weeks - weekday + WEEKDAYS.index(self.__collection_days[0])
                 )
-            return day1 + timedelta(days=offset)
+            return day1 + relativedelta(days=offset)
         elif self.__frequency == "every-n-days":
             if self.__first_date is None or self.__period is None:
                 _LOGGER.error(
@@ -285,7 +286,7 @@ class GarbageCollection(Entity):
             if (day1 - self.__first_date).days % self.__period == 0:
                 return day1
             offset = self.__period - ((day1 - self.__first_date).days % self.__period)
-            return day1 + timedelta(days=offset)
+            return day1 + relativedelta(days=offset)
         elif self.__frequency == "monthly":
             # Monthly
             if self.__monthly_force_week_numbers:
@@ -362,7 +363,7 @@ class GarbageCollection(Entity):
             return next_date
 
     def __skip_holiday(self, day: date) -> date:
-        return day + timedelta(days=1)
+        return day + relativedelta(days=1)
 
     def get_next_date(self, day1: date) -> date:
         """Find the next date starting from day1."""
@@ -379,7 +380,7 @@ class GarbageCollection(Entity):
             if next_date not in self.__exclude_dates:
                 return next_date
             _LOGGER.debug("(%s) Skipping exclude_date %s", self.__name, next_date)
-            first_day = next_date + timedelta(days=1)
+            first_day = next_date + relativedelta(days=1)
             i += 1
         _LOGGER.error("(%s) Cannot find any suitable date", self.__name)
         return None
