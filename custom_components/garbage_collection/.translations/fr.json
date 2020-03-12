@@ -12,7 +12,7 @@
                     "icon_tomorrow": "Icone pour collecte à jour J+1",
                     "icon_today": "Icone pour collecte au jour J",
                     "verbose_state": "Etat verbeux (texte, au lieu du chiffre)",
-                    "verbose_format": "Format état verbeux (utilisation des variables `date` et `days` (entre caractères accolade {})",
+                    "verbose_format": "Format état verbeux (utilisation des variables `date` et `days` (entre caractères accolade ))",
                     "date_format": "Format de date (voir http://strftime.org/)"
                 }
             },
@@ -89,7 +89,7 @@
                     "icon_tomorrow": "Icone pour collecte à jour J+1",
                     "icon_today": "Icone pour collecte au jour J",
                     "verbose_state": "Etat verbeux (texte, au lieu du chiffre)",
-                    "verbose_format": "Format état verbeux (utilisation des variables `date` et `days` (entre caractères accolade {})",
+                    "verbose_format": "Format état verbeux (utilisation des variables `date` et `days` (entre caractères accolade ))",
                     "date_format": "Format de date (voir http://strftime.org/)"
                 }
             },

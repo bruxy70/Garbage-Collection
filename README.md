@@ -58,7 +58,7 @@ There are 2 ways to configure the integration:
 # Example configuration.yaml entry
 garbage_collection:
   sensors:
-  - name: waste # Each week on Monday and Wednesday. No collection on Christmas, added extra collection on the 27th
+  - name: "Regular waste" # Each week on Monday and Wednesday. No collection on Christmas, added extra collection on the 27th
     frequency: "weekly"
     collection_days:
     - mon
@@ -198,7 +198,7 @@ This is what I use (I like images). I use a horizontal stack of picture-entities
 
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/picture-entity.png">
 
-(The `state` is designed to bew used like traffic lights, this is why it has 3 values)
+(The `state` is designed to be used like traffic lights, this is why it has 3 values. You obviously cannot use this with `verbose_state`)
 
 This is the configuration
 ```yaml
