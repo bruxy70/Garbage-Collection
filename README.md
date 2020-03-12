@@ -198,7 +198,7 @@ This is what I use (I like images). I use a horizontal stack of picture-entities
 
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/picture-entity.png">
 
-(The `state` is designed to bew used like traffic lights, this is why it has 3 values)
+(The `state` is designed to be used like traffic lights, this is why it has 3 values. You obviously cannot use this with `verbose_state`)
 
 This is the configuration
 ```yaml
