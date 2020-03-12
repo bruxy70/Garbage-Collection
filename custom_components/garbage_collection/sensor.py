@@ -388,7 +388,7 @@ class GarbageCollection(Entity):
     async def async_update(self) -> None:
         """Get the latest data and updates the states."""
         today = dt_util.now().date()
-        if self.__today is not None and self.__today == today:
+        if self.__frequency != "group" and self.__today is not None and self.__today == today:
             # _LOGGER.debug(
             #     "(%s) Skipping the update, already did it today",
             #     self.__name)
