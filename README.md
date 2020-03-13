@@ -9,8 +9,8 @@ The `garbage_collection` component is a Home Assistant custom sensor for monitor
 - `every-n-weeks`
 - bi-weekly in `even-weeks` or `odd-weeks` (technically, it is the same as every 2 weeks with 1<sup>st</sup> or 2<sup>nd</sup> first_week)
 - `every-n-days` (repeats regularly from the given first date). If n is multiply of 7, it works similar to `weekly` or `every-n-weeks`, with the difference that it ignores the week numbers (that restart each year) but continues infinitely from the initial date.
-- `monthly` schedule (n<sup>th</sup> day each month)
-- `annually` (e.g. birthdays). 
+- `monthly` schedule (n<sup>th</sup> day each month), or a specific day of each n<sup>th</sup> week. Using the `period` it could also be every 2<sup>nd</sup>, 3<sup>rd</sup> etc month.
+- `annually` (e.g. birthdays). This is once per year. Using include dates you can add additional dates manually.
 You can also configure seasonal calendars (e.g. for bio-waste collection), by configuring the first and last month. 
 And you can `group` entities, which will merge multiple schedules into one sensor.
 
@@ -151,6 +151,7 @@ The monthly schedule has two flavors: it can trigger either on the **n<sup>th</s
 |:----------|----------|------------
 |`weekday_order_number` | Yes | List of week numbers of `collection_day` each month. E.g., if `collection_day` is `"sat"`, 1 will mean 1<sup>st</sup> Saturday each month (integer 1-5)<br/>**Default**: 1
 |`week_order_number` | Yes | Similar to `weekday_order_number`, but instead of n<sup>th</sup> weekday of each month, take the weekday of the n<sup>th</sup> week of each month.</br>So if the month starts on Friday, the Wednesday of the 1<sup>st</sup> week would actually be last Wednesday of the previous month and the Wednesday of 2<sup>nd</sup> week will be the 1<sup>st</sup> Wednesday of the month.
+|`period` | Yes | If `period` is not defined (or 1), the schedule will repeat monthly. If `period` is 2, it will be every 2<sup>nd</sup>month, and so on.<br/>The `first_month` parameter will then define the starting month. So if the `first_month` is `jan` (or not defined), and `period` is 2, the collection will be in `jan`, `mar`, `may`, `jul`, `sep` and `nov` - odd months. If `first_month` is `feb`, it will be on even months. If `period` is 3, it will be once per quarter.<br/>(integer 1-12)<br/>**Default**: 1
 
 *You cannot combine both options in one sensor - if you configure both, it will only take the `week_order_number` parameter.*
 
