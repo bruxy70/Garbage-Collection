@@ -232,7 +232,7 @@ class GarbageCollection(Entity):
                 self.__next_date.year, self.__next_date.month, self.__next_date.day
             ).astimezone()
         res[ATTR_DAYS] = self.__days
-        res['last_updated'] =  self.__last_updated
+        res["last_updated"] = self.__last_updated
         return res
 
     def date_inside(self, dat: date) -> bool:
@@ -241,6 +241,42 @@ class GarbageCollection(Entity):
             return bool(month >= self.__first_month and month <= self.__last_month)
         else:
             return bool(month <= self.__last_month or month >= self.__first_month)
+
+    def __monthly_candidate(self, day1: date) -> date:
+        if self.__monthly_force_week_numbers:
+            for week_order_number in self._week_order_numbers:
+                candidate_date = nth_week_date(
+                    week_order_number, day1, WEEKDAYS.index(self.__collection_days[0]),
+                )
+                # date is today or in the future -> we have the date
+                if candidate_date >= day1:
+                    return candidate_date
+        else:
+            for weekday_order_number in self._weekday_order_numbers:
+                candidate_date = nth_weekday_date(
+                    weekday_order_number,
+                    day1,
+                    WEEKDAYS.index(self.__collection_days[0]),
+                )
+                # date is today or in the future -> we have the date
+                if candidate_date >= day1:
+                    return candidate_date
+        if day1.month == 12:
+            next_collection_month = date(day1.year + 1, 1, 1)
+        else:
+            next_collection_month = date(day1.year, day1.month + 1, 1)
+        if self.__monthly_force_week_numbers:
+            return nth_week_date(
+                self._week_order_numbers[0],
+                next_collection_month,
+                WEEKDAYS.index(self.__collection_days[0]),
+            )
+        else:
+            return nth_weekday_date(
+                self._weekday_order_numbers[0],
+                next_collection_month,
+                WEEKDAYS.index(self.__collection_days[0]),
+            )
 
     def find_candidate_date(self, day1: date) -> date:
         """Find the next possible date starting from day1,
@@ -283,49 +319,21 @@ class GarbageCollection(Entity):
                     self.__name,
                 )
                 return None
-
             if (day1 - self.__first_date).days % self.__period == 0:
                 return day1
             offset = self.__period - ((day1 - self.__first_date).days % self.__period)
             return day1 + relativedelta(days=offset)
         elif self.__frequency == "monthly":
             # Monthly
-            if self.__monthly_force_week_numbers:
-                for week_order_number in self._week_order_numbers:
-                    candidate_date = nth_week_date(
-                        week_order_number,
-                        day1,
-                        WEEKDAYS.index(self.__collection_days[0]),
+            if self.__period is None or self.__period == 1:
+                return self.__monthly_candidate(day1)
+            else:
+                candidate_date = self.__monthly_candidate(day1)
+                while (candidate_date.month - self.__first_month) % self.__period != 0:
+                    candidate_date = self.__monthly_candidate(
+                        candidate_date + relativedelta(days=1)
                     )
-                    # date is today or in the future -> we have the date
-                    if candidate_date >= day1:
-                        return candidate_date
-            else:
-                for weekday_order_number in self._weekday_order_numbers:
-                    candidate_date = nth_weekday_date(
-                        weekday_order_number,
-                        day1,
-                        WEEKDAYS.index(self.__collection_days[0]),
-                    )
-                    # date is today or in the future -> we have the date
-                    if candidate_date >= day1:
-                        return candidate_date
-            if day1.month == 12:
-                next_collection_month = date(year + 1, 1, 1)
-            else:
-                next_collection_month = date(year, day1.month + 1, 1)
-            if self.__monthly_force_week_numbers:
-                return nth_week_date(
-                    self._week_order_numbers[0],
-                    next_collection_month,
-                    WEEKDAYS.index(self.__collection_days[0]),
-                )
-            else:
-                return nth_weekday_date(
-                    self._weekday_order_numbers[0],
-                    next_collection_month,
-                    WEEKDAYS.index(self.__collection_days[0]),
-                )
+                return candidate_date
         elif self.__frequency == "annual":
             # Annual
             if self.__date is None:
@@ -366,13 +374,18 @@ class GarbageCollection(Entity):
     def __skip_holiday(self, day: date) -> date:
         return day + relativedelta(days=1)
 
-    def ready_for_update(self) ->bool:
+    def ready_for_update(self) -> bool:
         today = dt_util.now().date()
-        ready_for_update = bool(self.__last_updated is None or self.__last_updated.date() != today)
+        ready_for_update = bool(
+            self.__last_updated is None or self.__last_updated.date() != today
+        )
         if self.__frequency == "group":
             members_ready = True
             for entity in self.__entities:
-                if self.hass.states.get(entity).attributes.get('last_updated').date() != today:
+                if (
+                    self.hass.states.get(entity).attributes.get("last_updated").date()
+                    != today
+                ):
                     members_ready = False
             if ready_for_update and not members_ready:
                 ready_for_update = False
@@ -447,7 +460,6 @@ class GarbageCollection(Entity):
                     "starting from first month",
                     self.__name,
                 )
-
         self.__next_date = next_date
         if next_date is not None:
             self.__days = (next_date - today).days
