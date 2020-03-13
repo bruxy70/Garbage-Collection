@@ -281,6 +281,7 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
             final_info[CONF_FIRST_MONTH] = user_input[CONF_FIRST_MONTH]
             final_info[CONF_LAST_MONTH] = user_input[CONF_LAST_MONTH]
             if self._data[CONF_FREQUENCY] in MONTHLY_FREQUENCY:
+                final_info[CONF_PERIOD] = user_input[CONF_PERIOD]
                 day_selected = False
                 final_info[CONF_WEEKDAY_ORDER_NUMBER] = []
                 final_info[CONF_WEEK_ORDER_NUMBER] = []
@@ -385,6 +386,9 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
                 vol.Coerce(int), vol.Range(min=1, max=52)
             )
         if self._data[CONF_FREQUENCY] in MONTHLY_FREQUENCY:
+            data_schema[vol.Required(CONF_PERIOD, default=period)] = vol.All(
+                vol.Coerce(int), vol.Range(min=1, max=12)
+            )
             for i in range(5):
                 if self._data[CONF_FORCE_WEEK_NUMBERS]:
                     data_schema[
@@ -696,6 +700,7 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
             final_info[CONF_FIRST_MONTH] = user_input[CONF_FIRST_MONTH]
             final_info[CONF_LAST_MONTH] = user_input[CONF_LAST_MONTH]
             if self._data[CONF_FREQUENCY] in MONTHLY_FREQUENCY:
+                final_info[CONF_PERIOD] = user_input[CONF_PERIOD]
                 day_selected = False
                 final_info[CONF_WEEKDAY_ORDER_NUMBER] = []
                 final_info[CONF_WEEK_ORDER_NUMBER] = []
@@ -777,6 +782,11 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
                 )
             ] = vol.All(vol.Coerce(int), vol.Range(min=1, max=52))
         if self._data[CONF_FREQUENCY] in MONTHLY_FREQUENCY:
+            data_schema[
+                vol.Required(
+                    CONF_PERIOD, default=self.config_entry.options.get(CONF_PERIOD)
+                )
+            ] = vol.All(vol.Coerce(int), vol.Range(min=1, max=12))
             for i in range(5):
                 if self._data[CONF_FORCE_WEEK_NUMBERS]:
                     data_schema[

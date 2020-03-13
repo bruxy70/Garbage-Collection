@@ -331,8 +331,11 @@ class GarbageCollection(Entity):
                 return self.__monthly_candidate(day1)
             else:
                 candidate_date = self.__monthly_candidate(day1)
-                while (candidate_date.month() - self.__first_month) % self.__period != 0:
-                    candidate_date = self.__monthly_candidate(day1 + relativedelta(days=1))
+                _LOGGER.debug(
+                    f"{self.__name} Checking monthly month:{candidate_date.month}, first_month:{self.__first_month}, period:{self.__period}"
+                )
+                while (candidate_date.month - self.__first_month) % self.__period != 0:
+                    candidate_date = self.__monthly_candidate(candidate_date + relativedelta(days=1))
                 return candidate_date
         elif self.__frequency == "annual":
             # Annual
@@ -455,7 +458,6 @@ class GarbageCollection(Entity):
                     "starting from first month",
                     self.__name,
                 )
-
         self.__next_date = next_date
         if next_date is not None:
             self.__days = (next_date - today).days
