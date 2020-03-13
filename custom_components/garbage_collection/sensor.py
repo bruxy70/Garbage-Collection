@@ -232,7 +232,7 @@ class GarbageCollection(Entity):
                 self.__next_date.year, self.__next_date.month, self.__next_date.day
             ).astimezone()
         res[ATTR_DAYS] = self.__days
-        res['last_updated'] =  self.__last_updated
+        res["last_updated"] = self.__last_updated
         return res
 
     def date_inside(self, dat: date) -> bool:
@@ -246,9 +246,7 @@ class GarbageCollection(Entity):
         if self.__monthly_force_week_numbers:
             for week_order_number in self._week_order_numbers:
                 candidate_date = nth_week_date(
-                    week_order_number,
-                    day1,
-                    WEEKDAYS.index(self.__collection_days[0]),
+                    week_order_number, day1, WEEKDAYS.index(self.__collection_days[0]),
                 )
                 # date is today or in the future -> we have the date
                 if candidate_date >= day1:
@@ -331,11 +329,10 @@ class GarbageCollection(Entity):
                 return self.__monthly_candidate(day1)
             else:
                 candidate_date = self.__monthly_candidate(day1)
-                _LOGGER.debug(
-                    f"{self.__name} Checking monthly month:{candidate_date.month}, first_month:{self.__first_month}, period:{self.__period}"
-                )
                 while (candidate_date.month - self.__first_month) % self.__period != 0:
-                    candidate_date = self.__monthly_candidate(candidate_date + relativedelta(days=1))
+                    candidate_date = self.__monthly_candidate(
+                        candidate_date + relativedelta(days=1)
+                    )
                 return candidate_date
         elif self.__frequency == "annual":
             # Annual
@@ -377,13 +374,18 @@ class GarbageCollection(Entity):
     def __skip_holiday(self, day: date) -> date:
         return day + relativedelta(days=1)
 
-    def ready_for_update(self) ->bool:
+    def ready_for_update(self) -> bool:
         today = dt_util.now().date()
-        ready_for_update = bool(self.__last_updated is None or self.__last_updated.date() != today)
+        ready_for_update = bool(
+            self.__last_updated is None or self.__last_updated.date() != today
+        )
         if self.__frequency == "group":
             members_ready = True
             for entity in self.__entities:
-                if self.hass.states.get(entity).attributes.get('last_updated').date() != today:
+                if (
+                    self.hass.states.get(entity).attributes.get("last_updated").date()
+                    != today
+                ):
                     members_ready = False
             if ready_for_update and not members_ready:
                 ready_for_update = False
