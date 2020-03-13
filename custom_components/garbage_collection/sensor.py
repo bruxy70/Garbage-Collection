@@ -232,6 +232,7 @@ class GarbageCollection(Entity):
                 self.__next_date.year, self.__next_date.month, self.__next_date.day
             ).astimezone()
         res[ATTR_DAYS] = self.__days
+        res['last_updated'] =  self.__today
         return res
 
     def date_inside(self, dat: date) -> bool:
@@ -365,6 +366,15 @@ class GarbageCollection(Entity):
     def __skip_holiday(self, day: date) -> date:
         return day + relativedelta(days=1)
 
+    def up_to_date(self) ->bool:
+        today = dt_util.now().date()
+        up_to_date = bool(self.__today is not None and self.__today == today)
+        if self.__frequency == "group":
+            for entity in self.__entities:
+                if self.hass.states.get(entity).attributes.get('last_updated').date() != today:
+                    up_to_date = False
+        return up_to_date
+
     def get_next_date(self, day1: date) -> date:
         """Find the next date starting from day1."""
         first_day = day1
@@ -388,7 +398,7 @@ class GarbageCollection(Entity):
     async def async_update(self) -> None:
         """Get the latest data and updates the states."""
         today = dt_util.now().date()
-        if self.__frequency != "group" and self.__today is not None and self.__today == today:
+        if self.up_to_date():
             # _LOGGER.debug(
             #     "(%s) Skipping the update, already did it today",
             #     self.__name)
