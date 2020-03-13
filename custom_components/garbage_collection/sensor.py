@@ -242,6 +242,44 @@ class GarbageCollection(Entity):
         else:
             return bool(month <= self.__last_month or month >= self.__first_month)
 
+    def __monthly_candidate(self, day1: date) -> date:
+        if self.__monthly_force_week_numbers:
+            for week_order_number in self._week_order_numbers:
+                candidate_date = nth_week_date(
+                    week_order_number,
+                    day1,
+                    WEEKDAYS.index(self.__collection_days[0]),
+                )
+                # date is today or in the future -> we have the date
+                if candidate_date >= day1:
+                    return candidate_date
+        else:
+            for weekday_order_number in self._weekday_order_numbers:
+                candidate_date = nth_weekday_date(
+                    weekday_order_number,
+                    day1,
+                    WEEKDAYS.index(self.__collection_days[0]),
+                )
+                # date is today or in the future -> we have the date
+                if candidate_date >= day1:
+                    return candidate_date
+        if day1.month == 12:
+            next_collection_month = date(day1.year + 1, 1, 1)
+        else:
+            next_collection_month = date(day1.year, day1.month + 1, 1)
+        if self.__monthly_force_week_numbers:
+            return nth_week_date(
+                self._week_order_numbers[0],
+                next_collection_month,
+                WEEKDAYS.index(self.__collection_days[0]),
+            )
+        else:
+            return nth_weekday_date(
+                self._weekday_order_numbers[0],
+                next_collection_month,
+                WEEKDAYS.index(self.__collection_days[0]),
+            )
+
     def find_candidate_date(self, day1: date) -> date:
         """Find the next possible date starting from day1,
         only based on calendar, not lookimg at include/exclude days"""
@@ -283,49 +321,19 @@ class GarbageCollection(Entity):
                     self.__name,
                 )
                 return None
-
             if (day1 - self.__first_date).days % self.__period == 0:
                 return day1
             offset = self.__period - ((day1 - self.__first_date).days % self.__period)
             return day1 + relativedelta(days=offset)
         elif self.__frequency == "monthly":
             # Monthly
-            if self.__monthly_force_week_numbers:
-                for week_order_number in self._week_order_numbers:
-                    candidate_date = nth_week_date(
-                        week_order_number,
-                        day1,
-                        WEEKDAYS.index(self.__collection_days[0]),
-                    )
-                    # date is today or in the future -> we have the date
-                    if candidate_date >= day1:
-                        return candidate_date
+            if self.__period is None or self.__period == 1:
+                return self.__monthly_candidate(day1)
             else:
-                for weekday_order_number in self._weekday_order_numbers:
-                    candidate_date = nth_weekday_date(
-                        weekday_order_number,
-                        day1,
-                        WEEKDAYS.index(self.__collection_days[0]),
-                    )
-                    # date is today or in the future -> we have the date
-                    if candidate_date >= day1:
-                        return candidate_date
-            if day1.month == 12:
-                next_collection_month = date(year + 1, 1, 1)
-            else:
-                next_collection_month = date(year, day1.month + 1, 1)
-            if self.__monthly_force_week_numbers:
-                return nth_week_date(
-                    self._week_order_numbers[0],
-                    next_collection_month,
-                    WEEKDAYS.index(self.__collection_days[0]),
-                )
-            else:
-                return nth_weekday_date(
-                    self._weekday_order_numbers[0],
-                    next_collection_month,
-                    WEEKDAYS.index(self.__collection_days[0]),
-                )
+                candidate_date = self.__monthly_candidate(day1)
+                while (candidate_date.month() - self.__first_month) % self.__period != 0:
+                    candidate_date = self.__monthly_candidate(day1 + relativedelta(days=1))
+                return candidate_date
         elif self.__frequency == "annual":
             # Annual
             if self.__date is None:
