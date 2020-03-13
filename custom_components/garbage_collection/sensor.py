@@ -181,7 +181,7 @@ class GarbageCollection(Entity):
         self.__first_week = config.get(CONF_FIRST_WEEK)
         self.__first_date = to_date(config.get(CONF_FIRST_DATE))
         self.__next_date = None
-        self.__today = None
+        self.__last_updated = None
         self.__days = 0
         self.__date = config.get(CONF_DATE)
         self.__entities = config.get(CONF_ENTITIES)
@@ -232,7 +232,7 @@ class GarbageCollection(Entity):
                 self.__next_date.year, self.__next_date.month, self.__next_date.day
             ).astimezone()
         res[ATTR_DAYS] = self.__days
-        res['last_updated'] =  self.__today
+        res['last_updated'] =  self.__last_updated
         return res
 
     def date_inside(self, dat: date) -> bool:
@@ -368,7 +368,7 @@ class GarbageCollection(Entity):
 
     def up_to_date(self) ->bool:
         today = dt_util.now().date()
-        up_to_date = bool(self.__today is not None and self.__today == today)
+        up_to_date = bool(self.__last_updated is not None and self.__last_updated.date() == today)
         if self.__frequency == "group":
             for entity in self.__entities:
                 if self.hass.states.get(entity).attributes.get('last_updated').date() != today:
@@ -397,16 +397,17 @@ class GarbageCollection(Entity):
 
     async def async_update(self) -> None:
         """Get the latest data and updates the states."""
-        today = dt_util.now().date()
+        now = dt_util.now()
         if self.up_to_date():
             # _LOGGER.debug(
             #     "(%s) Skipping the update, already did it today",
             #     self.__name)
             return
         _LOGGER.debug("(%s) Calling update", self.__name)
+        today = now.date()
         year = today.year
         month = today.month
-        self.__today = today
+        self.__last_updated = now
         if self.date_inside(today):
             next_date = self.get_next_date(today)
             if next_date is not None:
