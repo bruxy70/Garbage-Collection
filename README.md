@@ -153,7 +153,7 @@ The monthly schedule has two flavors: it can trigger either on the **n<sup>th</s
 |`week_order_number` | Yes | Similar to `weekday_order_number`, but instead of n<sup>th</sup> weekday of each month, take the weekday of the n<sup>th</sup> week of each month.</br>So if the month starts on Friday, the Wednesday of the 1<sup>st</sup> week would actually be last Wednesday of the previous month and the Wednesday of 2<sup>nd</sup> week will be the 1<sup>st</sup> Wednesday of the month.
 |`period` | Yes | If `period` is not defined (or 1), the schedule will repeat monthly. If `period` is 2, it will be every 2<sup>nd</sup> month. If `period` is 3, it will be once per quarter, and so on.<br/>The `first_month` parameter will then define the starting month. So if the `first_month` is `jan` (or not defined), and `period` is 2, the collection will be in odd months (`jan`, `mar`, `may`, `jul`, `sep` and `nov`). If `first_month` is `feb`, it will be in even months. (integer 1-12)<br/>**Default**: 1
 
-*You cannot combine both options in one sensor - if you configure both, it will only take the `week_order_number` parameter.*
+*You cannot combine both `weekday_order_number` and `week_order_number` options in one sensor - if you configure both, it will only take the `week_order_number` parameter.*
 
 #### PARAMETERS FOR ANNUAL COLLECTION
 |Attribute |Optional|Description
