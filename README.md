@@ -195,7 +195,7 @@ You can use the custom  [garbage collection card](https://github.com/amaximus/ga
 
 
 ## With images (picture-entity)
-This is what I use (I like images). I use a horizontal stack of picture-entities, with `card-templater` plugin to show number of days:
+This is what I use (I like images). I use a horizontal stack of picture-entities, with `card-templater` plugin [Lovelace Card Templater](https://github.com/gadgetchnnel/lovelace-card-templater) to show number of days:
 
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/picture-entity.png">
 
