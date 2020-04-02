@@ -151,9 +151,9 @@ The monthly schedule has two flavors: it can trigger either on the **n<sup>th</s
 |:----------|----------|------------
 |`weekday_order_number` | Yes | List of week numbers of `collection_day` each month. E.g., if `collection_day` is `"sat"`, 1 will mean 1<sup>st</sup> Saturday each month (integer 1-5)<br/>**Default**: 1
 |`week_order_number` | Yes | Similar to `weekday_order_number`, but instead of n<sup>th</sup> weekday of each month, take the weekday of the n<sup>th</sup> week of each month.</br>So if the month starts on Friday, the Wednesday of the 1<sup>st</sup> week would actually be last Wednesday of the previous month and the Wednesday of 2<sup>nd</sup> week will be the 1<sup>st</sup> Wednesday of the month.
-|`period` | Yes | If `period` is not defined (or 1), the schedule will repeat monthly. If `period` is 2, it will be every 2<sup>nd</sup>month, and so on.<br/>The `first_month` parameter will then define the starting month. So if the `first_month` is `jan` (or not defined), and `period` is 2, the collection will be in `jan`, `mar`, `may`, `jul`, `sep` and `nov` - odd months. If `first_month` is `feb`, it will be on even months. If `period` is 3, it will be once per quarter.<br/>(integer 1-12)<br/>**Default**: 1
+|`period` | Yes | If `period` is not defined (or 1), the schedule will repeat monthly. If `period` is 2, it will be every 2<sup>nd</sup> month. If `period` is 3, it will be once per quarter, and so on.<br/>The `first_month` parameter will then define the starting month. So if the `first_month` is `jan` (or not defined), and `period` is 2, the collection will be in odd months (`jan`, `mar`, `may`, `jul`, `sep` and `nov`). If `first_month` is `feb`, it will be in even months. (integer 1-12)<br/>**Default**: 1
 
-*You cannot combine both options in one sensor - if you configure both, it will only take the `week_order_number` parameter.*
+*You cannot combine both `weekday_order_number` and `week_order_number` options in one sensor - if you configure both, it will only take the `week_order_number` parameter.*
 
 #### PARAMETERS FOR ANNUAL COLLECTION
 |Attribute |Optional|Description
@@ -195,7 +195,7 @@ You can use the custom  [garbage collection card](https://github.com/amaximus/ga
 
 
 ## With images (picture-entity)
-This is what I use (I like images). I use a horizontal stack of picture-entities, with `card-templater` plugin to show number of days:
+This is what I use (I like images). I use a horizontal stack of picture-entities, with `card-templater` plugin ([Lovelace Card Templater](https://github.com/gadgetchnnel/lovelace-card-templater)) to show number of days:
 
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/picture-entity.png">
 
