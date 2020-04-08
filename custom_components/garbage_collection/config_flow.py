@@ -479,6 +479,7 @@ def is_dates(dates):
             check = False
     return check
 
+
 """
 
 O P T I O N S   F L O W
