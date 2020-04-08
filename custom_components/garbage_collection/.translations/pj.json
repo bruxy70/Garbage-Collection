@@ -1,0 +1,155 @@
+{
+    "config": {
+        "title": "Wywóz śmieci",
+        "step": {
+            "user": {
+                "title": "Wywóz Śmieci - Częstotliwość wywozu",
+                "description": "Wprowadź nazwę dla sensora i zkonfiguruj jego parametry. Więcej informacji na stronie https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "name": "Przyjazna nazwa",
+                    "frequency": "Częstotliwość",
+                    "icon_normal": "Ikona",
+                    "icon_tomorrow": "Ikona wywozu jutro",
+                    "icon_today": "Ikona wywozu dzisiaj",
+                    "verbose_state": "Tryb gadatliwy (tekst, zamiast liczb)",
+                    "verbose_format": "Format trybu gadatliwego (używa zmiennych `date` oraz `days` (w nawiasach klamerkowych))",
+                    "date_format": "Format daty (patrz http://strftime.org/)"
+                }
+            },
+            "annual_group": {
+                "title": "Wywóz Śmieci - Dodatkowe parametry",
+                "description": "Podaj datę wywozu (np. 11/20 dla Listopad 20)",
+                "data": {
+                    "date": "Data (mm/dd)",
+                    "entities": "Lista encji (rozdzielane przecinkami)"
+                }
+            },
+            "detail": {
+                "title": "Wywóz Śmieci - Dni wywozu",
+                "description": "Wybierz jeden lub więcej dni wywozu. Więcej szczegółów tutaj: https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "collection_days_mon": "Poniedziałek",
+                    "collection_days_tue": "Wtorek",
+                    "collection_days_wed": "Środa",
+                    "collection_days_thu": "Czwartek",
+                    "collection_days_fri": "Piątek",
+                    "collection_days_sat": "Sobota",
+                    "collection_days_sun": "Niedziela",
+                    "force_week_order_numbers": "Kolejność `tydzień w miesiącu` zamiast `dzień tygodnia`"
+                }
+            },
+            "final": {
+                "title": "Wywóz Śmieci - Dodatkowe parametry",
+                "description": "Dołączone i wyłączone daty są listą, rozdzielanych przecinkami, dat w formacie rrrr-mm-dd. Więcej informacji tutaj https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "first_month": "Miesiąc pierwszego wywozu",
+                    "last_month": "Miesiąc ostatniego wywozu",
+                    "period": "Wywóz co n dni/tygodni: (1-52)",
+                    "first_week": "Tydzień pierwszego wywozu: (1-52)",
+                    "first_date": "Pierwsza data",
+                    "weekday_order_number_1": "Pierwszy dzień tygodnia",
+                    "weekday_order_number_2": "Drugi dzień tygodnia",
+                    "weekday_order_number_3": "Trzeci dzień tygodnia",
+                    "weekday_order_number_4": "Czwarty dzień tygodnia",
+                    "weekday_order_number_5": "Piąty dzień tygodnia",
+                    "week_order_number_1": "Pierwszy tydzień miesiąca",
+                    "week_order_number_2": "Drugi tydzień miesiąca",
+                    "week_order_number_3": "Trzeci tydzień miesiąca",
+                    "week_order_number_4": "Czwarty tydzień miesiąca",
+                    "week_order_number_5": "Piąty tydzień miesiąca",
+                    "include_dates": "Dołącz daty (opcjonalnie)",
+                    "exclude_dates": "Wyłącz daty (opcjonalnie)",
+                    "move_country_holidays": "Przesuń świąteczne dni na kolejny dzień (opcjonalnie)",
+                    "prov": "Święta państwowe - prowincje (opcjonalnie) - BRAK dla PL patrz https://github.com/dr-prodigy/python-holidays",
+                    "state": "Święta państwowe - stan (opcjonalnie)",
+                    "observed": "Święta państwowe - przesunięte obchody (opcjonalnie)"
+                }
+            }
+        },
+        "error": {
+            "name": "Nazwa sensora nie może być pusta. Wprowadź nazwę dla sensora.",
+            "days": "Wybierz 1 lub więcej dni !",
+            "entities": "Encja nie istnieje !",
+            "month_day": "Nieprawidłowy format daty !",
+            "weekday_order_number": "Wybierz 1 lub więcej dni !",
+            "period": "Okres musi być liczbą od 1 do 52.",
+            "first_week": "Pierwszy tydzień musi być liczbą między 1 a 52.",
+            "date": "Nieprawidłowy format daty !"
+            
+        },
+        "abort": {
+            "single_instance_allowed": "Tylko jedna konfiguracja dla wywozu śmieci jest dozwolona."
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "title": "Wywóz Śmieci - Częstotliwośc wywozu",
+                "description": "Zmień parametry sensora. Więcej informacji tutaj https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "frequency": "Częstotliwość",
+                    "icon_normal": "Ikona",
+                    "icon_tomorrow": "Ikona wywozu jutro",
+                    "icon_today": "Ikona wywozu dzisiaj",
+                    "verbose_state": "Tryb gadatliwy (tekst, zamiast liczb)",
+                    "verbose_format": "Format trybu gadatliwego (używa zmiennych `date` oraz `days` (w nawiasach klamerkowych))",
+                    "date_format": "Format daty (patrz http://strftime.org/)"
+                }
+            },
+            "annual_group": {
+                "title": "Wywóz Śmieci - Dodatkowe parametry",
+                "description": "Podaj datę wywozu (np. 11/20 dla Listopad 20)",
+                "data": {
+                    "date": "Data (mm/dd)",
+                    "entities": "Lista encji (rozdzielane przecinkami)"
+                }
+            },
+            "detail": {
+                "title": "Wywóz Śmieci - Dni wywozu",
+                "description": "Wybierz jeden lub więcej dni wywozu. Więcej szczegółów tutaj: https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "collection_days_mon": "Poniedziałek",
+                    "collection_days_tue": "Wtorek",
+                    "collection_days_wed": "Środa",
+                    "collection_days_thu": "Czwartek",
+                    "collection_days_fri": "Piątek",
+                    "collection_days_sat": "Sobota",
+                    "collection_days_sun": "Niedziela",
+                    "force_week_order_numbers": "Kolejność `tydzień w miesiącu` zamiast `dzień tygodnia`"
+                }
+            },
+            "final": {
+                "title": "Wywóz Śmieci - Dodatkowe parametry",
+                "description": "Dołączone i wyłączone daty są listą, rozdzielanych przecinkami, dat w formacie rrrr-mm-dd. Więcej informacji tutaj https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "first_month": "Miesiąc pierwszego wywozu",
+                    "last_month": "Miesiąc ostatniego wywozu",
+                    "period": "Wywóz co n dni/tygodni: (1-52)",
+                    "first_week": "Tydzień pierwszego wywozu: (1-52)",
+                    "first_date": "Pierwsza data",
+                    "weekday_order_number_1": "Pierwszy dzień tygodnia",
+                    "weekday_order_number_2": "Drugi dzień tygodnia",
+                    "weekday_order_number_3": "Trzeci dzień tygodnia",
+                    "weekday_order_number_4": "Czwarty dzień tygodnia",
+                    "weekday_order_number_5": "Piąty dzień tygodnia",
+                    "week_order_number_1": "Pierwszy tydzień miesiąca",
+                    "week_order_number_2": "Drugi tydzień miesiąca",
+                    "week_order_number_3": "Trzeci tydzień miesiąca",
+                    "week_order_number_4": "Czwarty tydzień miesiąca",
+                    "week_order_number_5": "Piąty tydzień miesiąca",
+                    "include_dates": "Dołącz daty (opcjonalnie)",
+                    "exclude_dates": "Wyłącz daty (opcjonalnie)",
+                    "move_country_holidays": "Przesuń państwowe święta na kolejny dzień (opcjonalnie)",
+                    "prov": "Przesuń święta na kolejny dzień (opcjonalnie)",
+                    "state": "Święta państwowe - stan (opcjonalnie)",
+                    "observed": "Święta państwowe - przesunięte obchody (opcjonalnie)"
+                }
+            }
+        },
+        "error": {
+            "date": "Nieprawidłowy format daty !",
+            "entities": "Encja nie istnieje !"
+        }
+    }
+
+}
