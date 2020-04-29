@@ -105,65 +105,65 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 
 ### CONFIGURATION PARAMETERS
 #### SENSOR PARAMETERS
-|Attribute |Optional|Description
+|Attribute |Required|Description
 |:----------|----------|------------
-| `name` | No | Sensor friendly name
+| `name` | Yes | Sensor friendly name
 | `frequency` | Yes | `"weekly"`, `"even-weeks"`, `"odd-weeks"`, `"every-n-weeks"`, `"every-n-days"`, `"monthly"`, `"annual"` or `"group"`
-| `icon_normal` | Yes | Default icon **Default**:  `mdi:trash-can`
-| `icon_today` | Yes | Icon if the collection is today **Default**: `mdi:delete-restore`
-| `icon_tomorrow` | Yes | Icon if the collection is tomorrow **Default**: `mdi:delete-circle`
-| `verbose_state` | Yes | The sensor state will show collection date and remaining days, instead of number **Default**: `False`
-| `verbose_format` | Yes | (relevant when `verbose_state` is `True`). Verbose status formatting string. Can use placeholders `{date}` and `{days}` to show the date of next collection and remaining days. **Default**: `'on {date}, in {days} days'`</br>*When the collection is today or tomorrow, it will show `Today` or `Tomorrow`*</br>*(currently in English, French, Czech and Italian).*
-| `date_format` | Yes | In the `verbose_format`, you can configure the format of date (using [strftime](http://strftime.org/) format)  **Default**: `'%d-%b-%Y'`
+| `icon_normal` | No | Default icon **Default**:  `mdi:trash-can`
+| `icon_today` | No | Icon if the collection is today **Default**: `mdi:delete-restore`
+| `icon_tomorrow` | No | Icon if the collection is tomorrow **Default**: `mdi:delete-circle`
+| `verbose_state` | No | The sensor state will show collection date and remaining days, instead of number **Default**: `False`
+| `verbose_format` | No | (relevant when `verbose_state` is `True`). Verbose status formatting string. Can use placeholders `{date}` and `{days}` to show the date of next collection and remaining days. **Default**: `'on {date}, in {days} days'`</br>*When the collection is today or tomorrow, it will show `Today` or `Tomorrow`*</br>*(currently in English, French, Czech and Italian).*
+| `date_format` | No | In the `verbose_format`, you can configure the format of date (using [strftime](http://strftime.org/) format)  **Default**: `'%d-%b-%Y'`
 
 
 #### PARAMETERS FOR ALL FREQUENCIES EXCEPT ANNUAL
-|Attribute |Optional|Description
+|Attribute |Required|Description
 |:----------|----------|------------
-| `collection_days` | No |Day three letter abbreviation, list of `"mon"`, `"tue"`, `"wed"`, `"thu"`, `"fri"`, `"sat"`, `"sun"`. 
-| `first_month` | Yes | Month three letter abbreviation, e.g. `"jan"`, `"feb"`...<br/>**Default**: `"jan"`
-| `last_month` | Yes | Month three letter abbreviation.<br/>**Default**: `"dec"`
-| `exclude_dates` | Yes | List of dates with no collection (using international date format `'yyyy-mm-dd'`. 
-| `include_dates` | Yes | List of extra collection (using international date format `'yyyy-mm-dd'`.
-| `move_country_holidays` | Yes | Country holidays - the country code (see [holidays](https://github.com/dr-prodigy/python-holidays) for the list of valid country codes).<br/>Automatically move garbage collection on public holidays to the following day.<br/>*Example:* `US`   
-| `prov` | Yes | Country holidays - province (see [holidays](https://github.com/dr-prodigy/python-holidays) ).
-| `state` | Yes | Country holidays - state (see [holidays](https://github.com/dr-prodigy/python-holidays) ).
-| `observed` | Yes | Country holidays - observed (see [holidays](https://github.com/dr-prodigy/python-holidays) ).
+| `collection_days` | Yes |Day three letter abbreviation, list of `"mon"`, `"tue"`, `"wed"`, `"thu"`, `"fri"`, `"sat"`, `"sun"`. 
+| `first_month` | No | Month three letter abbreviation, e.g. `"jan"`, `"feb"`...<br/>**Default**: `"jan"`
+| `last_month` | No | Month three letter abbreviation.<br/>**Default**: `"dec"`
+| `exclude_dates` | No | List of dates with no collection (using international date format `'yyyy-mm-dd'`. 
+| `include_dates` | No | List of extra collection (using international date format `'yyyy-mm-dd'`.
+| `move_country_holidays` | No | Country holidays - the country code (see [holidays](https://github.com/dr-prodigy/python-holidays) for the list of valid country codes).<br/>Automatically move garbage collection on public holidays to the following day.<br/>*Example:* `US`   
+| `prov` | No | Country holidays - province (see [holidays](https://github.com/dr-prodigy/python-holidays) ).
+| `state` | No | Country holidays - state (see [holidays](https://github.com/dr-prodigy/python-holidays) ).
+| `observed` | No | Country holidays - observed (see [holidays](https://github.com/dr-prodigy/python-holidays) ).
 
 #### PARAMETERS FOR COLLECTION EVERY-N-WEEKS
-|Attribute |Optional|Description
+|Attribute |Required|Description
 |:----------|----------|------------
-|`period` | Yes | Collection every `"period"` weeks (integer 1-53)<br/>**Default**: 1
-|`first_week` | Yes | First collection on the `"first_week"` week (integer 1-53)<br/>**Default**: 1<br/>*(The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representatio of the week)<br/><br/>Note: This parameter cannot be used to set the beginning of the collection period (use the `first_month` parameter for that). The purpose of `first_week` is to simply 'offset' the week number, so that the collection every n weeks does not always trigger on week numbers that are multiply of n. Technically, the value of this parameter shall be less than `period`, otherwise it will give weird results.*
+|`period` | No | Collection every `"period"` weeks (integer 1-53)<br/>**Default**: 1
+|`first_week` | No | First collection on the `"first_week"` week (integer 1-53)<br/>**Default**: 1<br/>*(The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representatio of the week)<br/><br/>Note: This parameter cannot be used to set the beginning of the collection period (use the `first_month` parameter for that). The purpose of `first_week` is to simply 'offset' the week number, so that the collection every n weeks does not always trigger on week numbers that are multiply of n. Technically, the value of this parameter shall be less than `period`, otherwise it will give weird results.*
 
 
 #### PARAMETERS FOR COLLECTION EVERY-N-DAYS
-|Attribute |Optional|Description
+|Attribute |Required|Description
 |:----------|----------|------------
-|`period` | Yes | Collection every `"period"` days (warning - in this configuration it is days, not weeks!)<br/>**Default**: 1 (daily, which makes no sense I suppose)
-|`first_date` | No | Repeats every n days from this first date<br>(date in the international ISO format `'yyyy-mm-dd'`).
+|`first_date` | Yes | Repeats every n days from this first date<br>(date in the international ISO format `'yyyy-mm-dd'`).
+|`period` | No | Collection every `"period"` days (warning - in this configuration it is days, not weeks!)<br/>**Default**: 1 (daily, which makes no sense I suppose)
 
 
 #### PARAMETERS FOR MONTHLY COLLECTION
 The monthly schedule has two flavors: it can trigger either on the **n<sup>th</sup> occurrence of the weekday** in a month, or on the weekday in the **n<sup>th</sup> week** of each month.
 
-|Attribute |Optional|Description
+|Attribute |Required|Description
 |:----------|----------|------------
-|`weekday_order_number` | Yes | List of week numbers of `collection_day` each month. E.g., if `collection_day` is `"sat"`, 1 will mean 1<sup>st</sup> Saturday each month (integer 1-5)<br/>**Default**: 1
-|`week_order_number` | Yes | Similar to `weekday_order_number`, but instead of n<sup>th</sup> weekday of each month, take the weekday of the n<sup>th</sup> week of each month.</br>So if the month starts on Friday, the Wednesday of the 1<sup>st</sup> week would actually be last Wednesday of the previous month and the Wednesday of 2<sup>nd</sup> week will be the 1<sup>st</sup> Wednesday of the month.
-|`period` | Yes | If `period` is not defined (or 1), the schedule will repeat monthly. If `period` is 2, it will be every 2<sup>nd</sup> month. If `period` is 3, it will be once per quarter, and so on.<br/>The `first_month` parameter will then define the starting month. So if the `first_month` is `jan` (or not defined), and `period` is 2, the collection will be in odd months (`jan`, `mar`, `may`, `jul`, `sep` and `nov`). If `first_month` is `feb`, it will be in even months. (integer 1-12)<br/>**Default**: 1
+|`weekday_order_number` | No | List of week numbers of `collection_day` each month. E.g., if `collection_day` is `"sat"`, 1 will mean 1<sup>st</sup> Saturday each month (integer 1-5)<br/>**Default**: 1
+|`week_order_number` | No | Similar to `weekday_order_number`, but instead of n<sup>th</sup> weekday of each month, take the weekday of the n<sup>th</sup> week of each month.</br>So if the month starts on Friday, the Wednesday of the 1<sup>st</sup> week would actually be last Wednesday of the previous month and the Wednesday of 2<sup>nd</sup> week will be the 1<sup>st</sup> Wednesday of the month.
+|`period` | No | If `period` is not defined (or 1), the schedule will repeat monthly. If `period` is 2, it will be every 2<sup>nd</sup> month. If `period` is 3, it will be once per quarter, and so on.<br/>The `first_month` parameter will then define the starting month. So if the `first_month` is `jan` (or not defined), and `period` is 2, the collection will be in odd months (`jan`, `mar`, `may`, `jul`, `sep` and `nov`). If `first_month` is `feb`, it will be in even months. (integer 1-12)<br/>**Default**: 1
 
 *You cannot combine both `weekday_order_number` and `week_order_number` options in one sensor - if you configure both, it will only take the `week_order_number` parameter.*
 
 #### PARAMETERS FOR ANNUAL COLLECTION
-|Attribute |Optional|Description
+|Attribute |Required|Description
 |:----------|----------|------------
-|`date` | No | Date of the collection using format `'mm/dd'` (e.g. '11/24' for November 24 each year)
+|`date` | Yes | Date of the collection using format `'mm/dd'` (e.g. '11/24' for November 24 each year)
 
 #### PARAMETERS FOR GROUP
-|Attribute |Optional|Description
+|Attribute |Required|Description
 |:----------|----------|------------
-|`entities` | No | List of `entity_id`s to merge
+|`entities` | Yes | List of `entity_id`s to merge
 
 
 **IMPORTANT - put include/exclude dates within quotes. Dates without quotes might cause Home Assistant not loading configuration when starting - in case the date is invalid. Validation for dates within quotes works fine.** I think this is general bug, I am addressing that. (See the example above)
