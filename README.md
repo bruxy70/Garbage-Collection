@@ -238,7 +238,10 @@ Lovelace configuration
 ```yaml
       - type: entities
         entities:
-        - sensor.general-waste
+          - sensor.general_waste
+          - sensor.bio
+          - sensor.paper
+          - sensor.plastic
 ```
 
 ## Icon view (glance)
@@ -252,7 +255,7 @@ garbage_collection:
     frequency: 'weekly'
     collection_days: wed
     verbose_state: True
-    verbose_format: "on {date} - (in {days} days)"
+    verbose_format: "on {date}, (in {days} days)"
   etc...
 ```
 
@@ -260,8 +263,5 @@ Configuration
 ```yaml
       - type: glance
         entities:
-          - sensor.smes
-          - sensor.bioodpad
-          - sensor.papir
-          - sensor.plasty
+          - sensor.general_waste
 ```
