@@ -254,20 +254,13 @@ garbage_collection:
     frequency: 'weekly'
     collection_days: wed
     verbose_state: True
-    verbose_format: "on {date}\n(in {days} days)"
+    verbose_format: "on {date} - (in {days} days)"
   etc...
 ```
 
-Configuration (I use style (by card-mod plugin) to allow line-break in the state)
+Configuration
 ```yaml
       - type: glance
-        style: 
-          ".entity": 
-            $: |
-             :host {}
-             div:nth-of-type(2) {
-               white-space: inherit !important
-             }
         entities:
           - sensor.smes
           - sensor.bioodpad
