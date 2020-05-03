@@ -255,7 +255,7 @@ garbage_collection:
     frequency: 'weekly'
     collection_days: wed
     verbose_state: True
-    verbose_format: "on {date}, (in {days} days)"
+    verbose_format: "on {date}, in {days} days"
   etc...
 ```
 
