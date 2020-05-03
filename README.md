@@ -239,8 +239,6 @@ Lovelace configuration
       - type: entities
         entities:
         - sensor.general-waste
-        - sensor.bio
-        - sensor.large-waste
 ```
 
 ## Icon view (glance)
