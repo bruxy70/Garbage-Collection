@@ -1,6 +1,8 @@
 {
     "state": {
-        "today": "I morgen",
-        "tomorrow": "I dag"
+        "_": {
+            "today": "I morgen",
+            "tomorrow": "I dag"
+        }
     }
 }
