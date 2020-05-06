@@ -1,6 +1,8 @@
 {
     "state": {
-        "today": "Vandaag",
-        "tomorrow": "Morgen"
+        "_": {
+            "today": "Vandaag",
+            "tomorrow": "Morgen"
+        }
     }
 }

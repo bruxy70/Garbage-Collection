@@ -1,6 +1,8 @@
 {
     "state": {
-        "today": "Dzisiaj",
-        "tomorrow": "Jutro"
+        "_": {
+            "today": "Dzisiaj",
+            "tomorrow": "Jutro"
+        }
     }
 }

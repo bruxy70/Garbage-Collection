@@ -1,6 +1,8 @@
 {
     "state": {
-        "today": "Dnes",
-        "tomorrow": "Zítra"
+        "_": {
+            "today": "Dnes",
+            "tomorrow": "Zítra"
+        }
     }
 }

@@ -1,6 +1,8 @@
 {
     "state": {
-        "today": "Oggi",
-        "tomorrow": "Domani"
+        "_": {
+            "today": "Oggi",
+            "tomorrow": "Domani"
+        }
     }
 }
