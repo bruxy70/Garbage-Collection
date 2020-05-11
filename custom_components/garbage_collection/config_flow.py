@@ -8,65 +8,15 @@ from homeassistant import config_entries
 from datetime import datetime
 import uuid
 
-from .const import (
-    DOMAIN,
-    FREQUENCY_OPTIONS,
-    MONTH_OPTIONS,
-    WEEKLY_FREQUENCY,
-    WEEKLY_FREQUENCY_X,
-    DAILY_FREQUENCY,
-    MONTHLY_FREQUENCY,
-    ANNUAL_FREQUENCY,
-    GROUP_FREQUENCY,
-    COUNTRY_CODES,
-    DEFAULT_FIRST_MONTH,
-    DEFAULT_LAST_MONTH,
-    DEFAULT_FREQUENCY,
-    DEFAULT_ICON_NORMAL,
-    DEFAULT_ICON_TOMORROW,
-    DEFAULT_ICON_TODAY,
-    DEFAULT_VERBOSE_STATE,
-    DEFAULT_VERBOSE_FORMAT,
-    DEFAULT_DATE_FORMAT,
-    CONF_SENSOR,
-    CONF_ENABLED,
-    CONF_FREQUENCY,
-    CONF_ICON_NORMAL,
-    CONF_ICON_TODAY,
-    CONF_ICON_TOMORROW,
-    CONF_VERBOSE_STATE,
-    CONF_VERBOSE_FORMAT,
-    CONF_DATE_FORMAT,
-    CONF_FIRST_MONTH,
-    CONF_LAST_MONTH,
-    CONF_COLLECTION_DAYS,
-    CONF_FORCE_WEEK_NUMBERS,
-    CONF_WEEKDAY_ORDER_NUMBER,
-    CONF_WEEK_ORDER_NUMBER,
-    CONF_DATE,
-    CONF_EXCLUDE_DATES,
-    CONF_INCLUDE_DATES,
-    CONF_MOVE_COUNTRY_HOLIDAYS,
-    CONF_PROV,
-    CONF_STATE,
-    CONF_OBSERVED,
-    CONF_PERIOD,
-    CONF_FIRST_WEEK,
-    CONF_FIRST_DATE,
-    CONF_SENSORS,
-    ATTR_NEXT_DATE,
-)
-
+from .const import * # pylint: disable=W0614
 from homeassistant.const import CONF_NAME, WEEKDAYS, CONF_ENTITIES
 
 _LOGGER = logging.getLogger(__name__)
-
 
 def clean_optional(dict, key):
     """Remove optional keys before update"""
     if key in dict:
         del dict[key]
-
 
 @config_entries.HANDLERS.register(DOMAIN)
 class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
@@ -78,6 +28,7 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
     def __init__(self):
         """Initialize."""
         self._errors = {}
+        CONFIGURATION.reset_defaults()
         self._data = {}
         self._data["unique_id"] = str(uuid.uuid4())
 
@@ -91,64 +42,28 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
         """
         self._errors = {}
         if user_input is not None:
-            if user_input[CONF_NAME] != "":
-                # Remember Frequency
+            validation = vol.Schema(CONFIGURATION.compile_schema(step=1))
+            try:
+                config = validation(user_input) # pylint: disable=W0612
+            except vol.Invalid as exception:
+                e = str(exception)
+                if 'icon_normal' in e or 'icon_today' in e or 'icon_tomorrow' in e:
+                    self._errors["base"] = "icon"
+                else:
+                    self._errors["base"] = "value"
+                CONFIGURATION.set_defaults(1, user_input)
+            if self._errors == {}:
+                # Valid input - go to the next step!
+                # Remember input values from step1
                 self._data.update(user_input)
-                # Call next step
-                if (
-                    user_input[CONF_FREQUENCY] in ANNUAL_FREQUENCY
-                    or user_input[CONF_FREQUENCY] in GROUP_FREQUENCY
-                ):
-                    # Annual and group schedule is different (does not have days)
+                # Call next step, delending on the frequency value
+                if user_input[CONF_FREQUENCY] in ANNUAL_GROUP_FREQUENCY:
                     return await self.async_step_annual_group()
                 elif user_input[CONF_FREQUENCY] in DAILY_FREQUENCY:
                     return await self.async_step_final()
                 else:
                     return await self.async_step_detail()
-            else:
-                self._errors["base"] = "name"
-            return await self._show_user_form(user_input)
-        return await self._show_user_form(user_input)
-
-    async def _show_user_form(self, user_input):
-        """Configuration STEP 1 - SHOW FORM"""
-        # Defaults
-        name = ""
-        frequency = DEFAULT_FREQUENCY
-        icon_normal = DEFAULT_ICON_NORMAL
-        icon_tomorrow = DEFAULT_ICON_TOMORROW
-        icon_today = DEFAULT_ICON_TODAY
-        verbose_state = DEFAULT_VERBOSE_STATE
-        verbose_format = DEFAULT_VERBOSE_FORMAT
-        date_format = DEFAULT_DATE_FORMAT
-        if user_input is not None:
-            if CONF_NAME in user_input:
-                name = user_input[CONF_NAME]
-            if CONF_FREQUENCY in user_input:
-                frequency = user_input[CONF_FREQUENCY]
-            if CONF_ICON_NORMAL in user_input:
-                icon_normal = user_input[CONF_ICON_NORMAL]
-            if CONF_ICON_TOMORROW in user_input:
-                icon_tomorrow = user_input[CONF_ICON_TOMORROW]
-            if CONF_ICON_TODAY in user_input:
-                icon_today = user_input[CONF_ICON_TODAY]
-            if CONF_VERBOSE_STATE in user_input:
-                verbose_state = user_input[CONF_VERBOSE_STATE]
-            if CONF_VERBOSE_FORMAT in user_input:
-                verbose_format = user_input[CONF_VERBOSE_FORMAT]
-            if CONF_DATE_FORMAT in user_input:
-                date_format = user_input[CONF_DATE_FORMAT]
-        data_schema = OrderedDict()
-        data_schema[vol.Required(CONF_NAME, default=name)] = str
-        data_schema[vol.Required(CONF_FREQUENCY, default=frequency)] = vol.In(
-            FREQUENCY_OPTIONS
-        )
-        data_schema[vol.Required(CONF_ICON_NORMAL, default=icon_normal)] = str
-        data_schema[vol.Required(CONF_ICON_TOMORROW, default=icon_tomorrow)] = str
-        data_schema[vol.Required(CONF_ICON_TODAY, default=icon_today)] = str
-        data_schema[vol.Required(CONF_VERBOSE_STATE, default=verbose_state)] = bool
-        data_schema[vol.Required(CONF_VERBOSE_FORMAT, default=verbose_format)] = str
-        data_schema[vol.Required(CONF_DATE_FORMAT, default=date_format)] = str
+        data_schema = CONFIGURATION.compile_config_flow(step=1)
         return self.async_show_form(
             step_id="user", data_schema=vol.Schema(data_schema), errors=self._errors
         )
@@ -158,50 +73,33 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
     ):  # pylint: disable=dangerous-default-value
         """
 
-        C O N F I G U R A T I O N   S T E P   A N N U A L   O R   G R O U P
-
+        C O N F I G U R A T I O N   S T E P   2   (  A N N U A L   O R   G R O U P  )
+        (no week days)
         """
         self._errors = {}
         updates = {}
         if user_input is not None and user_input != {}:
-            if self._data[CONF_FREQUENCY] in ANNUAL_FREQUENCY:
-                updates[CONF_DATE] = user_input[CONF_DATE]
-                if not is_month_day(user_input[CONF_DATE]):
+            validation = vol.Schema(CONFIGURATION.compile_schema(step=2, frequency=self._data[CONF_FREQUENCY]))
+            try:
+                updates = validation(user_input)
+            except vol.Invalid as e: # pylint: disable=W0612
+                # _LOGGER.debug(e)
+                if self._data[CONF_FREQUENCY] in ANNUAL_FREQUENCY:
                     self._errors["base"] = "month_day"
-            else:
-                updates[CONF_ENTITIES] = string_to_list(user_input[CONF_ENTITIES])
-                checked = True
-                for entity in updates[CONF_ENTITIES]:
-                    try:
-                        self.hass.states.get(entity).attributes.get(ATTR_NEXT_DATE)
-                    except:
-                        checked = False
-                if not checked:
+                else:
                     self._errors["base"] = "entities"
+                CONFIGURATION.set_defaults(2, user_input)
             if self._errors == {}:
-                # Remember Frequency
+                # Remember step2 values
+                if self._data[CONF_FREQUENCY] in GROUP_FREQUENCY:
+                    updates[CONF_ENTITIES] = string_to_list(user_input[CONF_ENTITIES])
                 self._data.update(updates)
                 # Call last step
                 return self.async_create_entry(
                     title=self._data["name"], data=self._data
                 )
-        return await self._show_annual_group_form(user_input)
-
-    async def _show_annual_group_form(self, user_input):
-        """Configuration STEP 2 - Annual or Group (no days) - SHOW FORM"""
-        # Defaults
-        date = ""
-        entities = ""
-        if user_input is not None:
-            if CONF_DATE in user_input:
-                date = user_input[CONF_DATE]
-            if CONF_ENTITIES in user_input:
-                entities = user_input[CONF_ENTITIES]
-        data_schema = OrderedDict()
-        if self._data[CONF_FREQUENCY] in ANNUAL_FREQUENCY:
-            data_schema[vol.Required(CONF_DATE, default=date)] = str
-        else:
-            data_schema[vol.Required(CONF_ENTITIES, default=entities)] = str
+        
+        data_schema = CONFIGURATION.compile_config_flow(step=2, frequency=self._data[CONF_FREQUENCY])
         return self.async_show_form(
             step_id="annual_group",
             data_schema=vol.Schema(data_schema),
@@ -213,56 +111,51 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
     ):  # pylint: disable=dangerous-default-value
         """
 
-        C O N F I G U R A T I O N   S T E P   2
+        C O N F I G U R A T I O N   S T E P   2   ( O T H E R   T H A N   A N N U A L   O R   G R O U P )
 
         """
         self._errors = {}
+        updates = {}
         if user_input is not None and user_input != {}:
-            day_selected = False
-            detail_info = {}
+            updates = user_input.copy()
+            days_to_list(updates)
+            validation_schema = CONFIGURATION.compile_schema(step=3, frequency=self._data[CONF_FREQUENCY])
             if self._data[CONF_FREQUENCY] in MONTHLY_FREQUENCY:
-                detail_info[CONF_FORCE_WEEK_NUMBERS] = user_input[
-                    CONF_FORCE_WEEK_NUMBERS
-                ]
-            detail_info[CONF_COLLECTION_DAYS] = []
-            for day in WEEKDAYS:
-                if user_input[f"collection_days_{day.lower()}"]:
-                    day_selected = True
-                    detail_info[CONF_COLLECTION_DAYS].append(day)
-            if day_selected:
-                # Remember Detail
-                self._data.update(detail_info)
-                # Call last step
-                return await self.async_step_final()
-            else:
+                validation_schema[
+                        vol.Optional(
+                        CONF_FORCE_WEEK_NUMBERS,
+                        default=bool(
+                            user_input is not None
+                            and user_input != {}
+                            and user_input[CONF_FORCE_WEEK_NUMBERS]
+                        )
+                    )] = cv.boolean
+            validation = vol.Schema(validation_schema)
+            try:
+                updates = validation(updates)
+            except vol.Invalid as e: # pylint: disable=W0612
+                # _LOGGER.debug(e)
+                self._errors["base"] = "value"
+            if len(updates[CONF_COLLECTION_DAYS]) == 0:
                 self._errors["base"] = "days"
-        return await self._show_detail_form(user_input)
+            if self._errors == {}:
+                # Remember values
+                self._data.update(updates)
+                return await self.async_step_final()
+            CONFIGURATION.set_defaults(3, updates)
 
-    async def _show_detail_form(self, user_input):
-        """Configuration STEP 2 - SHOW FORM"""
-        data_schema = OrderedDict()
-        for day in WEEKDAYS:
-            data_schema[
-                vol.Required(
-                    f"collection_days_{day.lower()}",
-                    default=bool(
-                        user_input is not None
-                        and user_input != {}
-                        and user_input[f"collection_days_{day.lower()}"]
-                    ),
-                )
-            ] = bool
+        data_schema = CONFIGURATION.compile_config_flow(step=3, frequency=self._data[CONF_FREQUENCY])
+        list_to_days(data_schema)
         if self._data[CONF_FREQUENCY] in MONTHLY_FREQUENCY:
             data_schema[
-                vol.Required(
+                vol.Optional(
                     CONF_FORCE_WEEK_NUMBERS,
                     default=bool(
                         user_input is not None
                         and user_input != {}
                         and user_input[CONF_FORCE_WEEK_NUMBERS]
                     ),
-                )
-            ] = bool
+                )] = bool
         return self.async_show_form(
             step_id="detail", data_schema=vol.Schema(data_schema), errors=self._errors
         )
@@ -277,149 +170,53 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
         """
         self._errors = {}
         if user_input is not None and user_input != {}:
-            final_info = {}
-            final_info[CONF_FIRST_MONTH] = user_input[CONF_FIRST_MONTH]
-            final_info[CONF_LAST_MONTH] = user_input[CONF_LAST_MONTH]
+            updates = user_input.copy()
             if self._data[CONF_FREQUENCY] in MONTHLY_FREQUENCY:
-                final_info[CONF_PERIOD] = user_input[CONF_PERIOD]
-                day_selected = False
-                final_info[CONF_WEEKDAY_ORDER_NUMBER] = []
-                final_info[CONF_WEEK_ORDER_NUMBER] = []
-                for i in range(5):
-                    if self._data[CONF_FORCE_WEEK_NUMBERS]:
-                        if user_input[f"week_order_number_{i+1}"]:
-                            day_selected = True
-                            final_info[CONF_WEEK_ORDER_NUMBER].append(i + 1)
-                    else:
-                        if user_input[f"weekday_order_number_{i+1}"]:
-                            day_selected = True
-                            final_info[CONF_WEEKDAY_ORDER_NUMBER].append(i + 1)
-                if not day_selected:
-                    self._errors["base"] = CONF_WEEKDAY_ORDER_NUMBER
-            if self._data[CONF_FREQUENCY] in DAILY_FREQUENCY:
-                if is_date(user_input[CONF_FIRST_DATE]):
-                    final_info[CONF_FIRST_DATE] = user_input[CONF_FIRST_DATE]
-                else:
-                    self._errors["base"] = "date"
-                final_info[CONF_PERIOD] = user_input[CONF_PERIOD]
-            if self._data[CONF_FREQUENCY] in WEEKLY_FREQUENCY_X:
-                final_info[CONF_PERIOD] = user_input[CONF_PERIOD]
-                final_info[CONF_FIRST_WEEK] = user_input[CONF_FIRST_WEEK]
-            final_info[CONF_INCLUDE_DATES] = string_to_list(
-                user_input[CONF_INCLUDE_DATES]
-            )
-            final_info[CONF_EXCLUDE_DATES] = string_to_list(
-                user_input[CONF_EXCLUDE_DATES]
-            )
-            final_info[CONF_MOVE_COUNTRY_HOLIDAYS] = user_input[
-                CONF_MOVE_COUNTRY_HOLIDAYS
-            ]
-            final_info[CONF_PROV] = user_input[CONF_PROV]
-            final_info[CONF_STATE] = user_input[CONF_STATE]
-            final_info[CONF_OBSERVED] = user_input[CONF_OBSERVED]
-            if not is_dates(final_info[CONF_INCLUDE_DATES]) or not is_dates(
-                final_info[CONF_EXCLUDE_DATES]
-            ):
-                self._errors["base"] = "date"
-            if self._errors == {}:
-                self._data.update(final_info)
-                return self.async_create_entry(
-                    title=self._data["name"], data=self._data
-                )
-        return await self._show_final_form(user_input)
-
-    async def _show_final_form(self, user_input):
-        """Configuration STEP 3 - SHOW FORM"""
-        # Defaults
-        first_month = DEFAULT_FIRST_MONTH
-        last_month = DEFAULT_LAST_MONTH
-        first_date = ""
-        include_dates = ""
-        exclude_dates = ""
-        period = 1
-        first_week = 1
-        include_country_holidays = ""
-        prov = ""
-        state = ""
-        observed = True
-        if user_input is not None:
-            if CONF_FIRST_MONTH in user_input:
-                first_month = user_input[CONF_FIRST_MONTH]
-            if CONF_LAST_MONTH in user_input:
-                last_month = user_input[CONF_LAST_MONTH]
-            if CONF_FIRST_DATE in user_input:
-                first_date = user_input[CONF_FIRST_DATE]
-            if CONF_PERIOD in user_input:
-                period = user_input[CONF_PERIOD]
-            if CONF_FIRST_WEEK in user_input:
-                first_week = user_input[CONF_FIRST_WEEK]
-            if CONF_INCLUDE_DATES in user_input:
-                include_dates = user_input[CONF_INCLUDE_DATES]
-            if CONF_EXCLUDE_DATES in user_input:
-                exclude_dates = user_input[CONF_EXCLUDE_DATES]
-            if CONF_MOVE_COUNTRY_HOLIDAYS in user_input:
-                include_country_holidays = user_input[CONF_MOVE_COUNTRY_HOLIDAYS]
-            if CONF_PROV in user_input:
-                prov = user_input[CONF_PROV]
-            if CONF_STATE in user_input:
-                state = user_input[CONF_STATE]
-            if CONF_OBSERVED in user_input:
-                observed = user_input[CONF_OBSERVED]
-
-        data_schema = OrderedDict()
-        data_schema[vol.Optional(CONF_FIRST_MONTH, default=first_month)] = vol.In(
-            MONTH_OPTIONS
-        )
-        data_schema[vol.Optional(CONF_LAST_MONTH, default=last_month)] = vol.In(
-            MONTH_OPTIONS
-        )
-        if self._data[CONF_FREQUENCY] in DAILY_FREQUENCY:
-            data_schema[vol.Required(CONF_PERIOD, default=period)] = vol.All(
-                vol.Coerce(int), vol.Range(min=1, max=52)
-            )
-            data_schema[vol.Required(CONF_FIRST_DATE, default=first_date)] = str
-        if self._data[CONF_FREQUENCY] in WEEKLY_FREQUENCY_X:
-            data_schema[vol.Required(CONF_PERIOD, default=period)] = vol.All(
-                vol.Coerce(int), vol.Range(min=1, max=52)
-            )
-            data_schema[vol.Required(CONF_FIRST_WEEK, default=first_week)] = vol.All(
-                vol.Coerce(int), vol.Range(min=1, max=52)
-            )
-        if self._data[CONF_FREQUENCY] in MONTHLY_FREQUENCY:
-            data_schema[vol.Required(CONF_PERIOD, default=period)] = vol.All(
-                vol.Coerce(int), vol.Range(min=1, max=12)
-            )
-            for i in range(5):
                 if self._data[CONF_FORCE_WEEK_NUMBERS]:
-                    data_schema[
-                        vol.Required(
-                            f"week_order_number_{i+1}",
-                            default=bool(
-                                user_input is not None
-                                and user_input != {}
-                                and user_input[f"week_order_number_{i+1}"]
-                            ),
-                        )
-                    ] = bool
+                    weekdays_to_list(updates, CONF_WEEK_ORDER_NUMBER)
                 else:
-                    data_schema[
-                        vol.Required(
-                            f"weekday_order_number_{i+1}",
-                            default=bool(
-                                user_input is not None
-                                and user_input != {}
-                                and user_input[f"weekday_order_number_{i+1}"]
-                            ),
-                        )
-                    ] = bool
-        data_schema[vol.Optional(CONF_INCLUDE_DATES, default=include_dates)] = str
-        data_schema[vol.Optional(CONF_EXCLUDE_DATES, default=exclude_dates)] = str
-        data_schema[
-            vol.Optional(CONF_MOVE_COUNTRY_HOLIDAYS, default=include_country_holidays)
-        ] = vol.In(COUNTRY_CODES)
-        data_schema[vol.Optional(CONF_PROV, default=prov)] = str
-        data_schema[vol.Optional(CONF_STATE, default=state)] = str
-        data_schema[vol.Optional(CONF_OBSERVED, default=observed)] = bool
+                    weekdays_to_list(updates, CONF_WEEKDAY_ORDER_NUMBER)
+            validation = vol.Schema(CONFIGURATION.compile_schema(step=4, frequency=self._data[CONF_FREQUENCY]))
+            if CONF_INCLUDE_DATES in updates:
+                updates[CONF_INCLUDE_DATES] = string_to_list(
+                    updates[CONF_INCLUDE_DATES]
+                )
+            if CONF_EXCLUDE_DATES in updates:
+                updates[CONF_EXCLUDE_DATES] = string_to_list(
+                    updates[CONF_EXCLUDE_DATES]
+                )
+            try:
+                updates = validation(updates)
+            except vol.Invalid as e: # pylint: disable=W0612
+                # _LOGGER.debug(e)
+                self._errors["base"] = "value"
+            if self._data[CONF_FREQUENCY] in MONTHLY_FREQUENCY:
+                if self._data[CONF_FORCE_WEEK_NUMBERS]:
+                    if len(updates[CONF_WEEK_ORDER_NUMBER]) == 0:
+                        self._errors["base"] = CONF_WEEK_ORDER_NUMBER
+                else:
+                    if len(updates[CONF_WEEKDAY_ORDER_NUMBER]) == 0:
+                        self._errors["base"] = CONF_WEEKDAY_ORDER_NUMBER
+            if self._errors == {}:
+                self._data.update(updates)
+                if CONF_FORCE_WEEK_NUMBERS in self._data:
+                    if self._data[CONF_FORCE_WEEK_NUMBERS]:
+                        if CONF_WEEKDAY_ORDER_NUMBER in self._data:
+                            del self._data[CONF_WEEKDAY_ORDER_NUMBER]
+                    else:
+                        if CONF_WEEK_ORDER_NUMBER in self._data:
+                            del self._data[CONF_WEEK_ORDER_NUMBER]
+                    del self._data[CONF_FORCE_WEEK_NUMBERS]
+                return self.async_create_entry(
+                        title=self._data["name"], data=self._data
+                    )
+        
+        data_schema = CONFIGURATION.compile_config_flow(step=4, frequency=self._data[CONF_FREQUENCY])
+        if self._data[CONF_FREQUENCY] in MONTHLY_FREQUENCY:
+            if self._data[CONF_FORCE_WEEK_NUMBERS]:
+                list_to_weekdays(data_schema, CONF_WEEK_ORDER_NUMBER)
+            else:
+                list_to_weekdays(data_schema, CONF_WEEKDAY_ORDER_NUMBER)
         return self.async_show_form(
             step_id="final", data_schema=vol.Schema(data_schema), errors=self._errors
         )
@@ -443,46 +240,11 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
             return EmptyOptions(config_entry)
 
 
-def is_month_day(date):
-    """Validates mm/dd format"""
-    try:
-        date = datetime.strptime(date, "%m/%d")
-        return True
-    except ValueError:
-        return False
-
-
-def is_date(date):
-    """Validates yyyy-mm-dd format"""
-    if date == "":
-        return True
-    try:
-        datetime.strptime(date, "%Y-%m-%d")
-        return True
-    except ValueError:
-        return False
-
-
-def string_to_list(string):
-    if string is None or string == "":
-        return []
-    return list(map(lambda x: x.strip(), string.split(",")))
-
-
-def is_dates(dates):
-    """Validates list of dates (yyyy-mm-dd, yyyy-mm-dd)"""
-    if dates == []:
-        return True
-    check = True
-    for date in dates:
-        if not is_date(date):
-            check = False
-    return check
-
-
 """
 
+
 O P T I O N S   F L O W
+
 
 """
 
@@ -502,76 +264,31 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         """
         self._errors = {}
         if user_input is not None:
-            # Remember Frequency
-            self._data.update(user_input)
-            # Call next step
-            if (
-                user_input[CONF_FREQUENCY] in ANNUAL_FREQUENCY
-                or user_input[CONF_FREQUENCY] in GROUP_FREQUENCY
-            ):
-                return await self.async_step_annual_group()
-            elif user_input[CONF_FREQUENCY] in DAILY_FREQUENCY:
-                return await self.async_step_final()
-            else:
-                return await self.async_step_detail()
-            return await self._show_init_form(user_input)
-        return await self._show_init_form(user_input)
-
-    async def _show_init_form(self, user_input):
-        """Options STEP 1 - SHOW FORM"""
-        # Defaults
-        data_schema = OrderedDict()
-        data_schema[
-            vol.Required(
-                CONF_FREQUENCY, default=self.config_entry.options.get(CONF_FREQUENCY)
-            )
-        ] = vol.In(FREQUENCY_OPTIONS)
-        data_schema[
-            vol.Required(
-                CONF_ICON_NORMAL,
-                default=self.config_entry.options.get(
-                    CONF_ICON_NORMAL, DEFAULT_ICON_NORMAL
-                ),
-            )
-        ] = str
-        data_schema[
-            vol.Required(
-                CONF_ICON_TOMORROW,
-                default=self.config_entry.options.get(
-                    CONF_ICON_TOMORROW, DEFAULT_ICON_TOMORROW
-                ),
-            )
-        ] = str
-        data_schema[
-            vol.Required(
-                CONF_ICON_TODAY,
-                default=self.config_entry.options.get(
-                    CONF_ICON_TODAY, DEFAULT_ICON_TODAY
-                ),
-            )
-        ] = str
-        data_schema[
-            vol.Required(
-                CONF_VERBOSE_STATE,
-                default=self.config_entry.options.get(CONF_VERBOSE_STATE, False),
-            )
-        ] = bool
-        data_schema[
-            vol.Required(
-                CONF_VERBOSE_FORMAT,
-                default=self.config_entry.options.get(
-                    CONF_VERBOSE_FORMAT, DEFAULT_VERBOSE_FORMAT
-                ),
-            )
-        ] = str
-        data_schema[
-            vol.Required(
-                CONF_DATE_FORMAT,
-                default=self.config_entry.options.get(
-                    CONF_DATE_FORMAT, DEFAULT_DATE_FORMAT
-                ),
-            )
-        ] = str
+            validation = vol.Schema(CONFIGURATION.compile_schema(step=1))
+            try:
+                config = validation(user_input) # pylint: disable=W0612
+            except vol.Invalid as exception:
+                e = str(exception)
+                if 'icon_normal' in e or 'icon_today' in e or 'icon_tomorrow' in e:
+                    self._errors["base"] = "icon"
+                else:
+                    self._errors["base"] = "value"
+                CONFIGURATION.set_defaults(1, user_input)
+            if self._errors == {}:
+                # Valid input - go to the next step!
+                # Remember input values from step1
+                self._data.update(user_input)
+                # Call next step, delending on the frequency value
+                if user_input[CONF_FREQUENCY] in ANNUAL_GROUP_FREQUENCY:
+                    return await self.async_step_annual_group()
+                elif user_input[CONF_FREQUENCY] in DAILY_FREQUENCY:
+                    return await self.async_step_final()
+                else:
+                    return await self.async_step_detail()
+        else:
+            CONFIGURATION.set_defaults(1, self.config_entry.options)
+        
+        data_schema = CONFIGURATION.compile_config_flow(step=1)
         return self.async_show_form(
             step_id="init", data_schema=vol.Schema(data_schema), errors=self._errors
         )
@@ -581,55 +298,40 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
     ):  # pylint: disable=dangerous-default-value
         """
 
-        O P T I O N S   S T E P   2   F O R   A N N U A L   O R   G R O U P
+        O P T I O N S   S T E P   2   (  A N N U A L   O R   G R O U P  )
+        (no week days)
 
         """
         self._errors = {}
         updates = {}
         if user_input is not None and user_input != {}:
-            if self._data[CONF_FREQUENCY] in ANNUAL_FREQUENCY:
-                updates[CONF_DATE] = user_input[CONF_DATE]
-                if not is_month_day(user_input[CONF_DATE]):
+            validation = vol.Schema(CONFIGURATION.compile_schema(step=2, frequency=self._data[CONF_FREQUENCY]))
+            try:
+                updates = validation(user_input)
+            except vol.Invalid as e: # pylint: disable=W0612
+                # _LOGGER.debug(e)
+                if self._data[CONF_FREQUENCY] in ANNUAL_FREQUENCY:
                     self._errors["base"] = "month_day"
-            else:
-                updates[CONF_ENTITIES] = string_to_list(user_input[CONF_ENTITIES])
-                checked = True
-                for entity in updates[CONF_ENTITIES]:
-                    try:
-                        self.hass.states.get(entity).attributes.get(ATTR_NEXT_DATE)
-                    except:
-                        checked = False
-                if not checked:
+                else:
                     self._errors["base"] = "entities"
+                CONFIGURATION.set_defaults(2, user_input)
             if self._errors == {}:
-                # Remember Frequency
-                clean_optional(self._data, CONF_DATE)
+                # Remember step2 values
+                if self._data[CONF_FREQUENCY] in GROUP_FREQUENCY:
+                    updates[CONF_ENTITIES] = string_to_list(user_input[CONF_ENTITIES])
                 self._data.update(updates)
                 # Call last step
-                return self.async_create_entry(title="", data=self._data)
-        return await self._show_annual_group_form(user_input)
-
-    async def _show_annual_group_form(self, user_input):
-        """Configuration STEP 2 for Annual or Group - SHOW FORM"""
-        # Defaults
-        data_schema = OrderedDict()
-        if self._data[CONF_FREQUENCY] in ANNUAL_FREQUENCY:
-            data_schema[
-                vol.Optional(
-                    CONF_DATE, default=self.config_entry.options.get(CONF_DATE)
+                return self.async_create_entry(
+                    title=self._data["name"], data=self._data
                 )
-            ] = str
         else:
-            data_schema[
-                vol.Required(
-                    CONF_ENTITIES,
-                    default=",".join(self.config_entry.options.get(CONF_ENTITIES)),
-                )
-            ] = str
+            CONFIGURATION.set_defaults(2, self.config_entry.options)
+        
+        data_schema = CONFIGURATION.compile_config_flow(step=2, frequency=self._data[CONF_FREQUENCY])
         return self.async_show_form(
             step_id="annual_group",
             data_schema=vol.Schema(data_schema),
-            errors=self._errors,
+            errors=self._errors
         )
 
     async def async_step_detail(
@@ -637,56 +339,57 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
     ):  # pylint: disable=dangerous-default-value
         """
 
-        O P T I O N S   S T E P   2
+        C O N F I G U R A T I O N   S T E P   2   ( O T H E R   T H A N   A N N U A L   O R   G R O U P )
 
         """
         self._errors = {}
+        updates = {}
         if user_input is not None and user_input != {}:
-            day_selected = False
-            detail_info = {}
+            updates = user_input.copy()
+            days_to_list(updates)
+            validation_schema = CONFIGURATION.compile_schema(step=3, frequency=self._data[CONF_FREQUENCY])
             if self._data[CONF_FREQUENCY] in MONTHLY_FREQUENCY:
-                detail_info[CONF_FORCE_WEEK_NUMBERS] = user_input[
-                    CONF_FORCE_WEEK_NUMBERS
-                ]
-            detail_info[CONF_COLLECTION_DAYS] = []
-            for day in WEEKDAYS:
-                if user_input[f"collection_days_{day.lower()}"]:
-                    day_selected = True
-                    detail_info[CONF_COLLECTION_DAYS].append(day)
-            if day_selected:
-                # Remember Detail
-                self._data.update(detail_info)
-                # Call last step
-                return await self.async_step_final()
-            else:
+                validation_schema[
+                        vol.Optional(
+                        CONF_FORCE_WEEK_NUMBERS,
+                        default=bool(
+                            user_input is not None
+                            and user_input != {}
+                            and user_input[CONF_FORCE_WEEK_NUMBERS]
+                        )
+                    )] = cv.boolean
+            validation = vol.Schema(validation_schema)
+            try:
+                updates = validation(updates)
+            except vol.Invalid as e: # pylint: disable=W0612
+                # _LOGGER.debug(e)
+                self._errors["base"] = "value"
+            if len(updates[CONF_COLLECTION_DAYS]) == 0:
                 self._errors["base"] = "days"
-        return await self._show_detail_form(user_input)
+            if self._errors == {}:
+                # Remember values
+                self._data.update(updates)
+                return await self.async_step_final()
+            CONFIGURATION.set_defaults(3, updates)
+        else:
+            CONFIGURATION.set_defaults(3, self.config_entry.options)
 
-    async def _show_detail_form(self, user_input):
-        """Configuration STEP 2 - SHOW FORM"""
-        data_schema = OrderedDict()
-        for day in WEEKDAYS:
-            data_schema[
-                vol.Required(
-                    f"collection_days_{day.lower()}",
-                    default=bool(
-                        day.lower()
-                        in self.config_entry.options.get(CONF_COLLECTION_DAYS)
-                    ),
-                )
-            ] = bool
+        data_schema = CONFIGURATION.compile_config_flow(step=3, frequency=self._data[CONF_FREQUENCY])
+        list_to_days(data_schema)
         if self._data[CONF_FREQUENCY] in MONTHLY_FREQUENCY:
             data_schema[
-                vol.Required(
+                vol.Optional(
                     CONF_FORCE_WEEK_NUMBERS,
                     default=bool(
-                        self.config_entry.options.get(CONF_FORCE_WEEK_NUMBERS, False)
+                        user_input is not None
+                        and user_input != {}
+                        and user_input[CONF_FORCE_WEEK_NUMBERS]
                     ),
-                )
-            ] = bool
+                )] = bool
         return self.async_show_form(
             step_id="detail", data_schema=vol.Schema(data_schema), errors=self._errors
         )
+
 
     async def async_step_final(
         self, user_input={}
@@ -698,166 +401,56 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         """
         self._errors = {}
         if user_input is not None and user_input != {}:
-            final_info = {}
-            final_info[CONF_FIRST_MONTH] = user_input[CONF_FIRST_MONTH]
-            final_info[CONF_LAST_MONTH] = user_input[CONF_LAST_MONTH]
+            updates = user_input.copy()
             if self._data[CONF_FREQUENCY] in MONTHLY_FREQUENCY:
-                final_info[CONF_PERIOD] = user_input[CONF_PERIOD]
-                day_selected = False
-                final_info[CONF_WEEKDAY_ORDER_NUMBER] = []
-                final_info[CONF_WEEK_ORDER_NUMBER] = []
-                for i in range(5):
-                    if self._data[CONF_FORCE_WEEK_NUMBERS]:
-                        if user_input[f"week_order_number_{i+1}"]:
-                            day_selected = True
-                            final_info[CONF_WEEK_ORDER_NUMBER].append(i + 1)
-                    else:
-                        if user_input[f"weekday_order_number_{i+1}"]:
-                            day_selected = True
-                            final_info[CONF_WEEKDAY_ORDER_NUMBER].append(i + 1)
-                if not day_selected:
-                    self._errors["base"] = CONF_WEEKDAY_ORDER_NUMBER
-            final_info[CONF_INCLUDE_DATES] = string_to_list(
-                user_input[CONF_INCLUDE_DATES]
-            )
-            final_info[CONF_EXCLUDE_DATES] = string_to_list(
-                user_input[CONF_EXCLUDE_DATES]
-            )
-            if not is_dates(final_info[CONF_INCLUDE_DATES]) or not is_dates(
-                final_info[CONF_EXCLUDE_DATES]
-            ):
-                self._errors["base"] = "date"
-            final_info[CONF_MOVE_COUNTRY_HOLIDAYS] = user_input[
-                CONF_MOVE_COUNTRY_HOLIDAYS
-            ]
-            final_info[CONF_PROV] = user_input[CONF_PROV]
-            final_info[CONF_STATE] = user_input[CONF_STATE]
-            final_info[CONF_OBSERVED] = user_input[CONF_OBSERVED]
-
-            if self._data[CONF_FREQUENCY] in DAILY_FREQUENCY:
-                if is_date(user_input[CONF_FIRST_DATE]):
-                    final_info[CONF_FIRST_DATE] = user_input[CONF_FIRST_DATE]
-                else:
-                    self._errors["base"] = "date"
-                final_info[CONF_PERIOD] = user_input[CONF_PERIOD]
-            if self._data[CONF_FREQUENCY] in WEEKLY_FREQUENCY_X:
-                final_info[CONF_PERIOD] = user_input[CONF_PERIOD]
-                final_info[CONF_FIRST_WEEK] = user_input[CONF_FIRST_WEEK]
-            if self._errors == {}:
-                clean_optional(self._data, CONF_FIRST_MONTH)
-                clean_optional(self._data, CONF_LAST_MONTH)
-                clean_optional(self._data, CONF_INCLUDE_DATES)
-                clean_optional(self._data, CONF_EXCLUDE_DATES)
-                clean_optional(self._data, CONF_MOVE_COUNTRY_HOLIDAYS)
-                clean_optional(self._data, CONF_PROV)
-                clean_optional(self._data, CONF_STATE)
-                clean_optional(self._data, CONF_OBSERVED)
-                # _LOGGER.debug("final_info %s",final_info)
-                self._data.update(final_info)
-                return self.async_create_entry(title="", data=self._data)
-        return await self._show_final_form(user_input)
-
-    async def _show_final_form(self, user_input):
-        """Configuration STEP 3 - SHOW FORM"""
-        data_schema = OrderedDict()
-        data_schema[
-            vol.Optional(
-                CONF_FIRST_MONTH,
-                default=self.config_entry.options.get(CONF_FIRST_MONTH),
-            )
-        ] = vol.In(MONTH_OPTIONS)
-        data_schema[
-            vol.Optional(
-                CONF_LAST_MONTH, default=self.config_entry.options.get(CONF_LAST_MONTH)
-            )
-        ] = vol.In(MONTH_OPTIONS)
-        if self._data[CONF_FREQUENCY] in WEEKLY_FREQUENCY_X:
-            data_schema[
-                vol.Required(
-                    CONF_PERIOD, default=self.config_entry.options.get(CONF_PERIOD)
-                )
-            ] = vol.All(vol.Coerce(int), vol.Range(min=1, max=52))
-            data_schema[
-                vol.Required(
-                    CONF_FIRST_WEEK,
-                    default=self.config_entry.options.get(CONF_FIRST_WEEK),
-                )
-            ] = vol.All(vol.Coerce(int), vol.Range(min=1, max=52))
-        if self._data[CONF_FREQUENCY] in MONTHLY_FREQUENCY:
-            data_schema[
-                vol.Required(
-                    CONF_PERIOD, default=self.config_entry.options.get(CONF_PERIOD)
-                )
-            ] = vol.All(vol.Coerce(int), vol.Range(min=1, max=12))
-            for i in range(5):
                 if self._data[CONF_FORCE_WEEK_NUMBERS]:
-                    data_schema[
-                        vol.Required(
-                            f"week_order_number_{i+1}",
-                            default=bool(
-                                (i + 1)
-                                in self.config_entry.options.get(CONF_WEEK_ORDER_NUMBER)
-                            ),
-                        )
-                    ] = bool
+                    weekdays_to_list(updates, CONF_WEEK_ORDER_NUMBER)
                 else:
-                    data_schema[
-                        vol.Required(
-                            f"weekday_order_number_{i+1}",
-                            default=bool(
-                                (i + 1)
-                                in self.config_entry.options.get(
-                                    CONF_WEEKDAY_ORDER_NUMBER
-                                )
-                            ),
-                        )
-                    ] = bool
-        if self._data[CONF_FREQUENCY] in DAILY_FREQUENCY:
-            data_schema[
-                vol.Required(
-                    CONF_PERIOD, default=self.config_entry.options.get(CONF_PERIOD)
+                    weekdays_to_list(updates, CONF_WEEKDAY_ORDER_NUMBER)
+            validation = vol.Schema(CONFIGURATION.compile_schema(step=4, frequency=self._data[CONF_FREQUENCY]))
+            if CONF_INCLUDE_DATES in updates:
+                updates[CONF_INCLUDE_DATES] = string_to_list(
+                    updates[CONF_INCLUDE_DATES]
                 )
-            ] = vol.All(vol.Coerce(int), vol.Range(min=1, max=52))
-            data_schema[
-                vol.Required(
-                    CONF_FIRST_DATE,
-                    default=self.config_entry.options.get(CONF_FIRST_DATE),
+            if CONF_EXCLUDE_DATES in updates:
+                updates[CONF_EXCLUDE_DATES] = string_to_list(
+                    updates[CONF_EXCLUDE_DATES]
                 )
-            ] = str
-        data_schema[
-            vol.Optional(
-                CONF_INCLUDE_DATES,
-                default=",".join(self.config_entry.options.get(CONF_INCLUDE_DATES)),
-            )
-        ] = str
-        data_schema[
-            vol.Optional(
-                CONF_EXCLUDE_DATES,
-                default=",".join(self.config_entry.options.get(CONF_EXCLUDE_DATES)),
-            )
-        ] = str
-        data_schema[
-            vol.Optional(
-                CONF_MOVE_COUNTRY_HOLIDAYS,
-                default=self.config_entry.options.get(CONF_MOVE_COUNTRY_HOLIDAYS, ""),
-            )
-        ] = vol.In(COUNTRY_CODES)
-        data_schema[
-            vol.Optional(
-                CONF_PROV, default=self.config_entry.options.get(CONF_PROV, "")
-            )
-        ] = str
-        data_schema[
-            vol.Optional(
-                CONF_STATE, default=self.config_entry.options.get(CONF_STATE, "")
-            )
-        ] = str
-        data_schema[
-            vol.Optional(
-                CONF_OBSERVED,
-                default=self.config_entry.options.get(CONF_OBSERVED, True),
-            )
-        ] = bool
+            try:
+                updates = validation(updates)
+            except vol.Invalid as e: # pylint: disable=W0612
+                # _LOGGER.debug(e)
+                self._errors["base"] = "value"
+            if self._data[CONF_FREQUENCY] in MONTHLY_FREQUENCY:
+                if self._data[CONF_FORCE_WEEK_NUMBERS]:
+                    if len(updates[CONF_WEEK_ORDER_NUMBER]) == 0:
+                        self._errors["base"] = CONF_WEEK_ORDER_NUMBER
+                else:
+                    if len(updates[CONF_WEEKDAY_ORDER_NUMBER]) == 0:
+                        self._errors["base"] = CONF_WEEKDAY_ORDER_NUMBER
+            if self._errors == {}:
+                self._data.update(updates)
+                if CONF_FORCE_WEEK_NUMBERS in self._data:
+                    if self._data[CONF_FORCE_WEEK_NUMBERS]:
+                        if CONF_WEEKDAY_ORDER_NUMBER in self._data:
+                            del self._data[CONF_WEEKDAY_ORDER_NUMBER]
+                    else:
+                        if CONF_WEEK_ORDER_NUMBER in self._data:
+                            del self._data[CONF_WEEK_ORDER_NUMBER]
+                    del self._data[CONF_FORCE_WEEK_NUMBERS]
+                _LOGGER.debug(self._data)
+                return self.async_create_entry(
+                        title=self._data["name"], data=self._data
+                    )
+        else:
+            CONFIGURATION.set_defaults(4, self.config_entry.options)
+            
+        data_schema = CONFIGURATION.compile_config_flow(step=4, frequency=self._data[CONF_FREQUENCY])
+        if self._data[CONF_FREQUENCY] in MONTHLY_FREQUENCY:
+            if self._data[CONF_FORCE_WEEK_NUMBERS]:
+                list_to_weekdays(data_schema, CONF_WEEK_ORDER_NUMBER)
+            else:
+                list_to_weekdays(data_schema, CONF_WEEKDAY_ORDER_NUMBER)
         return self.async_show_form(
             step_id="final", data_schema=vol.Schema(data_schema), errors=self._errors
         )
@@ -866,3 +459,78 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
 class EmptyOptions(config_entries.OptionsFlow):
     def __init__(self, config_entry):
         self.config_entry = config_entry
+
+def is_month_day(date) -> bool:
+    """Validates mm/dd format"""
+    try:
+        date = datetime.strptime(date, "%m/%d")
+        return True
+    except ValueError:
+        return False
+
+def is_date(date) -> bool:
+    """Validates yyyy-mm-dd format"""
+    if date == "":
+        return True
+    try:
+        datetime.strptime(date, "%Y-%m-%d")
+        return True
+    except ValueError:
+        return False
+
+def string_to_list(string) -> list:
+    if string is None or string == "":
+        return []
+    return list(map(lambda x: x.strip(), string.split(",")))
+
+def days_to_list(src):
+    src[CONF_COLLECTION_DAYS] = []
+    for day in WEEKDAYS:
+        if src[f"collection_days_{day.lower()}"]:
+            src[CONF_COLLECTION_DAYS].append(day)
+        del src[f"collection_days_{day.lower()}"]
+
+def weekdays_to_list(src, prefix):
+    src[prefix] = []
+    for i in range(5):
+        if src[f"{prefix}_{i+1}"]:
+            src[prefix].append(i+1)
+        del src[f"{prefix}_{i+1}"]
+
+def list_to_days(data_schema):
+    copy = data_schema.copy()
+    data_schema.clear()
+    for day in WEEKDAYS:
+        data_schema[
+            vol.Required(
+                f"collection_days_{day.lower()}",
+                default=bool(CONF_COLLECTION_DAYS in CONFIGURATION.defaults and day in CONFIGURATION.defaults[CONF_COLLECTION_DAYS])
+                )
+        ] = bool
+    items = { key:value for (key,value) in copy.items() if key not in [CONF_COLLECTION_DAYS] }
+    for key, value in items.items():
+        data_schema[key] = value
+
+def list_to_weekdays(data_schema, prefix):
+    copy = data_schema.copy()
+    data_schema.clear()
+    for i in range(5):
+        data_schema[
+            vol.Required(
+                f"{prefix}_{i+1}",
+                default=bool(prefix in CONFIGURATION.defaults and (i+1) in CONFIGURATION.defaults[prefix])
+                )
+        ] = bool
+    items = { key:value for (key,value) in copy.items() if key not in [CONF_WEEKDAY_ORDER_NUMBER, CONF_WEEK_ORDER_NUMBER] }
+    for key, value in items.items():
+        data_schema[key] = value
+
+def is_dates(dates) -> bool:
+    """Validates list of dates (yyyy-mm-dd, yyyy-mm-dd)"""
+    if dates == []:
+        return True
+    check = True
+    for date in dates:
+        if not is_date(date):
+            check = False
+    return check

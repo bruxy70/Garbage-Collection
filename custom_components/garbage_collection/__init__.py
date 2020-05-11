@@ -32,7 +32,6 @@ MIN_TIME_BETWEEN_UPDATES = timedelta(seconds=30)
 
 _LOGGER = logging.getLogger(__name__)
 
-
 async def async_setup(hass, config):
     """Set up this component using YAML."""
     if config.get(DOMAIN) is None:

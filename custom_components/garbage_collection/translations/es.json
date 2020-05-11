@@ -67,7 +67,8 @@
             }
         },
         "error": {
-            "name": "El nombre del sensor no puede estar vacío. Por favor, introduzca el nombre del sensor.",
+            "value": "Valor no válido. Por favor revise su entrada!",
+            "icon": "Los iconos deben especificarse en el formato 'prefix:name'.",
             "days": "Seleccione 1 o más días!",
             "entities": "La entidad no existe!",
             "month_day": "Formato de fecha inválido!",

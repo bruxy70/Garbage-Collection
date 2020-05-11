@@ -67,14 +67,15 @@
             }
         },
         "error": {
-            "name": "Nazwa sensora nie może być pusta. Wprowadź nazwę dla sensora.",
-            "days": "Wybierz 1 lub więcej dni !",
-            "entities": "Encja nie istnieje !",
-            "month_day": "Nieprawidłowy format daty !",
-            "weekday_order_number": "Wybierz 1 lub więcej dni !",
+            "value": "Niewłaściwa wartość. Sprawdź swoje dane wejściowe!",
+            "icon": "Ikony powinny być określone w formacie 'prefix:name'.",
+            "days": "Wybierz 1 lub więcej dni!",
+            "entities": "Encja nie istnieje!",
+            "month_day": "Nieprawidłowy format daty!",
+            "weekday_order_number": "Wybierz 1 lub więcej dni!",
             "period": "Okres musi być liczbą od 1 do 52.",
             "first_week": "Pierwszy tydzień musi być liczbą między 1 a 52.",
-            "date": "Nieprawidłowy format daty !"
+            "date": "Nieprawidłowy format daty!"
             
         },
         "abort": {
@@ -147,8 +148,8 @@
             }
         },
         "error": {
-            "date": "Nieprawidłowy format daty !",
-            "entities": "Encja nie istnieje !"
+            "date": "Nieprawidłowy format daty!",
+            "entities": "Encja nie istnieje!"
         }
     }
 

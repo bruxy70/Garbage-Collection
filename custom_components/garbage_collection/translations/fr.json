@@ -64,7 +64,8 @@
             }
         },
         "error": {
-            "name": "Le nom du capteur ne peut pas être vide. Merci d'entrer un nom pour le capteur.",
+            "value": "Valeur invalide. Veuillez vérifier votre saisie!",
+            "icon": "Les icônes doivent être spécifiées dans le format 'prefix:name'.",
             "days": "Choisir un ou plusieurs jours!",
             "entities": "L'entité n'existe pas!",
             "month_day": "Format de date invalide!",

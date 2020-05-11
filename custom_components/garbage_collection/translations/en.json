@@ -67,7 +67,8 @@
             }
         },
         "error": {
-            "name": "The sensor name cannot be empty. Please enter the sensor name.",
+            "value": "Invalid value. Please check your input!",
+            "icon": "Icons should be specified in the form 'prefix:name'.",
             "days": "Select 1 or more days!",
             "entities": "Entity does not exist!",
             "month_day": "Invalid date format!",
@@ -75,7 +76,6 @@
             "period": "Period must be a number between 1 and 52",
             "first_week": "Firsr week must be a number between 1 and 52",
             "date": "Invalid date format!"
-            
         },
         "abort": {
             "single_instance_allowed": "Only a single configuration of Garbage Collection is allowed."
@@ -147,6 +147,8 @@
             }
         },
         "error": {
+            "value": "Invalid value. Please chech your input!",
+            "icon": "Icons should be specified in the form 'prefix:name'.",
             "date": "Invalid date format!",
             "entities": "Entity does not exist!"
         }

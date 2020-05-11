@@ -68,7 +68,8 @@
             }
         },
         "error": {
-            "name": "Jméno sensoru nemůže být prázdné.",
+            "value": "Chybná hodnota. Zkontroluj zadané hodnoty!",
+            "icon": "Ikony musí být zadány ve formátu 'prefix:jmnéno'.",
             "days": "VYber jeden nebo více dní!",
             "entities": "Entita neexistuje!",
             "month_day": "Špatný formát data!",
