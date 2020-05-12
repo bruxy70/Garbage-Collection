@@ -73,6 +73,7 @@
             "entities": "La entidad no existe!",
             "month_day": "Formato de fecha inválido!",
             "weekday_order_number": "Seleccione 1 o más días",
+            "week_order_number": "Seleccione 1 o más semanas",
             "period": "El período debe ser un número entre 1 y 52",
             "first_week": "La primera semana debe ser un número entre 1 y 52",
             "date": "Formato de fecha inválido!"

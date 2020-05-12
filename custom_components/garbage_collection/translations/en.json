@@ -73,6 +73,7 @@
             "entities": "Entity does not exist!",
             "month_day": "Invalid date format!",
             "weekday_order_number": "Select 1 or more days",
+            "week_order_number": "Select 1 or more weeks",
             "period": "Period must be a number between 1 and 52",
             "first_week": "Firsr week must be a number between 1 and 52",
             "date": "Invalid date format!"

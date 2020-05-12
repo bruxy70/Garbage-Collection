@@ -73,6 +73,7 @@
             "entities": "Encja nie istnieje!",
             "month_day": "Nieprawidłowy format daty!",
             "weekday_order_number": "Wybierz 1 lub więcej dni!",
+            "week_order_number": "Wybierz 1 lub więcej tydzieńi!",
             "period": "Okres musi być liczbą od 1 do 52.",
             "first_week": "Pierwszy tydzień musi być liczbą między 1 a 52.",
             "date": "Nieprawidłowy format daty!"

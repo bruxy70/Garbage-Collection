@@ -74,6 +74,7 @@
             "entities": "Entita neexistuje!",
             "month_day": "Špatný formát data!",
             "weekday_order_number": "Vyber jeden nebo více dní!",
+            "week_order_number": "Vyber jeden nebo více týdnů!",
             "period": "Perioda musí být číslo mezi 1 a 52",
             "first_week": "První týden musí být číslo mezi 1 a 52",
             "date": "Špatný formát data!"

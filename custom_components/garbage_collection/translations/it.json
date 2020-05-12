@@ -70,6 +70,7 @@
             "entities": "L'entità non esiste!",
             "month_day": "Formato data non valido!",
             "weekday_order_number": "Seleziona uno o più giorni",
+            "week_order_number": "Seleziona uno o più settimani",
             "period": "Il periodo deve essere un numero compreso tra 1 e 52",
             "first_week": "La prima settimana deve essere un numero tra 1 e 52",
             "date": "Formato data non valido!"
