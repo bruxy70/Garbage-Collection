@@ -1,6 +1,5 @@
 {
     "config": {
-        "title": "Recolección de basura",
         "step": {
             "user": {
                 "title": "Recolección de basura - Frecuencia de recogida",
@@ -67,11 +66,13 @@
             }
         },
         "error": {
-            "name": "El nombre del sensor no puede estar vacío. Por favor, introduzca el nombre del sensor.",
+            "value": "Valor no válido. Por favor revise su entrada!",
+            "icon": "Los iconos deben especificarse en el formato 'prefix:name'.",
             "days": "Seleccione 1 o más días!",
             "entities": "La entidad no existe!",
             "month_day": "Formato de fecha inválido!",
             "weekday_order_number": "Seleccione 1 o más días",
+            "week_order_number": "Seleccione 1 o más semanas",
             "period": "El período debe ser un número entre 1 y 52",
             "first_week": "La primera semana debe ser un número entre 1 y 52",
             "date": "Formato de fecha inválido!"

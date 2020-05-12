@@ -1,6 +1,5 @@
 {
     "config": {
-        "title": "Raccolta Differenziata",
         "step": {
             "user": {
                 "title": "Raccolta Differenziata - Frequenza di raccolta",
@@ -64,11 +63,13 @@
             }
         },
         "error": {
-            "name": "Il nome del sensore non può essere vuoto. Immettere il nome del sensore.",
+            "value": "Valore non valido. Per favore controlla i tuoi input!",
+            "icon": "Le icone devono essere specificate nel formato 'prefix:name'.",
             "days": "Seleziona uno o più giorni!",
             "entities": "L'entità non esiste!",
             "month_day": "Formato data non valido!",
             "weekday_order_number": "Seleziona uno o più giorni",
+            "week_order_number": "Seleziona uno o più settimani",
             "period": "Il periodo deve essere un numero compreso tra 1 e 52",
             "first_week": "La prima settimana deve essere un numero tra 1 e 52",
             "date": "Formato data non valido!"
