@@ -1,6 +1,5 @@
 {
     "config": {
-        "title": "Recolección de basura",
         "step": {
             "user": {
                 "title": "Recolección de basura - Frecuencia de recogida",

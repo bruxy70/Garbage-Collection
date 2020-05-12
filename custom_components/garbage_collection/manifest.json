@@ -15,6 +15,5 @@
     "typing",
     "uuid", 
     "voluptuous"
-  ],
-  "homeassistant": "0.96.0"
+  ]
 }
