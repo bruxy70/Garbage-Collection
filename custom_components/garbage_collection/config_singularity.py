@@ -6,7 +6,7 @@ class config_singularity:
     Options is a dictionary (key is the parameter name), 
     where each value is a dictionary with following keys
     "step".......in whict config_flow step is this in
-    "valid_for"..list of frequencies for which this option is relevant 
+    "valid_for"..a function to test for which this option is relevant
     "method".....vol.Optional or vol.Required
     "default"....default value (optional)
     "type".......type
@@ -42,7 +42,7 @@ class config_singularity:
         for key, value in items.items():
             self.__defaults[key] = value["default"]
 
-    def compile_config_flow(self, step, frequency=None):
+    def compile_config_flow(self, step, valid_for=None):
         """
         Generate dictionary with relevant configuration options
         For the current step and relevant for the current frequency
@@ -53,9 +53,9 @@ class config_singularity:
             for (key, value) in self.options.items()
             if ("step" in value and value["step"] == step)
             and (
-                frequency is None
+                valid_for is None
                 or "valid_for" not in value
-                or frequency in value["valid_for"]
+                or bool(value["valid_for"](valid_for))
             )
         }
         for key, value in items.items():
@@ -67,7 +67,7 @@ class config_singularity:
                 result[value["method"](key)] = value["type"]
         return result
 
-    def compile_schema(self, step=None, frequency=None):
+    def compile_schema(self, step=None, valid_for=None):
         """
         For both YAML Scheme (step is None) or config_flow Scheme
         """
@@ -77,9 +77,9 @@ class config_singularity:
             for (key, value) in self.options.items()
             if (step is None or ("step" in value and value["step"] == step))
             and (
-                frequency is None
+                valid_for is None
                 or "valid_for" not in value
-                or frequency in value["valid_for"]
+                or bool(value["valid_for"](valid_for))
             )
         }
         for key, value in items.items():

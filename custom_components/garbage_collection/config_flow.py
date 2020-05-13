@@ -74,7 +74,7 @@ class garbage_collection_options:
         if user_input is not None and user_input != {}:
             validation = vol.Schema(
                 CONFIGURATION.compile_schema(
-                    step=2, frequency=self._data[CONF_FREQUENCY]
+                    step=2, valid_for=self._data[CONF_FREQUENCY]
                 )
             )
             try:
@@ -95,7 +95,7 @@ class garbage_collection_options:
         elif defaults is not None:
             CONFIGURATION.set_defaults(2, defaults)
         self.data_schema = CONFIGURATION.compile_config_flow(
-            step=2, frequency=self._data[CONF_FREQUENCY]
+            step=2, valid_for=self._data[CONF_FREQUENCY]
         )
         return False
 
@@ -111,7 +111,7 @@ class garbage_collection_options:
             updates = user_input.copy()
             days_to_list(updates)
             validation_schema = CONFIGURATION.compile_schema(
-                step=3, frequency=self._data[CONF_FREQUENCY]
+                step=3, valid_for=self._data[CONF_FREQUENCY]
             )
             if self._data[CONF_FREQUENCY] in MONTHLY_FREQUENCY:
                 validation_schema[
@@ -139,7 +139,7 @@ class garbage_collection_options:
         elif defaults is not None:
             CONFIGURATION.set_defaults(3, defaults)
         self.data_schema = CONFIGURATION.compile_config_flow(
-            step=3, frequency=self._data[CONF_FREQUENCY]
+            step=3, valid_for=self._data[CONF_FREQUENCY]
         )
         list_to_days(self.data_schema)
         if self._data[CONF_FREQUENCY] in MONTHLY_FREQUENCY:
@@ -172,7 +172,7 @@ class garbage_collection_options:
                     weekdays_to_list(updates, CONF_WEEKDAY_ORDER_NUMBER)
             validation = vol.Schema(
                 CONFIGURATION.compile_schema(
-                    step=4, frequency=self._data[CONF_FREQUENCY]
+                    step=4, valid_for=self._data[CONF_FREQUENCY]
                 )
             )
             if CONF_INCLUDE_DATES in updates:
@@ -216,7 +216,7 @@ class garbage_collection_options:
         elif defaults is not None:
             CONFIGURATION.set_defaults(4, defaults)
         self.data_schema = CONFIGURATION.compile_config_flow(
-            step=4, frequency=self._data[CONF_FREQUENCY]
+            step=4, valid_for=self._data[CONF_FREQUENCY]
         )
         if self._data[CONF_FREQUENCY] in MONTHLY_FREQUENCY:
             if self._data[CONF_FORCE_WEEK_NUMBERS]:
