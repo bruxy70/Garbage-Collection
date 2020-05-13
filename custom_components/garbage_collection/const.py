@@ -166,10 +166,21 @@ COUNTRY_CODES = [
 
 
 def date_text(value):
+    """Have to store date as text - datetime is not JSON serialisable"""
     if value is None or value == "":
         return ""
     try:
         return datetime.strptime(value, "%Y-%m-%d").date().strftime("%Y-%m-%d")
+    except ValueError:
+        raise vol.Invalid(f"Invalid date: {value}")
+
+
+def time_text(value):
+    """Have to store time as text - datetime is not JSON serialisable"""
+    if value is None or value == "":
+        return ""
+    try:
+        return datetime.strptime(value, "%H:%M").time().strftime("%H:%M")
     except ValueError:
         raise vol.Invalid(f"Invalid date: {value}")
 
@@ -228,7 +239,7 @@ class configuration(config_singularity):
             "step": 1,
             "method": vol.Optional,
             "type": str,
-            "validator": cv.time,
+            "validator": time_text,
         },
         CONF_VERBOSE_STATE: {
             "step": 1,
@@ -253,28 +264,28 @@ class configuration(config_singularity):
         },
         CONF_DATE: {
             "step": 2,
-            "valid_for": ANNUAL_FREQUENCY,
+            "valid_for": lambda f: f in ANNUAL_FREQUENCY,
             "method": vol.Optional,
             "type": str,
             "validator": month_day_text,
         },
         CONF_ENTITIES: {
             "step": 2,
-            "valid_for": GROUP_FREQUENCY,
+            "valid_for": lambda f: f in GROUP_FREQUENCY,
             "method": vol.Optional,
             "type": str,
             "validator": cv.entity_ids,
         },
         CONF_COLLECTION_DAYS: {
             "step": 3,
-            "valid_for": EXCEPT_ANNUAL_GROUP,
+            "valid_for": lambda f: f in EXCEPT_ANNUAL_GROUP,
             "method": vol.Optional,
             "type": [str],
             "validator": vol.All(cv.ensure_list, [vol.In(WEEKDAYS)]),
         },
         CONF_WEEKDAY_ORDER_NUMBER: {
             "step": 4,
-            "valid_for": MONTHLY_FREQUENCY,
+            "valid_for": lambda f: f in MONTHLY_FREQUENCY,
             "method": vol.Optional,
             "type": [int],
             "validator": vol.All(
@@ -283,7 +294,7 @@ class configuration(config_singularity):
         },
         CONF_WEEK_ORDER_NUMBER: {
             "step": 4,
-            "valid_for": MONTHLY_FREQUENCY,
+            "valid_for": lambda f: f in MONTHLY_FREQUENCY,
             "method": vol.Optional,
             "type": [int],
             "validator": vol.All(
@@ -292,76 +303,76 @@ class configuration(config_singularity):
         },
         CONF_FIRST_MONTH: {
             "step": 4,
-            "valid_for": EXCEPT_ANNUAL_GROUP,
+            "valid_for": lambda f: f in EXCEPT_ANNUAL_GROUP,
             "method": vol.Optional,
             "default": DEFAULT_FIRST_MONTH,
             "type": vol.In(MONTH_OPTIONS),
         },
         CONF_LAST_MONTH: {
             "step": 4,
-            "valid_for": EXCEPT_ANNUAL_GROUP,
+            "valid_for": lambda f: f in EXCEPT_ANNUAL_GROUP,
             "method": vol.Optional,
             "default": DEFAULT_LAST_MONTH,
             "type": vol.In(MONTH_OPTIONS),
         },
         CONF_PERIOD: {
             "step": 4,
-            "valid_for": WEEKLY_DAILY,
+            "valid_for": lambda f: f in WEEKLY_DAILY,
             "method": vol.Optional,
             "default": DEFAULT_PERIOD,
             "type": vol.All(vol.Coerce(int), vol.Range(min=1, max=52)),
         },
         CONF_FIRST_WEEK: {
             "step": 4,
-            "valid_for": WEEKLY_FREQUENCY_X,
+            "valid_for": lambda f: f in WEEKLY_FREQUENCY_X,
             "method": vol.Optional,
             "default": DEFAULT_FIRST_WEEK,
             "type": vol.All(vol.Coerce(int), vol.Range(min=1, max=52)),
         },
         CONF_FIRST_DATE: {
             "step": 4,
-            "valid_for": DAILY_FREQUENCY,
+            "valid_for": lambda f: f in DAILY_FREQUENCY,
             "method": vol.Optional,
             "type": str,
             "validator": date_text,
         },
         CONF_INCLUDE_DATES: {
             "step": 4,
-            "valid_for": EXCEPT_ANNUAL_GROUP,
+            "valid_for": lambda f: f in EXCEPT_ANNUAL_GROUP,
             "method": vol.Optional,
             "type": str,
             "validator": vol.All(cv.ensure_list, [date_text]),
         },
         CONF_EXCLUDE_DATES: {
             "step": 4,
-            "valid_for": EXCEPT_ANNUAL_GROUP,
+            "valid_for": lambda f: f in EXCEPT_ANNUAL_GROUP,
             "method": vol.Optional,
             "type": str,
             "validator": vol.All(cv.ensure_list, [date_text]),
         },
         CONF_MOVE_COUNTRY_HOLIDAYS: {
             "step": 4,
-            "valid_for": EXCEPT_ANNUAL_GROUP,
+            "valid_for": lambda f: f in EXCEPT_ANNUAL_GROUP,
             "method": vol.Optional,
             "type": vol.In(COUNTRY_CODES),
         },
         CONF_PROV: {
             "step": 4,
-            "valid_for": EXCEPT_ANNUAL_GROUP,
+            "valid_for": lambda f: f in EXCEPT_ANNUAL_GROUP,
             "method": vol.Optional,
             "type": str,
             "validator": cv.string,
         },
         CONF_STATE: {
             "step": 4,
-            "valid_for": EXCEPT_ANNUAL_GROUP,
+            "valid_for": lambda f: f in EXCEPT_ANNUAL_GROUP,
             "method": vol.Optional,
             "type": str,
             "validator": cv.string,
         },
         CONF_OBSERVED: {
             "step": 4,
-            "valid_for": EXCEPT_ANNUAL_GROUP,
+            "valid_for": lambda f: f in EXCEPT_ANNUAL_GROUP,
             "method": vol.Optional,
             "default": True,
             "type": bool,
@@ -372,7 +383,7 @@ class configuration(config_singularity):
 
 extra_options = {
     CONF_FORCE_WEEK_NUMBERS: {
-        "valid_for": MONTHLY_FREQUENCY,
+        "valid_for": lambda f: f in MONTHLY_FREQUENCY,
         "method": vol.Optional,
         "default": False,
         "type": bool,
