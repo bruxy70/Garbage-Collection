@@ -63,6 +63,7 @@ garbage_collection:
     collection_days:
     - mon
     - wed
+    expire_after: '12:00'
     exclude_dates:
     - '2019-12-25'
     include_dates:
@@ -112,6 +113,7 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 | `icon_normal` | No | Default icon **Default**:  `mdi:trash-can`
 | `icon_today` | No | Icon if the collection is today **Default**: `mdi:delete-restore`
 | `icon_tomorrow` | No | Icon if the collection is tomorrow **Default**: `mdi:delete-circle`
+| `expire_after` | No | Time in format format `%H:%M`. If the collection is due today, start looking for the next occurence after this time (i.e. if the weekly collection is in the morning, change the state from 'today' to next week in the afternoon)
 | `verbose_state` | No | The sensor state will show collection date and remaining days, instead of number **Default**: `False`
 | `verbose_format` | No | (relevant when `verbose_state` is `True`). Verbose status formatting string. Can use placeholders `{date}` and `{days}` to show the date of next collection and remaining days. **Default**: `'on {date}, in {days} days'`</br>*When the collection is today or tomorrow, it will show `Today` or `Tomorrow`*</br>*(currently in English, French, Czech and Italian).*
 | `date_format` | No | In the `verbose_format`, you can configure the format of date (using [strftime](http://strftime.org/) format)  **Default**: `'%d-%b-%Y'`
