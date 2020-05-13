@@ -166,10 +166,21 @@ COUNTRY_CODES = [
 
 
 def date_text(value):
+    """Have to store date as text - datetime is not JSON serialisable"""
     if value is None or value == "":
         return ""
     try:
         return datetime.strptime(value, "%Y-%m-%d").date().strftime("%Y-%m-%d")
+    except ValueError:
+        raise vol.Invalid(f"Invalid date: {value}")
+
+
+def time_text(value):
+    """Have to store time as text - datetime is not JSON serialisable"""
+    if value is None or value == "":
+        return ""
+    try:
+        return datetime.strptime(value, "%H:%M").time().strftime("%H:%M")
     except ValueError:
         raise vol.Invalid(f"Invalid date: {value}")
 
@@ -228,7 +239,7 @@ class configuration(config_singularity):
             "step": 1,
             "method": vol.Optional,
             "type": str,
-            "validator": cv.time,
+            "validator": time_text,
         },
         CONF_VERBOSE_STATE: {
             "step": 1,
