@@ -4,7 +4,7 @@ import homeassistant.util.dt as dt_util
 import holidays
 import logging
 import locale
-from datetime import datetime, date, timedelta
+from datetime import datetime, date, time, timedelta
 from dateutil.relativedelta import relativedelta
 from homeassistant.core import HomeAssistant, State
 from typing import List, Any
@@ -29,6 +29,7 @@ from .const import (
     CONF_ICON_TOMORROW,
     CONF_VERBOSE_STATE,
     CONF_VERBOSE_FORMAT,
+    CONF_EXPIRE_AFTER,
     CONF_DATE_FORMAT,
     DEFAULT_DATE_FORMAT,
     DEFAULT_VERBOSE_FORMAT,
@@ -190,6 +191,7 @@ class GarbageCollection(Entity):
         self.__icon_normal = config.get(CONF_ICON_NORMAL)
         self.__icon_today = config.get(CONF_ICON_TODAY)
         self.__icon_tomorrow = config.get(CONF_ICON_TOMORROW)
+        self.__expire_after = config.get(CONF_EXPIRE_AFTER)
         self.__date_format = config.get(CONF_DATE_FORMAT, DEFAULT_DATE_FORMAT)
         self.__verbose_format = config.get(CONF_VERBOSE_FORMAT, DEFAULT_VERBOSE_FORMAT)
         self.__icon = self.__icon_normal
@@ -403,9 +405,17 @@ class GarbageCollection(Entity):
                 )
                 next_date = self.__skip_holiday(next_date)
             next_date = self.__insert_include_date(first_day, next_date)
-            if next_date not in self.__exclude_dates:
+            date_ok = True
+            # Pokud je to dnes a po expiraci - hledat dal od zitra
+            now = dt_util.now()
+            if next_date == now.date() and now.time() > self.__expire_after:
+                _LOGGER.debug("(%s) Today's collection expired", self.__name)
+                date_ok = False
+            if next_date in self.__exclude_dates:
+                _LOGGER.debug("(%s) Skipping exclude_date %s", self.__name, next_date)
+                date_ok = False
+            if date_ok:
                 return next_date
-            _LOGGER.debug("(%s) Skipping exclude_date %s", self.__name, next_date)
             first_day = next_date + relativedelta(days=1)
             i += 1
         _LOGGER.error("(%s) Cannot find any suitable date", self.__name)

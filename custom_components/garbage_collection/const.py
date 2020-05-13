@@ -26,6 +26,7 @@ CONF_FREQUENCY = "frequency"
 CONF_ICON_NORMAL = "icon_normal"
 CONF_ICON_TODAY = "icon_today"
 CONF_ICON_TOMORROW = "icon_tomorrow"
+CONF_EXPIRE_AFTER = "expire_after"
 CONF_VERBOSE_STATE = "verbose_state"
 CONF_FIRST_MONTH = "first_month"
 CONF_LAST_MONTH = "last_month"
@@ -222,6 +223,12 @@ class configuration(config_singularity):
             "default": DEFAULT_ICON_TOMORROW,
             "type": str,
             "validator": cv.icon,
+        },
+        CONF_EXPIRE_AFTER: {
+            "step": 1,
+            "method": vol.Optional,
+            "type": str,
+            "validator": cv.time,
         },
         CONF_VERBOSE_STATE: {
             "step": 1,

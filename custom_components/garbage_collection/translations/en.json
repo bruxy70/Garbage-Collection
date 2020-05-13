@@ -10,6 +10,7 @@
                     "icon_normal": "Icon",
                     "icon_tomorrow": "Icon collectio tomorrow",
                     "icon_today": "Icon collection today",
+                    "expire_after": "Expire after",
                     "verbose_state": "Verbose state (text, instead of number)",
                     "verbose_format": "Verbose format (using `date` and `days` variables (in squary brackets))",
                     "date_format": "Date format (see http://strftime.org/)"
@@ -71,6 +72,7 @@
             "days": "Select 1 or more days!",
             "entities": "Entity does not exist!",
             "month_day": "Invalid date format!",
+            "time": "Invalid time format!",
             "weekday_order_number": "Select 1 or more days",
             "week_order_number": "Select 1 or more weeks",
             "period": "Period must be a number between 1 and 52",
@@ -91,6 +93,7 @@
                     "icon_normal": "Icon",
                     "icon_tomorrow": "Icon collectio tomorrow",
                     "icon_today": "Icon collection today",
+                    "expire_after": "Expire after",
                     "verbose_state": "Verbose state (text, instead of number)",
                     "verbose_format": "Verbose format (using `date` and `days` variables (in squary brackets))",
                     "date_format": "Date format (see http://strftime.org/)"
@@ -147,10 +150,17 @@
             }
         },
         "error": {
-            "value": "Invalid value. Please chech your input!",
+            "value": "Invalid value. Please check your input!",
             "icon": "Icons should be specified in the form 'prefix:name'.",
-            "date": "Invalid date format!",
-            "entities": "Entity does not exist!"
+            "days": "Select 1 or more days!",
+            "entities": "Entity does not exist!",
+            "month_day": "Invalid date format!",
+            "time": "Invalid time format!",
+            "weekday_order_number": "Select 1 or more days",
+            "week_order_number": "Select 1 or more weeks",
+            "period": "Period must be a number between 1 and 52",
+            "first_week": "Firsr week must be a number between 1 and 52",
+            "date": "Invalid date format!"
         }
     }
 
