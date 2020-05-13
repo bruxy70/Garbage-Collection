@@ -10,6 +10,7 @@
                     "icon_normal": "Icone",
                     "icon_tomorrow": "Icone pour collecte à jour J+1",
                     "icon_today": "Icone pour collecte au jour J",
+                    "expire_after": "Expire après",
                     "verbose_state": "Etat verbeux (texte, au lieu du chiffre)",
                     "verbose_format": "Format état verbeux (utilisation des variables `date` et `days` (entre caractères accolade ))",
                     "date_format": "Format de date (voir http://strftime.org/)"
@@ -68,12 +69,12 @@
             "days": "Choisir un ou plusieurs jours!",
             "entities": "L'entité n'existe pas!",
             "month_day": "Format de date invalide!",
+            "time": "Format d'heure invalide!",
             "weekday_order_number": "Choisir un ou plusieurs jours",
             "week_order_number": "Choisir un ou plusieurs semaines",
             "period": "Period doit être un nombre entre 1 et 52",
             "first_week": "La première semaine doit être un nombre entre 1 et 52",
             "date": "Format de date invalide!"
-            
         },
         "abort": {
             "single_instance_allowed": "Une seule configuration de Garbage Collection est autorisée"
@@ -89,6 +90,7 @@
                     "icon_normal": "Icone",
                     "icon_tomorrow": "Icone pour collecte à jour J+1",
                     "icon_today": "Icone pour collecte au jour J",
+                    "expire_after": "Expire après",
                     "verbose_state": "Etat verbeux (texte, au lieu du chiffre)",
                     "verbose_format": "Format état verbeux (utilisation des variables `date` et `days` (entre caractères accolade ))",
                     "date_format": "Format de date (voir http://strftime.org/)"
@@ -142,8 +144,17 @@
             }
         },
         "error": {
-            "date": "Format de date invalide!",
-            "entities": "L'entité n'existe pas!"
+            "value": "Valeur invalide. Veuillez vérifier votre saisie!",
+            "icon": "Les icônes doivent être spécifiées dans le format 'prefix:name'.",
+            "days": "Choisir un ou plusieurs jours!",
+            "entities": "L'entité n'existe pas!",
+            "month_day": "Format de date invalide!",
+            "time": "Format d'heure invalide!",
+            "weekday_order_number": "Choisir un ou plusieurs jours",
+            "week_order_number": "Choisir un ou plusieurs semaines",
+            "period": "Period doit être un nombre entre 1 et 52",
+            "first_week": "La première semaine doit être un nombre entre 1 et 52",
+            "date": "Format de date invalide!"
         }
     }
 

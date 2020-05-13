@@ -10,6 +10,7 @@
                     "icon_normal": "Icona",
                     "icon_tomorrow": "Icona raccolta domani",
                     "icon_today": "Icona raccolta oggi",
+                    "expire_after": "Scade dopo",
                     "verbose_state": "Stato Verbale (testo, al posto di numeri)",
                     "verbose_format": "Formato Verbale (usare le variabili `date` e `days` (in parentesi graffe))",
                     "date_format": "Formato Data (vedere http://strftime.org/)"
@@ -68,12 +69,12 @@
             "days": "Seleziona uno o più giorni!",
             "entities": "L'entità non esiste!",
             "month_day": "Formato data non valido!",
+            "time": "Formato ora non valido!",
             "weekday_order_number": "Seleziona uno o più giorni",
             "week_order_number": "Seleziona uno o più settimani",
             "period": "Il periodo deve essere un numero compreso tra 1 e 52",
             "first_week": "La prima settimana deve essere un numero tra 1 e 52",
             "date": "Formato data non valido!"
-            
         },
         "abort": {
             "single_instance_allowed": "E' consentita solo una singola configurazione di Raccolta Differenziata."
@@ -89,6 +90,7 @@
                     "icon_normal": "Icona",
                     "icon_tomorrow": "Icona raccolta domani",
                     "icon_today": "Icona raccolta oggi",
+                    "expire_after": "Scade dopo",
                     "verbose_state": "Stato Verbale (testo, al posto di numeri)",
                     "verbose_format": "Formato Verbale (usare le variabili `date` e `days` (in parentesi graffe))",
                     "date_format": "Formato Data (vedere http://strftime.org/)"
@@ -142,8 +144,17 @@
             }
         },
         "error": {
-            "date": "Formato data non valido!",
-            "entities": "L'entità non esiste!"
+            "value": "Valore non valido. Per favore controlla i tuoi input!",
+            "icon": "Le icone devono essere specificate nel formato 'prefix:name'.",
+            "days": "Seleziona uno o più giorni!",
+            "entities": "L'entità non esiste!",
+            "month_day": "Formato data non valido!",
+            "time": "Formato ora non valido!",
+            "weekday_order_number": "Seleziona uno o più giorni",
+            "week_order_number": "Seleziona uno o più settimani",
+            "period": "Il periodo deve essere un numero compreso tra 1 e 52",
+            "first_week": "La prima settimana deve essere un numero tra 1 e 52",
+            "date": "Formato data non valido!"
         }
     }
 

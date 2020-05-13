@@ -41,8 +41,10 @@ class garbage_collection_options:
             except vol.Invalid as exception:
                 # _LOGGER.debug(exception)
                 e = str(exception)
-                if "icon_normal" in e or "icon_today" in e or "icon_tomorrow" in e:
+                if CONF_ICON_NORMAL in e or CONF_ICON_TODAY in e or CONF_ICON_TOMORROW in e:
                     self.errors["base"] = "icon"
+                elif CONF_EXPIRE_AFTER in e:
+                    self.errors["base"] = "time"
                 else:
                     self.errors["base"] = "value"
                 CONFIGURATION.set_defaults(1, user_input)

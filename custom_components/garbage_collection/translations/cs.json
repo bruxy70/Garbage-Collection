@@ -10,6 +10,7 @@
                     "icon_normal": "Ikona",
                     "icon_tomorrow": "Ikona svoz zítra",
                     "icon_today": "Ikona svoz dnes",
+                    "expire_after": "Čas expirace",
                     "verbose_state": "Verbose state (popis místo čísel)",
                     "verbose_format": "Verbose format (Pouýij `date` a `days` proměnné (ve složených závorkách))",
                     "date_format": "Formát data(see http://strftime.org/)"
@@ -72,12 +73,12 @@
             "days": "VYber jeden nebo více dní!",
             "entities": "Entita neexistuje!",
             "month_day": "Špatný formát data!",
+            "time": "Špatný formát času!",
             "weekday_order_number": "Vyber jeden nebo více dní!",
             "week_order_number": "Vyber jeden nebo více týdnů!",
             "period": "Perioda musí být číslo mezi 1 a 52",
             "first_week": "První týden musí být číslo mezi 1 a 52",
             "date": "Špatný formát data!"
-            
         },
         "abort": {
             "single_instance_allowed": "Only a single configuration of Garbage Collection is allowed."
@@ -93,6 +94,7 @@
                     "icon_normal": "Ikona",
                     "icon_tomorrow": "Ikona svoz zítra",
                     "icon_today": "Ikona svoz dnes",
+                    "expire_after": "Čas expirace",
                     "verbose_state": "Verbose state (popis místo čísel)",
                     "verbose_format": "Verbose format (Pouýij `date` a `days` proměnné (ve složených závorkách))",
                     "date_format": "Formát data(see http://strftime.org/)"
@@ -150,8 +152,17 @@
             }
         },
         "error": {
-            "date": "Špatný formát data!",
-            "entities": "Entita neexistuje!"
+            "value": "Chybná hodnota. Zkontroluj zadané hodnoty!",
+            "icon": "Ikony musí být zadány ve formátu 'prefix:jmnéno'.",
+            "days": "VYber jeden nebo více dní!",
+            "entities": "Entita neexistuje!",
+            "month_day": "Špatný formát data!",
+            "time": "Špatný formát času!",
+            "weekday_order_number": "Vyber jeden nebo více dní!",
+            "week_order_number": "Vyber jeden nebo více týdnů!",
+            "period": "Perioda musí být číslo mezi 1 a 52",
+            "first_week": "První týden musí být číslo mezi 1 a 52",
+            "date": "Špatný formát data!"
         }
     }
 

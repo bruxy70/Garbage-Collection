@@ -10,6 +10,7 @@
                     "icon_normal": "Ikona",
                     "icon_tomorrow": "Ikona wywozu jutro",
                     "icon_today": "Ikona wywozu dzisiaj",
+                    "expire_after": "Wygasają po",
                     "verbose_state": "Tryb gadatliwy (tekst, zamiast liczb)",
                     "verbose_format": "Format trybu gadatliwego (używa zmiennych `date` oraz `days` (w nawiasach klamerkowych))",
                     "date_format": "Format daty (patrz http://strftime.org/)"
@@ -71,12 +72,12 @@
             "days": "Wybierz 1 lub więcej dni!",
             "entities": "Encja nie istnieje!",
             "month_day": "Nieprawidłowy format daty!",
+            "time": "Nieprawidłowy format czasu!",
             "weekday_order_number": "Wybierz 1 lub więcej dni!",
             "week_order_number": "Wybierz 1 lub więcej tydzieńi!",
             "period": "Okres musi być liczbą od 1 do 52.",
             "first_week": "Pierwszy tydzień musi być liczbą między 1 a 52.",
             "date": "Nieprawidłowy format daty!"
-            
         },
         "abort": {
             "single_instance_allowed": "Tylko jedna konfiguracja dla wywozu śmieci jest dozwolona."
@@ -92,6 +93,7 @@
                     "icon_normal": "Ikona",
                     "icon_tomorrow": "Ikona wywozu jutro",
                     "icon_today": "Ikona wywozu dzisiaj",
+                    "expire_after": "Wygasają po",
                     "verbose_state": "Tryb gadatliwy (tekst, zamiast liczb)",
                     "verbose_format": "Format trybu gadatliwego (używa zmiennych `date` oraz `days` (w nawiasach klamerkowych))",
                     "date_format": "Format daty (patrz http://strftime.org/)"
@@ -148,8 +150,17 @@
             }
         },
         "error": {
-            "date": "Nieprawidłowy format daty!",
-            "entities": "Encja nie istnieje!"
+            "value": "Niewłaściwa wartość. Sprawdź swoje dane wejściowe!",
+            "icon": "Ikony powinny być określone w formacie 'prefix:name'.",
+            "days": "Wybierz 1 lub więcej dni!",
+            "entities": "Encja nie istnieje!",
+            "month_day": "Nieprawidłowy format daty!",
+            "time": "Nieprawidłowy format czasu!",
+            "weekday_order_number": "Wybierz 1 lub więcej dni!",
+            "week_order_number": "Wybierz 1 lub więcej tydzieńi!",
+            "period": "Okres musi być liczbą od 1 do 52.",
+            "first_week": "Pierwszy tydzień musi być liczbą między 1 a 52.",
+            "date": "Nieprawidłowy format daty!"
         }
     }
 
