@@ -376,23 +376,6 @@ class GarbageCollection(Entity):
     def __skip_holiday(self, day: date) -> date:
         return day + relativedelta(days=1)
 
-    def ready_for_update(self) -> bool:
-        today = dt_util.now().date()
-        ready_for_update = bool(
-            self.__last_updated is None or self.__last_updated.date() != today
-        )
-        if self.__frequency == "group":
-            members_ready = True
-            for entity in self.__entities:
-                if (
-                    self.hass.states.get(entity).attributes.get("last_updated").date()
-                    != today
-                ):
-                    members_ready = False
-            if ready_for_update and not members_ready:
-                ready_for_update = False
-        return ready_for_update
-
     def get_next_date(self, day1: date) -> date:
         """Find the next date starting from day1."""
         first_day = day1
@@ -420,6 +403,36 @@ class GarbageCollection(Entity):
             i += 1
         _LOGGER.error("(%s) Cannot find any suitable date", self.__name)
         return None
+
+    def ready_for_update(self) -> bool:
+        """
+        Skip the update if the sensor was updated today
+        Except for the sensors with with next date today and after the expiration time
+        For group sensors wait for update of the sensors in the group
+        """
+        now = dt_util.now()
+        today = now.date()
+        ready_for_update = bool(
+            self.__last_updated is None or self.__last_updated.date() != today
+        )
+        if self.__frequency == "group":
+            members_ready = True
+            for entity in self.__entities:
+                if (
+                    self.hass.states.get(entity).attributes.get("last_updated").date()
+                    != today
+                ):
+                    members_ready = False
+            if ready_for_update and not members_ready:
+                ready_for_update = False
+        else:
+            if (
+                self.__expire_after is not None
+                and self.__next_date == today 
+                and now.time() >= self.__expire_after
+            ):
+                ready_for_update = True
+        return ready_for_update
 
     async def async_update(self) -> None:
         """Get the latest data and updates the states."""
