@@ -183,7 +183,7 @@ class GarbageCollection(Entity):
         self.__first_date = to_date(config.get(CONF_FIRST_DATE))
         self.__next_date = None
         self.__last_updated = None
-        self.__days = 0
+        self.__days = None
         self.__date = config.get(CONF_DATE)
         self.__entities = config.get(CONF_ENTITIES)
         self.__verbose_state = config.get(CONF_VERBOSE_STATE)
