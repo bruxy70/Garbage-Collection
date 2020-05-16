@@ -49,7 +49,7 @@ class garbage_collection_options:
                 elif CONF_EXPIRE_AFTER in e:
                     self.errors["base"] = "time"
                 else:
-                    _LOGGER.error(f'Unknown exception: {exception}')
+                    _LOGGER.error(f"Unknown exception: {exception}")
                     self.errors["base"] = "value"
                 CONFIGURATION.set_defaults(1, user_input)
             if self.errors == {}:
@@ -128,9 +128,9 @@ class garbage_collection_options:
             try:
                 updates = validation(updates)
             except vol.Invalid as exception:  # pylint: disable=W0612
-                _LOGGER.error(f'Unknown exception: {exception}')
+                _LOGGER.error(f"Unknown exception: {exception}")
                 self.errors["base"] = "value"
-                
+
             if len(updates[CONF_COLLECTION_DAYS]) == 0:
                 self.errors["base"] = "days"
             if self.errors == {}:
@@ -196,7 +196,7 @@ class garbage_collection_options:
                     self.errors["base"] = "date"
                 else:
                     self.errors["base"] = "value"
-                    _LOGGER.error(f'Unknown exception: {exception}')
+                    _LOGGER.error(f"Unknown exception: {exception}")
             if self._data[CONF_FREQUENCY] in MONTHLY_FREQUENCY:
                 if self._data[CONF_FORCE_WEEK_NUMBERS]:
                     if len(updates[CONF_WEEK_ORDER_NUMBER]) == 0:
@@ -369,6 +369,17 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         """
         O P T I O N S   S T E P   1
         """
+        CONFIGURATION.clean(self.config_entry.options)
+        if (
+            CONF_INCLUDE_DATES in self.config_entry.options
+            and len(self.config_entry.options[CONF_INCLUDE_DATES]) == 0
+        ):
+            del self.config_entry.options[CONF_INCLUDE_DATES]
+        if (
+            CONF_EXCLUDE_DATES in self.config_entry.options
+            and len(self.config_entry.options[CONF_EXCLUDE_DATES]) == 0
+        ):
+            del self.config_entry.options[CONF_EXCLUDE_DATES]
         next_step = self.options.step1_user_init(user_input, self.config_entry.options)
         if next_step:
             if self.options.frequency in ANNUAL_GROUP_FREQUENCY:

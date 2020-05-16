@@ -394,7 +394,11 @@ class GarbageCollection(Entity):
             date_ok = True
             # Pokud je to dnes a po expiraci - hledat dal od zitra
             now = dt_util.now()
-            if next_date == now.date() and self.__expire_after is not None and now.time() >= self.__expire_after:
+            if (
+                next_date == now.date()
+                and self.__expire_after is not None
+                and now.time() >= self.__expire_after
+            ):
                 _LOGGER.debug("(%s) Today's collection expired", self.__name)
                 date_ok = False
             if next_date in self.__exclude_dates:
