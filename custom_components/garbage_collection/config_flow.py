@@ -39,7 +39,6 @@ class garbage_collection_options:
             try:
                 config = validation(user_input)  # pylint: disable=W0612
             except vol.Invalid as exception:
-                # _LOGGER.debug(exception)
                 e = str(exception)
                 if (
                     CONF_ICON_NORMAL in e
@@ -50,6 +49,7 @@ class garbage_collection_options:
                 elif CONF_EXPIRE_AFTER in e:
                     self.errors["base"] = "time"
                 else:
+                    _LOGGER.error(f"Unknown exception: {exception}")
                     self.errors["base"] = "value"
                 CONFIGURATION.set_defaults(1, user_input)
             if self.errors == {}:
@@ -79,8 +79,8 @@ class garbage_collection_options:
             )
             try:
                 updates = validation(user_input)
-            except vol.Invalid as e:  # pylint: disable=W0612
-                # _LOGGER.debug(e)
+            except vol.Invalid as exception:  # pylint: disable=W0612
+                # _LOGGER.debug(exception)
                 if self._data[CONF_FREQUENCY] in ANNUAL_FREQUENCY:
                     self.errors["base"] = "month_day"
                 else:
@@ -127,9 +127,10 @@ class garbage_collection_options:
             validation = vol.Schema(validation_schema)
             try:
                 updates = validation(updates)
-            except vol.Invalid as e:  # pylint: disable=W0612
-                # _LOGGER.debug(e)
+            except vol.Invalid as exception:  # pylint: disable=W0612
+                _LOGGER.error(f"Unknown exception: {exception}")
                 self.errors["base"] = "value"
+
             if len(updates[CONF_COLLECTION_DAYS]) == 0:
                 self.errors["base"] = "days"
             if self.errors == {}:
@@ -186,15 +187,16 @@ class garbage_collection_options:
             try:
                 updates = validation(updates)
             except vol.Invalid as exception:  # pylint: disable=W0612
-                # _LOGGER.debug(exception)
                 e = str(exception)
-                self.errors["base"] = "value"
                 if (
                     CONF_INCLUDE_DATES in e
                     or CONF_EXCLUDE_DATES in e
                     or CONF_FIRST_DATE in e
                 ):
                     self.errors["base"] = "date"
+                else:
+                    self.errors["base"] = "value"
+                    _LOGGER.error(f"Unknown exception: {exception}")
             if self._data[CONF_FREQUENCY] in MONTHLY_FREQUENCY:
                 if self._data[CONF_FORCE_WEEK_NUMBERS]:
                     if len(updates[CONF_WEEK_ORDER_NUMBER]) == 0:
@@ -367,6 +369,7 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         """
         O P T I O N S   S T E P   1
         """
+        CONFIGURATION.clean(self.config_entry.options)
         next_step = self.options.step1_user_init(user_input, self.config_entry.options)
         if next_step:
             if self.options.frequency in ANNUAL_GROUP_FREQUENCY:
