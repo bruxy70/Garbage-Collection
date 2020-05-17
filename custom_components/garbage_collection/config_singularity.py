@@ -44,7 +44,7 @@ class config_singularity:
 
     def clean(self, data):
         """Remove all keys that are not in configuration"""
-        for key, value in data.items():
+        for key, value in data.items():  # pylint: disable=W0612
             if key not in self.options and key != "unique_id":
                 del data[key]
 
@@ -109,5 +109,9 @@ class config_singularity:
             for (key, value) in self.options.items()
             if "step" in value and value["step"] == step and key in data
         }
-        for key, value in items.items():
-            self.__defaults[key] = data[key]
+        for key, value in items.items():  # pylint: disable=W0612
+            if (
+                data[key] != None 
+                and (type(data[key]) not in [list, dict] or len(data[key]) != 0)
+            ):
+                self.__defaults[key] = data[key]

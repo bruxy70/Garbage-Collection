@@ -370,16 +370,6 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         O P T I O N S   S T E P   1
         """
         CONFIGURATION.clean(self.config_entry.options)
-        if (
-            CONF_INCLUDE_DATES in self.config_entry.options
-            and len(self.config_entry.options[CONF_INCLUDE_DATES]) == 0
-        ):
-            del self.config_entry.options[CONF_INCLUDE_DATES]
-        if (
-            CONF_EXCLUDE_DATES in self.config_entry.options
-            and len(self.config_entry.options[CONF_EXCLUDE_DATES]) == 0
-        ):
-            del self.config_entry.options[CONF_EXCLUDE_DATES]
         next_step = self.options.step1_user_init(user_input, self.config_entry.options)
         if next_step:
             if self.options.frequency in ANNUAL_GROUP_FREQUENCY:
