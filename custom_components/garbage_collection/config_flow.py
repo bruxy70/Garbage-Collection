@@ -14,18 +14,24 @@ from homeassistant.const import CONF_NAME, WEEKDAYS, CONF_ENTITIES
 _LOGGER = logging.getLogger(__name__)
 
 
-def clean_optional(dict, key):
-    """Remove optional keys before update"""
-    if key in dict:
-        del dict[key]
-
-
 class garbage_collection_options:
     def __init__(self, unique_id):
         self._data = {}
         self._data["unique_id"] = unique_id
         self.errors = {}
         self.data_schema = {}
+        
+    def update_data(self, user_input, step):
+        self._data.update(user_input)
+        # Remove empty fields
+        items = {
+            key: value
+            for (key, value) in CONFIGURATION.options.items()
+            if ("step" in value and value["step"] == step)
+        }
+        for key, value in items.items():
+            if key in self._data and (key not in user_input or user_input[key] == ""):
+                del self._data[key]
 
     def step1_user_init(self, user_input, defaults=None):
         """
@@ -54,9 +60,10 @@ class garbage_collection_options:
                 CONFIGURATION.set_defaults(1, user_input)
             if self.errors == {}:
                 # Valid input - go to the next step!
-                self._data.update(user_input)
+                self.update_data(user_input, 1)
                 return True
         elif defaults is not None:
+            CONFIGURATION.reset_defaults()
             CONFIGURATION.set_defaults(1, defaults)
         self.data_schema = CONFIGURATION.compile_config_flow(step=1)
         return False
@@ -90,7 +97,7 @@ class garbage_collection_options:
                 # Remember step2 values
                 if self._data[CONF_FREQUENCY] in GROUP_FREQUENCY:
                     updates[CONF_ENTITIES] = string_to_list(user_input[CONF_ENTITIES])
-                self._data.update(updates)
+                self.update_data(updates, 2)
                 return True
         elif defaults is not None:
             CONFIGURATION.set_defaults(2, defaults)
@@ -135,7 +142,7 @@ class garbage_collection_options:
                 self.errors["base"] = "days"
             if self.errors == {}:
                 # Remember values
-                self._data.update(updates)
+                self.update_data(updates, 3)
                 return True
         elif defaults is not None:
             CONFIGURATION.set_defaults(3, defaults)
@@ -205,7 +212,7 @@ class garbage_collection_options:
                     if len(updates[CONF_WEEKDAY_ORDER_NUMBER]) == 0:
                         self.errors["base"] = CONF_WEEKDAY_ORDER_NUMBER
             if self.errors == {}:
-                self._data.update(updates)
+                self.update_data(updates, 4)
                 if CONF_FORCE_WEEK_NUMBERS in self._data:
                     if self._data[CONF_FORCE_WEEK_NUMBERS]:
                         if CONF_WEEKDAY_ORDER_NUMBER in self._data:

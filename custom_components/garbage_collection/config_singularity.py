@@ -66,15 +66,12 @@ class config_singularity:
         }
         for key, value in items.items():
             if key in self.__defaults:
-                # result[
-                #     value["method"](
-                #         key,
-                #         description={"suggested_value": self.__defaults[key]}
-                #     )
-                # ] = value["type"]
-                result[value["method"](key, default=self.__defaults[key])] = value[
-                    "type"
-                ]
+                result[
+                    value["method"](
+                        key,
+                        description={"suggested_value": self.__defaults[key]}
+                    )
+                ] = value["type"]
             else:
                 result[value["method"](key)] = value["type"]
         return result
@@ -97,8 +94,8 @@ class config_singularity:
         for key, value in items.items():
             # use the validator if exists, otherwise the type
             t = value["validator"] if "validator" in value else value["type"]
-            if key in self.__defaults:
-                result[value["method"](key, default=self.__defaults[key])] = t
+            if "default" in value:
+                result[value["method"](key, default=value["default"])] = t
             else:
                 result[value["method"](key)] = t
         return result

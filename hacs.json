@@ -3,6 +3,6 @@
   "zip_release": true,
   "filename": "garbage_collection.zip",
   "domains": ["garbage_collection", "sensor"],
-  "homeassistant": "0.109.0",
+  "homeassistant": "0.110.0",
   "iot_class": "Local Push"
 }
