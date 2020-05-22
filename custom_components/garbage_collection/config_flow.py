@@ -20,7 +20,7 @@ class garbage_collection_options:
         self._data["unique_id"] = unique_id
         self.errors = {}
         self.data_schema = {}
-        
+
     def update_data(self, user_input, step):
         self._data.update(user_input)
         # Remove empty fields
@@ -122,14 +122,7 @@ class garbage_collection_options:
             )
             if self._data[CONF_FREQUENCY] in MONTHLY_FREQUENCY:
                 validation_schema[
-                    vol.Optional(
-                        CONF_FORCE_WEEK_NUMBERS,
-                        default=bool(
-                            user_input is not None
-                            and user_input != {}
-                            and user_input[CONF_FORCE_WEEK_NUMBERS]
-                        ),
-                    )
+                    vol.Optional(CONF_FORCE_WEEK_NUMBERS, default=False,)
                 ] = cv.boolean
             validation = vol.Schema(validation_schema)
             try:
@@ -151,15 +144,14 @@ class garbage_collection_options:
         )
         list_to_days(self.data_schema)
         if self._data[CONF_FREQUENCY] in MONTHLY_FREQUENCY:
+            if user_input is not None and CONF_FORCE_WEEK_NUMBERS in user_input:
+                force_week_numbers = user_input[CONF_FORCE_WEEK_NUMBERS]
+            elif defaults is not None and CONF_WEEK_ORDER_NUMBER in defaults:
+                force_week_numbers = True
+            else:
+                force_week_numbers = False
             self.data_schema[
-                vol.Optional(
-                    CONF_FORCE_WEEK_NUMBERS,
-                    default=bool(
-                        user_input is not None
-                        and user_input != {}
-                        and user_input[CONF_FORCE_WEEK_NUMBERS]
-                    ),
-                )
+                vol.Optional(CONF_FORCE_WEEK_NUMBERS, default=force_week_numbers,)
             ] = bool
         return False
 
@@ -376,7 +368,6 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         """
         O P T I O N S   S T E P   1
         """
-        CONFIGURATION.clean(self.config_entry.options)
         next_step = self.options.step1_user_init(user_input, self.config_entry.options)
         if next_step:
             if self.options.frequency in ANNUAL_GROUP_FREQUENCY:
