@@ -391,9 +391,9 @@ extra_options = {
     }
 }
 
-CONFIGURATION = configuration()
+config_definition = configuration()
 
-SENSOR_SCHEMA = vol.Schema(CONFIGURATION.compile_schema())
+SENSOR_SCHEMA = vol.Schema(config_definition.compile_schema())
 
 CONFIG_SCHEMA = vol.Schema(
     {
