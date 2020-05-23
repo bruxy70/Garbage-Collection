@@ -68,7 +68,9 @@ async def async_setup_platform(
 
 async def async_setup_entry(hass, config_entry, async_add_devices):
     """Setup sensor platform."""
-    async_add_devices([GarbageCollection(hass, config_entry.data)], True)
+    async_add_devices(
+        [GarbageCollection(hass, config_entry.data, config_entry.title)], True
+    )
 
 
 def nth_week_date(n: int, date_of_month: date, collection_day: int) -> date:
@@ -120,9 +122,9 @@ def to_dates(dates: List[Any]) -> List[date]:
 class GarbageCollection(Entity):
     """GarbageCollection Sensor class."""
 
-    def __init__(self, hass, config):
+    def __init__(self, hass, config, title=None):
         self.config = config
-        self.__name = config.get(CONF_NAME)
+        self.__name = title if title is not None else config.get(CONF_NAME)
         self.__frequency = config.get(CONF_FREQUENCY)
         self.__collection_days = config.get(CONF_COLLECTION_DAYS)
         first_month = config.get(CONF_FIRST_MONTH)

@@ -343,13 +343,12 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
         """
         if self._async_current_entries():
             return self.async_abort(reason="single_instance_allowed")
-
         return self.async_create_entry(title="configuration.yaml", data={})
 
     @staticmethod
     @callback
     def async_get_options_flow(config_entry):
-        if config_entry.options.get("unique_id", None) is not None:
+        if config_entry.data.get("unique_id", None) is not None:
             return OptionsFlowHandler(config_entry)
         else:
             return EmptyOptions(config_entry)
@@ -368,7 +367,7 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
     def __init__(self, config_entry):
         self.config_entry = config_entry
         self.shared_class = garbage_collection_shared(
-            config_entry.options.get("unique_id")
+            config_entry.data.get("unique_id")
         )
 
     async def async_step_init(self, user_input=None):
@@ -376,7 +375,7 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         O P T I O N S   S T E P   1
         """
         next_step = self.shared_class.step1_user_init(
-            user_input, self.config_entry.options
+            user_input, self.config_entry.data
         )
         if next_step:
             if self.shared_class.frequency in ANNUAL_GROUP_FREQUENCY:
@@ -400,7 +399,7 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         (no week days)
         """
         next_step = self.shared_class.step2_annual_group(
-            user_input, self.config_entry.options
+            user_input, self.config_entry.data
         )
         if next_step:
             return self.async_create_entry(title="", data=self.shared_class.data)
@@ -418,7 +417,7 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         C O N F I G U R A T I O N   S T E P   2   ( O T H E R   T H A N   A N N U A L   O R   G R O U P )
         """
         next_step = self.shared_class.step3_detail(
-            user_input, self.config_entry.options
+            user_input, self.config_entry.data
         )
         if next_step:
             return await self.async_step_final()
@@ -435,7 +434,7 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         """
         C O N F I G U R A T I O N   S T E P   3
         """
-        if self.shared_class.step4_final(user_input, self.config_entry.options):
+        if self.shared_class.step4_final(user_input, self.config_entry.data):
             return self.async_create_entry(title="", data=self.shared_class.data)
         else:
             return self.async_show_form(
