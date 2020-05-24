@@ -6,12 +6,14 @@ labels: bug
 assignees: ''
 
 ---
-
+<!-- READ THIS FIRST:
+DO NOT DELETE ANY TEXT from this template! Otherwise, your issue may be closed without comment.
+-->
 **Describe the bug**
 A clear and concise description of what the bug is. Steps to reproduce.
 
 **Configuration**
-YAML or Config Flow (GUI):
+YAML or Config Flow (GUI)?:
 
 ```
 Copy the sensor configuration here (for config flow, describe parameters or add screenshots)
