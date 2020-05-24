@@ -8,7 +8,7 @@ from homeassistant.const import CONF_NAME, WEEKDAYS, CONF_ENTITIES
 # Base component constants
 DOMAIN = "garbage_collection"
 DOMAIN_DATA = f"{DOMAIN}_data"
-VERSION = "2.26"
+VERSION = "2.27"
 PLATFORM = "sensor"
 ISSUE_URL = "https://github.com/bruxy70/Garbage-Collection/issues"
 ATTRIBUTION = "Data from this is provided by garbage_collection."
@@ -391,9 +391,9 @@ extra_options = {
     }
 }
 
-CONFIGURATION = configuration()
+config_definition = configuration()
 
-SENSOR_SCHEMA = vol.Schema(CONFIGURATION.compile_schema())
+SENSOR_SCHEMA = vol.Schema(config_definition.compile_schema())
 
 CONFIG_SCHEMA = vol.Schema(
     {

@@ -14,10 +14,11 @@ from homeassistant.const import CONF_NAME, WEEKDAYS, CONF_ENTITIES
 _LOGGER = logging.getLogger(__name__)
 
 
-class garbage_collection_options:
+class garbage_collection_shared:
     def __init__(self, unique_id):
         self._data = {}
         self._data["unique_id"] = unique_id
+        self.name = None
         self.errors = {}
         self.data_schema = {}
 
@@ -26,12 +27,15 @@ class garbage_collection_options:
         # Remove empty fields
         items = {
             key: value
-            for (key, value) in CONFIGURATION.options.items()
+            for (key, value) in config_definition.options.items()
             if ("step" in value and value["step"] == step)
         }
         for key, value in items.items():
             if key in self._data and (key not in user_input or user_input[key] == ""):
                 del self._data[key]
+        if CONF_NAME in self._data:
+            self.name = self._data[CONF_NAME]
+            del self._data[CONF_NAME]
 
     def step1_user_init(self, user_input, defaults=None):
         """
@@ -41,9 +45,12 @@ class garbage_collection_options:
         """
         self.errors = {}
         if user_input is not None:
-            validation = vol.Schema(CONFIGURATION.compile_schema(step=1))
+            validation = config_definition.compile_schema(step=1)
+            # Name is not used in OptionsFlow
+            if defaults is not None and CONF_NAME in validation:
+                del validation[CONF_NAME]
             try:
-                config = validation(user_input)  # pylint: disable=W0612
+                config = vol.Schema(validation)(user_input)  # pylint: disable=W0612
             except vol.Invalid as exception:
                 e = str(exception)
                 if (
@@ -57,15 +64,19 @@ class garbage_collection_options:
                 else:
                     _LOGGER.error(f"Unknown exception: {exception}")
                     self.errors["base"] = "value"
-                CONFIGURATION.set_defaults(1, user_input)
+                config_definition.set_defaults(1, user_input)
             if self.errors == {}:
                 # Valid input - go to the next step!
                 self.update_data(user_input, 1)
                 return True
         elif defaults is not None:
-            CONFIGURATION.reset_defaults()
-            CONFIGURATION.set_defaults(1, defaults)
-        self.data_schema = CONFIGURATION.compile_config_flow(step=1)
+            config_definition.reset_defaults()
+            config_definition.set_defaults(1, defaults)
+        self.data_schema = config_definition.compile_config_flow(step=1)
+        # Do not show name for Options_Flow. The name cannot be changed here
+        if defaults is not None and CONF_NAME in self.data_schema:
+            del self.data_schema[CONF_NAME]
+
         return False
 
     def step2_annual_group(self, user_input, defaults=None):
@@ -80,7 +91,7 @@ class garbage_collection_options:
         updates = {}
         if user_input is not None and user_input != {}:
             validation = vol.Schema(
-                CONFIGURATION.compile_schema(
+                config_definition.compile_schema(
                     step=2, valid_for=self._data[CONF_FREQUENCY]
                 )
             )
@@ -92,7 +103,7 @@ class garbage_collection_options:
                     self.errors["base"] = "month_day"
                 else:
                     self.errors["base"] = "entities"
-                CONFIGURATION.set_defaults(2, user_input)
+                config_definition.set_defaults(2, user_input)
             if self.errors == {}:
                 # Remember step2 values
                 if self._data[CONF_FREQUENCY] in GROUP_FREQUENCY:
@@ -100,8 +111,8 @@ class garbage_collection_options:
                 self.update_data(updates, 2)
                 return True
         elif defaults is not None:
-            CONFIGURATION.set_defaults(2, defaults)
-        self.data_schema = CONFIGURATION.compile_config_flow(
+            config_definition.set_defaults(2, defaults)
+        self.data_schema = config_definition.compile_config_flow(
             step=2, valid_for=self._data[CONF_FREQUENCY]
         )
         return False
@@ -117,7 +128,7 @@ class garbage_collection_options:
         if user_input is not None and user_input != {}:
             updates = user_input.copy()
             days_to_list(updates)
-            validation_schema = CONFIGURATION.compile_schema(
+            validation_schema = config_definition.compile_schema(
                 step=3, valid_for=self._data[CONF_FREQUENCY]
             )
             if self._data[CONF_FREQUENCY] in MONTHLY_FREQUENCY:
@@ -138,8 +149,8 @@ class garbage_collection_options:
                 self.update_data(updates, 3)
                 return True
         elif defaults is not None:
-            CONFIGURATION.set_defaults(3, defaults)
-        self.data_schema = CONFIGURATION.compile_config_flow(
+            config_definition.set_defaults(3, defaults)
+        self.data_schema = config_definition.compile_config_flow(
             step=3, valid_for=self._data[CONF_FREQUENCY]
         )
         list_to_days(self.data_schema)
@@ -171,7 +182,7 @@ class garbage_collection_options:
                 else:
                     weekdays_to_list(updates, CONF_WEEKDAY_ORDER_NUMBER)
             validation = vol.Schema(
-                CONFIGURATION.compile_schema(
+                config_definition.compile_schema(
                     step=4, valid_for=self._data[CONF_FREQUENCY]
                 )
             )
@@ -213,10 +224,12 @@ class garbage_collection_options:
                         if CONF_WEEK_ORDER_NUMBER in self._data:
                             del self._data[CONF_WEEK_ORDER_NUMBER]
                     del self._data[CONF_FORCE_WEEK_NUMBERS]
+                if CONF_NAME in self._data:
+                    del self._data[CONF_NAME]
                 return True
         elif defaults is not None:
-            CONFIGURATION.set_defaults(4, defaults)
-        self.data_schema = CONFIGURATION.compile_config_flow(
+            config_definition.set_defaults(4, defaults)
+        self.data_schema = config_definition.compile_config_flow(
             step=4, valid_for=self._data[CONF_FREQUENCY]
         )
         if self._data[CONF_FREQUENCY] in MONTHLY_FREQUENCY:
@@ -225,14 +238,6 @@ class garbage_collection_options:
             else:
                 list_to_weekdays(self.data_schema, CONF_WEEKDAY_ORDER_NUMBER)
         return False
-
-    @property
-    def name(self):
-        if CONF_NAME in self._data:
-            return self._data[CONF_NAME]
-        else:
-            return None
-        pass
 
     @property
     def frequency(self):
@@ -255,8 +260,8 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
 
     def __init__(self):
         """Initialize."""
-        CONFIGURATION.reset_defaults()
-        self.options = garbage_collection_options(str(uuid.uuid4()))
+        config_definition.reset_defaults()
+        self.shared_class = garbage_collection_shared(str(uuid.uuid4()))
 
     async def async_step_user(
         self, user_input={}
@@ -264,19 +269,19 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
         """
         C O N F I G U R A T I O N   S T E P   1
         """
-        next_step = self.options.step1_user_init(user_input)
+        next_step = self.shared_class.step1_user_init(user_input)
         if next_step:
-            if self.options.frequency in ANNUAL_GROUP_FREQUENCY:
+            if self.shared_class.frequency in ANNUAL_GROUP_FREQUENCY:
                 return await self.async_step_annual_group()
-            elif self.options.frequency in DAILY_FREQUENCY:
+            elif self.shared_class.frequency in DAILY_FREQUENCY:
                 return await self.async_step_final()
             else:
                 return await self.async_step_detail()
         else:
             return self.async_show_form(
                 step_id="user",
-                data_schema=vol.Schema(self.options.data_schema),
-                errors=self.options.errors,
+                data_schema=vol.Schema(self.shared_class.data_schema),
+                errors=self.shared_class.errors,
             )
 
     async def async_step_annual_group(
@@ -286,16 +291,16 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
         C O N F I G U R A T I O N   S T E P   2   (  A N N U A L   O R   G R O U P  )
         (no week days)
         """
-        next_step = self.options.step2_annual_group(user_input)
+        next_step = self.shared_class.step2_annual_group(user_input)
         if next_step:
             return self.async_create_entry(
-                title=self.options.name, data=self.options.data
+                title=self.shared_class.name, data=self.shared_class.data
             )
         else:
             return self.async_show_form(
                 step_id="annual_group",
-                data_schema=vol.Schema(self.options.data_schema),
-                errors=self.options.errors,
+                data_schema=vol.Schema(self.shared_class.data_schema),
+                errors=self.shared_class.errors,
             )
 
     async def async_step_detail(
@@ -304,14 +309,14 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
         """
         C O N F I G U R A T I O N   S T E P   2   ( O T H E R   T H A N   A N N U A L   O R   G R O U P )
         """
-        next_step = self.options.step3_detail(user_input)
+        next_step = self.shared_class.step3_detail(user_input)
         if next_step:
             return await self.async_step_final()
         else:
             return self.async_show_form(
                 step_id="detail",
-                data_schema=vol.Schema(self.options.data_schema),
-                errors=self.options.errors,
+                data_schema=vol.Schema(self.shared_class.data_schema),
+                errors=self.shared_class.errors,
             )
 
     async def async_step_final(
@@ -320,15 +325,15 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
         """
         C O N F I G U R A T I O N   S T E P   3
         """
-        if self.options.step4_final(user_input):
+        if self.shared_class.step4_final(user_input):
             return self.async_create_entry(
-                title=self.options.name, data=self.options.data
+                title=self.shared_class.name, data=self.shared_class.data
             )
         else:
             return self.async_show_form(
                 step_id="final",
-                data_schema=vol.Schema(self.options.data_schema),
-                errors=self.options.errors,
+                data_schema=vol.Schema(self.shared_class.data_schema),
+                errors=self.shared_class.errors,
             )
 
     async def async_step_import(self, user_input):  # pylint: disable=unused-argument
@@ -338,13 +343,12 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
         """
         if self._async_current_entries():
             return self.async_abort(reason="single_instance_allowed")
-
         return self.async_create_entry(title="configuration.yaml", data={})
 
     @staticmethod
     @callback
     def async_get_options_flow(config_entry):
-        if config_entry.options.get("unique_id", None) is not None:
+        if config_entry.data.get("unique_id", None) is not None:
             return OptionsFlowHandler(config_entry)
         else:
             return EmptyOptions(config_entry)
@@ -362,25 +366,29 @@ O P T I O N S   F L O W
 class OptionsFlowHandler(config_entries.OptionsFlow):
     def __init__(self, config_entry):
         self.config_entry = config_entry
-        self.options = garbage_collection_options(config_entry.options.get("unique_id"))
+        self.shared_class = garbage_collection_shared(
+            config_entry.data.get("unique_id")
+        )
 
     async def async_step_init(self, user_input=None):
         """
         O P T I O N S   S T E P   1
         """
-        next_step = self.options.step1_user_init(user_input, self.config_entry.options)
+        next_step = self.shared_class.step1_user_init(
+            user_input, self.config_entry.data
+        )
         if next_step:
-            if self.options.frequency in ANNUAL_GROUP_FREQUENCY:
+            if self.shared_class.frequency in ANNUAL_GROUP_FREQUENCY:
                 return await self.async_step_annual_group()
-            elif self.options.frequency in DAILY_FREQUENCY:
+            elif self.shared_class.frequency in DAILY_FREQUENCY:
                 return await self.async_step_final()
             else:
                 return await self.async_step_detail()
         else:
             return self.async_show_form(
                 step_id="init",
-                data_schema=vol.Schema(self.options.data_schema),
-                errors=self.options.errors,
+                data_schema=vol.Schema(self.shared_class.data_schema),
+                errors=self.shared_class.errors,
             )
 
     async def async_step_annual_group(
@@ -390,18 +398,16 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         O P T I O N S   S T E P   2   (  A N N U A L   O R   G R O U P  )
         (no week days)
         """
-        next_step = self.options.step2_annual_group(
-            user_input, self.config_entry.options
+        next_step = self.shared_class.step2_annual_group(
+            user_input, self.config_entry.data
         )
         if next_step:
-            return self.async_create_entry(
-                title=self.options.name, data=self.options.data
-            )
+            return self.async_create_entry(title="", data=self.shared_class.data)
         else:
             return self.async_show_form(
                 step_id="annual_group",
-                data_schema=vol.Schema(self.options.data_schema),
-                errors=self.options.errors,
+                data_schema=vol.Schema(self.shared_class.data_schema),
+                errors=self.shared_class.errors,
             )
 
     async def async_step_detail(
@@ -410,14 +416,16 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         """
         C O N F I G U R A T I O N   S T E P   2   ( O T H E R   T H A N   A N N U A L   O R   G R O U P )
         """
-        next_step = self.options.step3_detail(user_input, self.config_entry.options)
+        next_step = self.shared_class.step3_detail(
+            user_input, self.config_entry.data
+        )
         if next_step:
             return await self.async_step_final()
         else:
             return self.async_show_form(
                 step_id="detail",
-                data_schema=vol.Schema(self.options.data_schema),
-                errors=self.options.errors,
+                data_schema=vol.Schema(self.shared_class.data_schema),
+                errors=self.shared_class.errors,
             )
 
     async def async_step_final(
@@ -426,15 +434,13 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         """
         C O N F I G U R A T I O N   S T E P   3
         """
-        if self.options.step4_final(user_input, self.config_entry.options):
-            return self.async_create_entry(
-                title=self.options.name, data=self.options.data
-            )
+        if self.shared_class.step4_final(user_input, self.config_entry.data):
+            return self.async_create_entry(title="", data=self.shared_class.data)
         else:
             return self.async_show_form(
                 step_id="final",
-                data_schema=vol.Schema(self.options.data_schema),
-                errors=self.options.errors,
+                data_schema=vol.Schema(self.shared_class.data_schema),
+                errors=self.shared_class.errors,
             )
 
 
@@ -493,8 +499,8 @@ def list_to_days(data_schema):
             vol.Required(
                 f"collection_days_{day.lower()}",
                 default=bool(
-                    CONF_COLLECTION_DAYS in CONFIGURATION.defaults
-                    and day in CONFIGURATION.defaults[CONF_COLLECTION_DAYS]
+                    CONF_COLLECTION_DAYS in config_definition.defaults
+                    and day in config_definition.defaults[CONF_COLLECTION_DAYS]
                 ),
             )
         ] = bool
@@ -513,8 +519,8 @@ def list_to_weekdays(data_schema, prefix):
             vol.Required(
                 f"{prefix}_{i+1}",
                 default=bool(
-                    prefix in CONFIGURATION.defaults
-                    and (i + 1) in CONFIGURATION.defaults[prefix]
+                    prefix in config_definition.defaults
+                    and (i + 1) in config_definition.defaults[prefix]
                 ),
             )
         ] = bool

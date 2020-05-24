@@ -50,6 +50,9 @@ async def async_setup(hass, config):
         return False
 
     for entry in platform_config:
+        _LOGGER.info(
+            f"Setting {entry[CONF_NAME]}({entry[CONF_FREQUENCY]}) from YAML configuration"
+        )
         # If entry is not enabled, skip.
         # if not entry[CONF_ENABLED]:
         #     continue
@@ -74,7 +77,9 @@ async def async_setup_entry(hass, config_entry):
     _LOGGER.info(
         CC_STARTUP_VERSION.format(name=DOMAIN, version=VERSION, issue_link=ISSUE_URL)
     )
-    config_entry.options = config_entry.data
+    _LOGGER.info(f"Setting {config_entry.title}({config_entry.data[CONF_FREQUENCY]}) from ConfigFlow")
+    # Backward compatibility - clean-up (can be removed later?)
+    config_entry.options = {}
     config_entry.add_update_listener(update_listener)
     # Add sensor
     hass.async_add_job(
@@ -96,6 +101,5 @@ async def async_remove_entry(hass, config_entry):
 
 async def update_listener(hass, entry):
     """Update listener."""
-    entry.data = entry.options
     await hass.config_entries.async_forward_entry_unload(entry, PLATFORM)
     hass.async_add_job(hass.config_entries.async_forward_entry_setup(entry, PLATFORM))
