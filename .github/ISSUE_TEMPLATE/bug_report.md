@@ -50,6 +50,7 @@ Do you configure the integration in YAML or Config Flow (GUI)? : <!--Say YAML, o
 
 **Version**
 Integration version: 
+
 Home Assistant version: 
 
 <!--Thanks-->
