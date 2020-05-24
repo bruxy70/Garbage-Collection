@@ -25,6 +25,7 @@ assignees: ''
 
 
 **Configuration**
+
 Do you configure the integration in YAML or Config Flow (GUI)? : <!--Say YAML, or Config Flow-->
 
 <!--Copy the sensor configuration below.
@@ -49,6 +50,7 @@ Do you configure the integration in YAML or Config Flow (GUI)? : <!--Say YAML, o
 <!--If applicable, add screenshots to help explain the problem.-->
 
 **Version**
+
 Integration version: 
 
 Home Assistant version: 
