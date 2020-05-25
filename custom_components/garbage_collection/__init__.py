@@ -101,5 +101,9 @@ async def async_remove_entry(hass, config_entry):
 
 async def update_listener(hass, entry):
     """Update listener."""
+    # The OptionsFlow saves data to options. Move them back to data and clean options (dirty, but not sure how else to do that)
+    if entry.options != {}:
+        entry.data = entry.options
+        entry.options = {}
     await hass.config_entries.async_forward_entry_unload(entry, PLATFORM)
     hass.async_add_job(hass.config_entries.async_forward_entry_setup(entry, PLATFORM))
