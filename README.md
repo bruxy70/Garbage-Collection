@@ -127,7 +127,8 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 | `last_month` | No | Month three letter abbreviation.<br/>**Default**: `"dec"`
 | `exclude_dates` | No | List of dates with no collection (using international date format `'yyyy-mm-dd'`. 
 | `include_dates` | No | List of extra collection (using international date format `'yyyy-mm-dd'`.
-| `move_country_holidays` | No | Country holidays - the country code (see [holidays](https://github.com/dr-prodigy/python-holidays) for the list of valid country codes).<br/>Automatically move garbage collection on public holidays to the following day.<br/>*Example:* `US`   
+| `move_country_holidays` | No | Country holidays - the country code (see [holidays](https://github.com/dr-prodigy/python-holidays) for the list of valid country codes).<br/>Automatically move garbage collection on public holidays to the following day.<br/>*Example:* `US` 
+| `holiday_in_week_move` | No | Move garbage collection to the following day if a holiday is in week.<br/>**Default**: `"false"`
 | `prov` | No | Country holidays - province (see [holidays](https://github.com/dr-prodigy/python-holidays) ).
 | `state` | No | Country holidays - state (see [holidays](https://github.com/dr-prodigy/python-holidays) ).
 | `observed` | No | Country holidays - observed (see [holidays](https://github.com/dr-prodigy/python-holidays) ).
