@@ -60,6 +60,7 @@
                     "include_dates": "Incluir fechas (yyyy-mm-dd, yyyy-mm-dd, ...) - opcional",
                     "exclude_dates": "Excluir fechas (yyyy-mm-dd, yyyy-mm-dd, ...) - opcional",
                     "move_country_holidays": "Mover vacaciones al día siguiente (opcional)",
+                    "holiday_in_week_move": "Move to next day if holiday in week (optional)",
                     "prov": "Días festivos - prov (opcional)",
                     "state": "Días festivos - estado (opcional)",
                     "observed": "Días festivos - observado (opcional)"
@@ -143,6 +144,7 @@
                     "include_dates": "Incluir fechas (yyyy-mm-dd, yyyy-mm-dd, ...) - opcional",
                     "exclude_dates": "Excluir fechas (yyyy-mm-dd, yyyy-mm-dd, ...) - opcional",
                     "move_country_holidays": "Mover vacaciones al día siguiente (opcional)",
+                    "holiday_in_week_move": "Move to next day if holiday in week (optional)",
                     "prov": "Días festivos - prov (opcional)",
                     "state": "Días festivos - estado (opcional)",
                     "observed": "Días festivos - observado (opcional)"

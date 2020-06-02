@@ -39,6 +39,7 @@ from .const import (
     CONF_EXCLUDE_DATES,
     CONF_INCLUDE_DATES,
     CONF_MOVE_COUNTRY_HOLIDAYS,
+    CONF_HOLIDAY_IN_WEEK_MOVE,
     CONF_PROV,
     CONF_STATE,
     CONF_OBSERVED,
@@ -121,6 +122,7 @@ class GarbageCollection(Entity):
         self.__name = title if title is not None else config.get(CONF_NAME)
         self.__frequency = config.get(CONF_FREQUENCY)
         self.__collection_days = config.get(CONF_COLLECTION_DAYS)
+        self.__holiday_in_week_move = config.get(CONF_HOLIDAY_IN_WEEK_MOVE)
         first_month = config.get(CONF_FIRST_MONTH)
         if first_month in MONTH_OPTIONS:
             self.__first_month = MONTH_OPTIONS.index(first_month) + 1
@@ -391,6 +393,20 @@ class GarbageCollection(Entity):
         i = 0
         while i < 365:
             next_date = await self.async_find_candidate_date(first_day)
+
+            if bool(self.__holiday_in_week_move):
+               start_date = next_date - timedelta(days=next_date.weekday())
+               end_date = start_date + timedelta(days=6)
+               delta = timedelta(days=1)
+               while start_date <= end_date:
+                    if start_date in self.__holidays:
+                        _LOGGER.debug(
+                            "(%s) Move possible collection day, because public holiday in week on %s", self.__name, start_date
+                        )
+                        next_date = self.__skip_holiday(next_date)
+                        break
+                    start_date += delta
+
             while next_date in self.__holidays:
                 _LOGGER.debug(
                     "(%s) Skipping public holiday on %s", self.__name, next_date
