@@ -121,4 +121,3 @@ class EntitiesCalendarData:
         events.sort(key=lambda x: x["start"]["date"])
         if len(events) > 0:
             self.event = events[0]
-        _LOGGER.debug("Updated Garbage Collection Calendar")
