@@ -39,6 +39,7 @@ CONF_DATE = "date"
 CONF_EXCLUDE_DATES = "exclude_dates"
 CONF_INCLUDE_DATES = "include_dates"
 CONF_MOVE_COUNTRY_HOLIDAYS = "move_country_holidays"
+CONF_HOLIDAY_IN_WEEK_MOVE = "holiday_in_week_move"
 CONF_PROV = "prov"
 CONF_STATE = "state"
 CONF_OBSERVED = "observed"
@@ -57,6 +58,7 @@ DEFAULT_FREQUENCY = "weekly"
 DEFAULT_PERIOD = 1
 DEFAULT_FIRST_WEEK = 1
 DEFAULT_VERBOSE_STATE = False
+DEFAULT_HOLIDAY_IN_WEEK_MOVE = False
 DEFAULT_DATE_FORMAT = "%d-%b-%Y"
 DEFAULT_VERBOSE_FORMAT = "on {date}, in {days} days"
 
@@ -356,6 +358,13 @@ class configuration(config_singularity):
             "valid_for": lambda f: f in EXCEPT_ANNUAL_GROUP,
             "method": vol.Optional,
             "type": vol.In(COUNTRY_CODES),
+        },
+        CONF_HOLIDAY_IN_WEEK_MOVE: {
+            "step": 4,
+            "method": vol.Optional,
+            "default": DEFAULT_HOLIDAY_IN_WEEK_MOVE,
+            "type": bool,
+            "validator": cv.boolean,
         },
         CONF_PROV: {
             "step": 4,

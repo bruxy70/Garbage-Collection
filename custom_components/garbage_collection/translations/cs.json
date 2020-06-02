@@ -60,6 +60,7 @@
                     "include_dates": "Přidané datumy (yyyy-mm-dd, yyyy-mm-dd, ...) - volitelné",
                     "exclude_dates": "Zakázané datumy (yyyy-mm-dd, yyyy-mm-dd, ...) - volitelné",
                     "move_country_holidays": "Státní svátky - země (volitelné)",
+                    "holiday_in_week_move": "Move to next day if holiday in week (optional)",
                     "prov": "Státní svátky - provincie (volitelné)",
                     "state": "Státní svátky - stát (volitelné)",
                     "observed": "Státní svátky - observed (volitelné)"
@@ -145,6 +146,7 @@
                     "include_dates": "Přidané datumy (yyyy-mm-dd, yyyy-mm-dd, ...) - volitelné",
                     "exclude_dates": "Zakázané datumy (yyyy-mm-dd, yyyy-mm-dd, ...) - volitelné",
                     "move_country_holidays": "Státní svátky - země (volitelné)",
+                    "holiday_in_week_move": "Move to next day if holiday in week (optional)",
                     "prov": "Státní svátky - provincie (volitelné)",
                     "state": "Státní svátky - stát (volitelné)",
                     "observed": "Státní svátky - observed (volitelné)"
