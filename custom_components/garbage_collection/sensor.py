@@ -253,7 +253,7 @@ class GarbageCollection(Entity):
         else:
             return bool(month <= self.__last_month or month >= self.__first_month)
 
-    def __monthly_candidate(self, day1: date) -> date:
+    async def __async_monthly_candidate(self, day1: date) -> date:
         if self.__monthly_force_week_numbers:
             for week_order_number in self._week_order_numbers:
                 candidate_date = nth_week_date(
@@ -337,11 +337,11 @@ class GarbageCollection(Entity):
         elif self.__frequency == "monthly":
             # Monthly
             if self.__period is None or self.__period == 1:
-                return self.__monthly_candidate(day1)
+                return await self.__async_monthly_candidate(day1)
             else:
-                candidate_date = self.__monthly_candidate(day1)
+                candidate_date = await self.__async_monthly_candidate(day1)
                 while (candidate_date.month - self.__first_month) % self.__period != 0:
-                    candidate_date = self.__monthly_candidate(
+                    candidate_date = await self.__async_monthly_candidate(
                         candidate_date + relativedelta(days=1)
                     )
                 return candidate_date
