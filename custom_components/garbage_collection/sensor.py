@@ -289,7 +289,7 @@ class GarbageCollection(Entity):
                 WEEKDAYS.index(self.__collection_days[0]),
             )
 
-    def find_candidate_date(self, day1: date) -> date:
+    async def async_find_candidate_date(self, day1: date) -> date:
         """Find the next possible date starting from day1,
         only based on calendar, not lookimg at include/exclude days"""
         week = day1.isocalendar()[1]
@@ -385,12 +385,12 @@ class GarbageCollection(Entity):
     def __skip_holiday(self, day: date) -> date:
         return day + relativedelta(days=1)
 
-    def get_next_date(self, day1: date) -> date:
+    async def async_get_next_date(self, day1: date) -> date:
         """Find the next date starting from day1."""
         first_day = day1
         i = 0
         while i < 365:
-            next_date = self.find_candidate_date(first_day)
+            next_date = await self.async_find_candidate_date(first_day)
             while next_date in self.__holidays:
                 _LOGGER.debug(
                     "(%s) Skipping public holiday on %s", self.__name, next_date
@@ -417,7 +417,7 @@ class GarbageCollection(Entity):
         _LOGGER.error("(%s) Cannot find any suitable date", self.__name)
         return None
 
-    def ready_for_update(self) -> bool:
+    async def async_ready_for_update(self) -> bool:
         """
         Skip the update if the sensor was updated today
         Except for the sensors with with next date today and after the expiration time
@@ -450,7 +450,7 @@ class GarbageCollection(Entity):
     async def async_update(self) -> None:
         """Get the latest data and updates the states."""
         now = dt_util.now()
-        if not self.ready_for_update():
+        if not await self.async_ready_for_update():
             # _LOGGER.debug(
             #     "(%s) Skipping the update, already did it today",
             #     self.__name)
@@ -461,12 +461,12 @@ class GarbageCollection(Entity):
         month = today.month
         self.__last_updated = now
         if self.date_inside(today):
-            next_date = self.get_next_date(today)
+            next_date = await self.async_get_next_date(today)
             if next_date is not None:
                 if not self.date_inside(next_date):
                     if self.__first_month <= self.__last_month:
                         next_year = date(year + 1, self.__first_month, 1)
-                        next_date = self.get_next_date(next_year)
+                        next_date = await self.async_get_next_date(next_year)
                         _LOGGER.debug(
                             "(%s) Did not find a date this year, "
                             "lookig at next year",
@@ -474,7 +474,7 @@ class GarbageCollection(Entity):
                         )
                     else:
                         next_year = date(year, self.__first_month, 1)
-                        next_date = self.get_next_date(next_year)
+                        next_date = await self.async_get_next_date(next_year)
                         _LOGGER.debug(
                             "(%s) Date not within the range, "
                             "searching again from %s",
@@ -484,13 +484,13 @@ class GarbageCollection(Entity):
         else:
             if self.__first_month <= self.__last_month and month > self.__last_month:
                 next_year = date(year + 1, self.__first_month, 1)
-                next_date = self.get_next_date(next_year)
+                next_date = await self.async_get_next_date(next_year)
                 _LOGGER.debug(
                     "(%s) Date outside range, lookig at next year", self.__name
                 )
             else:
                 next_year = date(year, self.__first_month, 1)
-                next_date = self.get_next_date(next_year)
+                next_date = await self.async_get_next_date(next_year)
                 _LOGGER.debug(
                     "(%s) Current date is outside of the range, "
                     "starting from first month",

@@ -77,7 +77,6 @@ class EntitiesCalendarData:
     def add_entity(self, entity_id):
         """Append entity ID to the calendar"""
         if entity_id not in self.entities:
-            _LOGGER.debug(f"Adding entity {entity_id}")
             self.entities.append(entity_id)
 
     def remove_entity(self, entity_id):
