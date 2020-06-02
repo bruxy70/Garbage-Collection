@@ -18,11 +18,8 @@ ATTR_DAYS = "days"
 
 from homeassistant.const import CONF_NAME, WEEKDAYS, CONF_ENTITIES
 from .const import (
-    ATTRIBUTION,
-    DEFAULT_NAME,
     DOMAIN,
     CONF_SENSOR,
-    CONF_ENABLED,
     CONF_FREQUENCY,
     CONF_ICON_NORMAL,
     CONF_ICON_TODAY,
@@ -36,7 +33,6 @@ from .const import (
     CONF_FIRST_MONTH,
     CONF_LAST_MONTH,
     CONF_COLLECTION_DAYS,
-    CONF_FORCE_WEEK_NUMBERS,
     CONF_WEEKDAY_ORDER_NUMBER,
     CONF_WEEK_ORDER_NUMBER,
     CONF_DATE,
@@ -49,9 +45,7 @@ from .const import (
     CONF_PERIOD,
     CONF_FIRST_WEEK,
     CONF_FIRST_DATE,
-    CONF_SENSORS,
     MONTH_OPTIONS,
-    FREQUENCY_OPTIONS,
     STATE_TODAY,
     STATE_TOMORROW,
 )
@@ -200,6 +194,16 @@ class GarbageCollection(Entity):
         self.__date_format = config.get(CONF_DATE_FORMAT, DEFAULT_DATE_FORMAT)
         self.__verbose_format = config.get(CONF_VERBOSE_FORMAT, DEFAULT_VERBOSE_FORMAT)
         self.__icon = self.__icon_normal
+
+    async def async_added_to_hass(self):
+        """"When sensor is added to hassio, add it to calendar"""
+        await super().async_added_to_hass()
+        self.hass.data[DOMAIN].add_entity(self.entity_id)
+
+    async def async_will_remove_from_hass(self):
+        """"When sensor is added to hassio, remove it from"""
+        await super().async_will_remove_from_hass()
+        self.hass.data[DOMAIN].remove_entity(self.entity_id)
 
     @property
     def unique_id(self):
