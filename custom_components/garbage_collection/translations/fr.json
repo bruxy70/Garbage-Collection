@@ -60,7 +60,7 @@
                     "include_dates": "Inclusion de dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optionel",
                     "exclude_dates": "Exclusion de dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optionel",
                     "move_country_holidays": "Move holidays to next day (optional)",
-                    "holiday_in_week_move": "Move to next day if holiday in week (optional)",
+                    "holiday_in_week_move": "Move to next day if holiday in week (optional)"
                 }
             }
         },
@@ -141,7 +141,7 @@
                     "include_dates": "Inclusion de dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optionel",
                     "exclude_dates": "Exclusion de dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optionel",
                     "move_country_holidays": "Move holidays to next day (optional)",
-                    "holiday_in_week_move": "Move to next day if holiday in week (optional)",
+                    "holiday_in_week_move": "Move to next day if holiday in week (optional)"
                 }
             }
         },
