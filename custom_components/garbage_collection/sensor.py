@@ -469,9 +469,8 @@ class GarbageCollection(Entity):
                 ready_for_update = True
         return ready_for_update
 
-    async def async_find_next_date(self, now: datetime) -> date:
+    async def async_find_next_date(self, today: date) -> date:
         """Get date within configured date range"""
-        today = now.date()
         year = today.year
         month = today.month
         if self.date_inside(today):
@@ -531,7 +530,7 @@ class GarbageCollection(Entity):
             return
         _LOGGER.debug("(%s) Calling update", self.__name)
         self.__last_updated = now
-        self.__next_date = self.async_find_next_date(now)
+        self.__next_date = await self.async_find_next_date(today)
         if self.__next_date is not None:
             self.__days = (self.__next_date - today).days
             next_date_txt = self.__next_date.strftime(self.__date_format)
