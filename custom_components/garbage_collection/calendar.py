@@ -90,6 +90,7 @@ class EntitiesCalendarData:
         for entity in self.entities:
             state_object = hass.states.get(entity)
             start = state_object.attributes.get("next_date")
+            # while start is not None and start >= start_date and start <= end_date:
             if start is not None and start >= start_date and start <= end_date:
                 event = {
                     "uid": entity,
@@ -99,6 +100,8 @@ class EntitiesCalendarData:
                     "allDay": True,
                 }
                 events.append(event)
+                
+                # start = xx.async_find_candidate_date(start+timedelta(days=1))
         return events
 
     @Throttle(MIN_TIME_BETWEEN_UPDATES)
