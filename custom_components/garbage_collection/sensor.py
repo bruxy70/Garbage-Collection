@@ -19,6 +19,7 @@ ATTR_DAYS = "days"
 from homeassistant.const import CONF_NAME, WEEKDAYS, CONF_ENTITIES
 from .const import (
     DOMAIN,
+    DEVICE_CLASS,
     CONF_SENSOR,
     CONF_FREQUENCY,
     CONF_ICON_NORMAL,
@@ -54,9 +55,7 @@ from .const import (
 _LOGGER = logging.getLogger(__name__)
 
 
-async def async_setup_platform(
-    hass, _ , async_add_entities, discovery_info=None
-):
+async def async_setup_platform(hass, _, async_add_entities, discovery_info=None):
     """Setup sensor platform."""
     async_add_entities([GarbageCollection(hass, discovery_info)], True)
 
@@ -248,6 +247,11 @@ class GarbageCollection(Entity):
         res["last_updated"] = self.__last_updated
         return res
 
+    @property
+    def device_class(self):
+        """Return the class of the sensor."""
+        return DEVICE_CLASS
+
     def date_inside(self, dat: date) -> bool:
         month = dat.month
         if self.__first_month <= self.__last_month:
@@ -401,7 +405,9 @@ class GarbageCollection(Entity):
                 while start_date <= end_date:
                     if start_date in self.__holidays:
                         _LOGGER.debug(
-                            "(%s) Move possible collection day, because public holiday in week on %s", self.__name, start_date
+                            "(%s) Move possible collection day, because public holiday in week on %s",
+                            self.__name,
+                            start_date,
                         )
                         next_date = self.__skip_holiday(next_date)
                         break

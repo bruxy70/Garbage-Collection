@@ -19,6 +19,7 @@ ATTR_DAYS = "days"
 
 # Device classes
 BINARY_SENSOR_DEVICE_CLASS = "connectivity"
+DEVICE_CLASS = "garbage_collection__schedule"
 
 # Configuration
 CONF_SENSOR = "sensor"
