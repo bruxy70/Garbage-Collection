@@ -5,9 +5,12 @@ from homeassistant.components.calendar import PLATFORM_SCHEMA, CalendarEventDevi
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.template import DATE_STR_FORMAT
 from homeassistant.util import Throttle, dt
+from .sensor import find_entity
 
 from .const import (
     DOMAIN,
+    CALENDAR_PLATFORM,
+    SENSOR_PLATFORM,
     CALENDAR_NAME,
 )
 
@@ -38,7 +41,7 @@ class GarbageCollectionCalendar(CalendarEventDevice):
     @property
     def event(self):
         """Return the next upcoming event."""
-        return self.hass.data[DOMAIN].event
+        return self.hass.data[DOMAIN][CALENDAR_PLATFORM].event
 
     @property
     def name(self):
@@ -47,16 +50,18 @@ class GarbageCollectionCalendar(CalendarEventDevice):
 
     async def async_update(self):
         """Update all calendars."""
-        self.hass.data[DOMAIN].update()
+        self.hass.data[DOMAIN][CALENDAR_PLATFORM].update()
 
     async def async_get_events(self, hass, start_date, end_date):
         """Get all events in a specific time frame."""
-        return await self.hass.data[DOMAIN].async_get_events(hass, start_date, end_date)
+        return await self.hass.data[DOMAIN][CALENDAR_PLATFORM].async_get_events(
+            hass, start_date, end_date
+        )
 
     @property
     def device_state_attributes(self):
         """Return the device state attributes."""
-        if self.hass.data[DOMAIN].event is None:
+        if self.hass.data[DOMAIN][CALENDAR_PLATFORM].event is None:
             # No tasks, we don't need to show anything.
             return None
 
@@ -84,24 +89,28 @@ class EntitiesCalendarData:
         if entity_id in self.entities:
             self.entities.remove(entity_id)
 
-    async def async_get_events(self, hass, start_date, end_date):
+    async def async_get_events(self, hass, start_datetime, end_datetime):
         """Get all tasks in a specific time frame."""
         events = []
+        start_date = start_datetime.date()
+        end_date = end_datetime.date()
         for entity in self.entities:
-            state_object = hass.states.get(entity)
-            start = state_object.attributes.get("next_date")
-            # while start is not None and start >= start_date and start <= end_date:
-            if start is not None and start >= start_date and start <= end_date:
+            garbage_collection = find_entity(hass, entity)
+            if garbage_collection is None:
+                break
+            start = await garbage_collection.async_find_next_date(start_date)
+            while start is not None and start >= start_date and start <= end_date:
                 event = {
                     "uid": entity,
-                    "summary": state_object.attributes.get("friendly_name"),
+                    "summary": garbage_collection.name,
                     "start": {"date": start.strftime("%Y-%m-%d"),},
                     "end": {"date": start.strftime("%Y-%m-%d"),},
                     "allDay": True,
                 }
                 events.append(event)
-                
-                # start = xx.async_find_candidate_date(start+timedelta(days=1))
+                start = await garbage_collection.async_find_next_date(
+                    start + timedelta(days=1)
+                )
         return events
 
     @Throttle(MIN_TIME_BETWEEN_UPDATES)

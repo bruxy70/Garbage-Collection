@@ -19,6 +19,8 @@ ATTR_DAYS = "days"
 from homeassistant.const import CONF_NAME, WEEKDAYS, CONF_ENTITIES
 from .const import (
     DOMAIN,
+    SENSOR_PLATFORM,
+    CALENDAR_PLATFORM,
     DEVICE_CLASS,
     CONF_SENSOR,
     CONF_FREQUENCY,
@@ -57,14 +59,16 @@ _LOGGER = logging.getLogger(__name__)
 
 async def async_setup_platform(hass, _, async_add_entities, discovery_info=None):
     """Setup sensor platform."""
-    async_add_entities([GarbageCollection(hass, discovery_info)], True)
+    entity = GarbageCollection(hass, discovery_info)
+    entity.register(hass)
+    async_add_entities([entity], True)
 
 
 async def async_setup_entry(hass, config_entry, async_add_devices):
     """Setup sensor platform."""
-    async_add_devices(
-        [GarbageCollection(hass, config_entry.data, config_entry.title)], True
-    )
+    entity = GarbageCollection(hass, config_entry.data, config_entry.title)
+    entity.register(hass)
+    async_add_devices([entity], True)
 
 
 def nth_week_date(n: int, date_of_month: date, collection_day: int) -> date:
@@ -196,10 +200,18 @@ class GarbageCollection(Entity):
         self.__verbose_format = config.get(CONF_VERBOSE_FORMAT, DEFAULT_VERBOSE_FORMAT)
         self.__icon = self.__icon_normal
 
+    def register(self, hass):
+        """Append entity to hass.data"""
+        if DOMAIN not in hass.data:
+            hass.data[DOMAIN] = {}
+        if SENSOR_PLATFORM not in hass.data[DOMAIN]:
+            hass.data[DOMAIN][SENSOR_PLATFORM] = []
+        hass.data[DOMAIN][SENSOR_PLATFORM].append(self)
+
     async def async_added_to_hass(self):
         """"When sensor is added to hassio, add it to calendar"""
         await super().async_added_to_hass()
-        self.hass.data[DOMAIN].add_entity(self.entity_id)
+        self.hass.data[DOMAIN][CALENDAR_PLATFORM].add_entity(self.entity_id)
 
     async def async_will_remove_from_hass(self):
         """"When sensor is added to hassio, remove it from"""
@@ -369,10 +381,12 @@ class GarbageCollection(Entity):
                 _LOGGER.error("(%s) Please add entities for the group.", self.__name)
                 return None
             candidate_date = None
-            for entity in self.__entities:
-                d = self.hass.states.get(entity).attributes.get(ATTR_NEXT_DATE).date()
-                if candidate_date is None or d < candidate_date:
-                    candidate_date = d
+            for entity_id in self.__entities:
+                entity = find_entity(self.hass, entity_id)
+                if entity is not None:
+                    d = await entity.async_find_next_date(day1)
+                    if candidate_date is None or d < candidate_date:
+                        candidate_date = d
             return candidate_date
         else:
             _LOGGER.debug(f"({self.__name}) Unknown frequency {self.__frequency}")
@@ -564,3 +578,13 @@ class GarbageCollection(Entity):
                     self.__icon = self.__icon_tomorrow
         else:
             self.__days = None
+
+
+def find_entity(hass, entity_id) -> GarbageCollection:
+    """Find entity by entity_id"""
+    if SENSOR_PLATFORM not in hass.data[DOMAIN]:
+        return None
+    items = list(
+        filter(lambda x: x.entity_id == entity_id, hass.data[DOMAIN][SENSOR_PLATFORM])
+    )
+    return None if len(items) == 0 else items[0]

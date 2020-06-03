@@ -38,7 +38,9 @@ async def async_setup(hass, config):
     """Set up this component using YAML."""
     # Create calendar
     if DOMAIN not in hass.data:
-        hass.data[DOMAIN] = EntitiesCalendarData(hass)
+        hass.data[DOMAIN] = {}
+    if CALENDAR_PLATFORM not in hass.data[DOMAIN]:
+        hass.data[DOMAIN][CALENDAR_PLATFORM] = EntitiesCalendarData(hass)
         _LOGGER.debug("Creating calendar")
         hass.async_create_task(
             discovery.async_load_platform(
