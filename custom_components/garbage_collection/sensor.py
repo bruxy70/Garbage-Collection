@@ -55,8 +55,8 @@ _LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_platform(
-    hass, config, async_add_entities, discovery_info=None
-):  # pylint: disable=unused-argument
+    hass, _ , async_add_entities, discovery_info=None
+):
     """Setup sensor platform."""
     async_add_entities([GarbageCollection(hass, discovery_info)], True)
 
@@ -395,10 +395,10 @@ class GarbageCollection(Entity):
             next_date = await self.async_find_candidate_date(first_day)
 
             if bool(self.__holiday_in_week_move):
-               start_date = next_date - timedelta(days=next_date.weekday())
-               end_date = start_date + timedelta(days=6)
-               delta = timedelta(days=1)
-               while start_date <= end_date:
+                start_date = next_date - timedelta(days=next_date.weekday())
+                end_date = start_date + timedelta(days=6)
+                delta = timedelta(days=1)
+                while start_date <= end_date:
                     if start_date in self.__holidays:
                         _LOGGER.debug(
                             "(%s) Move possible collection day, because public holiday in week on %s", self.__name, start_date
