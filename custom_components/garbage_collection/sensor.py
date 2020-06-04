@@ -216,7 +216,7 @@ class GarbageCollection(Entity):
     async def async_will_remove_from_hass(self):
         """"When sensor is added to hassio, remove it from"""
         await super().async_will_remove_from_hass()
-        self.hass.data[DOMAIN].remove_entity(self.entity_id)
+        self.hass.data[DOMAIN][CALENDAR_PLATFORM].remove_entity(self.entity_id)
 
     @property
     def unique_id(self):
