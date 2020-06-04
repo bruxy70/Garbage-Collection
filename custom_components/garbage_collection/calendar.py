@@ -97,7 +97,7 @@ class EntitiesCalendarData:
         for entity in self.entities:
             garbage_collection = find_entity(hass, entity)
             if garbage_collection is None or garbage_collection.hidden:
-                break
+                continue
             await garbage_collection.async_load_holidays(start_date)
             start = await garbage_collection.async_find_next_date(start_date)
             while start is not None and start >= start_date and start <= end_date:
