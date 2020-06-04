@@ -5,7 +5,8 @@ from homeassistant.components.calendar import PLATFORM_SCHEMA, CalendarEventDevi
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.template import DATE_STR_FORMAT
 from homeassistant.util import Throttle, dt
-from .sensor import find_entity
+
+# from .sensor import find_entity
 
 from .const import (
     DOMAIN,
@@ -95,9 +96,14 @@ class EntitiesCalendarData:
         start_date = start_datetime.date()
         end_date = end_datetime.date()
         for entity in self.entities:
-            garbage_collection = find_entity(hass, entity)
-            if garbage_collection is None or garbage_collection.hidden:
+            # garbage_collection = find_entity(hass, entity)
+            if (
+                SENSOR_PLATFORM not in hass.data[DOMAIN]
+                or entity not in hass.data[DOMAIN][SENSOR_PLATFORM]
+                or hass.data[DOMAIN][SENSOR_PLATFORM][entity].hidden
+            ):
                 continue
+            garbage_collection = hass.data[DOMAIN][SENSOR_PLATFORM][entity]
             await garbage_collection.async_load_holidays(start_date)
             start = await garbage_collection.async_find_next_date(start_date)
             while start is not None and start >= start_date and start <= end_date:

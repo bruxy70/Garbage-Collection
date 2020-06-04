@@ -59,16 +59,14 @@ _LOGGER = logging.getLogger(__name__)
 
 async def async_setup_platform(hass, _, async_add_entities, discovery_info=None):
     """Setup sensor platform."""
-    entity = GarbageCollection(hass, discovery_info)
-    entity.register(hass)
-    async_add_entities([entity], True)
+    async_add_entities([GarbageCollection(hass, discovery_info)], True)
 
 
 async def async_setup_entry(hass, config_entry, async_add_devices):
     """Setup sensor platform."""
-    entity = GarbageCollection(hass, config_entry.data, config_entry.title)
-    entity.register(hass)
-    async_add_devices([entity], True)
+    async_add_devices(
+        [GarbageCollection(hass, config_entry.data, config_entry.title)], True
+    )
 
 
 def nth_week_date(n: int, date_of_month: date, collection_day: int) -> date:
@@ -170,14 +168,6 @@ class GarbageCollection(Entity):
         self.__verbose_format = config.get(CONF_VERBOSE_FORMAT, DEFAULT_VERBOSE_FORMAT)
         self.__icon = self.__icon_normal
 
-    def register(self, hass):
-        """Append entity to hass.data"""
-        if DOMAIN not in hass.data:
-            hass.data[DOMAIN] = {}
-        if SENSOR_PLATFORM not in hass.data[DOMAIN]:
-            hass.data[DOMAIN][SENSOR_PLATFORM] = []
-        hass.data[DOMAIN][SENSOR_PLATFORM].append(self)
-        
     async def async_load_holidays(self, today: date) -> None:
         """Load the holidays from from a date"""
         holidays_log = ""
@@ -198,7 +188,11 @@ class GarbageCollection(Entity):
                 kwargs["state"] = self.__state
             if self.__prov is not None and self.__prov != "":
                 kwargs["prov"] = self.__prov
-            if self.__observed is not None and type(self.__observed) == bool and self.__observed == False:
+            if (
+                self.__observed is not None
+                and type(self.__observed) == bool
+                and self.__observed == False
+            ):
                 kwargs["observed"] = self.__observed
             hol = holidays.CountryHoliday(self.__country_holidays, **kwargs).items()
             try:
@@ -208,19 +202,26 @@ class GarbageCollection(Entity):
                         holidays_log += f"\n  {d}: {name}"
             except KeyError:
                 _LOGGER.error(
-                    "(%s) Invalid country code (%s)", self.__name, self.__country_holidays
+                    "(%s) Invalid country code (%s)",
+                    self.__name,
+                    self.__country_holidays,
                 )
             _LOGGER.debug("(%s) Found these holidays: %s", self.__name, holidays_log)
-    
 
     async def async_added_to_hass(self):
         """"When sensor is added to hassio, add it to calendar"""
         await super().async_added_to_hass()
+        # if DOMAIN not in self.hass.data:
+        #     self.hass.data[DOMAIN] = {}
+        if SENSOR_PLATFORM not in self.hass.data[DOMAIN]:
+            self.hass.data[DOMAIN][SENSOR_PLATFORM] = {}
+        self.hass.data[DOMAIN][SENSOR_PLATFORM][self.entity_id] = self
         self.hass.data[DOMAIN][CALENDAR_PLATFORM].add_entity(self.entity_id)
 
     async def async_will_remove_from_hass(self):
         """"When sensor is added to hassio, remove it from"""
         await super().async_will_remove_from_hass()
+        del self.hass.data[DOMAIN][SENSOR_PLATFORM][self.entity_id]
         self.hass.data[DOMAIN][CALENDAR_PLATFORM].remove_entity(self.entity_id)
 
     @property
@@ -392,8 +393,11 @@ class GarbageCollection(Entity):
                 return None
             candidate_date = None
             for entity_id in self.__entities:
-                entity = find_entity(self.hass, entity_id)
-                if entity is not None:
+                if (
+                    SENSOR_PLATFORM in self.hass.data[DOMAIN]
+                    and entity_id in self.hass.data[DOMAIN][SENSOR_PLATFORM]
+                ):
+                    entity = self.hass.data[DOMAIN][SENSOR_PLATFORM][entity_id]
                     d = await entity.async_find_next_date(day1)
                     if candidate_date is None or d < candidate_date:
                         candidate_date = d
@@ -589,13 +593,3 @@ class GarbageCollection(Entity):
                     self.__icon = self.__icon_tomorrow
         else:
             self.__days = None
-
-
-def find_entity(hass, entity_id) -> GarbageCollection:
-    """Find entity by entity_id"""
-    if SENSOR_PLATFORM not in hass.data[DOMAIN]:
-        return None
-    items = list(
-        filter(lambda x: x.entity_id == entity_id, hass.data[DOMAIN][SENSOR_PLATFORM])
-    )
-    return None if len(items) == 0 else items[0]
