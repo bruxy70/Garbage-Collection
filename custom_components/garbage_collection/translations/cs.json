@@ -6,6 +6,7 @@
                 "description": "Zadej jméno sensoru a nastav parametry. Více na https://github.com/bruxy70/Garbage-Collection",
                 "data": {
                     "name": "Friendly name",
+                    "hidden": "Skrýt v kalendáři",
                     "frequency": "Frekvence",
                     "icon_normal": "Ikona (mdi:trash-can)",
                     "icon_tomorrow": "Ikona svoz zítra (mdi:delete-restore)",
@@ -91,6 +92,7 @@
                 "title": "Garbage Collection - Konfigurace",
                 "description": "Zadej jméno sensoru a nastav parametry. Více na https://github.com/bruxy70/Garbage-Collection",
                 "data": {
+                    "hidden": "Skrýt v kalendáři",
                     "frequency": "Frekvence",
                     "icon_normal": "Ikona (mdi:trash-can)",
                     "icon_tomorrow": "Ikona svoz zítra (mdi:delete-restore)",

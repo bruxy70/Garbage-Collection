@@ -6,6 +6,7 @@
                 "description": "Immetti il nome del sensore e configura i suoi parametri. Maggiori informazioni su https://github.com/bruxy70/Garbage-Collection",
                 "data": {
                     "name": "Nome personalizzato",
+                    "hidden": "Nascondi nel calendario",
                     "frequency": "Frequenza",
                     "icon_normal": "Icona (mdi:trash-can)",
                     "icon_tomorrow": "Icona raccolta domani (mdi:delete-restore)",
@@ -87,6 +88,7 @@
                 "title": "Raccolta Differenziata - Frequenza di raccolta",
                 "description": "Cambia i parametri del sensore. Maggiori informazioni su https://github.com/bruxy70/Garbage-Collection",
                 "data": {
+                    "hidden": "Nascondi nel calendario",
                     "frequency": "Frequenza",
                     "icon_normal": "Icona (mdi:trash-can)",
                     "icon_tomorrow": "Icona raccolta domani (mdi:delete-restore)",

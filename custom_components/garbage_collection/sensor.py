@@ -16,7 +16,7 @@ THROTTLE_INTERVAL = timedelta(seconds=60)
 ATTR_NEXT_DATE = "next_date"
 ATTR_DAYS = "days"
 
-from homeassistant.const import CONF_NAME, WEEKDAYS, CONF_ENTITIES
+from homeassistant.const import CONF_NAME, WEEKDAYS, CONF_ENTITIES, ATTR_HIDDEN
 from .const import (
     DOMAIN,
     SENSOR_PLATFORM,
@@ -123,6 +123,7 @@ class GarbageCollection(Entity):
     def __init__(self, hass, config, title=None):
         self.config = config
         self.__name = title if title is not None else config.get(CONF_NAME)
+        self.__hidden = config.get(ATTR_HIDDEN, False)
         self.__frequency = config.get(CONF_FREQUENCY)
         self.__collection_days = config.get(CONF_COLLECTION_DAYS)
         self.__holiday_in_week_move = config.get(CONF_HOLIDAY_IN_WEEK_MOVE)
@@ -143,42 +144,11 @@ class GarbageCollection(Entity):
         )
         self.__include_dates = to_dates(config.get(CONF_INCLUDE_DATES, []))
         self.__exclude_dates = to_dates(config.get(CONF_EXCLUDE_DATES, []))
-        country_holidays = config.get(CONF_MOVE_COUNTRY_HOLIDAYS)
+        self.__country_holidays = config.get(CONF_MOVE_COUNTRY_HOLIDAYS)
+        self.__prov = config.get(CONF_PROV)
+        self.__state = config.get(CONF_STATE)
+        self.__observed = config.get(CONF_OBSERVED, True)
         self.__holidays = []
-        holidays_log = ""
-        if country_holidays is not None and country_holidays != "":
-            today = dt_util.now().date()
-            this_year = today.year
-            years = [this_year, this_year + 1]
-            prov = config.get(CONF_PROV)
-            state = config.get(CONF_STATE)
-            observed = config.get(CONF_OBSERVED, True)
-            _LOGGER.debug(
-                "(%s) Country Holidays with parameters: country: %s, prov: %s, state: %s, observed: %s",
-                self.__name,
-                country_holidays,
-                prov,
-                state,
-                observed,
-            )
-            kwargs = {"years": years}
-            if state is not None and state != "":
-                kwargs["state"] = state
-            if prov is not None and prov != "":
-                kwargs["prov"] = prov
-            if observed is not None and type(observed) == bool and observed == False:
-                kwargs["observed"] = observed
-            hol = holidays.CountryHoliday(country_holidays, **kwargs).items()
-            try:
-                for date, name in hol:
-                    if date >= today:
-                        self.__holidays.append(date)
-                        holidays_log += f"\n  {date}: {name}"
-            except KeyError:
-                _LOGGER.error(
-                    "(%s) Invalid country code (%s)", self.__name, country_holidays
-                )
-            _LOGGER.debug("(%s) Found these holidays: %s", self.__name, holidays_log)
         self.__period = config.get(CONF_PERIOD)
         self.__first_week = config.get(CONF_FIRST_WEEK)
         self.__first_date = to_date(config.get(CONF_FIRST_DATE))
@@ -207,6 +177,41 @@ class GarbageCollection(Entity):
         if SENSOR_PLATFORM not in hass.data[DOMAIN]:
             hass.data[DOMAIN][SENSOR_PLATFORM] = []
         hass.data[DOMAIN][SENSOR_PLATFORM].append(self)
+        
+    async def async_load_holidays(self, today: date) -> None:
+        """Load the holidays from from a date"""
+        holidays_log = ""
+        self.__holidays.clear()
+        if self.__country_holidays is not None and self.__country_holidays != "":
+            this_year = today.year
+            years = [this_year, this_year + 1]
+            _LOGGER.debug(
+                "(%s) Country Holidays with parameters: country: %s, prov: %s, state: %s, observed: %s",
+                self.__name,
+                self.__country_holidays,
+                self.__prov,
+                self.__state,
+                self.__observed,
+            )
+            kwargs = {"years": years}
+            if self.__state is not None and self.__state != "":
+                kwargs["state"] = self.__state
+            if self.__prov is not None and self.__prov != "":
+                kwargs["prov"] = self.__prov
+            if self.__observed is not None and type(self.__observed) == bool and self.__observed == False:
+                kwargs["observed"] = self.__observed
+            hol = holidays.CountryHoliday(self.__country_holidays, **kwargs).items()
+            try:
+                for d, name in hol:
+                    if d >= today:
+                        self.__holidays.append(d)
+                        holidays_log += f"\n  {d}: {name}"
+            except KeyError:
+                _LOGGER.error(
+                    "(%s) Invalid country code (%s)", self.__name, self.__country_holidays
+                )
+            _LOGGER.debug("(%s) Found these holidays: %s", self.__name, holidays_log)
+    
 
     async def async_added_to_hass(self):
         """"When sensor is added to hassio, add it to calendar"""
@@ -235,6 +240,11 @@ class GarbageCollection(Entity):
     def name(self):
         """Return the name of the sensor."""
         return self.__name
+
+    @property
+    def hidden(self):
+        """Return the hidden attribute."""
+        return self.__hidden
 
     @property
     def state(self):
@@ -543,6 +553,7 @@ class GarbageCollection(Entity):
             #     self.__name)
             return
         _LOGGER.debug("(%s) Calling update", self.__name)
+        await self.async_load_holidays(today)
         self.__last_updated = now
         self.__next_date = await self.async_find_next_date(today)
         if self.__next_date is not None:

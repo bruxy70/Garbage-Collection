@@ -6,6 +6,7 @@
                 "description": "Wprowadź nazwę dla sensora i zkonfiguruj jego parametry. Więcej informacji na stronie https://github.com/bruxy70/Garbage-Collection",
                 "data": {
                     "name": "Przyjazna nazwa",
+                    "hidden": "Ukryj w kalendarzu",
                     "frequency": "Częstotliwość",
                     "icon_normal": "Ikona (mdi:trash-can) - opcjonalnie",
                     "icon_tomorrow": "Ikona wywozu jutro (mdi:delete-restore) - opcjonalnie",
@@ -90,6 +91,7 @@
                 "title": "Wywóz Śmieci - Częstotliwośc wywozu",
                 "description": "Zmień parametry sensora. Więcej informacji tutaj https://github.com/bruxy70/Garbage-Collection",
                 "data": {
+                    "hidden": "Ukryj w kalendarzu",
                     "frequency": "Częstotliwość",
                     "icon_normal": "Ikona (mdi:trash-can) - opcjonalnie",
                     "icon_tomorrow": "Ikona wywozu jutro (mdi:delete-restore) - opcjonalnie",

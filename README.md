@@ -110,6 +110,7 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 |:----------|----------|------------
 | `name` | Yes | Sensor friendly name
 | `frequency` | Yes | `"weekly"`, `"even-weeks"`, `"odd-weeks"`, `"every-n-weeks"`, `"every-n-days"`, `"monthly"`, `"annual"` or `"group"`
+| `hide` | No | Hide in calendar (useful for sensors that are used in groups)<br/>**Default**: `False`
 | `icon_normal` | No | Default icon **Default**:  `mdi:trash-can`
 | `icon_today` | No | Icon if the collection is today **Default**: `mdi:delete-restore`
 | `icon_tomorrow` | No | Icon if the collection is tomorrow **Default**: `mdi:delete-circle`
@@ -128,7 +129,7 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 | `exclude_dates` | No | List of dates with no collection (using international date format `'yyyy-mm-dd'`. 
 | `include_dates` | No | List of extra collection (using international date format `'yyyy-mm-dd'`.
 | `move_country_holidays` | No | Country holidays - the country code (see [holidays](https://github.com/dr-prodigy/python-holidays) for the list of valid country codes).<br/>Automatically move garbage collection on public holidays to the following day.<br/>*Example:* `US` 
-| `holiday_in_week_move` | No | Move garbage collection to the following day if a holiday is in week.<br/>**Default**: `"false"`
+| `holiday_in_week_move` | No | Move garbage collection to the following day if a holiday is in week.<br/>**Default**: `false`
 | `prov` | No | Country holidays - province (see [holidays](https://github.com/dr-prodigy/python-holidays) ).
 | `state` | No | Country holidays - state (see [holidays](https://github.com/dr-prodigy/python-holidays) ).
 | `observed` | No | Country holidays - observed (see [holidays](https://github.com/dr-prodigy/python-holidays) ).

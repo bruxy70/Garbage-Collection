@@ -2,7 +2,7 @@ import voluptuous as vol
 from .config_singularity import config_singularity
 from datetime import datetime, date
 import homeassistant.helpers.config_validation as cv
-from homeassistant.const import CONF_NAME, WEEKDAYS, CONF_ENTITIES
+from homeassistant.const import CONF_NAME, WEEKDAYS, CONF_ENTITIES, ATTR_HIDDEN
 
 """Constants for garbage_collection."""
 # Base component constants
@@ -211,6 +211,13 @@ class configuration(config_singularity):
             "method": vol.Required,
             "type": str,
             "validator": cv.string,
+        },
+        ATTR_HIDDEN: {
+            "step": 1,
+            "method": vol.Optional,
+            "default": False,
+            "type": bool,
+            "validator": cv.boolean,
         },
         CONF_FREQUENCY: {
             "step": 1,
