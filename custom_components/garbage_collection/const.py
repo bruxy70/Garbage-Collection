@@ -8,7 +8,7 @@ from homeassistant.const import CONF_NAME, WEEKDAYS, CONF_ENTITIES, ATTR_HIDDEN
 # Base component constants
 DOMAIN = "garbage_collection"
 CALENDAR_NAME = "Garbage Collection Calendar"
-VERSION = "3.00-beta4"
+VERSION = "3.00"
 SENSOR_PLATFORM = "sensor"
 CALENDAR_PLATFORM = "calendar"
 ISSUE_URL = "https://github.com/bruxy70/Garbage-Collection/issues"
