@@ -7,7 +7,7 @@ from homeassistant.const import CONF_NAME, WEEKDAYS, CONF_ENTITIES, ATTR_HIDDEN
 """Constants for garbage_collection."""
 # Base component constants
 DOMAIN = "garbage_collection"
-CALENDAR_NAME = "Garbage Collection Calendar"
+CALENDAR_NAME = "Garbage Collection"
 VERSION = "3.00"
 SENSOR_PLATFORM = "sensor"
 CALENDAR_PLATFORM = "calendar"
