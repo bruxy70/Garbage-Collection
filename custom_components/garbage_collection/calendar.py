@@ -93,13 +93,14 @@ class EntitiesCalendarData:
     async def async_get_events(self, hass, start_datetime, end_datetime):
         """Get all tasks in a specific time frame."""
         events = []
+        if SENSOR_PLATFORM not in hass.data[DOMAIN]:
+            return events
         start_date = start_datetime.date()
         end_date = end_datetime.date()
         for entity in self.entities:
             # garbage_collection = find_entity(hass, entity)
             if (
-                SENSOR_PLATFORM not in hass.data[DOMAIN]
-                or entity not in hass.data[DOMAIN][SENSOR_PLATFORM]
+                entity not in hass.data[DOMAIN][SENSOR_PLATFORM]
                 or hass.data[DOMAIN][SENSOR_PLATFORM][entity].hidden
             ):
                 continue

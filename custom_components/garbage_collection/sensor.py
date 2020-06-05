@@ -423,7 +423,7 @@ class GarbageCollection(Entity):
         """Find the next date starting from day1."""
         first_day = day1
         i = 0
-        while i < 365:
+        while True:
             next_date = await self.__async_find_candidate_date(first_day)
 
             if bool(self.__holiday_in_week_move):
@@ -464,8 +464,9 @@ class GarbageCollection(Entity):
                 return next_date
             first_day = next_date + relativedelta(days=1)
             i += 1
-        _LOGGER.error("(%s) Cannot find any suitable date", self.__name)
-        return None
+            if i > 365:
+                _LOGGER.error("(%s) Cannot find any suitable date", self.__name)
+                return None
 
     async def __async_ready_for_update(self) -> bool:
         """
