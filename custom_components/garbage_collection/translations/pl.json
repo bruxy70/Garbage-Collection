@@ -6,6 +6,7 @@
                 "description": "Wprowadź nazwę dla sensora i zkonfiguruj jego parametry. Więcej informacji na stronie https://github.com/bruxy70/Garbage-Collection",
                 "data": {
                     "name": "Przyjazna nazwa",
+                    "hidden": "Ukryj w kalendarzu",
                     "frequency": "Częstotliwość",
                     "icon_normal": "Ikona (mdi:trash-can) - opcjonalnie",
                     "icon_tomorrow": "Ikona wywozu jutro (mdi:delete-restore) - opcjonalnie",
@@ -60,6 +61,7 @@
                     "include_dates": "Dołącz daty (yyyy-mm-dd, yyyy-mm-dd, ...) - opcjonalnie",
                     "exclude_dates": "Wyłącz daty (yyyy-mm-dd, yyyy-mm-dd, ...) - opcjonalnie",
                     "move_country_holidays": "Przesuń świąteczne dni na kolejny dzień (opcjonalnie)",
+                    "holiday_in_week_move": "Move to next day if holiday in week (optional)",
                     "prov": "Święta państwowe - prowincje (opcjonalnie) - BRAK dla PL patrz https://github.com/dr-prodigy/python-holidays",
                     "state": "Święta państwowe - stan (opcjonalnie)",
                     "observed": "Święta państwowe - przesunięte obchody (opcjonalnie)"
@@ -89,6 +91,7 @@
                 "title": "Wywóz Śmieci - Częstotliwośc wywozu",
                 "description": "Zmień parametry sensora. Więcej informacji tutaj https://github.com/bruxy70/Garbage-Collection",
                 "data": {
+                    "hidden": "Ukryj w kalendarzu",
                     "frequency": "Częstotliwość",
                     "icon_normal": "Ikona (mdi:trash-can) - opcjonalnie",
                     "icon_tomorrow": "Ikona wywozu jutro (mdi:delete-restore) - opcjonalnie",
@@ -143,6 +146,7 @@
                     "include_dates": "Dołącz daty (yyyy-mm-dd, yyyy-mm-dd, ...) - opcjonalnie",
                     "exclude_dates": "Wyłącz daty (yyyy-mm-dd, yyyy-mm-dd, ...) - opcjonalnie",
                     "move_country_holidays": "Przesuń państwowe święta na kolejny dzień (opcjonalnie)",
+                    "holiday_in_week_move": "Move to next day if holiday in week (optional)",
                     "prov": "Przesuń święta na kolejny dzień (opcjonalnie)",
                     "state": "Święta państwowe - stan (opcjonalnie)",
                     "observed": "Święta państwowe - przesunięte obchody (opcjonalnie)"

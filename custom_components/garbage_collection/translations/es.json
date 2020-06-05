@@ -6,6 +6,7 @@
                 "description": "Ingrese el nombre del sensor y configure los parámetros del sensor. Más información en https://github.com/bruxy70/Garbage-Collection",
                 "data": {
                     "name": "Nombre amigable",
+                    "hidden": "Esconderse en el calendario",
                     "frequency": "Frequencia",
                     "icon_normal": "Icono (mdi:trash-can)",
                     "icon_tomorrow": "Icono de recoleccion para mañana (mdi:delete-restore)",
@@ -60,6 +61,7 @@
                     "include_dates": "Incluir fechas (yyyy-mm-dd, yyyy-mm-dd, ...) - opcional",
                     "exclude_dates": "Excluir fechas (yyyy-mm-dd, yyyy-mm-dd, ...) - opcional",
                     "move_country_holidays": "Mover vacaciones al día siguiente (opcional)",
+                    "holiday_in_week_move": "Move to next day if holiday in week (optional)",
                     "prov": "Días festivos - prov (opcional)",
                     "state": "Días festivos - estado (opcional)",
                     "observed": "Días festivos - observado (opcional)"
@@ -89,6 +91,7 @@
                 "title": "Recolección de basura - Frecuencia de recogida",
                 "description": "Cambiar los parámetros del sensor. Más información en https://github.com/bruxy70/Garbage-Collection",
                 "data": {
+                    "hidden": "Esconderse en el calendario",
                     "frequency": "Frequencia",
                     "icon_normal": "Icono (mdi:trash-can)",
                     "icon_tomorrow": "Icono de recoleccion para mañana (mdi:delete-restore)",
@@ -143,6 +146,7 @@
                     "include_dates": "Incluir fechas (yyyy-mm-dd, yyyy-mm-dd, ...) - opcional",
                     "exclude_dates": "Excluir fechas (yyyy-mm-dd, yyyy-mm-dd, ...) - opcional",
                     "move_country_holidays": "Mover vacaciones al día siguiente (opcional)",
+                    "holiday_in_week_move": "Move to next day if holiday in week (optional)",
                     "prov": "Días festivos - prov (opcional)",
                     "state": "Días festivos - estado (opcional)",
                     "observed": "Días festivos - observado (opcional)"

@@ -6,6 +6,7 @@
                 "description": "Définir le nom du capteur et configurer les paramètres du capteur. Plus d'info sur https://github.com/bruxy70/Garbage-Collection",
                 "data": {
                     "name": "Friendly name",
+                    "hidden": "Masquer dans le calendrier",
                     "frequency": "Fréquence",
                     "icon_normal": "Icone (mdi:trash-can)",
                     "icon_tomorrow": "Icone pour collecte à jour J+1 (mdi:delete-restore)",
@@ -59,7 +60,8 @@
                     "week_order_number_5": "5ème semaine du mois",
                     "include_dates": "Inclusion de dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optionel",
                     "exclude_dates": "Exclusion de dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optionel",
-                    "move_country_holidays": "Move holidays to next day (optional)"
+                    "move_country_holidays": "Move holidays to next day (optional)",
+                    "holiday_in_week_move": "Move to next day if holiday in week (optional)"
                 }
             }
         },
@@ -87,6 +89,7 @@
                 "description": "Modifier les paramètres des capteur. Plus d'infos sur https://github.com/bruxy70/Garbage-Collection",
                 "data": {
                     "frequency": "Fréquence",
+                    "hidden": "Masquer dans le calendrier",
                     "icon_normal": "Icone (mdi:trash-can)",
                     "icon_tomorrow": "Icone pour collecte à jour J+1 (mdi:delete-restore)",
                     "icon_today": "Icone pour collecte au jour J (mdi:delete-circle)",
@@ -139,7 +142,8 @@
                     "week_order_number_5": "5ème semaine du mois",
                     "include_dates": "Inclusion de dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optionel",
                     "exclude_dates": "Exclusion de dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optionel",
-                    "move_country_holidays": "Move holidays to next day (optional)"
+                    "move_country_holidays": "Move holidays to next day (optional)",
+                    "holiday_in_week_move": "Move to next day if holiday in week (optional)"
                 }
             }
         },

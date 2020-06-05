@@ -416,9 +416,7 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         """
         C O N F I G U R A T I O N   S T E P   2   ( O T H E R   T H A N   A N N U A L   O R   G R O U P )
         """
-        next_step = self.shared_class.step3_detail(
-            user_input, self.config_entry.data
-        )
+        next_step = self.shared_class.step3_detail(user_input, self.config_entry.data)
         if next_step:
             return await self.async_step_final()
         else:

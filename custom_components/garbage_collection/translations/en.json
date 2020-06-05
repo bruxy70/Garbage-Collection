@@ -6,6 +6,7 @@
                 "description": "Enter the sensor name and configure sensor parameters. More info on https://github.com/bruxy70/Garbage-Collection",
                 "data": {
                     "name": "Friendly name",
+                    "hidden": "Hide in calendar",
                     "frequency": "Frequency",
                     "icon_normal": "Icon (mdi:trash-can) - optional",
                     "icon_tomorrow": "Icon collection tomorrow (mdi:delete-restore) - optional",
@@ -60,6 +61,7 @@
                     "include_dates": "Include dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optional",
                     "exclude_dates": "Exclude dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optional",
                     "move_country_holidays": "Move holidays to next day (optional)",
+                    "holiday_in_week_move": "Move to next day if holiday in week (optional)",
                     "prov": "Country holidays - prov (optional)",
                     "state": "Country holidays - state (optional)",
                     "observed": "Country holidays - observed (optional)"
@@ -89,6 +91,7 @@
                 "title": "Garbage Collection - Collection frequency",
                 "description": "Change sensor parameters. More info on https://github.com/bruxy70/Garbage-Collection",
                 "data": {
+                    "hidden": "Hide in calendar",
                     "frequency": "Frequency",
                     "icon_normal": "Icon (mdi:trash-can) - optional",
                     "icon_tomorrow": "Icon collection tomorrow (mdi:delete-restore) - optional",
@@ -143,6 +146,7 @@
                     "include_dates": "Include dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optional",
                     "exclude_dates": "Exclude dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optional",
                     "move_country_holidays": "Move holidays to next day (optional)",
+                    "holiday_in_week_move": "Move to next day if holiday in week (optional)",
                     "prov": "Country holidays - prov (optional)",
                     "state": "Country holidays - state (optional)",
                     "observed": "Country holidays - observed (optional)"
