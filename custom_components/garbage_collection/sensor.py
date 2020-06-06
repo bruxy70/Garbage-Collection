@@ -274,6 +274,9 @@ class GarbageCollection(Entity):
     def device_class(self):
         """Return the class of the sensor."""
         return DEVICE_CLASS
+    
+    def __repr__(self):
+        return f"Garbagecollection[ name: {self.__name}, entity_id: {self.entity_id}, state: {self.state}\nconfig: {self.config}]"
 
     def date_inside(self, dat: date) -> bool:
         month = dat.month
