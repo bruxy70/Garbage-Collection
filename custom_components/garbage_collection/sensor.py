@@ -1,5 +1,6 @@
 """Sensor platform for garbage_collection."""
 from homeassistant.helpers.entity import Entity
+from homeassistant.helpers.discovery import async_load_platform
 import homeassistant.util.dt as dt_util
 import holidays
 import logging
@@ -8,6 +9,8 @@ from datetime import datetime, date, time, timedelta
 from dateutil.relativedelta import relativedelta
 from homeassistant.core import HomeAssistant, State
 from typing import List, Any
+from .calendar import EntitiesCalendarData
+
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -21,6 +24,7 @@ from .const import (
     DOMAIN,
     SENSOR_PLATFORM,
     CALENDAR_PLATFORM,
+    CALENDAR_NAME,
     DEVICE_CLASS,
     CONF_SENSOR,
     CONF_FREQUENCY,
@@ -211,12 +215,27 @@ class GarbageCollection(Entity):
     async def async_added_to_hass(self):
         """"When sensor is added to hassio, add it to calendar"""
         await super().async_added_to_hass()
-        # if DOMAIN not in self.hass.data:
-        #     self.hass.data[DOMAIN] = {}
+        if DOMAIN not in self.hass.data:
+            self.hass.data[DOMAIN] = {}
         if SENSOR_PLATFORM not in self.hass.data[DOMAIN]:
             self.hass.data[DOMAIN][SENSOR_PLATFORM] = {}
         self.hass.data[DOMAIN][SENSOR_PLATFORM][self.entity_id] = self
-        self.hass.data[DOMAIN][CALENDAR_PLATFORM].add_entity(self.entity_id)
+        if not self.hidden:
+            if CALENDAR_PLATFORM not in self.hass.data[DOMAIN]:
+                self.hass.data[DOMAIN][CALENDAR_PLATFORM] = EntitiesCalendarData(
+                    self.hass
+                )
+                _LOGGER.debug("Creating calendar")
+                self.hass.async_create_task(
+                    async_load_platform(
+                        self.hass,
+                        CALENDAR_PLATFORM,
+                        DOMAIN,
+                        {"name": CALENDAR_NAME},
+                        {"name": CALENDAR_NAME},
+                    )
+                )
+            self.hass.data[DOMAIN][CALENDAR_PLATFORM].add_entity(self.entity_id)
 
     async def async_will_remove_from_hass(self):
         """"When sensor is added to hassio, remove it from"""
@@ -274,7 +293,7 @@ class GarbageCollection(Entity):
     def device_class(self):
         """Return the class of the sensor."""
         return DEVICE_CLASS
-    
+
     def __repr__(self):
         return f"Garbagecollection[ name: {self.__name}, entity_id: {self.entity_id}, state: {self.state}\nconfig: {self.config}]"
 

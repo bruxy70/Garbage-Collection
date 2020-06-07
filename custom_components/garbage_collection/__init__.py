@@ -10,7 +10,6 @@ import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers import discovery
 from homeassistant.util import Throttle
 from .sensor import GarbageCollection
-from .calendar import EntitiesCalendarData
 
 from integrationhelper.const import CC_STARTUP_VERSION
 
@@ -18,7 +17,6 @@ from homeassistant.const import CONF_NAME, ATTR_HIDDEN
 
 from .const import (
     CONF_SENSORS,
-    CALENDAR_NAME,
     CONF_ENABLED,
     CONF_FREQUENCY,
     DOMAIN,
@@ -34,23 +32,8 @@ MIN_TIME_BETWEEN_UPDATES = timedelta(seconds=30)
 _LOGGER = logging.getLogger(__name__)
 
 
-def set_up_calendar(hass, config):
-    if config.get(ATTR_HIDDEN, False):
-        return
-    if CALENDAR_PLATFORM not in hass.data[DOMAIN]:
-        hass.data[DOMAIN][CALENDAR_PLATFORM] = EntitiesCalendarData(hass)
-        _LOGGER.debug("Creating calendar")
-        hass.async_create_task(
-            discovery.async_load_platform(
-                hass, CALENDAR_PLATFORM, DOMAIN, {"name": CALENDAR_NAME}, config,
-            )
-        )
-
 async def async_setup(hass, config):
     """Set up this component using YAML."""
-    # Create calendar
-    if DOMAIN not in hass.data:
-        hass.data[DOMAIN] = {}
     if config.get(DOMAIN) is None:
         # We get here if the integration is set up using config flow
         return True
@@ -65,7 +48,6 @@ async def async_setup(hass, config):
         return False
 
     for entry in platform_config:
-        set_up_calendar(hass, entry)
         _LOGGER.info(
             f"Setting {entry[CONF_NAME]}({entry[CONF_FREQUENCY]}) from YAML configuration"
         )
@@ -96,7 +78,6 @@ async def async_setup_entry(hass, config_entry):
     _LOGGER.info(
         f"Setting {config_entry.title}({config_entry.data[CONF_FREQUENCY]}) from ConfigFlow"
     )
-    set_up_calendar(hass, config_entry.data)
     # Backward compatibility - clean-up (can be removed later?)
     config_entry.options = {}
     config_entry.add_update_listener(update_listener)
