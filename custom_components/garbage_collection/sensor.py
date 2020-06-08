@@ -375,15 +375,16 @@ class GarbageCollection(Entity):
                 )
             return day1 + relativedelta(days=offset)
         elif self.__frequency == "every-n-days":
-            if self.__first_date is None or self.__period is None:
+            try:
+                if (day1 - self.__first_date).days % self.__period == 0:
+                    return day1
+                offset = self.__period - ((day1 - self.__first_date).days % self.__period)
+            except TypeError:
                 _LOGGER.error(
                     "(%s) Please configure first_date and period for every-n-days collection frequency.",
                     self.__name,
                 )
                 return None
-            if (day1 - self.__first_date).days % self.__period == 0:
-                return day1
-            offset = self.__period - ((day1 - self.__first_date).days % self.__period)
             return day1 + relativedelta(days=offset)
         elif self.__frequency == "monthly":
             # Monthly
@@ -398,31 +399,33 @@ class GarbageCollection(Entity):
                 return candidate_date
         elif self.__frequency == "annual":
             # Annual
-            if self.__date is None:
+            try:
+                conf_date = datetime.strptime(self.__date, "%m/%d").date()
+            except TypeError:
                 _LOGGER.error(
                     "(%s) Please configure the date for annual collection frequency.",
                     self.__name,
                 )
                 return None
-            conf_date = datetime.strptime(self.__date, "%m/%d").date()
             candidate_date = date(year, conf_date.month, conf_date.day)
             if candidate_date < day1:
                 candidate_date = date(year + 1, conf_date.month, conf_date.day)
             return candidate_date
         elif self.__frequency == "group":
-            if self.__entities is None:
+            candidate_date = None
+            try:
+                for entity_id in self.__entities:
+                    if (
+                        SENSOR_PLATFORM in self.hass.data[DOMAIN]
+                        and entity_id in self.hass.data[DOMAIN][SENSOR_PLATFORM]
+                    ):
+                        entity = self.hass.data[DOMAIN][SENSOR_PLATFORM][entity_id]
+                        d = await entity.async_find_next_date(day1)
+                        if candidate_date is None or d < candidate_date:
+                            candidate_date = d
+            except TypeError:
                 _LOGGER.error("(%s) Please add entities for the group.", self.__name)
                 return None
-            candidate_date = None
-            for entity_id in self.__entities:
-                if (
-                    SENSOR_PLATFORM in self.hass.data[DOMAIN]
-                    and entity_id in self.hass.data[DOMAIN][SENSOR_PLATFORM]
-                ):
-                    entity = self.hass.data[DOMAIN][SENSOR_PLATFORM][entity_id]
-                    d = await entity.async_find_next_date(day1)
-                    if candidate_date is None or d < candidate_date:
-                        candidate_date = d
             return candidate_date
         else:
             _LOGGER.debug(f"({self.__name}) Unknown frequency {self.__frequency}")
