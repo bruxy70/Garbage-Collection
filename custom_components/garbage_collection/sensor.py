@@ -31,6 +31,7 @@ from .const import (
     CONF_ICON_NORMAL,
     CONF_ICON_TODAY,
     CONF_ICON_TOMORROW,
+    CONF_OFFSET,
     CONF_VERBOSE_STATE,
     CONF_VERBOSE_FORMAT,
     CONF_EXPIRE_AFTER,
@@ -161,6 +162,7 @@ class GarbageCollection(Entity):
         self.__entities = config.get(CONF_ENTITIES)
         self.__verbose_state = config.get(CONF_VERBOSE_STATE)
         self.__state = "" if bool(self.__verbose_state) else 2
+        self.__offset = config.get(CONF_OFFSET, 0)
         self.__icon_normal = config.get(CONF_ICON_NORMAL)
         self.__icon_today = config.get(CONF_ICON_TODAY)
         self.__icon_tomorrow = config.get(CONF_ICON_TOMORROW)
@@ -368,11 +370,14 @@ class GarbageCollection(Entity):
                     if day_index >= weekday:  # Collection still did not happen
                         offset = day_index - weekday
                         break
-            if offset == -1:  # look in following weeks
-                in_weeks = period - (week - first_week) % period
-                offset = (
-                    7 * in_weeks - weekday + WEEKDAYS.index(self.__collection_days[0])
-                )
+            iterate_by_week = 7 - weekday + WEEKDAYS.index(self.__collection_days[0])
+            while offset == -1:  # look in following weeks
+                candidate = day1 + relativedelta(days=iterate_by_week)
+                week = candidate.isocalendar()[1]
+                if (week - first_week) % period == 0:
+                    offset = iterate_by_week
+                    break
+                iterate_by_week += 7
             return day1 + relativedelta(days=offset)
         elif self.__frequency == "every-n-days":
             try:
@@ -446,7 +451,7 @@ class GarbageCollection(Entity):
 
     async def __async_candidate_with_include_exclude_dates(self, day1: date) -> date:
         """Find the next date starting from day1."""
-        first_day = day1
+        first_day = day1 - relativedelta(days=self.__offset)
         i = 0
         while True:
             next_date = await self.__async_find_candidate_date(first_day)
@@ -486,7 +491,7 @@ class GarbageCollection(Entity):
                 _LOGGER.debug("(%s) Skipping exclude_date %s", self.__name, next_date)
                 date_ok = False
             if date_ok:
-                return next_date
+                return next_date + relativedelta(days=self.__offset)
             first_day = next_date + relativedelta(days=1)
             i += 1
             if i > 365:
