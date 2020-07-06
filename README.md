@@ -110,10 +110,7 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 |:----------|----------|------------
 | `name` | Yes | Sensor friendly name
 | `frequency` | Yes | `"weekly"`, `"even-weeks"`, `"odd-weeks"`, `"every-n-weeks"`, `"every-n-days"`, `"monthly"`, `"annual"` or `"group"`
-| `offset` | No | Offset calculated date by `offset` days (makes most sense for monthly frequency). Examples of use:</br> 
-for last Saurday each month, configure first Saturday each month with `offset: -7`</br>
-for 1<sup>st</sup> Wednesday in of full week, configure first Monday each month with `offset: 2`</br>
-(integer between -31 and 31) **Default**: 0
+| `offset` | No | Offset calculated date by `offset` days (makes most sense for monthly frequency). Examples of use:</br>for last Saurday each month, configure first Saturday each month with `offset: -7`</br>for 1<sup>st</sup> Wednesday in of full week, configure first Monday each month with `offset: 2`</br>(integer between -31 and 31) **Default**: 0
 | `hidden` | No | Hide in calendar (useful for sensors that are used in groups)<br/>**Default**: `False`
 | `icon_normal` | No | Default icon **Default**:  `mdi:trash-can`
 | `icon_today` | No | Icon if the collection is today **Default**: `mdi:delete-restore`
