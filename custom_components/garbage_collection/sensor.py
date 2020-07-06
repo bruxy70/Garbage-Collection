@@ -458,9 +458,8 @@ class GarbageCollection(Entity):
 
             if bool(self.__holiday_in_week_move):
                 start_date = next_date - timedelta(days=next_date.weekday())
-                end_date = start_date + timedelta(days=6)
                 delta = timedelta(days=1)
-                while start_date <= end_date:
+                while start_date <= next_date:
                     if start_date in self.__holidays:
                         _LOGGER.debug(
                             "(%s) Move possible collection day, because public holiday in week on %s",
