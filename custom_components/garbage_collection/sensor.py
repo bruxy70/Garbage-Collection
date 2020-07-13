@@ -31,6 +31,7 @@ from .const import (
     CONF_ICON_NORMAL,
     CONF_ICON_TODAY,
     CONF_ICON_TOMORROW,
+    CONF_OFFSET,
     CONF_VERBOSE_STATE,
     CONF_VERBOSE_FORMAT,
     CONF_EXPIRE_AFTER,
@@ -161,6 +162,7 @@ class GarbageCollection(Entity):
         self.__entities = config.get(CONF_ENTITIES)
         self.__verbose_state = config.get(CONF_VERBOSE_STATE)
         self.__state = "" if bool(self.__verbose_state) else 2
+        self.__offset = config.get(CONF_OFFSET, 0)
         self.__icon_normal = config.get(CONF_ICON_NORMAL)
         self.__icon_today = config.get(CONF_ICON_TODAY)
         self.__icon_tomorrow = config.get(CONF_ICON_TOMORROW)
@@ -368,22 +370,26 @@ class GarbageCollection(Entity):
                     if day_index >= weekday:  # Collection still did not happen
                         offset = day_index - weekday
                         break
-            if offset == -1:  # look in following weeks
-                in_weeks = period - (week - first_week) % period
-                offset = (
-                    7 * in_weeks - weekday + WEEKDAYS.index(self.__collection_days[0])
-                )
+            iterate_by_week = 7 - weekday + WEEKDAYS.index(self.__collection_days[0])
+            while offset == -1:  # look in following weeks
+                candidate = day1 + relativedelta(days=iterate_by_week)
+                week = candidate.isocalendar()[1]
+                if (week - first_week) % period == 0:
+                    offset = iterate_by_week
+                    break
+                iterate_by_week += 7
             return day1 + relativedelta(days=offset)
         elif self.__frequency == "every-n-days":
-            if self.__first_date is None or self.__period is None:
+            try:
+                if (day1 - self.__first_date).days % self.__period == 0:
+                    return day1
+                offset = self.__period - ((day1 - self.__first_date).days % self.__period)
+            except TypeError:
                 _LOGGER.error(
                     "(%s) Please configure first_date and period for every-n-days collection frequency.",
                     self.__name,
                 )
                 return None
-            if (day1 - self.__first_date).days % self.__period == 0:
-                return day1
-            offset = self.__period - ((day1 - self.__first_date).days % self.__period)
             return day1 + relativedelta(days=offset)
         elif self.__frequency == "monthly":
             # Monthly
@@ -398,31 +404,33 @@ class GarbageCollection(Entity):
                 return candidate_date
         elif self.__frequency == "annual":
             # Annual
-            if self.__date is None:
+            try:
+                conf_date = datetime.strptime(self.__date, "%m/%d").date()
+            except TypeError:
                 _LOGGER.error(
                     "(%s) Please configure the date for annual collection frequency.",
                     self.__name,
                 )
                 return None
-            conf_date = datetime.strptime(self.__date, "%m/%d").date()
             candidate_date = date(year, conf_date.month, conf_date.day)
             if candidate_date < day1:
                 candidate_date = date(year + 1, conf_date.month, conf_date.day)
             return candidate_date
         elif self.__frequency == "group":
-            if self.__entities is None:
+            candidate_date = None
+            try:
+                for entity_id in self.__entities:
+                    if (
+                        SENSOR_PLATFORM in self.hass.data[DOMAIN]
+                        and entity_id in self.hass.data[DOMAIN][SENSOR_PLATFORM]
+                    ):
+                        entity = self.hass.data[DOMAIN][SENSOR_PLATFORM][entity_id]
+                        d = await entity.async_find_next_date(day1)
+                        if candidate_date is None or d < candidate_date:
+                            candidate_date = d
+            except TypeError:
                 _LOGGER.error("(%s) Please add entities for the group.", self.__name)
                 return None
-            candidate_date = None
-            for entity_id in self.__entities:
-                if (
-                    SENSOR_PLATFORM in self.hass.data[DOMAIN]
-                    and entity_id in self.hass.data[DOMAIN][SENSOR_PLATFORM]
-                ):
-                    entity = self.hass.data[DOMAIN][SENSOR_PLATFORM][entity_id]
-                    d = await entity.async_find_next_date(day1)
-                    if candidate_date is None or d < candidate_date:
-                        candidate_date = d
             return candidate_date
         else:
             _LOGGER.debug(f"({self.__name}) Unknown frequency {self.__frequency}")
@@ -443,16 +451,15 @@ class GarbageCollection(Entity):
 
     async def __async_candidate_with_include_exclude_dates(self, day1: date) -> date:
         """Find the next date starting from day1."""
-        first_day = day1
+        first_day = day1 - relativedelta(days=self.__offset)
         i = 0
         while True:
             next_date = await self.__async_find_candidate_date(first_day)
 
             if bool(self.__holiday_in_week_move):
                 start_date = next_date - timedelta(days=next_date.weekday())
-                end_date = start_date + timedelta(days=6)
                 delta = timedelta(days=1)
-                while start_date <= end_date:
+                while start_date <= next_date:
                     if start_date in self.__holidays:
                         _LOGGER.debug(
                             "(%s) Move possible collection day, because public holiday in week on %s",
@@ -483,7 +490,7 @@ class GarbageCollection(Entity):
                 _LOGGER.debug("(%s) Skipping exclude_date %s", self.__name, next_date)
                 date_ok = False
             if date_ok:
-                return next_date
+                return next_date + relativedelta(days=self.__offset)
             first_day = next_date + relativedelta(days=1)
             i += 1
             if i > 365:

@@ -8,7 +8,7 @@ from homeassistant.const import CONF_NAME, WEEKDAYS, CONF_ENTITIES, ATTR_HIDDEN
 # Base component constants
 DOMAIN = "garbage_collection"
 CALENDAR_NAME = "Garbage Collection"
-VERSION = "3.01"
+VERSION = "3.02"
 SENSOR_PLATFORM = "sensor"
 CALENDAR_PLATFORM = "calendar"
 ISSUE_URL = "https://github.com/bruxy70/Garbage-Collection/issues"
@@ -28,6 +28,7 @@ CONF_FREQUENCY = "frequency"
 CONF_ICON_NORMAL = "icon_normal"
 CONF_ICON_TODAY = "icon_today"
 CONF_ICON_TOMORROW = "icon_tomorrow"
+CONF_OFFSET = "offset"
 CONF_EXPIRE_AFTER = "expire_after"
 CONF_VERBOSE_STATE = "verbose_state"
 CONF_FIRST_MONTH = "first_month"
@@ -225,6 +226,13 @@ class configuration(config_singularity):
             "default": DEFAULT_FREQUENCY,
             "type": vol.In(FREQUENCY_OPTIONS),
         },
+        CONF_OFFSET: {
+            "step": 1,
+            "method": vol.Optional,
+            "default": 0,
+            "type": int,
+            "validator": vol.All(vol.Coerce(int), vol.Range(min=-31, max=31)),
+        },
         CONF_ICON_NORMAL: {
             "step": 1,
             "method": vol.Optional,
@@ -331,14 +339,16 @@ class configuration(config_singularity):
             "valid_for": lambda f: f in WEEKLY_DAILY,
             "method": vol.Optional,
             "default": DEFAULT_PERIOD,
-            "type": vol.All(vol.Coerce(int), vol.Range(min=1, max=52)),
+            "type": int,
+            "validator": vol.All(vol.Coerce(int), vol.Range(min=1, max=52)),
         },
         CONF_FIRST_WEEK: {
             "step": 4,
             "valid_for": lambda f: f in WEEKLY_FREQUENCY_X,
             "method": vol.Optional,
             "default": DEFAULT_FIRST_WEEK,
-            "type": vol.All(vol.Coerce(int), vol.Range(min=1, max=52)),
+            "type": int,
+            "validator": vol.All(vol.Coerce(int), vol.Range(min=1, max=52)),
         },
         CONF_FIRST_DATE: {
             "step": 4,
