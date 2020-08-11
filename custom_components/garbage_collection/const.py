@@ -44,6 +44,7 @@ CONF_EXCLUDE_DATES = "exclude_dates"
 CONF_INCLUDE_DATES = "include_dates"
 CONF_MOVE_COUNTRY_HOLIDAYS = "move_country_holidays"
 CONF_HOLIDAY_IN_WEEK_MOVE = "holiday_in_week_move"
+CONF_MOVE_OFFSET = "move_offset"
 CONF_PROV = "prov"
 CONF_STATE = "state"
 CONF_OBSERVED = "observed"
@@ -378,6 +379,13 @@ class configuration(config_singularity):
             "valid_for": lambda f: f in EXCEPT_ANNUAL_GROUP,
             "method": vol.Optional,
             "type": vol.In(COUNTRY_CODES),
+        },
+        CONF_MOVE_OFFSET: {
+            "step": 4,
+            "valid_for": lambda f: f in EXCEPT_ANNUAL_GROUP,
+            "method": vol.Optional,
+            "type": int,
+            "validator": vol.All(vol.Coerce(int), vol.Range(min=-7, max=7)),
         },
         CONF_HOLIDAY_IN_WEEK_MOVE: {
             "step": 4,

@@ -30,6 +30,7 @@ from .const import (
     CONF_INCLUDE_DATES,
     CONF_LAST_MONTH,
     CONF_MOVE_COUNTRY_HOLIDAYS,
+    CONF_MOVE_OFFSET,
     CONF_OBSERVED,
     CONF_OFFSET,
     CONF_PERIOD,
@@ -146,6 +147,7 @@ class GarbageCollection(Entity):
         self.__include_dates = to_dates(config.get(CONF_INCLUDE_DATES, []))
         self.__exclude_dates = to_dates(config.get(CONF_EXCLUDE_DATES, []))
         self.__country_holidays = config.get(CONF_MOVE_COUNTRY_HOLIDAYS)
+        self.__move_offset = config.get(CONF_MOVE_OFFSET, 1)
         self.__prov = config.get(CONF_PROV)
         self.__state = config.get(CONF_STATE)
         self.__observed = config.get(CONF_OBSERVED, True)
@@ -447,7 +449,7 @@ class GarbageCollection(Entity):
             return next_date
 
     def __skip_holiday(self, day: date) -> date:
-        return day + relativedelta(days=1)
+        return day + relativedelta(days=self.__move_offset)
 
     async def __async_candidate_with_include_exclude_dates(self, day1: date) -> date:
         """Find the next date starting from day1."""
