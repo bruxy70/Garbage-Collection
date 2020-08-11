@@ -22,10 +22,10 @@ jobs:
     steps:
       - uses: "actions/checkout@v2"
       - uses: jpetrucciani/black-check@master
-  isort:
-    runs-on: "ubuntu-latest"
-    steps:
-      - uses: "actions/checkout@v2"
-      - uses: olance/isort-action@v1.0.0
-        with:
-          args: .
+  # isort:
+  #   runs-on: "ubuntu-latest"
+  #   steps:
+  #     - uses: "actions/checkout@v2"
+  #     - uses: olance/isort-action@v1.0.0
+  #       with:
+  #         args: .
