@@ -70,7 +70,7 @@ class garbage_collection_shared:
             if defaults is not None and CONF_NAME in validation:
                 del validation[CONF_NAME]
             try:
-                config = vol.Schema(validation)(user_input)  # pylint: disable=W0612
+                _ = vol.Schema(validation)(user_input)  # pylint: disable=W0612
             except vol.Invalid as exception:
                 e = str(exception)
                 if (
@@ -117,7 +117,7 @@ class garbage_collection_shared:
             )
             try:
                 updates = validation(user_input)
-            except vol.Invalid as exception:  # pylint: disable=W0612
+            except vol.Invalid:
                 # _LOGGER.debug(exception)
                 if self._data[CONF_FREQUENCY] in ANNUAL_FREQUENCY:
                     self.errors["base"] = "month_day"
