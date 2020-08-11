@@ -22,10 +22,24 @@ jobs:
     steps:
       - uses: "actions/checkout@v2"
       - uses: jpetrucciani/black-check@master
-  # isort:
-  #   runs-on: "ubuntu-latest"
-  #   steps:
-  #     - uses: "actions/checkout@v2"
-  #     - uses: olance/isort-action@v1.0.0
-  #       with:
-  #         args: .
+  isort:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: "actions/checkout@v2"
+      - name: Sort imports 
+        uses: olance/isort-action@v1.0.0
+        with:
+          args: -y
+  codespell:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: "actions/checkout@v2"
+      - name: CodeSpell (Common misspelling in text files) 
+        uses: codespell-project/actions-codespell@master
+  bandit:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: "actions/checkout@v2"
+      - name: Bandit Check (Python security linter)
+        uses: jpetrucciani/bandit-check@master
+
