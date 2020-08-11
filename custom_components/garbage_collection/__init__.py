@@ -1,30 +1,22 @@
 """
 Component to integrate with garbage_colection.
 """
-import os
-from datetime import timedelta
 import logging
+from datetime import timedelta
+
 from homeassistant import config_entries
-import voluptuous as vol
-import homeassistant.helpers.config_validation as cv
+from homeassistant.const import CONF_NAME
 from homeassistant.helpers import discovery
-from homeassistant.util import Throttle
-from .sensor import GarbageCollection
 
 from integrationhelper.const import CC_STARTUP_VERSION
 
-from homeassistant.const import CONF_NAME, ATTR_HIDDEN
-
 from .const import (
-    CONF_SENSORS,
-    CONF_ENABLED,
     CONF_FREQUENCY,
+    CONF_SENSORS,
     DOMAIN,
     ISSUE_URL,
     SENSOR_PLATFORM,
-    CALENDAR_PLATFORM,
     VERSION,
-    CONFIG_SCHEMA,
 )
 
 MIN_TIME_BETWEEN_UPDATES = timedelta(seconds=30)

@@ -22,7 +22,7 @@ class config_singularity:
 
     def __init__(self):
         # Validate
-        for key, value in self.options.items():
+        for _, value in self.options.items():
             if "method" not in value:
                 raise ('config_singularity.options must contain the key "method"')
             if "type" not in value:

@@ -1,8 +1,10 @@
-import voluptuous as vol
-from .config_singularity import config_singularity
-from datetime import datetime, date
+from datetime import datetime
+
 import homeassistant.helpers.config_validation as cv
-from homeassistant.const import CONF_NAME, WEEKDAYS, CONF_ENTITIES, ATTR_HIDDEN
+import voluptuous as vol
+from homeassistant.const import ATTR_HIDDEN, CONF_ENTITIES, CONF_NAME, WEEKDAYS
+
+from .config_singularity import config_singularity
 
 """Constants for garbage_collection."""
 # Base component constants

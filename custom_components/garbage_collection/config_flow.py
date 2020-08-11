@@ -1,15 +1,35 @@
 """Adds config flow for GarbageCollection."""
-from collections import OrderedDict
 import logging
-from homeassistant.core import callback
-import voluptuous as vol
-import homeassistant.helpers.config_validation as cv
-from homeassistant import config_entries
-from datetime import datetime
 import uuid
+from datetime import datetime
 
-from .const import *  # pylint: disable=W0614
-from homeassistant.const import CONF_NAME, WEEKDAYS, CONF_ENTITIES
+import homeassistant.helpers.config_validation as cv
+import voluptuous as vol
+from homeassistant import config_entries
+from homeassistant.const import CONF_ENTITIES, CONF_NAME, WEEKDAYS
+from homeassistant.core import callback
+
+from .const import (
+    ANNUAL_FREQUENCY,
+    ANNUAL_GROUP_FREQUENCY,
+    CONF_COLLECTION_DAYS,
+    CONF_EXCLUDE_DATES,
+    CONF_EXPIRE_AFTER,
+    CONF_FIRST_DATE,
+    CONF_FORCE_WEEK_NUMBERS,
+    CONF_FREQUENCY,
+    CONF_ICON_NORMAL,
+    CONF_ICON_TODAY,
+    CONF_ICON_TOMORROW,
+    CONF_INCLUDE_DATES,
+    CONF_WEEK_ORDER_NUMBER,
+    CONF_WEEKDAY_ORDER_NUMBER,
+    DAILY_FREQUENCY,
+    DOMAIN,
+    GROUP_FREQUENCY,
+    MONTHLY_FREQUENCY,
+    config_definition,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -133,7 +153,7 @@ class garbage_collection_shared:
             )
             if self._data[CONF_FREQUENCY] in MONTHLY_FREQUENCY:
                 validation_schema[
-                    vol.Optional(CONF_FORCE_WEEK_NUMBERS, default=False,)
+                    vol.Optional(CONF_FORCE_WEEK_NUMBERS, default=False)
                 ] = cv.boolean
             validation = vol.Schema(validation_schema)
             try:
@@ -162,7 +182,7 @@ class garbage_collection_shared:
             else:
                 force_week_numbers = False
             self.data_schema[
-                vol.Optional(CONF_FORCE_WEEK_NUMBERS, default=force_week_numbers,)
+                vol.Optional(CONF_FORCE_WEEK_NUMBERS, default=force_week_numbers)
             ] = bool
         return False
 

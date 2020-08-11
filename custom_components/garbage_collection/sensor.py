@@ -1,16 +1,53 @@
 """Sensor platform for garbage_collection."""
-from homeassistant.helpers.entity import Entity
-from homeassistant.helpers.discovery import async_load_platform
-import homeassistant.util.dt as dt_util
-import holidays
 import logging
-import locale
-from datetime import datetime, date, time, timedelta
-from dateutil.relativedelta import relativedelta
-from homeassistant.core import HomeAssistant, State
-from typing import List, Any
-from .calendar import EntitiesCalendarData
+from datetime import date, datetime, timedelta
+from typing import Any, List
 
+import holidays
+import homeassistant.util.dt as dt_util
+from dateutil.relativedelta import relativedelta
+from homeassistant.const import ATTR_HIDDEN, CONF_ENTITIES, CONF_NAME, WEEKDAYS
+from homeassistant.helpers.discovery import async_load_platform
+from homeassistant.helpers.entity import Entity
+
+from .calendar import EntitiesCalendarData
+from .const import (
+    CALENDAR_NAME,
+    CALENDAR_PLATFORM,
+    CONF_COLLECTION_DAYS,
+    CONF_DATE,
+    CONF_DATE_FORMAT,
+    CONF_EXCLUDE_DATES,
+    CONF_EXPIRE_AFTER,
+    CONF_FIRST_DATE,
+    CONF_FIRST_MONTH,
+    CONF_FIRST_WEEK,
+    CONF_FREQUENCY,
+    CONF_HOLIDAY_IN_WEEK_MOVE,
+    CONF_ICON_NORMAL,
+    CONF_ICON_TODAY,
+    CONF_ICON_TOMORROW,
+    CONF_INCLUDE_DATES,
+    CONF_LAST_MONTH,
+    CONF_MOVE_COUNTRY_HOLIDAYS,
+    CONF_OBSERVED,
+    CONF_OFFSET,
+    CONF_PERIOD,
+    CONF_PROV,
+    CONF_STATE,
+    CONF_VERBOSE_FORMAT,
+    CONF_VERBOSE_STATE,
+    CONF_WEEK_ORDER_NUMBER,
+    CONF_WEEKDAY_ORDER_NUMBER,
+    DEFAULT_DATE_FORMAT,
+    DEFAULT_VERBOSE_FORMAT,
+    DEVICE_CLASS,
+    DOMAIN,
+    MONTH_OPTIONS,
+    SENSOR_PLATFORM,
+    STATE_TODAY,
+    STATE_TOMORROW,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -19,45 +56,6 @@ THROTTLE_INTERVAL = timedelta(seconds=60)
 ATTR_NEXT_DATE = "next_date"
 ATTR_DAYS = "days"
 
-from homeassistant.const import CONF_NAME, WEEKDAYS, CONF_ENTITIES, ATTR_HIDDEN
-from .const import (
-    DOMAIN,
-    SENSOR_PLATFORM,
-    CALENDAR_PLATFORM,
-    CALENDAR_NAME,
-    DEVICE_CLASS,
-    CONF_SENSOR,
-    CONF_FREQUENCY,
-    CONF_ICON_NORMAL,
-    CONF_ICON_TODAY,
-    CONF_ICON_TOMORROW,
-    CONF_OFFSET,
-    CONF_VERBOSE_STATE,
-    CONF_VERBOSE_FORMAT,
-    CONF_EXPIRE_AFTER,
-    CONF_DATE_FORMAT,
-    DEFAULT_DATE_FORMAT,
-    DEFAULT_VERBOSE_FORMAT,
-    CONF_FIRST_MONTH,
-    CONF_LAST_MONTH,
-    CONF_COLLECTION_DAYS,
-    CONF_WEEKDAY_ORDER_NUMBER,
-    CONF_WEEK_ORDER_NUMBER,
-    CONF_DATE,
-    CONF_EXCLUDE_DATES,
-    CONF_INCLUDE_DATES,
-    CONF_MOVE_COUNTRY_HOLIDAYS,
-    CONF_HOLIDAY_IN_WEEK_MOVE,
-    CONF_PROV,
-    CONF_STATE,
-    CONF_OBSERVED,
-    CONF_PERIOD,
-    CONF_FIRST_WEEK,
-    CONF_FIRST_DATE,
-    MONTH_OPTIONS,
-    STATE_TODAY,
-    STATE_TOMORROW,
-)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -310,7 +308,7 @@ class GarbageCollection(Entity):
         if self.__monthly_force_week_numbers:
             for week_order_number in self._week_order_numbers:
                 candidate_date = nth_week_date(
-                    week_order_number, day1, WEEKDAYS.index(self.__collection_days[0]),
+                    week_order_number, day1, WEEKDAYS.index(self.__collection_days[0])
                 )
                 # date is today or in the future -> we have the date
                 if candidate_date >= day1:
@@ -383,7 +381,9 @@ class GarbageCollection(Entity):
             try:
                 if (day1 - self.__first_date).days % self.__period == 0:
                     return day1
-                offset = self.__period - ((day1 - self.__first_date).days % self.__period)
+                offset = self.__period - (
+                    (day1 - self.__first_date).days % self.__period
+                )
             except TypeError:
                 _LOGGER.error(
                     "(%s) Please configure first_date and period for every-n-days collection frequency.",

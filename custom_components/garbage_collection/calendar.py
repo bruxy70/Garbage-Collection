@@ -1,19 +1,12 @@
 """Garbage Collection Callendar"""
-from datetime import datetime, timedelta
 import logging
-from homeassistant.components.calendar import PLATFORM_SCHEMA, CalendarEventDevice
-import homeassistant.helpers.config_validation as cv
-from homeassistant.helpers.template import DATE_STR_FORMAT
-from homeassistant.util import Throttle, dt
+from datetime import timedelta
 
-# from .sensor import find_entity
+from homeassistant.components.calendar import CalendarEventDevice
+from homeassistant.util import Throttle
 
-from .const import (
-    DOMAIN,
-    CALENDAR_PLATFORM,
-    SENSOR_PLATFORM,
-    CALENDAR_NAME,
-)
+from .const import CALENDAR_NAME, CALENDAR_PLATFORM, DOMAIN, SENSOR_PLATFORM
+
 
 _LOGGER = logging.getLogger(__name__)
 MIN_TIME_BETWEEN_UPDATES = timedelta(seconds=30)
@@ -111,8 +104,8 @@ class EntitiesCalendarData:
                 event = {
                     "uid": entity,
                     "summary": garbage_collection.name,
-                    "start": {"date": start.strftime("%Y-%m-%d"),},
-                    "end": {"date": start.strftime("%Y-%m-%d"),},
+                    "start": {"date": start.strftime("%Y-%m-%d")},
+                    "end": {"date": start.strftime("%Y-%m-%d")},
                     "allDay": True,
                 }
                 events.append(event)
@@ -132,8 +125,8 @@ class EntitiesCalendarData:
                 event = {
                     "uid": entity,
                     "summary": state_object.attributes.get("friendly_name"),
-                    "start": {"date": start.strftime("%Y-%m-%d"),},
-                    "end": {"date": start.strftime("%Y-%m-%d"),},
+                    "start": {"date": start.strftime("%Y-%m-%d")},
+                    "end": {"date": start.strftime("%Y-%m-%d")},
                     "allDay": True,
                 }
                 events.append(event)
