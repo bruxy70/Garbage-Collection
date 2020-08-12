@@ -24,13 +24,14 @@ from .const import (
     CONF_FIRST_WEEK,
     CONF_FREQUENCY,
     CONF_HOLIDAY_IN_WEEK_MOVE,
+    CONF_HOLIDAY_MOVE_OFFSET,
+    CONF_HOLIDAY_POP_NAMED,
     CONF_ICON_NORMAL,
     CONF_ICON_TODAY,
     CONF_ICON_TOMORROW,
     CONF_INCLUDE_DATES,
     CONF_LAST_MONTH,
     CONF_MOVE_COUNTRY_HOLIDAYS,
-    CONF_MOVE_OFFSET,
     CONF_OBSERVED,
     CONF_OFFSET,
     CONF_PERIOD,
@@ -146,7 +147,8 @@ class GarbageCollection(Entity):
         self.__include_dates = to_dates(config.get(CONF_INCLUDE_DATES, []))
         self.__exclude_dates = to_dates(config.get(CONF_EXCLUDE_DATES, []))
         self.__country_holidays = config.get(CONF_MOVE_COUNTRY_HOLIDAYS)
-        self.__move_offset = config.get(CONF_MOVE_OFFSET, 1)
+        self.__holiday_move_offset = config.get(CONF_HOLIDAY_MOVE_OFFSET, 1)
+        self.__holiday_pop_named = config.get(CONF_HOLIDAY_POP_NAMED)
         self.__holiday_in_week_move = config.get(CONF_HOLIDAY_IN_WEEK_MOVE)
         self.__prov = config.get(CONF_PROV)
         self.__state = config.get(CONF_STATE)
@@ -197,12 +199,22 @@ class GarbageCollection(Entity):
             if (
                 self.__observed is not None
                 and type(self.__observed) == bool
-                and self.__observed == False
+                and not self.__observed
             ):
                 kwargs["observed"] = self.__observed
-            hol = holidays.CountryHoliday(self.__country_holidays, **kwargs).items()
+            hol = holidays.CountryHoliday(self.__country_holidays, **kwargs)
+            if self.__holiday_pop_named is not None:
+                for pop in self.__holiday_pop_named:
+                    try:
+                        hol.pop_named(pop)
+                    except Exception:
+                        _LOGGER.error(
+                            "(%s) Holiday not removed - Invaid name (%s)",
+                            self.__name,
+                            pop,
+                        )
             try:
-                for d, name in hol:
+                for d, name in hol.items():
                     if d >= today:
                         self.__holidays.append(d)
                         holidays_log += f"\n  {d}: {name}"
@@ -449,7 +461,7 @@ class GarbageCollection(Entity):
             return next_date
 
     def __skip_holiday(self, day: date) -> date:
-        return day + relativedelta(days=self.__move_offset)
+        return day + relativedelta(days=self.__holiday_move_offset)
 
     async def __async_candidate_with_include_exclude_dates(self, day1: date) -> date:
         """Find the next date starting from day1."""
