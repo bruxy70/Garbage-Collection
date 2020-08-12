@@ -383,7 +383,6 @@ class configuration(config_singularity):
         CONF_MOVE_OFFSET: {
             "step": 4,
             "valid_for": lambda f: f in EXCEPT_ANNUAL_GROUP,
-            "default": 1,
             "method": vol.Optional,
             "type": int,
             "validator": vol.All(vol.Coerce(int), vol.Range(min=-7, max=7)),
@@ -430,7 +429,3 @@ extra_options = {
         "validator": cv.boolean,
     }
 }
-
-config_definition = configuration()
-
-SENSOR_SCHEMA = vol.Schema(config_definition.compile_schema())

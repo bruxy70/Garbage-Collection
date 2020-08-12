@@ -17,13 +17,17 @@ from .const import (
     DOMAIN,
     ISSUE_URL,
     SENSOR_PLATFORM,
-    SENSOR_SCHEMA,
     VERSION,
+    configuration,
 )
 
 MIN_TIME_BETWEEN_UPDATES = timedelta(seconds=30)
 
 _LOGGER = logging.getLogger(__name__)
+
+config_definition = configuration()
+
+SENSOR_SCHEMA = vol.Schema(config_definition.compile_schema())
 
 CONFIG_SCHEMA = vol.Schema(
     {
