@@ -429,3 +429,5 @@ extra_options = {
         "validator": cv.boolean,
     }
 }
+
+config_definition = configuration()
