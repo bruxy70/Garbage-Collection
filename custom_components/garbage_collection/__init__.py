@@ -4,10 +4,11 @@ Component to integrate with garbage_colection.
 import logging
 from datetime import timedelta
 
+import homeassistant.helpers.config_validation as cv
+import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.const import CONF_NAME
 from homeassistant.helpers import discovery
-
 from integrationhelper.const import CC_STARTUP_VERSION
 
 from .const import (
@@ -16,12 +17,22 @@ from .const import (
     DOMAIN,
     ISSUE_URL,
     SENSOR_PLATFORM,
+    SENSOR_SCHEMA,
     VERSION,
 )
 
 MIN_TIME_BETWEEN_UPDATES = timedelta(seconds=30)
 
 _LOGGER = logging.getLogger(__name__)
+
+CONFIG_SCHEMA = vol.Schema(
+    {
+        DOMAIN: vol.Schema(
+            {vol.Optional(CONF_SENSORS): vol.All(cv.ensure_list, [SENSOR_SCHEMA])}
+        )
+    },
+    extra=vol.ALLOW_EXTRA,
+)
 
 
 async def async_setup(hass, config):

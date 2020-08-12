@@ -128,7 +128,6 @@ class GarbageCollection(Entity):
         self.__hidden = config.get(ATTR_HIDDEN, False)
         self.__frequency = config.get(CONF_FREQUENCY)
         self.__collection_days = config.get(CONF_COLLECTION_DAYS)
-        self.__holiday_in_week_move = config.get(CONF_HOLIDAY_IN_WEEK_MOVE)
         first_month = config.get(CONF_FIRST_MONTH)
         if first_month in MONTH_OPTIONS:
             self.__first_month = MONTH_OPTIONS.index(first_month) + 1
@@ -148,6 +147,7 @@ class GarbageCollection(Entity):
         self.__exclude_dates = to_dates(config.get(CONF_EXCLUDE_DATES, []))
         self.__country_holidays = config.get(CONF_MOVE_COUNTRY_HOLIDAYS)
         self.__move_offset = config.get(CONF_MOVE_OFFSET, 1)
+        self.__holiday_in_week_move = config.get(CONF_HOLIDAY_IN_WEEK_MOVE)
         self.__prov = config.get(CONF_PROV)
         self.__state = config.get(CONF_STATE)
         self.__observed = config.get(CONF_OBSERVED, True)

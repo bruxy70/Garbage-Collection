@@ -390,6 +390,7 @@ class configuration(config_singularity):
         },
         CONF_HOLIDAY_IN_WEEK_MOVE: {
             "step": 4,
+            "valid_for": lambda f: f in EXCEPT_ANNUAL_GROUP,
             "method": vol.Optional,
             "default": DEFAULT_HOLIDAY_IN_WEEK_MOVE,
             "type": bool,
@@ -433,12 +434,3 @@ extra_options = {
 config_definition = configuration()
 
 SENSOR_SCHEMA = vol.Schema(config_definition.compile_schema())
-
-CONFIG_SCHEMA = vol.Schema(
-    {
-        DOMAIN: vol.Schema(
-            {vol.Optional(CONF_SENSORS): vol.All(cv.ensure_list, [SENSOR_SCHEMA])}
-        )
-    },
-    extra=vol.ALLOW_EXTRA,
-)
