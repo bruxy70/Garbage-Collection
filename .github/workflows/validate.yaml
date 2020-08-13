@@ -29,7 +29,7 @@ jobs:
       - name: Sort imports 
         uses: olance/isort-action@v1.0.0
         with:
-          args: **/*.py -c -v
+          args: '**/*.py' -c -v
   bandit:
     runs-on: "ubuntu-latest"
     steps:
