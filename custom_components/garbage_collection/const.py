@@ -10,7 +10,7 @@ from .config_singularity import config_singularity
 # Base component constants
 DOMAIN = "garbage_collection"
 CALENDAR_NAME = "Garbage Collection"
-VERSION = "3.02"
+VERSION = "3.03"
 SENSOR_PLATFORM = "sensor"
 CALENDAR_PLATFORM = "calendar"
 ISSUE_URL = "https://github.com/bruxy70/Garbage-Collection/issues"
