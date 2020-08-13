@@ -18,12 +18,14 @@ from .const import (
     ISSUE_URL,
     SENSOR_PLATFORM,
     VERSION,
-    config_definition,
+    configuration,
 )
 
 MIN_TIME_BETWEEN_UPDATES = timedelta(seconds=30)
 
 _LOGGER = logging.getLogger(__name__)
+
+config_definition = configuration()
 
 SENSOR_SCHEMA = vol.Schema(config_definition.compile_schema())
 
@@ -35,7 +37,6 @@ CONFIG_SCHEMA = vol.Schema(
     },
     extra=vol.ALLOW_EXTRA,
 )
-
 
 async def async_setup(hass, config):
     """Set up this component using YAML."""

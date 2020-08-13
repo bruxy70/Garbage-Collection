@@ -9,6 +9,7 @@ from homeassistant import config_entries
 from homeassistant.const import CONF_ENTITIES, CONF_NAME, WEEKDAYS
 from homeassistant.core import callback
 
+from . import config_definition
 from .const import (
     ANNUAL_FREQUENCY,
     ANNUAL_GROUP_FREQUENCY,
@@ -18,6 +19,7 @@ from .const import (
     CONF_FIRST_DATE,
     CONF_FORCE_WEEK_NUMBERS,
     CONF_FREQUENCY,
+    CONF_HOLIDAY_POP_NAMED,
     CONF_ICON_NORMAL,
     CONF_ICON_TODAY,
     CONF_ICON_TOMORROW,
@@ -28,7 +30,6 @@ from .const import (
     DOMAIN,
     GROUP_FREQUENCY,
     MONTHLY_FREQUENCY,
-    config_definition,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -70,16 +71,16 @@ class garbage_collection_shared:
             if defaults is not None and CONF_NAME in validation:
                 del validation[CONF_NAME]
             try:
-                _ = vol.Schema(validation)(user_input)  # pylint: disable=W0612
+                _ = vol.Schema(validation)(user_input)
             except vol.Invalid as exception:
-                e = str(exception)
+                error = str(exception)
                 if (
-                    CONF_ICON_NORMAL in e
-                    or CONF_ICON_TODAY in e
-                    or CONF_ICON_TOMORROW in e
+                    CONF_ICON_NORMAL in error
+                    or CONF_ICON_TODAY in error
+                    or CONF_ICON_TOMORROW in error
                 ):
                     self.errors["base"] = "icon"
-                elif CONF_EXPIRE_AFTER in e:
+                elif CONF_EXPIRE_AFTER in error:
                     self.errors["base"] = "time"
                 else:
                     _LOGGER.error(f"Unknown exception: {exception}")
@@ -158,7 +159,7 @@ class garbage_collection_shared:
             validation = vol.Schema(validation_schema)
             try:
                 updates = validation(updates)
-            except vol.Invalid as exception:  # pylint: disable=W0612
+            except vol.Invalid as exception:
                 _LOGGER.error(f"Unknown exception: {exception}")
                 self.errors["base"] = "value"
 
@@ -214,14 +215,18 @@ class garbage_collection_shared:
                 updates[CONF_EXCLUDE_DATES] = string_to_list(
                     updates[CONF_EXCLUDE_DATES]
                 )
+            if CONF_HOLIDAY_POP_NAMED in updates:
+                updates[CONF_HOLIDAY_POP_NAMED] = string_to_list(
+                    updates[CONF_HOLIDAY_POP_NAMED]
+                )
             try:
                 updates = validation(updates)
-            except vol.Invalid as exception:  # pylint: disable=W0612
-                e = str(exception)
+            except vol.Invalid as exception:
+                error = str(exception)
                 if (
-                    CONF_INCLUDE_DATES in e
-                    or CONF_EXCLUDE_DATES in e
-                    or CONF_FIRST_DATE in e
+                    CONF_INCLUDE_DATES in error
+                    or CONF_EXCLUDE_DATES in error
+                    or CONF_FIRST_DATE in error
                 ):
                     self.errors["base"] = "date"
                 else:

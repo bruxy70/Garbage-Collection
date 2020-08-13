@@ -387,13 +387,13 @@ class configuration(config_singularity):
             "default": 1,
             "method": vol.Optional,
             "type": int,
-            "validator": vol.All(vol.Coerce(int), vol.Range(min=-7, max=7)),
+            "validator": vol.All(vol.Coerce(int), vol.Range(min=1, max=7)),
         },
         CONF_HOLIDAY_POP_NAMED: {
             "step": 4,
             "valid_for": lambda f: f in EXCEPT_ANNUAL_GROUP,
             "method": vol.Optional,
-            "type": [str],
+            "type": str,
             "validator": vol.All(cv.ensure_list, [str]),
         },
         CONF_HOLIDAY_IN_WEEK_MOVE: {
@@ -438,5 +438,3 @@ extra_options = {
         "validator": cv.boolean,
     }
 }
-
-config_definition = configuration()
