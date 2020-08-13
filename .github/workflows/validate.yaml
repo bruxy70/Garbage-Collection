@@ -10,25 +10,18 @@ jobs:
     steps:
       - uses: "actions/checkout@v2"
       - uses: home-assistant/actions/hassfest@master
-  # flake8:
-  #   runs-on: "ubuntu-latest"
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: tonybajan/flake8-check-action@v1.0.0
-  #       with:
-  #         repotoken: ${{ secrets.GITHUB_TOKEN }}
-  # black:
-  #   runs-on: "ubuntu-latest"
-  #   steps:
-  #     - uses: "actions/checkout@v2"
-  #     - uses: jpetrucciani/black-check@master
-  code_quality:
+  flake8:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: tonybajan/flake8-check-action@v1.0.0
+        with:
+          repotoken: ${{ secrets.GITHUB_TOKEN }}
+  black:
     runs-on: "ubuntu-latest"
     steps:
       - uses: "actions/checkout@v2"
-      - uses: ricardochaves/python-lint@v1.1.0
-        with:
-          python-root-list: "custom_components/garbage_collection"
+      - uses: jpetrucciani/black-check@master
   bandit:
     runs-on: "ubuntu-latest"
     steps:
