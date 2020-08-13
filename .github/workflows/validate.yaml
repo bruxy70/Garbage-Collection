@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: "actions/checkout@v2"
       - uses: home-assistant/actions/hassfest@master
-  isort_black_flake8:
+  code_quality:
     runs-on: "ubuntu-latest"
     steps:
       - uses: "actions/checkout@v2"
@@ -23,7 +23,7 @@ jobs:
       - name: Change directory
         run: cd custom_components/garbage_collection
       - name: isort
-        run: isort -l88 -tc -m 3 -c .
+        run: isort --line-width 88 --trailing-comma --multi_line 3 --check-only .
       - name: black
         run: black --check .
       - name: flake8
