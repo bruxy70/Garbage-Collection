@@ -10,18 +10,6 @@ jobs:
     steps:
       - uses: "actions/checkout@v2"
       - uses: home-assistant/actions/hassfest@master
-  # flake8:
-  #   runs-on: "ubuntu-latest"
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: tonybajan/flake8-check-action@v1.0.0
-  #       with:
-  #         repotoken: ${{ secrets.GITHUB_TOKEN }}
-  # black:
-  #   runs-on: "ubuntu-latest"
-  #   steps:
-  #     - uses: "actions/checkout@v2"
-  #     - uses: jpetrucciani/black-check@master
   isort_black_flake8:
     runs-on: "ubuntu-latest"
     steps:
@@ -39,7 +27,7 @@ jobs:
       - name: black
         run: black --check .
       - name: flake8
-        run: flake8 --max-line-length 88 --extend-ignore E203 .
+        run: flake8 --max-line-length 88 --extend-ignore E203,E501,W291 .
   bandit:
     runs-on: "ubuntu-latest"
     steps:
