@@ -22,14 +22,14 @@ jobs:
     steps:
       - uses: "actions/checkout@v2"
       - uses: jpetrucciani/black-check@master
-  # isort:
-  #   runs-on: "ubuntu-latest"
-  #   steps:
-  #     - uses: "actions/checkout@v2"
-  #     - name: Sort imports 
-  #       uses: olance/isort-action@v1.0.0
-  #       with:
-  #         args: -y
+  isort:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: "actions/checkout@v2"
+      - name: Sort imports 
+        uses: olance/isort-action@v1.0.0
+        with:
+          args: **/*.py -c -v
   bandit:
     runs-on: "ubuntu-latest"
     steps:
