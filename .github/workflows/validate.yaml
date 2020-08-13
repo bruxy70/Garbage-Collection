@@ -22,12 +22,13 @@ jobs:
   #   steps:
   #     - uses: "actions/checkout@v2"
   #     - uses: jpetrucciani/black-check@master
-  python_style:
+  code_quality:
     runs-on: "ubuntu-latest"
     steps:
       - uses: "actions/checkout@v2"
-      - name: Check Python Style (isort, flake8, black) 
-        uses: bulv1ne/python-style-check@master
+      - uses: ricardochaves/python-lint@v1.2.0
+        # with:
+        #   python-root-list: "python_alelo tests"
   bandit:
     runs-on: "ubuntu-latest"
     steps:
