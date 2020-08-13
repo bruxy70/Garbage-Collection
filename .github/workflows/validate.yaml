@@ -17,19 +17,17 @@ jobs:
       - uses: tonybajan/flake8-check-action@v1.0.0
         with:
           repotoken: ${{ secrets.GITHUB_TOKEN }}
-  black:
+  # black:
+  #   runs-on: "ubuntu-latest"
+  #   steps:
+  #     - uses: "actions/checkout@v2"
+  #     - uses: jpetrucciani/black-check@master
+  isort_black:
     runs-on: "ubuntu-latest"
     steps:
       - uses: "actions/checkout@v2"
-      - uses: jpetrucciani/black-check@master
-  isort:
-    runs-on: "ubuntu-latest"
-    steps:
-      - uses: "actions/checkout@v2"
-      - name: Sort imports 
-        uses: olance/isort-action@v1.0.0
-        with:
-          args: "**/*.py -c -v"
+      - name: Sort imports & black 
+        uses: wrboyce/python-lint-action@master
   bandit:
     runs-on: "ubuntu-latest"
     steps:
