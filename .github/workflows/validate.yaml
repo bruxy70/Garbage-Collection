@@ -17,16 +17,27 @@ jobs:
       - uses: tonybajan/flake8-check-action@v1.0.0
         with:
           repotoken: ${{ secrets.GITHUB_TOKEN }}
-  black:
+  # black:
+  #   runs-on: "ubuntu-latest"
+  #   steps:
+  #     - uses: "actions/checkout@v2"
+  #     - uses: jpetrucciani/black-check@master
+  isort_black:
     runs-on: "ubuntu-latest"
     steps:
       - uses: "actions/checkout@v2"
-      - uses: jpetrucciani/black-check@master
-  isort:
-    runs-on: "ubuntu-latest"
-    steps:
-      - uses: "actions/checkout@v2"
-      - uses: olance/isort-action@v1.0.0
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: pip install 'isort==5.*' black
+      - name: Change directory
+        run: cd custom_components/garbage_collection
+      - name: Lint with isort
+        run: isort --profile black --length-sort --line-width 120 -c .
+      - name: Lint with black
+        run: black -l 120 --check .
   bandit:
     runs-on: "ubuntu-latest"
     steps:
