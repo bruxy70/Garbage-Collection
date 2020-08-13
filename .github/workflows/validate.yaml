@@ -10,19 +10,19 @@ jobs:
     steps:
       - uses: "actions/checkout@v2"
       - uses: home-assistant/actions/hassfest@master
-  flake8:
-    runs-on: "ubuntu-latest"
-    steps:
-      - uses: actions/checkout@v2
-      - uses: tonybajan/flake8-check-action@v1.0.0
-        with:
-          repotoken: ${{ secrets.GITHUB_TOKEN }}
+  # flake8:
+  #   runs-on: "ubuntu-latest"
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: tonybajan/flake8-check-action@v1.0.0
+  #       with:
+  #         repotoken: ${{ secrets.GITHUB_TOKEN }}
   # black:
   #   runs-on: "ubuntu-latest"
   #   steps:
   #     - uses: "actions/checkout@v2"
   #     - uses: jpetrucciani/black-check@master
-  isort_black:
+  isort_black_flake8:
     runs-on: "ubuntu-latest"
     steps:
       - uses: "actions/checkout@v2"
@@ -31,13 +31,15 @@ jobs:
         with:
           python-version: 3.8
       - name: Install dependencies
-        run: pip install 'isort==5.*' black
+        run: pip install 'isort==5.*' black flake8
       - name: Change directory
         run: cd custom_components/garbage_collection
-      - name: Lint with isort
-        run: isort -c .
-      - name: Lint with black
+      - name: isort
+        run: isort -l88 -tc -m 3 -c .
+      - name: black
         run: black --check .
+      - name: flake8
+        run: flake8 --max-line-length 88 --extend-ignore E203 .
   bandit:
     runs-on: "ubuntu-latest"
     steps:
