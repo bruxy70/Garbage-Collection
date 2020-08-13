@@ -35,9 +35,9 @@ jobs:
       - name: Change directory
         run: cd custom_components/garbage_collection
       - name: Lint with isort
-        run: isort --profile black --length-sort --line-width 120 -c .
+        run: isort -c .
       - name: Lint with black
-        run: black -l 120 --check .
+        run: black --check .
   bandit:
     runs-on: "ubuntu-latest"
     steps:
