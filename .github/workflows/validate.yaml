@@ -10,24 +10,24 @@ jobs:
     steps:
       - uses: "actions/checkout@v2"
       - uses: home-assistant/actions/hassfest@master
-  flake8:
-    runs-on: "ubuntu-latest"
-    steps:
-      - uses: actions/checkout@v2
-      - uses: tonybajan/flake8-check-action@v1.0.0
-        with:
-          repotoken: ${{ secrets.GITHUB_TOKEN }}
+  # flake8:
+  #   runs-on: "ubuntu-latest"
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: tonybajan/flake8-check-action@v1.0.0
+  #       with:
+  #         repotoken: ${{ secrets.GITHUB_TOKEN }}
   # black:
   #   runs-on: "ubuntu-latest"
   #   steps:
   #     - uses: "actions/checkout@v2"
   #     - uses: jpetrucciani/black-check@master
-  isort_black:
+  python_style:
     runs-on: "ubuntu-latest"
     steps:
       - uses: "actions/checkout@v2"
-      - name: Sort imports & black 
-        uses: wrboyce/python-lint-action@master
+      - name: Check Python Style (isort, flake8, black) 
+        uses: bulv1ne/python-style-check@master
   bandit:
     runs-on: "ubuntu-latest"
     steps:
