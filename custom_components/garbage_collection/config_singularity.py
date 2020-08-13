@@ -3,7 +3,7 @@ from collections import OrderedDict
 
 class config_singularity:
     """
-    Options is a dictionary (key is the parameter name), 
+    Options is a dictionary (key is the parameter name),
     where each value is a dictionary with following keys
     "step".......in whict config_flow step is this in
     "valid_for"..a function to test for which this option is relevant
@@ -11,7 +11,7 @@ class config_singularity:
     "default"....default value (optional)
     "type".......type
     "validator"..validator
-    (Type and validator are somewhat redundant. 
+    (Type and validator are somewhat redundant.
     But I cannot use custom validators in ShowForm - it calls convert from voluptuous-serialize that does not accept them.
     So I pass it twice - once the type, then the validator. Not necesaty for standard validators, such as vol.In()
     For example: "type": str, "validator": cv.string.
@@ -100,7 +100,7 @@ class config_singularity:
             if "step" in value and value["step"] == step and key in data
         }
         for key, value in items.items():  # pylint: disable=W0612
-            if data[key] != None and (
+            if data[key] is not None and (
                 type(data[key]) not in [list, dict] or len(data[key]) != 0
             ):
                 self.__defaults[key] = data[key]

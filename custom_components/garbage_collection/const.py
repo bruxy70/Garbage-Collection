@@ -207,7 +207,7 @@ class configuration(config_singularity):
     """
     Type and validation seems duplicare, but I cannot use custom validators in ShowForm
     It calls convert from voluptuous-serialize that does not accept them
-    so I pass it twice - once the type, then the validator :( )
+    so I pass it twice - once the type, then the validator:( )
     """
 
     options = {

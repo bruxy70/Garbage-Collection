@@ -27,7 +27,7 @@ jobs:
       - name: black
         run: black --check .
       - name: flake8
-        run: flake8 --max-line-length 88 --extend-ignore E203,E501,W291 .
+        run: flake8 --max-line-length 88 --extend-ignore E501 .
   bandit:
     runs-on: "ubuntu-latest"
     steps:
