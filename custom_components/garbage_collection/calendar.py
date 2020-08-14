@@ -108,7 +108,7 @@ class EntitiesCalendarData:
                     "allDay": True,
                 }
                 events.append(event)
-                #Get new date, making sure the holiday offset does not throw me back
+                # Get new date, making sure the holiday offset does not throw me back
                 new_start = start
                 days = 1
                 while new_start <= start:
