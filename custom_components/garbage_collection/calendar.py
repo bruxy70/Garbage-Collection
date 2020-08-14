@@ -108,15 +108,9 @@ class EntitiesCalendarData:
                     "allDay": True,
                 }
                 events.append(event)
-                # Get new date, making sure the holiday offset does not throw me back
-                new_start = start
-                days = 1
-                while new_start <= start:
-                    new_start = await garbage_collection.async_find_next_date(
-                        start + timedelta(days=days)
-                    )
-                    days += 1
-                start = new_start
+                start = await garbage_collection.async_find_next_date(
+                    start + timedelta(days=1)
+                )
         return events
 
     @Throttle(MIN_TIME_BETWEEN_UPDATES)

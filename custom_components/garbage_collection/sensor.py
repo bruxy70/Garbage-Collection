@@ -1,6 +1,6 @@
 """Sensor platform for garbage_collection."""
 import logging
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, time, timedelta
 from typing import Any, List
 
 import holidays
@@ -12,6 +12,9 @@ from homeassistant.helpers.entity import Entity
 
 from .calendar import EntitiesCalendarData
 from .const import (
+    ATTR_DAYS,
+    ATTR_LAST_COLLECTION,
+    ATTR_NEXT_DATE,
     CALENDAR_NAME,
     CALENDAR_PLATFORM,
     CONF_COLLECTION_DAYS,
@@ -55,8 +58,6 @@ _LOGGER = logging.getLogger(__name__)
 
 SCAN_INTERVAL = timedelta(seconds=60)
 THROTTLE_INTERVAL = timedelta(seconds=60)
-ATTR_NEXT_DATE = "next_date"
-ATTR_DAYS = "days"
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -259,6 +260,24 @@ class GarbageCollection(Entity):
         del self.hass.data[DOMAIN][SENSOR_PLATFORM][self.entity_id]
         self.hass.data[DOMAIN][CALENDAR_PLATFORM].remove_entity(self.entity_id)
 
+    def get_last_collection(self):
+        """Last collection datetime."""
+        try:
+            lc = self.hass.states.get(self.entity_id).attributes.get(
+                ATTR_LAST_COLLECTION
+            )
+            if type(lc) == datetime:
+                return lc
+        except Exception:
+            return None
+        return None
+
+    def set_last_collection(self, dt: datetime):
+        """Set last collection attribute."""
+        rc = self.device_state_attributes
+        rc[ATTR_LAST_COLLECTION] = dt
+        self.hass.states.set(self.entity_id, self.state, attributes=rc)
+
     @property
     def unique_id(self):
         """Return a unique ID to use for this sensor."""
@@ -303,6 +322,7 @@ class GarbageCollection(Entity):
                 self.__next_date.year, self.__next_date.month, self.__next_date.day
             ).astimezone()
         res[ATTR_DAYS] = self.__days
+        res[ATTR_LAST_COLLECTION] = self.get_last_collection()
         res["last_updated"] = self.__last_updated
         return res
 
@@ -462,6 +482,34 @@ class GarbageCollection(Entity):
             _LOGGER.debug("(%s) Unknown frequency %s", self.__name, self.__frequency)
             return None
 
+    async def __async_candidate_date_with_holidays(self, day1: date) -> date:
+        """Find candidate date, automatically skip holidays"""
+        first_day = day1
+        while True:
+            next_date = await self.__async_find_candidate_date(first_day)
+            if bool(self.__holiday_in_week_move):
+                start_date = next_date - relativedelta(days=next_date.weekday())
+                delta = relativedelta(days=1)
+                while start_date <= next_date:
+                    if start_date in self.__holidays:
+                        _LOGGER.debug(
+                            "(%s) Move possible collection day, "
+                            "because public holiday in week on %s",
+                            self.__name,
+                            start_date,
+                        )
+                        next_date = self.__skip_holiday(next_date)
+                        break
+                    start_date += delta
+            while next_date in self.__holidays:
+                _LOGGER.debug(
+                    "(%s) Skipping public holiday on %s", self.__name, next_date
+                )
+                next_date = self.__skip_holiday(next_date)
+            if next_date >= day1:
+                return next_date
+            first_day += relativedelta(days=1)
+
     def __insert_include_date(self, day1: date, next_date: date) -> date:
         """Add include dates."""
         include_dates = list(filter(lambda date: date >= day1, self.__include_dates))
@@ -482,38 +530,25 @@ class GarbageCollection(Entity):
         first_day = day1 - relativedelta(days=self.__offset)
         i = 0
         while True:
-            next_date = await self.__async_find_candidate_date(first_day)
-
-            if bool(self.__holiday_in_week_move):
-                start_date = next_date - timedelta(days=next_date.weekday())
-                delta = timedelta(days=1)
-                while start_date <= next_date:
-                    if start_date in self.__holidays:
-                        _LOGGER.debug(
-                            "(%s) Move possible collection day, "
-                            "because public holiday in week on %s",
-                            self.__name,
-                            start_date,
-                        )
-                        next_date = self.__skip_holiday(next_date)
-                        break
-                    start_date += delta
-
-            while next_date in self.__holidays:
-                _LOGGER.debug(
-                    "(%s) Skipping public holiday on %s", self.__name, next_date
-                )
-                next_date = self.__skip_holiday(next_date)
-            next_date = self.__insert_include_date(first_day, next_date)
+            next_date = self.__insert_include_date(
+                first_day, await self.__async_candidate_date_with_holidays(first_day)
+            )
             date_ok = True
             # Pokud je to dnes a po expiraci - hledat dal od zitra
             now = dt_util.now()
-            if (
-                next_date == now.date()
-                and self.__expire_after is not None
-                and now.time() >= self.__expire_after
-            ):
-                _LOGGER.debug("(%s) Today's collection expired", self.__name)
+            expiration = (
+                self.__expire_after
+                if self.__expire_after is not None
+                else time(23, 59, 59)
+            )
+            lc = self.get_last_collection()
+            if next_date == now.date():
+                if (
+                    lc is None or lc.date() != next_date or lc.time() > now.time()
+                ) and now.time() >= expiration:
+                    _LOGGER.debug("(%s) Today's collection expired", self.__name)
+                    self.set_last_collection(datetime.combine(next_date, expiration))
+                    date_ok = False
                 date_ok = False
             if next_date in self.__exclude_dates:
                 _LOGGER.debug("(%s) Skipping exclude_date %s", self.__name, next_date)

@@ -18,6 +18,7 @@ ATTRIBUTION = "Data from this is provided by garbage_collection."
 
 ATTR_NEXT_DATE = "next_date"
 ATTR_DAYS = "days"
+ATTR_LAST_COLLECTION = "last_collection"
 
 # Device classes
 BINARY_SENSOR_DEVICE_CLASS = "connectivity"
