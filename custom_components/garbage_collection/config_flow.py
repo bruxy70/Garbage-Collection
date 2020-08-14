@@ -141,7 +141,8 @@ class garbage_collection_shared:
     def step3_detail(self, user_input, defaults=None):
         """
 
-        C O N F I G U R A T I O N   S T E P   2   ( O T H E R   T H A N   A N N U A L   O R   G R O U P )
+        C O N F I G U R A T I O N   S T E P   2
+        ( O T H E R   T H A N   A N N U A L   O R   G R O U P )
 
         """
         self.errors = {}
@@ -332,7 +333,8 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
         self, user_input={}
     ):  # pylint: disable=dangerous-default-value
         """
-        C O N F I G U R A T I O N   S T E P   2   ( O T H E R   T H A N   A N N U A L   O R   G R O U P )
+        C O N F I G U R A T I O N   S T E P   2
+        ( O T H E R   T H A N   A N N U A L   O R   G R O U P )
         """
         next_step = self.shared_class.step3_detail(user_input)
         if next_step:
@@ -439,7 +441,8 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         self, user_input={}
     ):  # pylint: disable=dangerous-default-value
         """
-        C O N F I G U R A T I O N   S T E P   2   ( O T H E R   T H A N   A N N U A L   O R   G R O U P )
+        C O N F I G U R A T I O N   S T E P   2
+        ( O T H E R   T H A N   A N N U A L   O R   G R O U P )
         """
         next_step = self.shared_class.step3_detail(user_input, self.config_entry.data)
         if next_step:

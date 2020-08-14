@@ -56,7 +56,9 @@ async def async_setup(hass, config):
 
     for entry in platform_config:
         _LOGGER.info(
-            f"Setting {entry[CONF_NAME]}({entry[CONF_FREQUENCY]}) from YAML configuration"
+            "Setting %s(%s) from YAML configuration",
+            entry[CONF_NAME],
+            entry[CONF_FREQUENCY]
         )
         # If entry is not enabled, skip.
         # if not entry[CONF_ENABLED]:
@@ -83,7 +85,9 @@ async def async_setup_entry(hass, config_entry):
         CC_STARTUP_VERSION.format(name=DOMAIN, version=VERSION, issue_link=ISSUE_URL)
     )
     _LOGGER.info(
-        f"Setting {config_entry.title}({config_entry.data[CONF_FREQUENCY]}) from ConfigFlow"
+        "Setting %s(%s) from ConfigFlow",
+        config_entry.title,
+        config_entry.data[CONF_FREQUENCY]
     )
     # Backward compatibility - clean-up (can be removed later?)
     config_entry.options = {}
@@ -110,7 +114,8 @@ async def async_remove_entry(hass, config_entry):
 
 async def update_listener(hass, entry):
     """Update listener."""
-    # The OptionsFlow saves data to options. Move them back to data and clean options (dirty, but not sure how else to do that)
+    # The OptionsFlow saves data to options. 
+    # Move them back to data and clean options (dirty, but not sure how else to do that)
     if entry.options != {}:
         entry.data = entry.options
         entry.options = {}

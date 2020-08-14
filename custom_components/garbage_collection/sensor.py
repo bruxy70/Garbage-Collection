@@ -75,7 +75,7 @@ async def async_setup_entry(hass, config_entry, async_add_devices):
 
 
 def nth_week_date(n: int, date_of_month: date, collection_day: int) -> date:
-    """Find weekday in the nth week of the month"""
+    """Find weekday in the nth week of the month."""
     first_of_month = date(date_of_month.year, date_of_month.month, 1)
     month_starts_on = first_of_month.weekday()
     return first_of_month + relativedelta(
@@ -84,7 +84,7 @@ def nth_week_date(n: int, date_of_month: date, collection_day: int) -> date:
 
 
 def nth_weekday_date(n: int, date_of_month: date, collection_day: int) -> date:
-    """Find nth weekday of the month"""
+    """Find nth weekday of the month."""
     first_of_month = date(date_of_month.year, date_of_month.month, 1)
     month_starts_on = first_of_month.weekday()
     # 1st of the month is before the day of collection
@@ -100,6 +100,7 @@ def nth_weekday_date(n: int, date_of_month: date, collection_day: int) -> date:
 
 
 def to_date(day: Any) -> date:
+    """Convert datetime or text to date, if not already datetime."""
     if day is None:
         return None
     if type(day) == date:
@@ -110,7 +111,7 @@ def to_date(day: Any) -> date:
 
 
 def to_dates(dates: List[Any]) -> List[date]:
-    # Convert list of text to datetimes, if not already datetimes
+    """Convert list of text to datetimes, if not already datetimes."""
     converted = []
     for day in dates:
         try:
@@ -177,14 +178,15 @@ class GarbageCollection(Entity):
         self.__icon = self.__icon_normal
 
     async def async_load_holidays(self, today: date) -> None:
-        """Load the holidays from from a date"""
+        """Load the holidays from from a date."""
         holidays_log = ""
         self.__holidays.clear()
         if self.__country_holidays is not None and self.__country_holidays != "":
             this_year = today.year
             years = [this_year, this_year + 1]
             _LOGGER.debug(
-                "(%s) Country Holidays with parameters: country: %s, prov: %s, state: %s, observed: %s",
+                "(%s) Country Holidays with parameters: "
+                "country: %s, prov: %s, state: %s, observed: %s",
                 self.__name,
                 self.__country_holidays,
                 self.__prov,
@@ -227,7 +229,7 @@ class GarbageCollection(Entity):
             _LOGGER.debug("(%s) Found these holidays: %s", self.__name, holidays_log)
 
     async def async_added_to_hass(self):
-        """"When sensor is added to hassio, add it to calendar"""
+        """"When sensor is added to hassio, add it to calendar."""
         await super().async_added_to_hass()
         if DOMAIN not in self.hass.data:
             self.hass.data[DOMAIN] = {}
@@ -252,7 +254,7 @@ class GarbageCollection(Entity):
             self.hass.data[DOMAIN][CALENDAR_PLATFORM].add_entity(self.entity_id)
 
     async def async_will_remove_from_hass(self):
-        """"When sensor is added to hassio, remove it from"""
+        """"When sensor is added to hassio, remove it."""
         await super().async_will_remove_from_hass()
         del self.hass.data[DOMAIN][SENSOR_PLATFORM][self.entity_id]
         self.hass.data[DOMAIN][CALENDAR_PLATFORM].remove_entity(self.entity_id)
@@ -264,6 +266,7 @@ class GarbageCollection(Entity):
 
     @property
     def device_info(self):
+        """Return device info."""
         return {
             "identifiers": {(DOMAIN, self.config.get("unique_id", None))},
             "name": self.config.get("name"),
@@ -309,7 +312,13 @@ class GarbageCollection(Entity):
         return DEVICE_CLASS
 
     def __repr__(self):
-        return f"Garbagecollection[ name: {self.__name}, entity_id: {self.entity_id}, state: {self.state}\nconfig: {self.config}]"
+        """Return main sensor parameters."""
+        return (
+            f"Garbagecollection[ name: {self.__name}, "
+            f"entity_id: {self.entity_id}, "
+            f"state: {self.state}\n"
+            f"config: {self.config}]"
+        )
 
     def date_inside(self, dat: date) -> bool:
         month = dat.month
@@ -400,7 +409,8 @@ class GarbageCollection(Entity):
                 )
             except TypeError:
                 _LOGGER.error(
-                    "(%s) Please configure first_date and period for every-n-days collection frequency.",
+                    "(%s) Please configure first_date and period "
+                    "for every-n-days collection frequency.",
                     self.__name,
                 )
                 return None
@@ -447,7 +457,7 @@ class GarbageCollection(Entity):
                 return None
             return candidate_date
         else:
-            _LOGGER.debug(f"({self.__name}) Unknown frequency {self.__frequency}")
+            _LOGGER.debug("(%s) Unknown frequency %s", self.__name, self.__frequency)
             return None
 
     def __insert_include_date(self, day1: date, next_date: date) -> date:
@@ -463,7 +473,7 @@ class GarbageCollection(Entity):
     def __skip_holiday(self, day: date) -> date:
         return day + relativedelta(days=self.__holiday_move_offset)
 
-    async def __async_candidate_with_include_exclude_dates(self, day1: date) -> date:
+    async def __async_candidate_with_incl_excl(self, day1: date) -> date:
         """Find the next date starting from day1."""
         first_day = day1 - relativedelta(days=self.__offset)
         i = 0
@@ -476,7 +486,8 @@ class GarbageCollection(Entity):
                 while start_date <= next_date:
                     if start_date in self.__holidays:
                         _LOGGER.debug(
-                            "(%s) Move possible collection day, because public holiday in week on %s",
+                            "(%s) Move possible collection day, "
+                            "because public holiday in week on %s",
                             self.__name,
                             start_date,
                         )
@@ -546,12 +557,12 @@ class GarbageCollection(Entity):
         year = today.year
         month = today.month
         if self.date_inside(today):
-            next_date = await self.__async_candidate_with_include_exclude_dates(today)
+            next_date = await self.__async_candidate_with_incl_excl(today)
             if next_date is not None:
                 if not self.date_inside(next_date):
                     if self.__first_month <= self.__last_month:
                         next_year = date(year + 1, self.__first_month, 1)
-                        next_date = await self.__async_candidate_with_include_exclude_dates(
+                        next_date = await self.__async_candidate_with_incl_excl(
                             next_year
                         )
                         _LOGGER.debug(
@@ -561,7 +572,7 @@ class GarbageCollection(Entity):
                         )
                     else:
                         next_year = date(year, self.__first_month, 1)
-                        next_date = await self.__async_candidate_with_include_exclude_dates(
+                        next_date = await self.__async_candidate_with_incl_excl(
                             next_year
                         )
                         _LOGGER.debug(
@@ -573,7 +584,7 @@ class GarbageCollection(Entity):
         else:
             if self.__first_month <= self.__last_month and month > self.__last_month:
                 next_year = date(year + 1, self.__first_month, 1)
-                next_date = await self.__async_candidate_with_include_exclude_dates(
+                next_date = await self.__async_candidate_with_incl_excl(
                     next_year
                 )
                 _LOGGER.debug(
@@ -581,7 +592,7 @@ class GarbageCollection(Entity):
                 )
             else:
                 next_year = date(year, self.__first_month, 1)
-                next_date = await self.__async_candidate_with_include_exclude_dates(
+                next_date = await self.__async_candidate_with_incl_excl(
                     next_year
                 )
                 _LOGGER.debug(
