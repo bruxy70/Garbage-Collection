@@ -12,9 +12,9 @@ class config_singularity:
     "type".......type
     "validator"..validator
     (Type and validator are somewhat redundant.
-    But I cannot use custom validators in ShowForm - it calls convert from 
+    But I cannot use custom validators in ShowForm - it calls convert from
     voluptuous-serialize that does not accept them.
-    So I pass it twice - once the type, then the validator. 
+    So I pass it twice - once the type, then the validator.
     Not necesaty for standard validators, such as vol.In()
     For example: "type": str, "validator": cv.string.
     )
