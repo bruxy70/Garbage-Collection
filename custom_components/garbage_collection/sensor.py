@@ -321,6 +321,7 @@ class GarbageCollection(Entity):
         )
 
     def date_inside(self, dat: date) -> bool:
+        """Check if the date is inside first and last date."""
         month = dat.month
         if self.__first_month <= self.__last_month:
             return bool(month >= self.__first_month and month <= self.__last_month)
@@ -328,6 +329,7 @@ class GarbageCollection(Entity):
             return bool(month <= self.__last_month or month >= self.__first_month)
 
     async def __async_monthly_candidate(self, day1: date) -> date:
+        """Calculate possible date, for monthly frequency."""
         if self.__monthly_force_week_numbers:
             for week_order_number in self._week_order_numbers:
                 candidate_date = nth_week_date(
@@ -365,7 +367,7 @@ class GarbageCollection(Entity):
 
     async def __async_find_candidate_date(self, day1: date) -> date:
         """Find the next possible date starting from day1,
-        only based on calendar, not lookimg at include/exclude days"""
+        only based on calendar, not looking at include/exclude days."""
         week = day1.isocalendar()[1]
         weekday = day1.weekday()
         year = day1.year
@@ -461,6 +463,7 @@ class GarbageCollection(Entity):
             return None
 
     def __insert_include_date(self, day1: date, next_date: date) -> date:
+        """Add include dates."""
         include_dates = list(filter(lambda date: date >= day1, self.__include_dates))
         if len(include_dates) > 0 and include_dates[0] < next_date:
             _LOGGER.debug(
@@ -471,6 +474,7 @@ class GarbageCollection(Entity):
             return next_date
 
     def __skip_holiday(self, day: date) -> date:
+        """Move holidays by holiday move offset."""
         return day + relativedelta(days=self.__holiday_move_offset)
 
     async def __async_candidate_with_incl_excl(self, day1: date) -> date:
@@ -584,17 +588,13 @@ class GarbageCollection(Entity):
         else:
             if self.__first_month <= self.__last_month and month > self.__last_month:
                 next_year = date(year + 1, self.__first_month, 1)
-                next_date = await self.__async_candidate_with_incl_excl(
-                    next_year
-                )
+                next_date = await self.__async_candidate_with_incl_excl(next_year)
                 _LOGGER.debug(
                     "(%s) Date outside range, lookig at next year", self.__name
                 )
             else:
                 next_year = date(year, self.__first_month, 1)
-                next_date = await self.__async_candidate_with_incl_excl(
-                    next_year
-                )
+                next_date = await self.__async_candidate_with_incl_excl(next_year)
                 _LOGGER.debug(
                     "(%s) Current date is outside of the range, "
                     "starting from first month",

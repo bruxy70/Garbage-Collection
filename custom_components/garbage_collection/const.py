@@ -387,7 +387,7 @@ class configuration(config_singularity):
             "default": 1,
             "method": vol.Optional,
             "type": int,
-            "validator": vol.All(vol.Coerce(int), vol.Range(min=1, max=7)),
+            "validator": vol.All(vol.Coerce(int), vol.Range(min=-7, max=7)),
         },
         CONF_HOLIDAY_POP_NAMED: {
             "step": 4,
