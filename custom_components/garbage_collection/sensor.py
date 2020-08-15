@@ -161,6 +161,7 @@ class GarbageCollection(Entity):
         self.__first_date = to_date(config.get(CONF_FIRST_DATE))
         self.__next_date = None
         self.__last_updated = None
+        self.last_collection = None
         self.__days = None
         self.__date = config.get(CONF_DATE)
         self.__entities = config.get(CONF_ENTITIES)
@@ -260,24 +261,6 @@ class GarbageCollection(Entity):
         del self.hass.data[DOMAIN][SENSOR_PLATFORM][self.entity_id]
         self.hass.data[DOMAIN][CALENDAR_PLATFORM].remove_entity(self.entity_id)
 
-    def get_last_collection(self):
-        """Last collection datetime."""
-        try:
-            lc = self.hass.states.get(self.entity_id).attributes.get(
-                ATTR_LAST_COLLECTION
-            )
-            if type(lc) == datetime:
-                return lc
-        except Exception:
-            return None
-        return None
-
-    def set_last_collection(self, dt: datetime):
-        """Set last collection attribute."""
-        rc = self.device_state_attributes
-        rc[ATTR_LAST_COLLECTION] = dt
-        self.hass.states.set(self.entity_id, self.state, attributes=rc)
-
     @property
     def unique_id(self):
         """Return a unique ID to use for this sensor."""
@@ -322,7 +305,7 @@ class GarbageCollection(Entity):
                 self.__next_date.year, self.__next_date.month, self.__next_date.day
             ).astimezone()
         res[ATTR_DAYS] = self.__days
-        res[ATTR_LAST_COLLECTION] = self.get_last_collection()
+        res[ATTR_LAST_COLLECTION] = self.last_collection
         res["last_updated"] = self.__last_updated
         return res
 
@@ -520,7 +503,7 @@ class GarbageCollection(Entity):
                 next_date = self.__skip_holiday(next_date)
             if next_date >= day1:
                 return next_date
-            first_day += relativedelta(days=1)
+            first_day += relativedelta(days=1)  
 
     def __insert_include_date(self, day1: date, next_date: date) -> date:
         """Add include dates."""
@@ -558,17 +541,16 @@ class GarbageCollection(Entity):
                 if self.__expire_after is not None
                 else time(23, 59, 59)
             )
-            lc = self.get_last_collection()
             if next_date == now.date():
                 if (
-                    lc is not None
-                    and lc.date() == next_date
-                    and now.time() >= lc.time()
+                    self.last_collection is not None
+                    and self.last_collection.date() == next_date
+                    and now.time() >= self.last_collection.time()
                 ):
                     date_ok = False
                 elif now.time() >= expiration:
                     _LOGGER.debug("(%s) Today's collection expired", self.__name)
-                    self.set_last_collection(datetime.combine(next_date, expiration))
+                    self.last_collection = datetime.combine(next_date, expiration)
                     date_ok = False
             if next_date in self.__exclude_dates:
                 _LOGGER.debug("(%s) Skipping exclude_date %s", self.__name, next_date)
@@ -594,12 +576,14 @@ class GarbageCollection(Entity):
         )
         if self.__frequency == "group":
             members_ready = True
-            for entity in self.__entities:
+            for entity_id in self.__entities:
+                entity = self.hass.states.get(entity_id)
                 if (
-                    self.hass.states.get(entity).attributes.get("last_updated").date()
+                    entity is not None and entity.attributes.get("last_updated").date()
                     != today
                 ):
                     members_ready = False
+                    break
             if ready_for_update and not members_ready:
                 ready_for_update = False
         else:
