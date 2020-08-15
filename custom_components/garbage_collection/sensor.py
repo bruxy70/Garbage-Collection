@@ -561,12 +561,15 @@ class GarbageCollection(Entity):
             lc = self.get_last_collection()
             if next_date == now.date():
                 if (
-                    lc is None or lc.date() != next_date or lc.time() > now.time()
-                ) and now.time() >= expiration:
+                    lc is not None
+                    and lc.date() == next_date
+                    and now.time() >= lc.time()
+                ):
+                    date_ok = False
+                elif now.time() >= expiration:
                     _LOGGER.debug("(%s) Today's collection expired", self.__name)
                     self.set_last_collection(datetime.combine(next_date, expiration))
                     date_ok = False
-                date_ok = False
             if next_date in self.__exclude_dates:
                 _LOGGER.debug("(%s) Skipping exclude_date %s", self.__name, next_date)
                 date_ok = False
