@@ -119,6 +119,8 @@ class EntitiesCalendarData:
         events = []
         for entity in self.entities:
             state_object = self._hass.states.get(entity)
+            if state_object is None:
+                continue
             start = state_object.attributes.get("next_date")
             if start is not None:
                 event = {

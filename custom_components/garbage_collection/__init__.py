@@ -5,6 +5,7 @@ import logging
 from datetime import timedelta
 
 import homeassistant.helpers.config_validation as cv
+import homeassistant.util.dt as dt_util
 import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.const import CONF_ENTITY_ID, CONF_NAME
@@ -44,10 +45,15 @@ COLLECT_NOW_SCHEMA = vol.Schema({vol.Required(CONF_ENTITY_ID): cv.string})
 async def async_setup(hass, config):
     """Set up this component using YAML."""
 
-    def handle_collect_garbage(self, call):
+    def handle_collect_garbage(call):
         """Handle the service call."""
         entity_id = call.data.get(CONF_ENTITY_ID)
         _LOGGER.debug("called collect_garbage for %s", entity_id)
+        try:
+            entity = hass.data[DOMAIN][SENSOR_PLATFORM][entity_id]
+            entity.last_collection = dt_util.now()
+        except Exception:
+            _LOGGER.error("Failed setting last collection for %s", entity_id)
 
     if DOMAIN not in hass.services.async_services():
         hass.services.async_register(

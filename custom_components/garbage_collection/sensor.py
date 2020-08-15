@@ -577,10 +577,10 @@ class GarbageCollection(Entity):
         if self.__frequency == "group":
             members_ready = True
             for entity_id in self.__entities:
-                entity = self.hass.states.get(entity_id)
+                state_object = self.hass.states.get(entity_id)
                 if (
-                    entity is not None
-                    and entity.attributes.get("last_updated").date() != today
+                    state_object is not None
+                    and state_object.attributes.get("last_updated").date() != today
                 ):
                     members_ready = False
                     break
