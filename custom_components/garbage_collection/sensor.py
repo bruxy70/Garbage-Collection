@@ -496,7 +496,7 @@ class GarbageCollection(Entity):
                 )
             )
             if len(check_near) > 0:
-                first_day = first_day - relativedelta(days=self.__holiday_move_offset)
+                first_day -= relativedelta(days=self.__holiday_move_offset)
         while True:
             next_date = await self.__async_find_candidate_date(first_day)
             if bool(self.__holiday_in_week_move):
@@ -535,7 +535,12 @@ class GarbageCollection(Entity):
 
     def __skip_holiday(self, day: date) -> date:
         """Move holidays by holiday move offset."""
-        return day + relativedelta(days=self.__holiday_move_offset)
+        skip_days = (
+            1
+            if self.__holiday_move_offset is None or self.__holiday_move_offset == 0
+            else self.__holiday_move_offset
+        )
+        return day + relativedelta(days=skip_days)
 
     async def __async_candidate_with_incl_excl(self, day1: date) -> date:
         """Find the next date starting from day1."""
