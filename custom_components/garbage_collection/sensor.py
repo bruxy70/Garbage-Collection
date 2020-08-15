@@ -212,11 +212,7 @@ class GarbageCollection(Entity):
                     try:
                         hol.pop_named(pop)
                     except Exception as err:
-                        _LOGGER.error(
-                            "(%s) Holiday not removed (%s)",
-                            self.__name,
-                            err,
-                        )
+                        _LOGGER.error("(%s) Holiday not removed (%s)", self.__name, err)
             try:
                 for d, name in hol.items():
                     if d >= today:
