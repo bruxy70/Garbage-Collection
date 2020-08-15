@@ -152,9 +152,9 @@ class GarbageCollection(Entity):
         self.__holiday_move_offset = config.get(CONF_HOLIDAY_MOVE_OFFSET, 1)
         self.__holiday_pop_named = config.get(CONF_HOLIDAY_POP_NAMED)
         self.__holiday_in_week_move = config.get(CONF_HOLIDAY_IN_WEEK_MOVE)
-        self.__prov = config.get(CONF_PROV)
-        self.__state = config.get(CONF_STATE)
-        self.__observed = config.get(CONF_OBSERVED, True)
+        self.__holiday_prov = config.get(CONF_PROV)
+        self.__holiday_state = config.get(CONF_STATE)
+        self.__holiday_observed = config.get(CONF_OBSERVED, True)
         self.__holidays = []
         self.__period = config.get(CONF_PERIOD)
         self.__first_week = config.get(CONF_FIRST_WEEK)
@@ -191,21 +191,21 @@ class GarbageCollection(Entity):
                 "country: %s, prov: %s, state: %s, observed: %s",
                 self.__name,
                 self.__country_holidays,
-                self.__prov,
-                self.__state,
-                self.__observed,
+                self.__holiday_prov,
+                self.__holiday_state,
+                self.__holiday_observed,
             )
             kwargs = {"years": years}
-            if self.__state is not None and self.__state != "":
-                kwargs["state"] = self.__state
-            if self.__prov is not None and self.__prov != "":
-                kwargs["prov"] = self.__prov
+            if self.__holiday_state is not None and self.__holiday_state != "":
+                kwargs["state"] = self.__holiday_state
+            if self.__holiday_prov is not None and self.__holiday_prov != "":
+                kwargs["prov"] = self.__holiday_prov
             if (
-                self.__observed is not None
-                and type(self.__observed) == bool
-                and not self.__observed
+                self.__holiday_observed is not None
+                and type(self.__holiday_observed) == bool
+                and not self.__holiday_observed
             ):
-                kwargs["observed"] = self.__observed
+                kwargs["observed"] = self.__holiday_observed
             hol = holidays.CountryHoliday(self.__country_holidays, **kwargs)
             if self.__holiday_pop_named is not None:
                 for pop in self.__holiday_pop_named:
