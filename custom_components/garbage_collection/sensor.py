@@ -211,11 +211,11 @@ class GarbageCollection(Entity):
                 for pop in self.__holiday_pop_named:
                     try:
                         hol.pop_named(pop)
-                    except Exception:
+                    except Exception as err:
                         _LOGGER.error(
-                            "(%s) Holiday not removed - Invaid name (%s)",
+                            "(%s) Holiday not removed (%s)",
                             self.__name,
-                            pop,
+                            err,
                         )
             try:
                 for d, name in hol.items():
