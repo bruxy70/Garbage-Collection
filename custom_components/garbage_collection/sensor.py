@@ -485,6 +485,18 @@ class GarbageCollection(Entity):
     async def __async_candidate_date_with_holidays(self, day1: date) -> date:
         """Find candidate date, automatically skip holidays"""
         first_day = day1
+        # Check if there are holidays within holiday offset that would fall into day1
+        if len(self.__holidays) > 0 and self.__holiday_move_offset > 0:
+            check_near = list(
+                filter(
+                    lambda date: date + relativedelta(days=self.__holiday_move_offset)
+                    >= day1
+                    and date <= day1,
+                    self.__holidays,
+                )
+            )
+            if len(check_near) > 0:
+                first_day = first_day - relativedelta(days=self.__holiday_move_offset)
         while True:
             next_date = await self.__async_find_candidate_date(first_day)
             if bool(self.__holiday_in_week_move):

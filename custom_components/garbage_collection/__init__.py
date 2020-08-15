@@ -7,7 +7,7 @@ from datetime import timedelta
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 from homeassistant import config_entries
-from homeassistant.const import CONF_NAME
+from homeassistant.const import CONF_ENTITY_ID, CONF_NAME
 from homeassistant.helpers import discovery
 from integrationhelper.const import CC_STARTUP_VERSION
 
@@ -38,9 +38,23 @@ CONFIG_SCHEMA = vol.Schema(
     extra=vol.ALLOW_EXTRA,
 )
 
+COLLECT_NOW_SCHEMA = vol.Schema({vol.Required(CONF_ENTITY_ID): cv.string})
 
 async def async_setup(hass, config):
     """Set up this component using YAML."""
+
+    def handle_collect_garbage(self, call):
+        """Handle the service call."""
+        entity_id = call.data.get(CONF_ENTITY_ID)
+        _LOGGER.debug("called collect_garbage for %s", entity_id)
+
+    if DOMAIN not in hass.services.async_services():
+        hass.services.async_register(
+            DOMAIN, "collect_garbage", handle_collect_garbage, schema=COLLECT_NOW_SCHEMA
+        )
+    else:
+        _LOGGER.debug("Service already registered")
+
     if config.get(DOMAIN) is None:
         # We get here if the integration is set up using config flow
         return True
