@@ -503,7 +503,7 @@ class GarbageCollection(Entity):
                 next_date = self.__skip_holiday(next_date)
             if next_date >= day1:
                 return next_date
-            first_day += relativedelta(days=1)  
+            first_day += relativedelta(days=1)
 
     def __insert_include_date(self, day1: date, next_date: date) -> date:
         """Add include dates."""
@@ -579,8 +579,8 @@ class GarbageCollection(Entity):
             for entity_id in self.__entities:
                 entity = self.hass.states.get(entity_id)
                 if (
-                    entity is not None and entity.attributes.get("last_updated").date()
-                    != today
+                    entity is not None
+                    and entity.attributes.get("last_updated").date() != today
                 ):
                     members_ready = False
                     break
