@@ -40,6 +40,7 @@ CONFIG_SCHEMA = vol.Schema(
 
 COLLECT_NOW_SCHEMA = vol.Schema({vol.Required(CONF_ENTITY_ID): cv.string})
 
+
 async def async_setup(hass, config):
     """Set up this component using YAML."""
 
