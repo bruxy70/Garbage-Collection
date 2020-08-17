@@ -193,6 +193,15 @@ If the `verbose_state` parameter is set, it will show date and remaining days, f
 | `next_date` | The date of next collection
 | `days` | Days till the next collection
 
+## Services
+### garbage_collection.collect_garbage
+If the collection is scheduled for today, mark it completed and look for the next collection.
+It will set the `last_collection` attribute to the current date and time.
+
+| Attribute | Description
+|:----------|------------
+| `entity_id` | The gatbage collection entity id (e.g. `sensor.general_waste`)
+
 # Lovelace config examples
 
 ## Garbage Collection custom card

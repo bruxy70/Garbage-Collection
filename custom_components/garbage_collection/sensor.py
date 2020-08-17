@@ -583,12 +583,15 @@ class GarbageCollection(Entity):
             if ready_for_update and not members_ready:
                 ready_for_update = False
         else:
-            if (
-                self.__expire_after is not None
-                and self.__next_date == today
-                and now.time() >= self.__expire_after
+            if self.__next_date == today and (
+                (self.__expire_after is not None and now.time() >= self.__expire_after)
+                or (
+                    self.last_collection is not None
+                    and self.last_collection.date() == today
+                )
             ):
                 ready_for_update = True
+            # pokud last_collection je dnes next_date == today
         return ready_for_update
 
     async def async_find_next_date(self, today: date) -> date:
