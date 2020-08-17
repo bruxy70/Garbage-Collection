@@ -9,6 +9,7 @@ from dateutil.relativedelta import relativedelta
 from homeassistant.const import ATTR_HIDDEN, CONF_ENTITIES, CONF_NAME, WEEKDAYS
 from homeassistant.helpers.discovery import async_load_platform
 from homeassistant.helpers.entity import Entity
+# from homeassistant.helpers.restore_state import RestoreEntity
 
 from .calendar import EntitiesCalendarData
 from .const import (

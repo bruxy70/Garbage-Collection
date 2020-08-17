@@ -4,3 +4,7 @@ collect_garbage:
     entity_id:
       description: The garbage_collection sensor entity_id
       example: sensor.general_waste
+    last_collection:
+      description: Date and time of the last collection (optional)
+      example: "2020-08-16 10:54:00"
+  

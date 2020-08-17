@@ -2,7 +2,7 @@
 Component to integrate with garbage_colection.
 """
 import logging
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 import homeassistant.helpers.config_validation as cv
 import homeassistant.util.dt as dt_util
@@ -13,6 +13,7 @@ from homeassistant.helpers import discovery
 from integrationhelper.const import CC_STARTUP_VERSION
 
 from .const import (
+    ATTR_LAST_COLLECTION,
     CONF_FREQUENCY,
     CONF_SENSORS,
     DOMAIN,
@@ -39,7 +40,12 @@ CONFIG_SCHEMA = vol.Schema(
     extra=vol.ALLOW_EXTRA,
 )
 
-COLLECT_NOW_SCHEMA = vol.Schema({vol.Required(CONF_ENTITY_ID): cv.string})
+COLLECT_NOW_SCHEMA = vol.Schema(
+    {
+        vol.Required(CONF_ENTITY_ID): cv.string,
+        vol.Optional(ATTR_LAST_COLLECTION): cv.datetime,
+    }
+)
 
 
 async def async_setup(hass, config):
@@ -48,12 +54,17 @@ async def async_setup(hass, config):
     def handle_collect_garbage(call):
         """Handle the service call."""
         entity_id = call.data.get(CONF_ENTITY_ID)
+        last_collection = call.data.get(ATTR_LAST_COLLECTION)
         _LOGGER.debug("called collect_garbage for %s", entity_id)
         try:
             entity = hass.data[DOMAIN][SENSOR_PLATFORM][entity_id]
-            entity.last_collection = dt_util.now()
-        except Exception:
-            _LOGGER.error("Failed setting last collection for %s", entity_id)
+            if last_collection is None:
+                entity.last_collection = dt_util.now()
+            else:
+                entity.last_collection = dt_util.as_local(last_collection)
+        except Exception as err:
+            _LOGGER.error("Failed setting last collection for %s - %s", entity_id, err)
+        hass.services.call("homeassistant", "update_entity", {"entity_id": entity_id})
 
     if DOMAIN not in hass.services.async_services():
         hass.services.async_register(
