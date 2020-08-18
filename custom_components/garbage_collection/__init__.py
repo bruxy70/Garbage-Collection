@@ -2,7 +2,7 @@
 Component to integrate with garbage_colection.
 """
 import logging
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 import homeassistant.helpers.config_validation as cv
 import homeassistant.util.dt as dt_util

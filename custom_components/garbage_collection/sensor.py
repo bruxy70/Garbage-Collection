@@ -117,7 +117,7 @@ def parse_datetime(text: str):
     """Parse text to datetime object."""
     try:
         return parse(text)
-    except:
+    except Exception:
         return None
 
 
@@ -125,7 +125,7 @@ def parse_date(text: str):
     """Parse text to date object."""
     try:
         return parse(text).date()
-    except:
+    except Exception:
         return None
 
 
