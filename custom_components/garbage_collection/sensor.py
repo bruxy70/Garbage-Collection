@@ -5,16 +5,17 @@ from typing import Any, List
 
 import holidays
 import homeassistant.util.dt as dt_util
+from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
 from homeassistant.const import ATTR_HIDDEN, CONF_ENTITIES, CONF_NAME, WEEKDAYS
 from homeassistant.helpers.discovery import async_load_platform
-from homeassistant.helpers.entity import Entity
-# from homeassistant.helpers.restore_state import RestoreEntity
+from homeassistant.helpers.restore_state import RestoreEntity
 
 from .calendar import EntitiesCalendarData
 from .const import (
     ATTR_DAYS,
     ATTR_LAST_COLLECTION,
+    ATTR_LAST_UPDATED,
     ATTR_NEXT_DATE,
     CALENDAR_NAME,
     CALENDAR_PLATFORM,
@@ -112,6 +113,22 @@ def to_date(day: Any) -> date:
     return date.fromisoformat(day)
 
 
+def parse_datetime(text: str):
+    """Parse text to datetime object."""
+    try:
+        return parse(text)
+    except:
+        return None
+
+
+def parse_date(text: str):
+    """Parse text to date object."""
+    try:
+        return parse(text).date()
+    except:
+        return None
+
+
 def to_dates(dates: List[Any]) -> List[date]:
     """Convert list of text to datetimes, if not already datetimes."""
     converted = []
@@ -123,7 +140,7 @@ def to_dates(dates: List[Any]) -> List[date]:
     return converted
 
 
-class GarbageCollection(Entity):
+class GarbageCollection(RestoreEntity):
     """GarbageCollection Sensor class."""
 
     def __init__(self, hass, config, title=None):
@@ -235,12 +252,25 @@ class GarbageCollection(Entity):
         if SENSOR_PLATFORM not in self.hass.data[DOMAIN]:
             self.hass.data[DOMAIN][SENSOR_PLATFORM] = {}
         self.hass.data[DOMAIN][SENSOR_PLATFORM][self.entity_id] = self
+
+        state = await self.async_get_last_state()
+        if state is not None:
+            self.last_collection = parse_datetime(
+                state.attributes.get(ATTR_LAST_COLLECTION)
+            )
+            self.__last_updated = parse_datetime(
+                state.attributes.get(ATTR_LAST_UPDATED)
+            )
+            self.__next_date = parse_date(state.attributes.get(ATTR_NEXT_DATE))
+            self.__days = state.attributes.get(ATTR_DAYS)
+            self.__state = state.state
+
         if not self.hidden:
             if CALENDAR_PLATFORM not in self.hass.data[DOMAIN]:
                 self.hass.data[DOMAIN][CALENDAR_PLATFORM] = EntitiesCalendarData(
                     self.hass
                 )
-                _LOGGER.debug("Creating calendar")
+                _LOGGER.debug("Creating garbage_collection calendar")
                 self.hass.async_create_task(
                     async_load_platform(
                         self.hass,
@@ -303,7 +333,7 @@ class GarbageCollection(Entity):
             ).astimezone()
         res[ATTR_DAYS] = self.__days
         res[ATTR_LAST_COLLECTION] = self.last_collection
-        res["last_updated"] = self.__last_updated
+        res[ATTR_LAST_UPDATED] = self.__last_updated
         return res
 
     @property
@@ -446,14 +476,12 @@ class GarbageCollection(Entity):
             candidate_date = None
             try:
                 for entity_id in self.__entities:
-                    if (
-                        SENSOR_PLATFORM in self.hass.data[DOMAIN]
-                        and entity_id in self.hass.data[DOMAIN][SENSOR_PLATFORM]
-                    ):
-                        entity = self.hass.data[DOMAIN][SENSOR_PLATFORM][entity_id]
-                        d = await entity.async_find_next_date(day1)
-                        if candidate_date is None or d < candidate_date:
-                            candidate_date = d
+                    entity = self.hass.data[DOMAIN][SENSOR_PLATFORM][entity_id]
+                    d = await entity.async_find_next_date(day1)
+                    if candidate_date is None or d < candidate_date:
+                        candidate_date = d
+            except KeyError:
+                return None
             except TypeError:
                 _LOGGER.error("(%s) Please add entities for the group.", self.__name)
                 return None
@@ -479,6 +507,8 @@ class GarbageCollection(Entity):
                 first_day -= relativedelta(days=self.__holiday_move_offset)
         while True:
             next_date = await self.__async_find_candidate_date(first_day)
+            if next_date is None:
+                return None
             if bool(self.__holiday_in_week_move):
                 start_date = next_date - relativedelta(days=next_date.weekday())
                 delta = relativedelta(days=1)
@@ -530,6 +560,8 @@ class GarbageCollection(Entity):
             next_date = self.__insert_include_date(
                 first_day, await self.__async_candidate_date_with_holidays(first_day)
             )
+            if next_date is None:
+                return None
             date_ok = True
             # Pokud je to dnes a po expiraci - hledat dal od zitra
             now = dt_util.now()
@@ -576,8 +608,8 @@ class GarbageCollection(Entity):
             for entity_id in self.__entities:
                 state_object = self.hass.states.get(entity_id)
                 if (
-                    state_object is not None
-                    and state_object.attributes.get("last_updated").date() != today
+                    state_object is None
+                    or state_object.attributes.get(ATTR_LAST_UPDATED).date() != today
                 ):
                     members_ready = False
                     break
