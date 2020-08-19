@@ -1,8 +1,12 @@
+"""Genrate configuration that is used by both YAML and config_flow."""
+
 from collections import OrderedDict
+from typing import Dict
 
 
 class config_singularity:
-    """
+    """Store configuration and generate configs and default values.
+    
     Options is a dictionary (key is the parameter name),
     where each value is a dictionary with following keys
     "step".......in whict config_flow step is this in
@@ -17,13 +21,12 @@ class config_singularity:
     So I pass it twice - once the type, then the validator.
     Not necesaty for standard validators, such as vol.In()
     For example: "type": str, "validator": cv.string.
-    )
     """
 
-    options = {}
+    options: Dict = {}
 
     def __init__(self):
-        """"Validate."""
+        """Validate configuration and reset defaults."""
         for _, value in self.options.items():
             if "method" not in value:
                 raise ('config_singularity.options must contain the key "method"')
@@ -34,7 +37,7 @@ class config_singularity:
 
     @property
     def defaults(self):
-        """Default values."""
+        """Return default values."""
         return self.__defaults
 
     def reset_defaults(self):
@@ -47,10 +50,7 @@ class config_singularity:
             self.__defaults[key] = value["default"]
 
     def compile_config_flow(self, step, valid_for=None):
-        """
-        Generate dictionary with relevant configuration options
-        for the current step and relevant for the current frequency.
-        """
+        """Generate configuration options relevant for current step and frequency."""
         result = OrderedDict()
         items = {
             key: value

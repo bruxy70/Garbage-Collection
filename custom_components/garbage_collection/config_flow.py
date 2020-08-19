@@ -36,7 +36,10 @@ _LOGGER = logging.getLogger(__name__)
 
 
 class garbage_collection_shared:
+    """Store configuration for both YAML and config_flow."""
+
     def __init__(self, unique_id):
+        """Create class attributes and set initial values."""
         self._data = {}
         self._data["unique_id"] = unique_id
         self.name = None
@@ -44,8 +47,8 @@ class garbage_collection_shared:
         self.data_schema = {}
 
     def update_data(self, user_input, step):
+        """Remove empty fields, and fields that should not be stored in the configuration."""
         self._data.update(user_input)
-        # Remove empty fields
         items = {
             key: value
             for (key, value) in config_definition.options.items()
@@ -59,11 +62,7 @@ class garbage_collection_shared:
             del self._data[CONF_NAME]
 
     def step1_user_init(self, user_input, defaults=None):
-        """
-
-        C O N F I G U R A T I O N   S T E P   1
-
-        """
+        """Step 1 - general set-up."""
         self.errors = {}
         if user_input is not None:
             validation = config_definition.compile_schema(step=1)
@@ -101,12 +100,7 @@ class garbage_collection_shared:
         return False
 
     def step2_annual_group(self, user_input, defaults=None):
-        """
-
-        C O N F I G U R A T I O N   S T E P   2   (  A N N U A L   O R   G R O U P  )
-        (no week days)
-
-        """
+        """Step 2 - Annual or Group (no week days)."""
         self.errors = {}
         self.data_schema = {}
         updates = {}
@@ -139,12 +133,7 @@ class garbage_collection_shared:
         return False
 
     def step3_detail(self, user_input, defaults=None):
-        """
-
-        C O N F I G U R A T I O N   S T E P   2
-        ( O T H E R   T H A N   A N N U A L   O R   G R O U P )
-
-        """
+        """Step 2 - other than Annual or Group."""
         self.errors = {}
         self.data_schema = {}
         if user_input is not None and user_input != {}:
@@ -189,11 +178,7 @@ class garbage_collection_shared:
         return False
 
     def step4_final(self, user_input, defaults=None):
-        """
-
-        C O N F I G U R A T I O N   S T E P   3
-
-        """
+        """Step 3 - additional parameters."""
         self.errors = {}
         self.data_schema = {}
         if user_input is not None and user_input != {}:
@@ -267,13 +252,15 @@ class garbage_collection_shared:
 
     @property
     def frequency(self):
-        if CONF_FREQUENCY in self._data:
+        """Return the collection frequency."""
+        try:
             return self._data[CONF_FREQUENCY]
-        else:
+        except Exception:
             return None
 
     @property
     def data(self):
+        """Return whole data store."""
         return self._data
 
 
@@ -292,9 +279,7 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
     async def async_step_user(
         self, user_input={}
     ):  # pylint: disable=dangerous-default-value
-        """
-        C O N F I G U R A T I O N   S T E P   1
-        """
+        """Step 1 - general parameters."""
         next_step = self.shared_class.step1_user_init(user_input)
         if next_step:
             if self.shared_class.frequency in ANNUAL_GROUP_FREQUENCY:
@@ -313,10 +298,7 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
     async def async_step_annual_group(
         self, user_input={}
     ):  # pylint: disable=dangerous-default-value
-        """
-        C O N F I G U R A T I O N   S T E P   2   (  A N N U A L   O R   G R O U P  )
-        (no week days)
-        """
+        """Step 2 - annual or group (no week days)."""
         next_step = self.shared_class.step2_annual_group(user_input)
         if next_step:
             return self.async_create_entry(
@@ -332,10 +314,7 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
     async def async_step_detail(
         self, user_input={}
     ):  # pylint: disable=dangerous-default-value
-        """
-        C O N F I G U R A T I O N   S T E P   2
-        ( O T H E R   T H A N   A N N U A L   O R   G R O U P )
-        """
+        """Step 2 - other than annual or group."""
         next_step = self.shared_class.step3_detail(user_input)
         if next_step:
             return await self.async_step_final()
@@ -349,9 +328,7 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
     async def async_step_final(
         self, user_input={}
     ):  # pylint: disable=dangerous-default-value
-        """
-        C O N F I G U R A T I O N   S T E P   3
-        """
+        """Step 3 - additional parameters."""
         if self.shared_class.step4_final(user_input):
             return self.async_create_entry(
                 title=self.shared_class.name, data=self.shared_class.data
@@ -365,6 +342,7 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
 
     async def async_step_import(self, user_input):  # pylint: disable=unused-argument
         """Import a config entry.
+        
         Special type of import, we're not actually going to store any data.
         Instead, we're going to rely on the values that are in config file.
         """
@@ -375,6 +353,7 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
     @staticmethod
     @callback
     def async_get_options_flow(config_entry):
+        """Return options flow handler, or empty options flow if no unique_id."""
         if config_entry.data.get("unique_id", None) is not None:
             return OptionsFlowHandler(config_entry)
         else:
@@ -391,16 +370,17 @@ O P T I O N S   F L O W
 
 
 class OptionsFlowHandler(config_entries.OptionsFlow):
+    """Options flow handler."""
+
     def __init__(self, config_entry):
+        """Create and initualize class variables."""
         self.config_entry = config_entry
         self.shared_class = garbage_collection_shared(
             config_entry.data.get("unique_id")
         )
 
     async def async_step_init(self, user_input=None):
-        """
-        O P T I O N S   S T E P   1
-        """
+        """Genral parameters."""
         next_step = self.shared_class.step1_user_init(
             user_input, self.config_entry.data
         )
@@ -421,10 +401,7 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
     async def async_step_annual_group(
         self, user_input={}
     ):  # pylint: disable=dangerous-default-value
-        """
-        O P T I O N S   S T E P   2   (  A N N U A L   O R   G R O U P  )
-        (no week days)
-        """
+        """Step 2 - annual or group (no week days)."""
         next_step = self.shared_class.step2_annual_group(
             user_input, self.config_entry.data
         )
@@ -440,10 +417,7 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
     async def async_step_detail(
         self, user_input={}
     ):  # pylint: disable=dangerous-default-value
-        """
-        C O N F I G U R A T I O N   S T E P   2
-        ( O T H E R   T H A N   A N N U A L   O R   G R O U P )
-        """
+        """Step 2 - other than annual or group."""
         next_step = self.shared_class.step3_detail(user_input, self.config_entry.data)
         if next_step:
             return await self.async_step_final()
@@ -457,9 +431,7 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
     async def async_step_final(
         self, user_input={}
     ):  # pylint: disable=dangerous-default-value
-        """
-        C O N F I G U R A T I O N   S T E P   3
-        """
+        """Step 3 - additional parameters."""
         if self.shared_class.step4_final(user_input, self.config_entry.data):
             return self.async_create_entry(title="", data=self.shared_class.data)
         else:
@@ -471,12 +443,15 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
 
 
 class EmptyOptions(config_entries.OptionsFlow):
+    """A class for default options. Not sure why this is required."""
+
     def __init__(self, config_entry):
+        """Just set the config_entry parameter."""
         self.config_entry = config_entry
 
 
 def is_month_day(date) -> bool:
-    """Validates mm/dd format"""
+    """Validate mm/dd format."""
     try:
         date = datetime.strptime(date, "%m/%d")
         return True
@@ -485,7 +460,7 @@ def is_month_day(date) -> bool:
 
 
 def is_date(date) -> bool:
-    """Validates yyyy-mm-dd format"""
+    """Validate yyyy-mm-dd format."""
     if date == "":
         return True
     try:
@@ -496,12 +471,14 @@ def is_date(date) -> bool:
 
 
 def string_to_list(string) -> list:
+    """Convert comma separated text to list."""
     if string is None or string == "":
         return []
     return list(map(lambda x: x.strip(), string.split(",")))
 
 
 def days_to_list(src):
+    """Compile a list of days from individual variables."""
     src[CONF_COLLECTION_DAYS] = []
     for day in WEEKDAYS:
         if src[f"collection_days_{day.lower()}"]:
@@ -510,6 +487,7 @@ def days_to_list(src):
 
 
 def weekdays_to_list(src, prefix):
+    """Compile a list of weekdays from individual variables."""
     src[prefix] = []
     for i in range(5):
         if src[f"{prefix}_{i+1}"]:
@@ -518,6 +496,7 @@ def weekdays_to_list(src, prefix):
 
 
 def list_to_days(data_schema):
+    """Create variables back from the list."""
     copy = data_schema.copy()
     data_schema.clear()
     for day in WEEKDAYS:
@@ -538,6 +517,7 @@ def list_to_days(data_schema):
 
 
 def list_to_weekdays(data_schema, prefix):
+    """Create variables back from the list."""
     copy = data_schema.copy()
     data_schema.clear()
     for i in range(5):
@@ -560,7 +540,7 @@ def list_to_weekdays(data_schema, prefix):
 
 
 def is_dates(dates) -> bool:
-    """Validates list of dates (yyyy-mm-dd, yyyy-mm-dd)"""
+    """Validate list of dates (yyyy-mm-dd, yyyy-mm-dd)."""
     if dates == []:
         return True
     check = True

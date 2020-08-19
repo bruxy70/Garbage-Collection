@@ -1,6 +1,5 @@
-"""
-Component to integrate with garbage_colection.
-"""
+"""Component to integrate with garbage_colection."""
+
 import logging
 from datetime import timedelta
 

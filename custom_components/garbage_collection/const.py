@@ -1,3 +1,5 @@
+"""Define constants used in garbage_collection."""
+
 from datetime import datetime
 
 import homeassistant.helpers.config_validation as cv
@@ -175,7 +177,7 @@ COUNTRY_CODES = [
 
 
 def date_text(value):
-    """Have to store date as text - datetime is not JSON serialisable"""
+    """Have to store date as text - datetime is not JSON serialisable."""
     if value is None or value == "":
         return ""
     try:
@@ -185,7 +187,7 @@ def date_text(value):
 
 
 def time_text(value):
-    """Have to store time as text - datetime is not JSON serialisable"""
+    """Have to store time as text - datetime is not JSON serialisable."""
     if value is None or value == "":
         return ""
     try:
@@ -195,6 +197,7 @@ def time_text(value):
 
 
 def month_day_text(value):
+    """Validate format month/day."""
     if value is None or value == "":
         return ""
     try:
@@ -204,10 +207,11 @@ def month_day_text(value):
 
 
 class configuration(config_singularity):
-    """
-    Type and validation seems duplicare, but I cannot use custom validators in ShowForm
+    """Store validation schema for garbage_collection configuration.
+    
+    Type and validation seems duplicate, but I cannot use custom validators in ShowForm
     It calls convert from voluptuous-serialize that does not accept them
-    so I pass it twice - once the type, then the validator:( )
+    so I pass it twice - once the type, then the validator.
     """
 
     options = {

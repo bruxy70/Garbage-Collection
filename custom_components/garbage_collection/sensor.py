@@ -66,12 +66,12 @@ _LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_platform(hass, _, async_add_entities, discovery_info=None):
-    """Setup sensor platform."""
+    """Create garbage collection entities defined in YAML and add them to HA."""
     async_add_entities([GarbageCollection(hass, discovery_info)], True)
 
 
 async def async_setup_entry(hass, config_entry, async_add_devices):
-    """Setup sensor platform."""
+    """Create garbage collection entities defined in config_flow and add them to HA."""
     async_add_devices(
         [GarbageCollection(hass, config_entry.data, config_entry.title)], True
     )
@@ -144,6 +144,7 @@ class GarbageCollection(RestoreEntity):
     """GarbageCollection Sensor class."""
 
     def __init__(self, hass, config, title=None):
+        """Read configuration and initialise class variables."""
         self.config = config
         self.__name = title if title is not None else config.get(CONF_NAME)
         self.__hidden = config.get(ATTR_HIDDEN, False)
@@ -245,7 +246,7 @@ class GarbageCollection(RestoreEntity):
             _LOGGER.debug("(%s) Found these holidays: %s", self.__name, holidays_log)
 
     async def async_added_to_hass(self):
-        """"When sensor is added to hassio, add it to calendar."""
+        """When sensor is added to hassio, add it to calendar."""
         await super().async_added_to_hass()
         if DOMAIN not in self.hass.data:
             self.hass.data[DOMAIN] = {}
@@ -283,7 +284,7 @@ class GarbageCollection(RestoreEntity):
             self.hass.data[DOMAIN][CALENDAR_PLATFORM].add_entity(self.entity_id)
 
     async def async_will_remove_from_hass(self):
-        """"When sensor is added to hassio, remove it."""
+        """When sensor is added to hassio, remove it."""
         await super().async_will_remove_from_hass()
         del self.hass.data[DOMAIN][SENSOR_PLATFORM][self.entity_id]
         self.hass.data[DOMAIN][CALENDAR_PLATFORM].remove_entity(self.entity_id)
@@ -319,6 +320,7 @@ class GarbageCollection(RestoreEntity):
 
     @property
     def icon(self):
+        """Return the entity icon."""
         return self.__icon
 
     @property
@@ -396,8 +398,10 @@ class GarbageCollection(RestoreEntity):
             )
 
     async def __async_find_candidate_date(self, day1: date) -> date:
-        """Find the next possible date starting from day1,
-        only based on calendar, not looking at include/exclude days."""
+        """Find the next possible date starting from day1.
+        
+        Only based on calendar, not looking at include/exclude days.
+        """
         week = day1.isocalendar()[1]
         weekday = day1.weekday()
         year = day1.year
@@ -593,7 +597,8 @@ class GarbageCollection(RestoreEntity):
                 return None
 
     async def __async_ready_for_update(self) -> bool:
-        """
+        """Check if the entity is ready for the update.
+        
         Skip the update if the sensor was updated today
         Except for the sensors with with next date today and after the expiration time
         For group sensors wait for update of the sensors in the group
