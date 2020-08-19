@@ -10,11 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: "Set version numbmer"
-        run: |
-          sed -i '/VERSION = /c\VERSION = "${{ github.ref }}"' custom_components/garbage_collection/const.py
-          sed -i 's|refs/heads/||' custom_components/garbage_collection/const.py
-          sed -i 's|refs/tags/||' custom_components/garbage_collection/const.py
+      # - name: "Set version number"
+      #   run: |
+      #     sed -i '/VERSION = /c\VERSION = "${{ github.ref }}"' custom_components/garbage_collection/const.py
+      #     sed -i 's|refs/heads/||' custom_components/garbage_collection/const.py
+      #     sed -i 's|refs/tags/||' custom_components/garbage_collection/const.py
 
       # Pack the HACS dir as a zip and upload to the release
       - name: ZIP garbage_collection Dir
