@@ -10,7 +10,6 @@ import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.const import CONF_ENTITY_ID, CONF_NAME
 from homeassistant.helpers import discovery
-from integrationhelper.const import CC_STARTUP_VERSION
 
 from .const import (
     ATTR_LAST_COLLECTION,
@@ -76,18 +75,14 @@ async def async_setup(hass, config):
     if config.get(DOMAIN) is None:
         # We get here if the integration is set up using config flow
         return True
-    # Print startup message
-    _LOGGER.info(
-        CC_STARTUP_VERSION.format(name=DOMAIN, version=VERSION, issue_link=ISSUE_URL)
-    )
-    platform_config = config[DOMAIN].get(CONF_SENSORS, {})
 
+    platform_config = config[DOMAIN].get(CONF_SENSORS, {})
     # If platform is not enabled, skip.
     if not platform_config:
         return False
 
     for entry in platform_config:
-        _LOGGER.info(
+        _LOGGER.debug(
             "Setting %s(%s) from YAML configuration",
             entry[CONF_NAME],
             entry[CONF_FREQUENCY],
@@ -112,12 +107,8 @@ async def async_setup_entry(hass, config_entry):
         # We get here if the integration is set up using YAML
         hass.async_create_task(hass.config_entries.async_remove(config_entry.entry_id))
         return False
-    # Print startup message
-    _LOGGER.info(
-        CC_STARTUP_VERSION.format(name=DOMAIN, version=VERSION, issue_link=ISSUE_URL)
-    )
-    _LOGGER.info(
-        "Setting %s(%s) from ConfigFlow",
+    _LOGGER.debug(
+        "Setting %s (%s) from ConfigFlow",
         config_entry.title,
         config_entry.data[CONF_FREQUENCY],
     )

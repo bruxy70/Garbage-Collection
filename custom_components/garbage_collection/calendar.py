@@ -90,7 +90,6 @@ class EntitiesCalendarData:
         start_date = start_datetime.date()
         end_date = end_datetime.date()
         for entity in self.entities:
-            # garbage_collection = find_entity(hass, entity)
             if (
                 entity not in hass.data[DOMAIN][SENSOR_PLATFORM]
                 or hass.data[DOMAIN][SENSOR_PLATFORM][entity].hidden

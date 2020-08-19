@@ -119,7 +119,7 @@ class garbage_collection_shared:
             try:
                 updates = validation(user_input)
             except vol.Invalid:
-                # _LOGGER.debug(exception)
+                # _LOGGER.debug(error)
                 if self._data[CONF_FREQUENCY] in ANNUAL_FREQUENCY:
                     self.errors["base"] = "month_day"
                 else:

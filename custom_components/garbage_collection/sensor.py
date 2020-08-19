@@ -491,7 +491,7 @@ class GarbageCollection(RestoreEntity):
             return None
 
     async def __async_candidate_date_with_holidays(self, day1: date) -> date:
-        """Find candidate date, automatically skip holidays"""
+        """Find candidate date, automatically skip holidays."""
         first_day = day1
         # Check if there are holidays within holiday offset that would fall into day1
         if len(self.__holidays) > 0 and self.__holiday_move_offset > 0:
@@ -563,7 +563,7 @@ class GarbageCollection(RestoreEntity):
             if next_date is None:
                 return None
             date_ok = True
-            # Pokud je to dnes a po expiraci - hledat dal od zitra
+            # Ifit is today and after expiration, search from tomorrow
             now = dt_util.now()
             expiration = (
                 self.__expire_after
@@ -624,11 +624,10 @@ class GarbageCollection(RestoreEntity):
                 )
             ):
                 ready_for_update = True
-            # pokud last_collection je dnes next_date == today
         return ready_for_update
 
     async def async_find_next_date(self, today: date) -> date:
-        """Get date within configured date range"""
+        """Get date within configured date range."""
         year = today.year
         month = today.month
         if self.date_inside(today):
