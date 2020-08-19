@@ -16,9 +16,7 @@ from .const import (
     CONF_FREQUENCY,
     CONF_SENSORS,
     DOMAIN,
-    ISSUE_URL,
     SENSOR_PLATFORM,
-    VERSION,
     configuration,
 )
 
