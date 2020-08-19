@@ -399,7 +399,7 @@ class GarbageCollection(RestoreEntity):
 
     async def __async_find_candidate_date(self, day1: date) -> date:
         """Find the next possible date starting from day1.
-        
+
         Only based on calendar, not looking at include/exclude days.
         """
         week = day1.isocalendar()[1]
@@ -598,7 +598,7 @@ class GarbageCollection(RestoreEntity):
 
     async def __async_ready_for_update(self) -> bool:
         """Check if the entity is ready for the update.
-        
+
         Skip the update if the sensor was updated today
         Except for the sensors with with next date today and after the expiration time
         For group sensors wait for update of the sensors in the group

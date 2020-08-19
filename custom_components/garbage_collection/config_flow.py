@@ -47,7 +47,7 @@ class garbage_collection_shared:
         self.data_schema = {}
 
     def update_data(self, user_input, step):
-        """Remove empty fields, and fields that should not be stored in the configuration."""
+        """Remove empty fields, and fields that should not be stored in the config."""
         self._data.update(user_input)
         items = {
             key: value
@@ -342,7 +342,7 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
 
     async def async_step_import(self, user_input):  # pylint: disable=unused-argument
         """Import a config entry.
-        
+
         Special type of import, we're not actually going to store any data.
         Instead, we're going to rely on the values that are in config file.
         """

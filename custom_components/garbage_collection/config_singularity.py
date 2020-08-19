@@ -6,7 +6,7 @@ from typing import Dict
 
 class config_singularity:
     """Store configuration and generate configs and default values.
-    
+
     Options is a dictionary (key is the parameter name),
     where each value is a dictionary with following keys
     "step".......in whict config_flow step is this in
