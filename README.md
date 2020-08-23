@@ -131,6 +131,8 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 | `include_dates` | No | List of extra collection (using international date format `'yyyy-mm-dd'`.
 | `move_country_holidays` | No | Country holidays - the country code (see [holidays](https://github.com/dr-prodigy/python-holidays) for the list of valid country codes).<br/>Automatically move garbage collection on public holidays to the following day.<br/>*Example:* `US` 
 | `holiday_in_week_move` | No | Move garbage collection to the following day if a holiday is in week.<br/>**Default**: `false`
+| `holiday_move_offset` | No | Move the collection by the number of days (integer -7..7) **Default**: 1
+| `holiday_pop_named` | No | Ignore holidays (list of holiday names) *Example:* `"Columbus Day"`, `"Veterans Day"`
 | `prov` | No | Country holidays - province (see [holidays](https://github.com/dr-prodigy/python-holidays) ).
 | `state` | No | Country holidays - state (see [holidays](https://github.com/dr-prodigy/python-holidays) ).
 | `observed` | No | Country holidays - observed (see [holidays](https://github.com/dr-prodigy/python-holidays) ).
@@ -190,6 +192,15 @@ If the `verbose_state` parameter is set, it will show date and remaining days, f
 |:----------|------------
 | `next_date` | The date of next collection
 | `days` | Days till the next collection
+
+## Services
+### garbage_collection.collect_garbage
+If the collection is scheduled for today, mark it completed and look for the next collection.
+It will set the `last_collection` attribute to the current date and time.
+
+| Attribute | Description
+|:----------|------------
+| `entity_id` | The gatbage collection entity id (e.g. `sensor.general_waste`)
 
 # Lovelace config examples
 
