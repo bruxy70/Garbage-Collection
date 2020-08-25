@@ -604,7 +604,7 @@ class GarbageCollection(RestoreEntity):
         today = now.date()
         try:
             ready_for_update = bool(self.__last_updated.date() != today)
-        except:
+        except AttributeError:
             ready_for_update = True
         if self.__frequency == "group":
             members_ready = True
@@ -614,7 +614,7 @@ class GarbageCollection(RestoreEntity):
                     if state_object.attributes.get(ATTR_LAST_UPDATED).date() != today:
                         members_ready = False
                         break
-                except Exception:
+                except AttributeError:
                     members_ready = False
                     break
             if ready_for_update and not members_ready:
@@ -626,7 +626,7 @@ class GarbageCollection(RestoreEntity):
                     or self.last_collection.date() == today
                 ):
                     ready_for_update = True
-            except Exception:
+            except AttributeError:
                 pass
         return ready_for_update
 
