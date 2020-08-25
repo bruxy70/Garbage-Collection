@@ -602,30 +602,32 @@ class GarbageCollection(RestoreEntity):
         """
         now = dt_util.now()
         today = now.date()
-        ready_for_update = bool(
-            self.__last_updated is None or self.__last_updated.date() != today
-        )
+        try:
+            ready_for_update = bool(self.__last_updated.date() != today)
+        except:
+            ready_for_update = True
         if self.__frequency == "group":
             members_ready = True
             for entity_id in self.__entities:
                 state_object = self.hass.states.get(entity_id)
-                if (
-                    state_object is None
-                    or state_object.attributes.get(ATTR_LAST_UPDATED).date() != today
-                ):
+                try:
+                    if state_object.attributes.get(ATTR_LAST_UPDATED).date() != today:
+                        members_ready = False
+                        break
+                except Exception:
                     members_ready = False
                     break
             if ready_for_update and not members_ready:
                 ready_for_update = False
         else:
-            if (self.__next_date is not None and self.__next_date == today) and (
-                (self.__expire_after is not None and now.time() >= self.__expire_after)
-                or (
-                    self.last_collection is not None
-                    and self.last_collection.date() == today
-                )
-            ):
-                ready_for_update = True
+            try:
+                if self.__next_date == today and (
+                    now.time() >= self.__expire_after
+                    or self.last_collection.date() == today
+                ):
+                    ready_for_update = True
+            except Exception:
+                pass
         return ready_for_update
 
     async def async_find_next_date(self, today: date) -> date:
