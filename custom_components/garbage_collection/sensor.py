@@ -259,9 +259,6 @@ class GarbageCollection(RestoreEntity):
             self.last_collection = parse_datetime(
                 state.attributes.get(ATTR_LAST_COLLECTION)
             )
-            self.__last_updated = parse_datetime(
-                state.attributes.get(ATTR_LAST_UPDATED)
-            )
             self.__next_date = parse_date(state.attributes.get(ATTR_NEXT_DATE))
             self.__days = state.attributes.get(ATTR_DAYS)
             self.__state = state.state
@@ -621,7 +618,7 @@ class GarbageCollection(RestoreEntity):
             if ready_for_update and not members_ready:
                 ready_for_update = False
         else:
-            if self.__next_date == today and (
+            if (self.__next_date is not None and self.__next_date == today) and (
                 (self.__expire_after is not None and now.time() >= self.__expire_after)
                 or (
                     self.last_collection is not None
