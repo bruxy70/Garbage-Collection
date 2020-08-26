@@ -28,10 +28,12 @@ jobs:
         run: black --check .
       - name: flake8
         run: flake8 --max-line-length 88 .
-      - name: mypy
-        run: mypy --ignore-missing-imports --follow-imports=silent .
       - name: pydocstyle
         run: pydocstyle .
+      - name: mypy
+        run: |
+          cd ..
+          mypy --ignore-missing-imports --follow-imports=silent garbage_collection
   bandit:
     runs-on: "ubuntu-latest"
     steps:
