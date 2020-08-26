@@ -29,7 +29,7 @@ jobs:
       - name: flake8
         run: flake8 --max-line-length 88 .
       - name: mypy
-        run: mypy --ignore-missing-imports --follow-imports=silent --show-column-numbers .. 
+        run: mypy --ignore-missing-imports --follow-imports=silent .
       - name: pydocstyle
         run: pydocstyle .
   bandit:
