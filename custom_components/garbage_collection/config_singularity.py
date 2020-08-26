@@ -1,7 +1,7 @@
 """Genrate configuration that is used by both YAML and config_flow."""
 
 from collections import OrderedDict
-from typing import Dict, List
+from typing import Dict
 
 
 class config_singularity:
