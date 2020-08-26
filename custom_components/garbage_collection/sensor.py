@@ -445,7 +445,7 @@ class GarbageCollection(RestoreEntity):
                 )
             except TypeError:
                 raise ValueError(
-                    f"(self.__name) Please configure first_date and period "
+                    f"({self.__name}) Please configure first_date and period "
                     "for every-n-days collection frequency."
                 )
             return day1 + relativedelta(days=offset)
@@ -466,7 +466,8 @@ class GarbageCollection(RestoreEntity):
                 conf_date = datetime.strptime(self.__date, "%m/%d").date()
             except TypeError:
                 raise ValueError(
-                    f"(self.__name) Please configure the date for annual collection frequency."
+                    f"({self.__name}) Please configure the date "
+                    "for annual collection frequency."
                 )
             candidate_date = date(year, conf_date.month, conf_date.day)
             if candidate_date < day1:
