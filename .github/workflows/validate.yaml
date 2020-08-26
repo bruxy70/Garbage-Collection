@@ -31,9 +31,7 @@ jobs:
       - name: pydocstyle
         run: pydocstyle .
       - name: mypy
-        run: |
-          cd ..
-          mypy --ignore-missing-imports --follow-imports=silent garbage_collection
+        run: mypy --ignore-missing-imports --follow-imports=silent custom_components/garbage_collection
   bandit:
     runs-on: "ubuntu-latest"
     steps:
