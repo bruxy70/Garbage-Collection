@@ -629,7 +629,7 @@ class GarbageCollection(RestoreEntity):
                     or self.last_collection.date() == today
                 ):
                     ready_for_update = True
-            except AttributeError:
+            except (AttributeError, TypeError):
                 pass
         return ready_for_update
 
