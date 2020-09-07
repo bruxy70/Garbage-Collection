@@ -440,9 +440,7 @@ class GarbageCollection(RestoreEntity):
             try:
                 if (day1 - self._first_date).days % self._period == 0:
                     return day1
-                offset = self._period - (
-                    (day1 - self._first_date).days % self._period
-                )
+                offset = self._period - ((day1 - self._first_date).days % self._period)
             except TypeError:
                 raise ValueError(
                     f"({self._name}) Please configure first_date and period "
