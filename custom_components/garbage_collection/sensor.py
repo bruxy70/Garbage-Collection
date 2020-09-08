@@ -80,24 +80,22 @@ async def async_setup_entry(hass, config_entry, async_add_devices):
 def nth_week_date(n: int, date_of_month: date, collection_day: int) -> date:
     """Find weekday in the nth week of the month."""
     first_of_month = date(date_of_month.year, date_of_month.month, 1)
-    month_starts_on = first_of_month.weekday()
     return first_of_month + relativedelta(
-        days=collection_day - month_starts_on + (n - 1) * 7
+        days=collection_day - first_of_month.weekday() + (n - 1) * 7
     )
 
 
 def nth_weekday_date(n: int, date_of_month: date, collection_day: int) -> date:
     """Find nth weekday of the month."""
     first_of_month = date(date_of_month.year, date_of_month.month, 1)
-    month_starts_on = first_of_month.weekday()
     # 1st of the month is before the day of collection
     # (so 1st collection week the week when month starts)
-    if collection_day >= month_starts_on:
+    if collection_day >= first_of_month.weekday():
         return first_of_month + relativedelta(
-            days=collection_day - month_starts_on + (n - 1) * 7
+            days=collection_day - first_of_month.weekday() + (n - 1) * 7
         )
     return first_of_month + relativedelta(
-        days=7 - month_starts_on + collection_day + (n - 1) * 7
+        days=7 - first_of_month.weekday() + collection_day + (n - 1) * 7
     )
 
 
@@ -356,8 +354,7 @@ class GarbageCollection(RestoreEntity):
         month = dat.month
         if self._first_month <= self._last_month:
             return bool(month >= self._first_month and month <= self._last_month)
-        else:
-            return bool(month <= self._last_month or month >= self._first_month)
+        return bool(month <= self._last_month or month >= self._first_month)
 
     async def _async_monthly_candidate(self, day1: date) -> date:
         """Calculate possible date, for monthly frequency."""
@@ -389,12 +386,11 @@ class GarbageCollection(RestoreEntity):
                 next_collection_month,
                 WEEKDAYS.index(self._collection_days[0]),
             )
-        else:
-            return nth_weekday_date(
-                self._weekday_order_numbers[0],
-                next_collection_month,
-                WEEKDAYS.index(self._collection_days[0]),
-            )
+        return nth_weekday_date(
+            self._weekday_order_numbers[0],
+            next_collection_month,
+            WEEKDAYS.index(self._collection_days[0]),
+        )
 
     async def _async_find_candidate_date(self, day1: date) -> date:
         """Find the next possible date starting from day1.
@@ -484,9 +480,8 @@ class GarbageCollection(RestoreEntity):
                 _LOGGER.error("(%s) Please add entities for the group.", self._name)
                 raise ValueError
             return candidate_date
-        else:
-            _LOGGER.error("(%s) Unknown frequency %s", self._name, self._frequency)
-            raise ValueError
+        _LOGGER.error("(%s) Unknown frequency %s", self._name, self._frequency)
+        raise ValueError
 
     async def _async_candidate_date_with_holidays(self, day1: date) -> date:
         """Find candidate date, automatically skip holidays."""
@@ -539,8 +534,7 @@ class GarbageCollection(RestoreEntity):
                 "(%s) Inserting include_date %s", self._name, include_dates[0]
             )
             return include_dates[0]
-        else:
-            return next_date
+        return next_date
 
     def _skip_holiday(self, day: date) -> date:
         """Move holidays by holiday move offset."""
