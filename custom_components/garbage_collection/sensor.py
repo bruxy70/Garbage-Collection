@@ -96,10 +96,9 @@ def nth_weekday_date(n: int, date_of_month: date, collection_day: int) -> date:
         return first_of_month + relativedelta(
             days=collection_day - month_starts_on + (n - 1) * 7
         )
-    else:  # Next week
-        return first_of_month + relativedelta(
-            days=7 - month_starts_on + collection_day + (n - 1) * 7
-        )
+    return first_of_month + relativedelta(
+        days=7 - month_starts_on + collection_day + (n - 1) * 7
+    )
 
 
 def to_date(day: Any) -> date:
@@ -343,7 +342,7 @@ class GarbageCollection(RestoreEntity):
         """Return the class of the sensor."""
         return DEVICE_CLASS
 
-    def _repr__(self):
+    def __repr__(self):
         """Return main sensor parameters."""
         return (
             f"Garbagecollection[ name: {self._name}, "
@@ -486,7 +485,7 @@ class GarbageCollection(RestoreEntity):
                 raise ValueError
             return candidate_date
         else:
-            _LOGGER.debug("(%s) Unknown frequency %s", self._name, self._frequency)
+            _LOGGER.error("(%s) Unknown frequency %s", self._name, self._frequency)
             raise ValueError
 
     async def _async_candidate_date_with_holidays(self, day1: date) -> date:
