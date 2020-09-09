@@ -204,7 +204,7 @@ class GarbageCollection(RestoreEntity):
         self._holidays.clear()
         if self._country_holidays is not None and self._country_holidays != "":
             this_year = today.year
-            years = [this_year, this_year + 1]
+            years = [this_year - 1, this_year, this_year + 1]
             _LOGGER.debug(
                 "(%s) Country Holidays with parameters: "
                 "country: %s, prov: %s, state: %s, observed: %s",
@@ -234,9 +234,8 @@ class GarbageCollection(RestoreEntity):
                         _LOGGER.error("(%s) Holiday not removed (%s)", self._name, err)
             try:
                 for d, name in hol.items():
-                    if d >= today:
-                        self._holidays.append(d)
-                        holidays_log += f"\n  {d}: {name}"
+                    self._holidays.append(d)
+                    holidays_log += f"\n  {d}: {name}"
             except KeyError:
                 _LOGGER.error(
                     "(%s) Invalid country code (%s)",
@@ -259,9 +258,6 @@ class GarbageCollection(RestoreEntity):
             self.last_collection = parse_datetime(
                 state.attributes.get(ATTR_LAST_COLLECTION)
             )
-            self._next_date = parse_date(state.attributes.get(ATTR_NEXT_DATE))
-            self._days = state.attributes.get(ATTR_DAYS)
-            self._state = state.state
 
         if not self.hidden:
             if CALENDAR_PLATFORM not in self.hass.data[DOMAIN]:
