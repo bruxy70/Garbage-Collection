@@ -492,7 +492,7 @@ class GarbageCollection(RestoreEntity):
                     self._holidays,
                 )
             )
-            if len(check_near) > 0:
+            if len(check_near) > 0 or bool(self._holiday_in_week_move):
                 first_day -= relativedelta(days=self._holiday_move_offset)
         while True:
             try:
@@ -554,7 +554,7 @@ class GarbageCollection(RestoreEntity):
             except ValueError:
                 raise
             date_ok = True
-            # Ifit is today and after expiration, search from tomorrow
+            # If it is today and after expiration, search from tomorrow
             now = dt_util.now()
             expiration = (
                 self._expire_after
