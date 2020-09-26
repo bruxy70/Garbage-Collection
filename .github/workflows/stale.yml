@@ -10,10 +10,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/stale@v1
+    - uses: actions/stale@v3
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
-        stale-issue-message: 'Stale issue message'
-        stale-pr-message: 'Stale pull request message'
-        stale-issue-label: 'no-issue-activity'
-        stale-pr-label: 'no-pr-activity'
+        stale-issue-message: >
+          This issue has been automatically marked as stale because it has not had
+          any activity in last 30 days. It will be closed in 5 days if no further activity occurs. 
+          Thank you for your contributions.
+        stale-issue-label: 'wontfix'
+        days-before-stale: 30
+        days-before-close: 5
