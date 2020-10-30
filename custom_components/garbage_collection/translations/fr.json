@@ -8,10 +8,10 @@
                     "name": "Friendly name",
                     "hidden": "Masquer dans le calendrier",
                     "frequency": "Fréquence",
-                    "icon_normal": "Icone (mdi:trash-can)",
-                    "icon_tomorrow": "Icone pour collecte à jour J+1 (mdi:delete-restore)",
-                    "icon_today": "Icone pour collecte au jour J (mdi:delete-circle)",
-                    "offset": "offset (entre -31 et 31 jours)",
+                    "icon_normal": "Icône (mdi:trash-can)",
+                    "icon_tomorrow": "Icône pour collecte à jour J+1 (mdi:delete-restore)",
+                    "icon_today": "Icône pour collecte au jour J (mdi:delete-circle)",
+                    "offset": "Décalage (entre -31 et 31 jours)",
                     "expire_after": "Expire après (HH:MM)",
                     "verbose_state": "Etat verbeux (texte, au lieu du chiffre)",
                     "verbose_format": "Format état verbeux (utilisation des variables `date` et `days` (entre caractères accolade ))",
@@ -36,13 +36,13 @@
                     "collection_days_thu": "Jeudi",
                     "collection_days_fri": "Vendredi",
                     "collection_days_sat": "Samedi",
-                    "collection_days_sun": "Dimance",
+                    "collection_days_sun": "Dimanche",
                     "force_week_order_numbers": "Nième occurrence du jour de la semaine dans un mois, au lieu du jour de la semaine dans la Nième semaine de chaque mois. Plus d'info sur https://github.com/bruxy70/Garbage-Collection#parameters-for-monthly-collection"
                 }
             },
             "final": {
                 "title": "Garbage Collection - Paramètres additionnels",
-                "description": "Liste de dates, séparées par des virgules, d'incluston et d'exclusion. Les dates sont au format yyyy-mm-dd. Plus d'info sur https://github.com/bruxy70/Garbage-Collection",
+                "description": "Liste de dates, séparées par des virgules, d'inclusion et d'exclusion. Les dates sont au format yyyy-mm-dd. Plus d'info sur https://github.com/bruxy70/Garbage-Collection",
                 "data": {
                     "first_month": "Premier mois de la collecte",
                     "last_month": "Dernier mois de la collecte",
@@ -53,33 +53,33 @@
                     "weekday_order_number_2": "2ème jour de semaine du mois",
                     "weekday_order_number_3": "3ème jour de semaine du mois",
                     "weekday_order_number_4": "4ème jour de semaine du mois",
-                    "weekday_order_number_5": "5th jour de semaine du mois",
+                    "weekday_order_number_5": "5ème jour de semaine du mois",
                     "week_order_number_1": "1ère semaine du mois",
                     "week_order_number_2": "2ème semaine du mois",
                     "week_order_number_3": "3ème semaine du mois",
                     "week_order_number_4": "4ème semaine du mois",
                     "week_order_number_5": "5ème semaine du mois",
-                    "include_dates": "Inclusion de dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optionel",
-                    "exclude_dates": "Exclusion de dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optionel",
-                    "move_country_holidays": "Move holidays to next day (optional)",
-                    "holiday_move_offset": "Move holidays by # of days(-7..7)",
-                    "holiday_pop_named": "Ignore holidays (list) - optional",
-                    "holiday_in_week_move": "Move to next day if holiday in week (optional)"
+                    "include_dates": "Inclusion de dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optionnel",
+                    "exclude_dates": "Exclusion de dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optionnel",
+                    "move_country_holidays": "Reporter les vacances au lendemain (optionnel)",
+                    "holiday_move_offset": "Déplacer les vacances de # jours (-7..7)",
+                    "holiday_pop_named": "Ignorer les vacances (liste) - optionnel",
+                    "holiday_in_week_move": "Passer au jour suivant en cas de vacances en semaine (optionnel)"
                 }
             }
         },
         "error": {
-            "value": "Valeur invalide. Veuillez vérifier votre saisie!",
+            "value": "Valeur invalide. Veuillez vérifier votre saisie !",
             "icon": "Les icônes doivent être spécifiées dans le format 'prefix:name'.",
-            "days": "Choisir un ou plusieurs jours!",
-            "entities": "L'entité n'existe pas!",
-            "month_day": "Format de date invalide!",
-            "time": "Format d'heure invalide!",
+            "days": "Choisir un ou plusieurs jours !",
+            "entities": "L'entité n'existe pas !",
+            "month_day": "Format de date invalide !",
+            "time": "Format d'heure invalide !",
             "weekday_order_number": "Choisir un ou plusieurs jours",
-            "week_order_number": "Choisir un ou plusieurs semaines",
-            "period": "Period doit être un nombre entre 1 et 52",
+            "week_order_number": "Choisir une ou plusieurs semaines",
+            "period": "La semaine doit être un nombre entre 1 et 52",
             "first_week": "La première semaine doit être un nombre entre 1 et 52",
-            "date": "Format de date invalide!"
+            "date": "Format de date invalide !"
         },
         "abort": {
             "single_instance_allowed": "Une seule configuration de Garbage Collection est autorisée"
@@ -89,14 +89,14 @@
         "step": {
             "init": {
                 "title": "Garbage Collection - Fréquence de la collecte",
-                "description": "Modifier les paramètres des capteur. Plus d'infos sur https://github.com/bruxy70/Garbage-Collection",
+                "description": "Modifier les paramètres des capteurs. Plus d'infos sur https://github.com/bruxy70/Garbage-Collection",
                 "data": {
                     "frequency": "Fréquence",
                     "hidden": "Masquer dans le calendrier",
-                    "icon_normal": "Icone (mdi:trash-can)",
-                    "icon_tomorrow": "Icone pour collecte à jour J+1 (mdi:delete-restore)",
-                    "icon_today": "Icone pour collecte au jour J (mdi:delete-circle)",
-                    "offset": "offset (entre -31 et 31 jours)",
+                    "icon_normal": "Icône (mdi:trash-can)",
+                    "icon_tomorrow": "Icône pour collecte à jour J+1 (mdi:delete-restore)",
+                    "icon_today": "Icône pour collecte au jour J (mdi:delete-circle)",
+                    "offset": "Décalage (entre -31 et 31 jours)",
                     "expire_after": "Expire après (HH:MM)",
                     "verbose_state": "Etat verbeux (texte, au lieu du chiffre)",
                     "verbose_format": "Format état verbeux (utilisation des variables `date` et `days` (entre caractères accolade ))",
@@ -121,13 +121,13 @@
                     "collection_days_thu": "Jeudi",
                     "collection_days_fri": "Vendredi",
                     "collection_days_sat": "Samedi",
-                    "collection_days_sun": "Dimance",
+                    "collection_days_sun": "Dimanche",
                     "force_week_order_numbers": "Nième occurrence du jour de la semaine dans un mois, au lieu du jour de la semaine dans la Nième semaine de chaque mois. Plus d'info sur https://github.com/bruxy70/Garbage-Collection#parameters-for-monthly-collection"
                 }
             },
             "final": {
                 "title": "Garbage Collection -  Paramètres additionnels",
-                "description": "Liste de dates, séparées par des virgules, d'incluston et d'exclusion. Les dates sont au format yyyy-mm-dd. Plus d'info sur https://github.com/bruxy70/Garbage-Collection",
+                "description": "Liste de dates, séparées par des virgules, d'inclusion et d'exclusion. Les dates sont au format yyyy-mm-dd. Plus d'info sur https://github.com/bruxy70/Garbage-Collection",
                 "data": {
                     "first_month": "Premier mois de la collecte",
                     "last_month": "Dernier mois de la collecte",
@@ -144,27 +144,27 @@
                     "week_order_number_3": "3ème semaine du mois",
                     "week_order_number_4": "4ème semaine du mois",
                     "week_order_number_5": "5ème semaine du mois",
-                    "include_dates": "Inclusion de dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optionel",
-                    "exclude_dates": "Exclusion de dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optionel",
-                    "move_country_holidays": "Move holidays to next day (optional)",
-                    "holiday_move_offset": "Move holidays by # of days(-7..7)",
-                    "holiday_pop_named": "Ignore holidays (list) - optional",
-                    "holiday_in_week_move": "Move to next day if holiday in week (optional)"
+                    "include_dates": "Inclusion de dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optionnel",
+                    "exclude_dates": "Exclusion de dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optionnel",
+                    "move_country_holidays": "Reporter les vacances au lendemain (optionnel)",
+                    "holiday_move_offset": "Déplacer les vacances de # jours (-7..7)",
+                    "holiday_pop_named": "Ignorer les vacances (liste) - optionnel",
+                    "holiday_in_week_move": "Passer au jour suivant en cas de vacances en semaine (optionnel)"
                 }
             }
         },
         "error": {
-            "value": "Valeur invalide. Veuillez vérifier votre saisie!",
+            "value": "Valeur invalide. Veuillez vérifier votre saisie !",
             "icon": "Les icônes doivent être spécifiées dans le format 'prefix:name'.",
-            "days": "Choisir un ou plusieurs jours!",
-            "entities": "L'entité n'existe pas!",
-            "month_day": "Format de date invalide!",
-            "time": "Format d'heure invalide!",
+            "days": "Choisir un ou plusieurs jours !",
+            "entities": "L'entité n'existe pas !",
+            "month_day": "Format de date invalide !",
+            "time": "Format d'heure invalide !",
             "weekday_order_number": "Choisir un ou plusieurs jours",
-            "week_order_number": "Choisir un ou plusieurs semaines",
-            "period": "Period doit être un nombre entre 1 et 52",
+            "week_order_number": "Choisir une ou plusieurs semaines",
+            "period": "La semaine doit être un nombre entre 1 et 52",
             "first_week": "La première semaine doit être un nombre entre 1 et 52",
-            "date": "Format de date invalide!"
+            "date": "Format de date invalide !"
         }
     }
 
