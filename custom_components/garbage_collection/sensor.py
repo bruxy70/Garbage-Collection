@@ -191,7 +191,7 @@ class GarbageCollection(RestoreEntity):
         self._icon_today = config.get(CONF_ICON_TODAY)
         self._icon_tomorrow = config.get(CONF_ICON_TOMORROW)
         exp = config.get(CONF_EXPIRE_AFTER)
-        self._expire_after = (
+        self.expire_after = (
             None if exp is None else datetime.strptime(exp, "%H:%M").time()
         )
         self._date_format = config.get(CONF_DATE_FORMAT, DEFAULT_DATE_FORMAT)
@@ -559,9 +559,7 @@ class GarbageCollection(RestoreEntity):
             # If it is today and after expiration, search from tomorrow
             now = dt_util.now()
             expiration = (
-                self._expire_after
-                if self._expire_after is not None
-                else time(23, 59, 59)
+                self.expire_after if self.expire_after is not None else time(23, 59, 59)
             )
             if next_date == now.date():
                 if (
@@ -614,7 +612,7 @@ class GarbageCollection(RestoreEntity):
         else:
             try:
                 if self._next_date == today and (
-                    now.time() >= self._expire_after
+                    now.time() >= self.expire_after
                     or self.last_collection.date() == today
                 ):
                     ready_for_update = True

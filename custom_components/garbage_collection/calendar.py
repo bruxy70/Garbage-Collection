@@ -1,7 +1,7 @@
 """Garbage collection calendar."""
 
 import logging
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 from homeassistant.components.calendar import CalendarEventDevice
 from homeassistant.util import Throttle
@@ -102,13 +102,26 @@ class EntitiesCalendarData:
                     end = start + timedelta(days=1)
                 except TypeError:
                     end = start
-                event = {
-                    "uid": entity,
-                    "summary": garbage_collection.name,
-                    "start": {"date": start.strftime("%Y-%m-%d")},
-                    "end": {"date": end.strftime("%Y-%m-%d")},
-                    "allDay": True,
-                }
+                if garbage_collection.expire_after is None:
+                    event = {
+                        "uid": entity,
+                        "summary": garbage_collection.name,
+                        "start": {"date": start.strftime("%Y-%m-%d")},
+                        "end": {"date": end.strftime("%Y-%m-%d")},
+                        "allDay": True,
+                    }
+                else:
+                    event = {
+                        "uid": entity,
+                        "summary": garbage_collection.name,
+                        "start": {"date": start.strftime("%Y-%m-%d %H:%M")},
+                        "end": {
+                            "date": datetime.combine(
+                                start, garbage_collection.expire_after
+                            ).strftime("%Y-%m-%d %H:%M")
+                        },
+                        "allDay": False,
+                    }
                 events.append(event)
                 start = await garbage_collection.async_find_next_date(
                     start + timedelta(days=1)
@@ -121,6 +134,7 @@ class EntitiesCalendarData:
         events = []
         for entity in self.entities:
             state_object = self._hass.states.get(entity)
+            garbage_collection = self._hass.data[DOMAIN][SENSOR_PLATFORM][entity]
             if state_object is None:
                 continue
             start = state_object.attributes.get("next_date")
@@ -129,13 +143,26 @@ class EntitiesCalendarData:
             except TypeError:
                 continue
             if start is not None:
-                event = {
-                    "uid": entity,
-                    "summary": state_object.attributes.get("friendly_name"),
-                    "start": {"date": start.strftime("%Y-%m-%d")},
-                    "end": {"date": end.strftime("%Y-%m-%d")},
-                    "allDay": True,
-                }
+                if garbage_collection.expire_after is None:
+                    event = {
+                        "uid": entity,
+                        "summary": state_object.attributes.get("friendly_name"),
+                        "start": {"date": start.strftime("%Y-%m-%d")},
+                        "end": {"date": end.strftime("%Y-%m-%d")},
+                        "allDay": True,
+                    }
+                else:
+                    event = {
+                        "uid": entity,
+                        "summary": state_object.attributes.get("friendly_name"),
+                        "start": {"date": start.strftime("%Y-%m-%d %H:%M")},
+                        "end": {
+                            "date": datetime.combine(
+                                start, garbage_collection.expire_after
+                            ).strftime("%Y-%m-%d %H:%M")
+                        },
+                        "allDay": False,
+                    }
                 events.append(event)
         events.sort(key=lambda x: x["start"]["date"])
         if len(events) > 0:
