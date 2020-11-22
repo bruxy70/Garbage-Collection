@@ -347,6 +347,8 @@ class GarbageCollection(RestoreEntity):
 
     def date_inside(self, dat: date) -> bool:
         """Check if the date is inside first and last date."""
+        if dat in self._include_dates:
+            return True
         month = dat.month
         if self._first_month <= self._last_month:
             return bool(month >= self._first_month and month <= self._last_month)

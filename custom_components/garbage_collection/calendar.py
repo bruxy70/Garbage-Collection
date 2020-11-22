@@ -98,11 +98,12 @@ class EntitiesCalendarData:
             await garbage_collection.async_load_holidays(start_date)
             start = await garbage_collection.async_find_next_date(start_date)
             while start is not None and start >= start_date and start <= end_date:
+                end = start + timedelta(days=1)
                 event = {
                     "uid": entity,
                     "summary": garbage_collection.name,
                     "start": {"date": start.strftime("%Y-%m-%d")},
-                    "end": {"date": start.strftime("%Y-%m-%d")},
+                    "end": {"date": end.strftime("%Y-%m-%d")},
                     "allDay": True,
                 }
                 events.append(event)
@@ -120,12 +121,13 @@ class EntitiesCalendarData:
             if state_object is None:
                 continue
             start = state_object.attributes.get("next_date")
+            end = start + timedelta(days=1)
             if start is not None:
                 event = {
                     "uid": entity,
                     "summary": state_object.attributes.get("friendly_name"),
                     "start": {"date": start.strftime("%Y-%m-%d")},
-                    "end": {"date": start.strftime("%Y-%m-%d")},
+                    "end": {"date": end.strftime("%Y-%m-%d")},
                     "allDay": True,
                 }
                 events.append(event)
