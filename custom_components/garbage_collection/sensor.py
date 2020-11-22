@@ -680,6 +680,9 @@ class GarbageCollection(RestoreEntity):
                     next_date = await self._async_candidate_with_incl_excl(next_year)
                 except ValueError:
                     raise
+            include_dates = list(filter(lambda date: date >= today, self._include_dates))
+            if len(include_dates) > 0 and include_dates[0] < next_date:
+                next_date = include_dates[0]
         return next_date
 
     async def async_update(self) -> None:
