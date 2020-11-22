@@ -347,8 +347,6 @@ class GarbageCollection(RestoreEntity):
 
     def date_inside(self, dat: date) -> bool:
         """Check if the date is inside first and last date."""
-        if dat in self._include_dates:
-            return True
         month = dat.month
         if self._first_month <= self._last_month:
             return bool(month >= self._first_month and month <= self._last_month)
@@ -633,6 +631,7 @@ class GarbageCollection(RestoreEntity):
                 next_date = await self._async_candidate_with_incl_excl(today)
             except ValueError:
                 raise
+            _LOGGER.debug("(%s) Next date candidate (%s)", self._name, next_date)
             if not self.date_inside(next_date):
                 if self._first_month <= self._last_month:
                     next_year = date(year + 1, self._first_month, 1)
@@ -659,6 +658,16 @@ class GarbageCollection(RestoreEntity):
                         )
                     except ValueError:
                         raise
+                include_dates = list(
+                    filter(lambda date: date >= today, self._include_dates)
+                )
+                if len(include_dates) > 0 and include_dates[0] < next_date:
+                    _LOGGER.debug(
+                        "(%s) Using include date outside the date range %s",
+                        self._name,
+                        include_dates[0],
+                    )
+                    next_date = include_dates[0]
         else:
             if self._first_month <= self._last_month and month > self._last_month:
                 next_year = date(year + 1, self._first_month, 1)
@@ -680,8 +689,15 @@ class GarbageCollection(RestoreEntity):
                     next_date = await self._async_candidate_with_incl_excl(next_year)
                 except ValueError:
                     raise
-            include_dates = list(filter(lambda date: date >= today, self._include_dates))
+            include_dates = list(
+                filter(lambda date: date >= today, self._include_dates)
+            )
             if len(include_dates) > 0 and include_dates[0] < next_date:
+                _LOGGER.debug(
+                    "(%s) Using include date outside the date range %s",
+                    self._name,
+                    include_dates[0],
+                )
                 next_date = include_dates[0]
         return next_date
 
