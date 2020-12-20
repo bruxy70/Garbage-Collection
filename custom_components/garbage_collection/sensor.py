@@ -498,7 +498,9 @@ class GarbageCollection(RestoreEntity):
                 first_day -= relativedelta(days=look_back)
         while True:
             try:
-                next_date = await self._async_find_candidate_date(first_day)
+                next_date = await self._async_find_candidate_date(
+                    first_day
+                ) + relativedelta(days=self._offset)
             except ValueError:
                 raise
             if bool(self._holiday_in_week_move):
@@ -578,7 +580,7 @@ class GarbageCollection(RestoreEntity):
                 _LOGGER.debug("(%s) Skipping exclude_date %s", self._name, next_date)
                 date_ok = False
             if date_ok:
-                return next_date + relativedelta(days=self._offset)
+                return next_date
             first_day = next_date + relativedelta(days=1)
             i += 1
             if i > 365:
