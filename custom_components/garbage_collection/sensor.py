@@ -645,7 +645,8 @@ class GarbageCollection(RestoreEntity):
             iterations += 1
             if iterations > 356:
                 _LOGGER.error(
-                    "(%s) Did not find any collection date", self._name,
+                    "(%s) Did not find any collection date",
+                    self._name,
                 )
                 return None
         return next_date
