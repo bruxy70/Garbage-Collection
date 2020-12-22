@@ -46,7 +46,7 @@
                 "data": {
                     "first_month": "První měsíc svozu",
                     "last_month": "Poslední měsíc svozu",
-                    "period": "Perioda (svoz každých n týdnů/dnů): (1-52)",
+                    "period": "Perioda (svoz každých n týdnů/dnů): (1-365)",
                     "first_week": "První týden svozu (1-52)",
                     "first_date": "První datum",
                     "weekday_order_number_1": "Prvn den v měsíci",
@@ -81,7 +81,7 @@
             "time": "Špatný formát času!",
             "weekday_order_number": "Vyber jeden nebo více dní!",
             "week_order_number": "Vyber jeden nebo více týdnů!",
-            "period": "Perioda musí být číslo mezi 1 a 52",
+            "period": "Perioda musí být číslo mezi 1 a 365",
             "first_week": "První týden musí být číslo mezi 1 a 52",
             "date": "Špatný formát data!"
         },
@@ -136,7 +136,7 @@
                 "data": {
                     "first_month": "První měsíc svozu",
                     "last_month": "Poslední měsíc scozu",
-                    "period": "Perioda (svoz každých n týdnů-dnů): (1-52)",
+                    "period": "Perioda (svoz každých n týdnů-dnů): (1-365)",
                     "first_week": "První týden svozu (1-52)",
                     "first_date": "První datum",
                     "weekday_order_number_1": "Prvn den v měsíci",
@@ -170,7 +170,7 @@
             "time": "Špatný formát času!",
             "weekday_order_number": "Vyber jeden nebo více dní!",
             "week_order_number": "Vyber jeden nebo více týdnů!",
-            "period": "Perioda musí být číslo mezi 1 a 52",
+            "period": "Perioda musí být číslo mezi 1 a 365",
             "first_week": "První týden musí být číslo mezi 1 a 52",
             "date": "Špatný formát data!"
         }

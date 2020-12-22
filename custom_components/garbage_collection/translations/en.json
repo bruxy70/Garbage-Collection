@@ -46,7 +46,7 @@
                 "data": {
                     "first_month": "First collection month",
                     "last_month": "Last collection month",
-                    "period": "Collection every n weeks/days: (1-52)",
+                    "period": "Collection every n weeks/days: (1-365)",
                     "first_week": "First collection week (1-52)",
                     "first_date": "First date",
                     "weekday_order_number_1": "1st weekday of month",
@@ -80,7 +80,7 @@
             "time": "Invalid time format!",
             "weekday_order_number": "Select 1 or more days",
             "week_order_number": "Select 1 or more weeks",
-            "period": "Period must be a number between 1 and 52",
+            "period": "Period must be a number between 1 and 365",
             "first_week": "Firsr week must be a number between 1 and 52",
             "date": "Invalid date format!"
         },
@@ -134,7 +134,7 @@
                 "data": {
                     "first_month": "First collection month",
                     "last_month": "Last collection month",
-                    "period": "Collection every n weeks/days: (1-52)",
+                    "period": "Collection every n weeks/days: (1-365)",
                     "first_week": "First collection week (1-52)",
                     "first_date": "First date",
                     "weekday_order_number_1": "1st weekday of month",
@@ -168,7 +168,7 @@
             "time": "Invalid time format!",
             "weekday_order_number": "Select 1 or more days",
             "week_order_number": "Select 1 or more weeks",
-            "period": "Period must be a number between 1 and 52",
+            "period": "Period must be a number between 1 and 365",
             "first_week": "Firsr week must be a number between 1 and 52",
             "date": "Invalid date format!"
         }

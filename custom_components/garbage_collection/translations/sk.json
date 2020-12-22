@@ -1,0 +1,179 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "title": "Garbage Collection - Nastavenia",
+                "description": "Zadej meno senzoru a nastav parametre. Viac na https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "name": "Friendly name",
+                    "hidden": "Skryť v kalendári",
+                    "frequency": "Frekvencia",
+                    "icon_normal": "Ikona (mdi:trash-can)",
+                    "icon_tomorrow": "Ikona zvoz zajtra (mdi:delete-restore)",
+                    "icon_today": "Ikona zvoz dnes (mdi:delete-circle)",
+                    "offset": "Odsadiť (medzi -31 a 31 dňami)",
+                    "expire_after": "Čas expirácie (HH:MM)",
+                    "verbose_state": "Verbose state (popis miesto čísiel)",
+                    "verbose_format": "Verbose format (Použi `date` a `days` premenné (v zložených zátvorkách))",
+                    "date_format": "Formát data(see http://strftime.org/)"
+                }
+            },
+            "annual_group": {
+                "title": "Garbage Collection - Ďalšie parametre",
+                "description": "Zadej dátum zvozu (napr. 11/20 pre 20. november)",
+                "data": {
+                    "date": "Dátum (mm/dd)",
+                    "entities": "Zoznam entít (oddelené čiarkou)"
+                }
+            },
+            "detail": {
+                "title": "Garbage Collection - Dny svozu",
+                "description": "Vyber jeden alebo viacej dní zvozu. Viac na: https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "collection_days_mon": "Pondelok",
+                    "collection_days_tue": "Útorok",
+                    "collection_days_wed": "Streda",
+                    "collection_days_thu": "Štvrtok",
+                    "collection_days_fri": "Piatok",
+                    "collection_days_sat": "Sobota",
+                    "collection_days_sun": "Nedeľa",
+                    "force_week_order_numbers": "Číslo týždňa v mesiaci namiesto čísla dňa"
+                }
+            },
+            "final": {
+                "title": "Garbage Collection - Ďalšie parametre",
+                "description": "Pridané a zakázané dátumy sú zoznamy dátumov vo formáte yyyy-mm-dd, oddelených čiarkou. Viac info na https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "first_month": "Prvý mesiac zvozu",
+                    "last_month": "Posledný mesiac zvozu",
+                    "period": "Perióda (zvoz každých n týždňov/dní): (1-365)",
+                    "first_week": "Prvý týždeň zvozu (1-52)",
+                    "first_date": "Prvý dátum",
+                    "weekday_order_number_1": "Prvý deň v mesiaci",
+                    "weekday_order_number_2": "Druhý deň v mesiaci",
+                    "weekday_order_number_3": "Tretí deň v mesiaci",
+                    "weekday_order_number_4": "Štvrtý deň v mesiaci",
+                    "weekday_order_number_5": "Piaty deň v mesiaci",
+                    "week_order_number_1": "Prvý týžden v mesiaci",
+                    "week_order_number_2": "Druhý týžden v mesiaci",
+                    "week_order_number_3": "Tretí týžden v mesiaci",
+                    "week_order_number_4": "Štvrtý týžden v mesiaci",
+                    "week_order_number_5": "Piaty týžden v mesiaci",
+                    "include_dates": "Pridané dátumy (yyyy-mm-dd, yyyy-mm-dd, ...) - voliteľné",
+                    "exclude_dates": "Zakázané dátumy (yyyy-mm-dd, yyyy-mm-dd, ...) - voliteľné",
+                    "move_country_holidays": "Štátne sviatky - krajiny (voliteľné)",
+                    "holiday_move_offset": "Posunúť sviatok o (dní: -7..7)",
+                    "holiday_pop_named": "Ignorovať sviatky (volitelné)", 
+                    "holiday_in_week_move": "Posunúť na ďalší deň ak je dovolenka v týždni (voliteľné)",
+                    "prov": "Štátne sviatky - provincie (volitelné)",
+                    "state": "Štátne sviatky - štát (volitelné)",
+                    "observed": "Štátne sviatky - sledované (volitelné)"
+
+                }
+            }
+        },
+        "error": {
+            "value": "Chybná hodnota. Skontroluj zadané hodnoty!",
+            "icon": "Ikony musia býť zadané vo formáte 'prefix:meno'.",
+            "days": "Vyber jeden nebo viacej dní!",
+            "entities": "Entita neexistuje!",
+            "month_day": "Zlý formát dátumu!",
+            "time": "Zlý formát času!",
+            "weekday_order_number": "Vyber jeden nebo viacej dní!",
+            "week_order_number": "Vyber jeden nebo viacej týždňov!",
+            "period": "Perióda musí být číslo medzi 1 a 365",
+            "first_week": "Prvý týždeň musí být číslo medzi 1 a 52",
+            "date": "Zlý formát dátumu!"
+        },
+        "abort": {
+            "single_instance_allowed": "Je povolená iba jedna konfigurácia Garbage Collection."
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "title": "Garbage Collection - Nastavenia",
+                "description": "Zadaj meno senzora a nastav parametre. Viac na https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "hidden": "Skryť v kalendári",
+                    "frequency": "Frekvencia",
+                    "icon_normal": "Ikona (mdi:trash-can)",
+                    "icon_tomorrow": "Ikona zvoz zajtra (mdi:delete-restore)",
+                    "icon_today": "Ikona zvoz dnes (mdi:delete-circle)",
+                    "offset": "Odsadit (medzi -31 a 31 dny)",
+                    "expire_after": "Čas expirácie (HH:MM)",
+                    "verbose_state": "Verbose state (popis miesto čísiel)",
+                    "verbose_format": "Verbose format (Použi `date` a `days` premenné (v zložených zátvorkách))",
+                    "date_format": "Formát dátumu(see http://strftime.org/)"
+                }
+            },
+            "annual_group": {
+                "title": "Garbage Collection - Ďalšie parametre",
+                "description": "Zadej dátum zvozu (napr. 11/20 pre 20. november)",
+                "data": {
+                    "date": "Dátum (mm/dd)",
+                    "entities": "Zoznam entít (oddelené čiarkou)"
+                }
+            },
+            "detail": {
+                "title": "Garbage Collection - Dni zvozu",
+                "description": "Vyber jeden alebo viac dní zvozu. Více na: https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "collection_days_mon": "Pondelok",
+                    "collection_days_tue": "Útorok",
+                    "collection_days_wed": "Streda",
+                    "collection_days_thu": "Štvrtok",
+                    "collection_days_fri": "Piatok",
+                    "collection_days_sat": "Sobota",
+                    "collection_days_sun": "Nedeľa",
+                    "force_week_order_numbers": "Číslo týždna v mesiaci namiesto čísla dňa"
+
+                }
+            },
+            "final": {
+                "title": "Garbage Collection - Ďalšie parametre",
+                "description": "Pridané a zakázané dátumy sú zoznamy dátumov vo formáte yyyy-mm-dd, oddelených čiarkou. Viac info na https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "first_month": "Prvý mesiac zvozu",
+                    "last_month": "Posledný mesiac zvozu",
+                    "period": "Perióda (zvoz každých n týždňov/dní): (1-365)",
+                    "first_week": "Prvý týždeň zvozu (1-52)",
+                    "first_date": "Prvý dátum",
+                    "weekday_order_number_1": "Prvý deň v mesiaci",
+                    "weekday_order_number_2": "Druhý deň v mesiaci",
+                    "weekday_order_number_3": "Tretí deň v mesiaci",
+                    "weekday_order_number_4": "Štvrtý deň v mesiaci",
+                    "weekday_order_number_5": "Piaty deň v mesiaci",
+                    "week_order_number_1": "Prvý týžden v mesiaci",
+                    "week_order_number_2": "Druhý týžden v mesiaci",
+                    "week_order_number_3": "Tretí týžden v mesiaci",
+                    "week_order_number_4": "Štvrtý týžden v mesiaci",
+                    "week_order_number_5": "Piaty týžden v mesiaci",
+                    "include_dates": "Pridané dátumy (yyyy-mm-dd, yyyy-mm-dd, ...) - voliteľné",
+                    "exclude_dates": "Zakázané dátumy (yyyy-mm-dd, yyyy-mm-dd, ...) - voliteľné",
+                    "move_country_holidays": "Štátne sviatky - krajiny (voliteľné)",
+                    "holiday_move_offset": "Posunúť sviatok o (dní: -7..7)",
+                    "holiday_pop_named": "Ignorovať sviatky (volitelné)", 
+                    "holiday_in_week_move": "Posunúť na ďalší deň ak je dovolenka v týždni (voliteľné)",
+                    "prov": "Štátne sviatky - provincie (volitelné)",
+                    "state": "Štátne sviatky - štát (volitelné)",
+                    "observed": "Štátne sviatky - sledované (volitelné)"
+                }
+            }
+        },
+        "error": {
+            "value": "Chybná hodnota. Skontroluj zadané hodnoty!",
+            "icon": "Ikony musia býť zadané vo formáte 'prefix:meno'.",
+            "days": "Vyber jeden nebo viacej dní!",
+            "entities": "Entita neexistuje!",
+            "month_day": "Zlý formát dátumu!",
+            "time": "Zlý formát času!",
+            "weekday_order_number": "Vyber jeden nebo viacej dní!",
+            "week_order_number": "Vyber jeden nebo viacej týždňov!",
+            "period": "Perióda musí být číslo medzi 1 a 365",
+            "first_week": "Prvý týždeň musí být číslo medzi 1 a 52",
+            "date": "Zlý formát dátumu!"
+        }
+    }
+
+}
