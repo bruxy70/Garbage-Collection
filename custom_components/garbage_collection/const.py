@@ -350,7 +350,7 @@ class configuration(config_singularity):
             "method": vol.Optional,
             "default": DEFAULT_PERIOD,
             "type": int,
-            "validator": vol.All(vol.Coerce(int), vol.Range(min=1, max=52)),
+            "validator": vol.All(vol.Coerce(int), vol.Range(min=1, max=356)),
         },
         CONF_FIRST_WEEK: {
             "step": 4,
