@@ -14,6 +14,7 @@ from homeassistant.helpers.restore_state import RestoreEntity
 from .calendar import EntitiesCalendarData
 from .const import (
     ATTR_DAYS,
+    ATTR_HOLIDAYS,
     ATTR_LAST_COLLECTION,
     ATTR_LAST_UPDATED,
     ATTR_NEXT_DATE,
@@ -172,6 +173,7 @@ class GarbageCollection(RestoreEntity):
         self._holiday_state = config.get(CONF_STATE)
         self._holiday_observed = config.get(CONF_OBSERVED, True)
         self._holidays = []
+        self._holidays_log = ""
         self._period = config.get(CONF_PERIOD)
         self._first_week = config.get(CONF_FIRST_WEEK)
         try:
@@ -200,7 +202,7 @@ class GarbageCollection(RestoreEntity):
 
     async def async_load_holidays(self, today: date) -> None:
         """Load the holidays from from a date."""
-        holidays_log = ""
+        self._holidays_log = ""
         self._holidays.clear()
         if self._country_holidays is not None and self._country_holidays != "":
             this_year = today.year
@@ -235,14 +237,16 @@ class GarbageCollection(RestoreEntity):
             try:
                 for d, name in hol.items():
                     self._holidays.append(d)
-                    holidays_log += f"\n  {d}: {name}"
+                    self._holidays_log += f"\n  {d}: {name}"
             except KeyError:
                 _LOGGER.error(
                     "(%s) Invalid country code (%s)",
                     self._name,
                     self._country_holidays,
                 )
-            _LOGGER.debug("(%s) Found these holidays: %s", self._name, holidays_log)
+            _LOGGER.debug(
+                "(%s) Found these holidays: %s", self._name, self._holidays_log
+            )
 
     async def async_added_to_hass(self):
         """When sensor is added to hassio, add it to calendar."""
@@ -329,6 +333,7 @@ class GarbageCollection(RestoreEntity):
         res[ATTR_DAYS] = self._days
         res[ATTR_LAST_COLLECTION] = self.last_collection
         res[ATTR_LAST_UPDATED] = self._last_updated
+        res[ATTR_HOLIDAYS] = self._holidays_log
         return res
 
     @property

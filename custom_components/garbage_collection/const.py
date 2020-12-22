@@ -21,6 +21,7 @@ ATTR_NEXT_DATE = "next_date"
 ATTR_DAYS = "days"
 ATTR_LAST_COLLECTION = "last_collection"
 ATTR_LAST_UPDATED = "last_updated"
+ATTR_HOLIDAYS = "holidays"
 
 # Device classes
 BINARY_SENSOR_DEVICE_CLASS = "connectivity"
