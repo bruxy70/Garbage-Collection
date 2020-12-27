@@ -503,8 +503,7 @@ class GarbageCollection(RestoreEntity):
                     self._name,
                     date_candidate,
                 )
-                return self._skip_holiday(date_candidate)
-            return date_candidate
+                date_candidate = self._skip_holiday(date_candidate)
         while date_candidate in self._holidays:
             _LOGGER.debug(
                 "(%s) Skipping public holiday on %s", self._name, date_candidate
