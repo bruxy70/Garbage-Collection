@@ -6,9 +6,9 @@
 
 The `garbage_collection` component is a Home Assistant custom sensor for monitoring regular garbage collection schedule. The sensor can be configured for number of different schedules:
 - `weekly` schedule (including multiple collection days, e.g. on Tuesday and Thursday)
-- `every-n-weeks`
-- bi-weekly in `even-weeks` or `odd-weeks` (technically, it is the same as every 2 weeks with 1<sup>st</sup> or 2<sup>nd</sup> first_week)
-- `every-n-days` (repeats regularly from the given first date). If n is multiply of 7, it works similar to `weekly` or `every-n-weeks`, with the difference that it ignores the week numbers (that restart each year) but continues infinitely from the initial date.
+- `every-n-weeks` repeats every `period` of weeks, starting from the week number `first_week`. It uses the week number - it therefore restarts each year, as the week numbers start again from 1.
+- bi-weekly in `even-weeks` or `odd-weeks` (technically, it is the same as every 2 weeks with 1<sup>st</sup> or 2<sup>nd</sup> `first_week`)
+- `every-n-days` (repeats regularly from the given first date). If n is multiply of 7, it works similar to `every-n-weeks`, with the difference that it does not use the week numbers (that restart each year) but continues infinitely from the initial date.
 - `monthly` schedule (n<sup>th</sup> day each month), or a specific day of each n<sup>th</sup> week. Using the `period` it could also be every 2<sup>nd</sup>, 3<sup>rd</sup> etc month.
 - `annually` (e.g. birthdays). This is once per year. Using include dates you can add additional dates manually.
 You can also configure seasonal calendars (e.g. for bio-waste collection), by configuring the first and last month. 
