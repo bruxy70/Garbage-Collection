@@ -204,6 +204,8 @@ class GarbageCollection(RestoreEntity):
     async def async_load_holidays(self, today: date) -> None:
         """Load the holidays from from a date."""
         self._holidays_log = ""
+        log = ""
+        year_from_today = today + relativedelta(years=1)
         self._holidays.clear()
         if self._country_holidays is not None and self._country_holidays != "":
             this_year = today.year
@@ -238,16 +240,16 @@ class GarbageCollection(RestoreEntity):
             try:
                 for d, name in hol.items():
                     self._holidays.append(d)
-                    self._holidays_log += f"\n  {d}: {name}"
+                    log += f"\n  {d}: {name}"
+                    if d >= today and d <= year_from_today:
+                        self._holidays_log += f"\n  {d}: {name}"
             except KeyError:
                 _LOGGER.error(
                     "(%s) Invalid country code (%s)",
                     self._name,
                     self._country_holidays,
                 )
-            _LOGGER.debug(
-                "(%s) Found these holidays: %s", self._name, self._holidays_log
-            )
+            _LOGGER.debug("(%s) Found these holidays: %s", self._name, log)
 
     async def async_added_to_hass(self):
         """When sensor is added to hassio, add it to calendar."""
@@ -503,13 +505,12 @@ class GarbageCollection(RestoreEntity):
                     self._name,
                     date_candidate,
                 )
-                return self._skip_holiday(date_candidate)
-            return date_candidate
-        if date_candidate in self._holidays:
+                date_candidate = self._skip_holiday(date_candidate)
+        while date_candidate in self._holidays:
             _LOGGER.debug(
                 "(%s) Skipping public holiday on %s", self._name, date_candidate
             )
-            return self._skip_holiday(date_candidate)
+            date_candidate = self._skip_holiday(date_candidate)
         return date_candidate
 
     def _insert_include_date(
