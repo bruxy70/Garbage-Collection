@@ -46,7 +46,7 @@
                 "data": {
                     "first_month": "Miesiąc pierwszego wywozu",
                     "last_month": "Miesiąc ostatniego wywozu",
-                    "period": "Wywóz co n dni/tygodni: (1-52)",
+                    "period": "Wywóz co n dni/tygodni: (1-365)",
                     "first_week": "Tydzień pierwszego wywozu: (1-52)",
                     "first_date": "Pierwsza data",
                     "weekday_order_number_1": "Pierwszy dzień tygodnia",
@@ -80,7 +80,7 @@
             "time": "Nieprawidłowy format czasu!",
             "weekday_order_number": "Wybierz 1 lub więcej dni!",
             "week_order_number": "Wybierz 1 lub więcej tydzieńi!",
-            "period": "Okres musi być liczbą od 1 do 52.",
+            "period": "Okres musi być liczbą od 1 do 365.",
             "first_week": "Pierwszy tydzień musi być liczbą między 1 a 52.",
             "date": "Nieprawidłowy format daty!"
         },
@@ -134,7 +134,7 @@
                 "data": {
                     "first_month": "Miesiąc pierwszego wywozu",
                     "last_month": "Miesiąc ostatniego wywozu",
-                    "period": "Wywóz co n dni/tygodni: (1-52)",
+                    "period": "Wywóz co n dni/tygodni: (1-365)",
                     "first_week": "Tydzień pierwszego wywozu: (1-52)",
                     "first_date": "Pierwsza data",
                     "weekday_order_number_1": "Pierwszy dzień tygodnia",
@@ -168,7 +168,7 @@
             "time": "Nieprawidłowy format czasu!",
             "weekday_order_number": "Wybierz 1 lub więcej dni!",
             "week_order_number": "Wybierz 1 lub więcej tydzieńi!",
-            "period": "Okres musi być liczbą od 1 do 52.",
+            "period": "Okres musi być liczbą od 1 do 365.",
             "first_week": "Pierwszy tydzień musi być liczbą między 1 a 52.",
             "date": "Nieprawidłowy format daty!"
         }

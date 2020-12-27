@@ -46,7 +46,7 @@
                 "data": {
                     "first_month": "Esimene prügiveo kuu",
                     "last_month": "Viimane prügiveo kuu",
-                    "period": "Prügivedu iga n päeva/nädala tagant: (1-52)",
+                    "period": "Prügivedu iga n päeva/nädala tagant: (1-365)",
                     "first_week": "Esimese prügiveo nädal (1-52)",
                     "first_date": "Esimese prügiveo kuupäev",
                     "weekday_order_number_1": "Kuu esimene tööpäev",
@@ -80,7 +80,7 @@
             "time": "Vigane kellaaja formaat!",
             "weekday_order_number": "Valige üks või rohkem päevi",
             "week_order_number": "Valige üks või rohkem nädalat",
-            "period": "Välp peab olema number 1 ja 52 vahel",
+            "period": "Välp peab olema number 1 ja 365 vahel",
             "first_week": "Esimene nädal peab olema number 1 ja 52 vahel",
             "date": "Vigane kuupäeva formaat!!"
         },
@@ -135,7 +135,7 @@
                 "data": {
                     "first_month": "Esimene prügiveo kuu",
                     "last_month": "Viimane prügiveo kuu",
-                    "period": "Prügivedu iga n päeva/nädala tagant: (1-52)",
+                    "period": "Prügivedu iga n päeva/nädala tagant: (1-365)",
                     "first_week": "Esimese prügiveo nädal (1-52)",
                     "first_date": "Esimese prügiveo kuupäev",
                     "weekday_order_number_1": "Kuu esimene tööpäev",
@@ -169,7 +169,7 @@
             "time": "Vigane kellaaja formaat!",
             "weekday_order_number": "Valige üks või rohkem päevi",
             "week_order_number": "Valige üks või rohkem nädalat",
-            "period": "Välp peab olema number 1 ja 52 vahel",
+            "period": "Välp peab olema number 1 ja 365 vahel",
             "first_week": "Esimene nädal peab olema number 1 ja 52 vahel",
             "date": "Vigane kuupäeva formaat!!"
         }

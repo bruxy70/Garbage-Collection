@@ -46,7 +46,7 @@
                 "data": {
                     "first_month": "Prima raccolta del mese",
                     "last_month": "Ultima raccolta del mese",
-                    "period": "Raccolta ogni n settimane/giorno: (1-52)",
+                    "period": "Raccolta ogni n settimane/giorno: (1-365)",
                     "first_week": "Prima raccolta della settimana (1-52)",
                     "first_date": "Prima date",
                     "weekday_order_number_1": "1° giorno della settimana del mese",
@@ -77,7 +77,7 @@
             "time": "Formato ora non valido!",
             "weekday_order_number": "Seleziona uno o più giorni",
             "week_order_number": "Seleziona uno o più settimani",
-            "period": "Il periodo deve essere un numero compreso tra 1 e 52",
+            "period": "Il periodo deve essere un numero compreso tra 1 e 365",
             "first_week": "La prima settimana deve essere un numero tra 1 e 52",
             "date": "Formato data non valido!"
         },
@@ -131,7 +131,7 @@
                 "data": {
                     "first_month": "Prima raccolta del mese",
                     "last_month": "Ultima raccolta del mese",
-                    "period": "Raccolta ogni n settimane/giorno: (1-52)",
+                    "period": "Raccolta ogni n settimane/giorno: (1-365)",
                     "first_week": "Prima raccolta della settimana (1-52)",
                     "first_date": "Prima date",
                     "weekday_order_number_1": "1° giorno della settimana del mese",
@@ -162,7 +162,7 @@
             "time": "Formato ora non valido!",
             "weekday_order_number": "Seleziona uno o più giorni",
             "week_order_number": "Seleziona uno o più settimani",
-            "period": "Il periodo deve essere un numero compreso tra 1 e 52",
+            "period": "Il periodo deve essere un numero compreso tra 1 e 365",
             "first_week": "La prima settimana deve essere un numero tra 1 e 52",
             "date": "Formato data non valido!"
         }
