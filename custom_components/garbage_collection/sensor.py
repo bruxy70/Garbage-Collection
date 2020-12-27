@@ -1,4 +1,5 @@
 """Sensor platform for garbage_collection."""
+import asyncio
 import logging
 from datetime import date, datetime, time, timedelta
 from typing import Any, List, Optional, Union
@@ -573,7 +574,7 @@ class GarbageCollection(RestoreEntity):
 
     def move_to_range(self, day: date) -> date:
         """If the date is not in range, move to the range."""
-        if not self.date_inside(day):
+        if not (day in self._include_dates or self.date_inside(day)):
             year = day.year
             month = day.month
             if self._first_month <= self._last_month and month > self._last_month:
@@ -607,7 +608,6 @@ class GarbageCollection(RestoreEntity):
         # Move starting date if today is out of range
         day1 = self.move_to_range(day1)
         next_date = None
-        iterations = 0
         while next_date is None:
             try:
                 next_date = await self._async_find_candidate_date(day1) + relativedelta(
@@ -645,30 +645,26 @@ class GarbageCollection(RestoreEntity):
                         "(%s) Skipping exclude_date %s", self._name, next_date
                     )
                     next_date = None
-            next_date = self._insert_include_date(first_date, next_date)
-            day1 += relativedelta(days=1)  # look from the next day
-            iterations += 1
-            if iterations > 356:
-                _LOGGER.error(
-                    "(%s) Did not find any collection date",
-                    self._name,
-                )
-                return None
+                day1 += relativedelta(days=1)  # look from the next day
+        next_date = self._insert_include_date(first_date, next_date)
         return next_date
 
     async def async_update(self) -> None:
         """Get the latest data and updates the states."""
-        now = dt_util.now()
-        today = now.date()
         if not await self._async_ready_for_update():
-            # _LOGGER.debug(
-            #     "(%s) Skipping the update, already did it today",
-            #     self._name)
             return
         _LOGGER.debug("(%s) Calling update", self._name)
-        await self.async_load_holidays(today)
+        now = dt_util.now()
+        today = now.date()
         self._last_updated = now
-        self._next_date = await self.async_find_next_date(today)
+        try:
+            await asyncio.wait_for(self.async_load_holidays(today), timeout=10)
+            self._next_date = await asyncio.wait_for(
+                self.async_find_next_date(today), timeout=10
+            )
+        except asyncio.TimeoutError:
+            _LOGGER.error("(%s) Timeout looking for the new date", self._name)
+            self._next_date = None
         if self._next_date is not None:
             self._days = (self._next_date - today).days
             next_date_txt = self._next_date.strftime(self._date_format)
