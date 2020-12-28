@@ -1,8 +1,7 @@
 """Garbage collection calendar."""
 
-import asyncio
 import logging
-from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta
 
 from homeassistant.components.calendar import CalendarEventDevice
 from homeassistant.util import Throttle
