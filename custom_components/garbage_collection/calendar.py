@@ -134,7 +134,9 @@ class EntitiesCalendarData:
         next_dates = {}
         for entity in self.entities:
             if self._hass.data[DOMAIN][SENSOR_PLATFORM][entity]._next_date is not None:
-                next_dates[entity] = self._hass.data[DOMAIN][SENSOR_PLATFORM][entity]._next_date
+                next_dates[entity] = self._hass.data[DOMAIN][SENSOR_PLATFORM][
+                    entity
+                ]._next_date
         if len(next_dates) > 0:
             entity_id = min(next_dates.keys(), key=(lambda k: next_dates[k]))
             start = next_dates[entity_id]
