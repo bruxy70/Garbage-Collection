@@ -15,6 +15,8 @@
                     "expire_after": "Expire after (HH:MM) - optional",
                     "verbose_state": "Verbose state (text, instead of number)",
                     "verbose_format": "Verbose format (using `date` and `days` variables (in squary brackets))",
+                    "include_dates": "Include dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optional",
+                    "exclude_dates": "Exclude dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optional",
                     "date_format": "Date format (see http://strftime.org/)"
                 }
             },
@@ -59,8 +61,6 @@
                     "week_order_number_3": "3rd week of month",
                     "week_order_number_4": "4th week of month",
                     "week_order_number_5": "5th week of month",
-                    "include_dates": "Include dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optional",
-                    "exclude_dates": "Exclude dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optional",
                     "move_country_holidays": "Move holidays to next day (optional)",
                     "holiday_move_offset": "Move holidays by # of days(-7..7)",
                     "holiday_pop_named": "Ignore holidays (list) - optional",
@@ -103,6 +103,8 @@
                     "expire_after": "Expire after (HH:MM) - optional",
                     "verbose_state": "Verbose state (text, instead of number)",
                     "verbose_format": "Verbose format (using `date` and `days` variables (in squary brackets))",
+                    "include_dates": "Include dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optional",
+                    "exclude_dates": "Exclude dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optional",
                     "date_format": "Date format (see http://strftime.org/)"
                 }
             },
@@ -147,8 +149,6 @@
                     "week_order_number_3": "3rd week of month",
                     "week_order_number_4": "4th week of month",
                     "week_order_number_5": "5th week of month",
-                    "include_dates": "Include dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optional",
-                    "exclude_dates": "Exclude dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optional",
                     "move_country_holidays": "Move holidays to next day (optional)",
                     "holiday_move_offset": "Move holidays by # of days(-7..7)",
                     "holiday_pop_named": "Ignore holidays (list) - optional",
