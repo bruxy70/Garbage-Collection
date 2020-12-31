@@ -15,6 +15,8 @@
                     "expire_after": "Expire après (HH:MM)",
                     "verbose_state": "Etat verbeux (texte, au lieu du chiffre)",
                     "verbose_format": "Format état verbeux (utilisation des variables `date` et `days` (entre caractères accolade ))",
+                    "include_dates": "Inclusion de dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optionnel",
+                    "exclude_dates": "Exclusion de dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optionnel",
                     "date_format": "Format de date (voir http://strftime.org/)"
                 }
             },
@@ -59,8 +61,6 @@
                     "week_order_number_3": "3ème semaine du mois",
                     "week_order_number_4": "4ème semaine du mois",
                     "week_order_number_5": "5ème semaine du mois",
-                    "include_dates": "Inclusion de dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optionnel",
-                    "exclude_dates": "Exclusion de dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optionnel",
                     "move_country_holidays": "Reporter les vacances au lendemain (optionnel)",
                     "holiday_move_offset": "Déplacer les vacances de # jours (-7..7)",
                     "holiday_pop_named": "Ignorer les vacances (liste) - optionnel",
@@ -100,6 +100,8 @@
                     "expire_after": "Expire après (HH:MM)",
                     "verbose_state": "Etat verbeux (texte, au lieu du chiffre)",
                     "verbose_format": "Format état verbeux (utilisation des variables `date` et `days` (entre caractères accolade ))",
+                    "include_dates": "Inclusion de dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optionnel",
+                    "exclude_dates": "Exclusion de dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optionnel",
                     "date_format": "Format de date (voir http://strftime.org/)"
                 }
             },
@@ -144,8 +146,6 @@
                     "week_order_number_3": "3ème semaine du mois",
                     "week_order_number_4": "4ème semaine du mois",
                     "week_order_number_5": "5ème semaine du mois",
-                    "include_dates": "Inclusion de dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optionnel",
-                    "exclude_dates": "Exclusion de dates (yyyy-mm-dd, yyyy-mm-dd, ...) - optionnel",
                     "move_country_holidays": "Reporter les vacances au lendemain (optionnel)",
                     "holiday_move_offset": "Déplacer les vacances de # jours (-7..7)",
                     "holiday_pop_named": "Ignorer les vacances (liste) - optionnel",

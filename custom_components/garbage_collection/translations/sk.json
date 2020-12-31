@@ -15,6 +15,8 @@
                     "expire_after": "Čas expirácie (HH:MM)",
                     "verbose_state": "Verbose state (popis miesto čísiel)",
                     "verbose_format": "Verbose format (Použi `date` a `days` premenné (v zložených zátvorkách))",
+                    "include_dates": "Pridané dátumy (yyyy-mm-dd, yyyy-mm-dd, ...) - voliteľné",
+                    "exclude_dates": "Zakázané dátumy (yyyy-mm-dd, yyyy-mm-dd, ...) - voliteľné",
                     "date_format": "Formát data(see http://strftime.org/)"
                 }
             },
@@ -59,8 +61,6 @@
                     "week_order_number_3": "Tretí týžden v mesiaci",
                     "week_order_number_4": "Štvrtý týžden v mesiaci",
                     "week_order_number_5": "Piaty týžden v mesiaci",
-                    "include_dates": "Pridané dátumy (yyyy-mm-dd, yyyy-mm-dd, ...) - voliteľné",
-                    "exclude_dates": "Zakázané dátumy (yyyy-mm-dd, yyyy-mm-dd, ...) - voliteľné",
                     "move_country_holidays": "Štátne sviatky - krajiny (voliteľné)",
                     "holiday_move_offset": "Posunúť sviatok o (dní: -7..7)",
                     "holiday_pop_named": "Ignorovať sviatky (volitelné)", 
@@ -104,6 +104,8 @@
                     "expire_after": "Čas expirácie (HH:MM)",
                     "verbose_state": "Verbose state (popis miesto čísiel)",
                     "verbose_format": "Verbose format (Použi `date` a `days` premenné (v zložených zátvorkách))",
+                    "include_dates": "Pridané dátumy (yyyy-mm-dd, yyyy-mm-dd, ...) - voliteľné",
+                    "exclude_dates": "Zakázané dátumy (yyyy-mm-dd, yyyy-mm-dd, ...) - voliteľné",
                     "date_format": "Formát dátumu(see http://strftime.org/)"
                 }
             },
@@ -149,8 +151,6 @@
                     "week_order_number_3": "Tretí týžden v mesiaci",
                     "week_order_number_4": "Štvrtý týžden v mesiaci",
                     "week_order_number_5": "Piaty týžden v mesiaci",
-                    "include_dates": "Pridané dátumy (yyyy-mm-dd, yyyy-mm-dd, ...) - voliteľné",
-                    "exclude_dates": "Zakázané dátumy (yyyy-mm-dd, yyyy-mm-dd, ...) - voliteľné",
                     "move_country_holidays": "Štátne sviatky - krajiny (voliteľné)",
                     "holiday_move_offset": "Posunúť sviatok o (dní: -7..7)",
                     "holiday_pop_named": "Ignorovať sviatky (volitelné)", 

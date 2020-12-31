@@ -15,6 +15,8 @@
                     "expire_after": "Caduca después (HH:MM)",
                     "verbose_state": "Estado detallado (texto, en lugar de número)",
                     "verbose_format": "Formato detallado (usando las variables `fecha` y` dias` (entre corchetes))",
+                    "include_dates": "Incluir fechas (yyyy-mm-dd, yyyy-mm-dd, ...) - opcional",
+                    "exclude_dates": "Excluir fechas (yyyy-mm-dd, yyyy-mm-dd, ...) - opcional",
                     "date_format": "Formato de fecha(ver en http://strftime.org/)"
                 }
             },
@@ -59,8 +61,6 @@
                     "week_order_number_3": "3ra semana del mes",
                     "week_order_number_4": "4ta semana del mes",
                     "week_order_number_5": "5ta semana del mes",
-                    "include_dates": "Incluir fechas (yyyy-mm-dd, yyyy-mm-dd, ...) - opcional",
-                    "exclude_dates": "Excluir fechas (yyyy-mm-dd, yyyy-mm-dd, ...) - opcional",
                     "move_country_holidays": "Mover vacaciones al día siguiente (opcional)",
                     "holiday_move_offset": "Move holidays by # of days(-7..7)",
                     "holiday_pop_named": "Ignore holidays (list) - optional",
@@ -103,6 +103,8 @@
                     "expire_after": "Caduca después (HH:MM)",
                     "verbose_state": "Estado detallado (texto, en lugar de número)",
                     "verbose_format": "Formato detallado (usando las variables `fecha` y` dias` (entre corchetes))",
+                    "include_dates": "Incluir fechas (yyyy-mm-dd, yyyy-mm-dd, ...) - opcional",
+                    "exclude_dates": "Excluir fechas (yyyy-mm-dd, yyyy-mm-dd, ...) - opcional",
                     "date_format": "Formato de fecha(ver en http://strftime.org/)"
                 }
             },
@@ -147,8 +149,6 @@
                     "week_order_number_3": "3ra semana del mes",
                     "week_order_number_4": "4ta semana del mes",
                     "week_order_number_5": "5ta semana del mes",
-                    "include_dates": "Incluir fechas (yyyy-mm-dd, yyyy-mm-dd, ...) - opcional",
-                    "exclude_dates": "Excluir fechas (yyyy-mm-dd, yyyy-mm-dd, ...) - opcional",
                     "move_country_holidays": "Mover vacaciones al día siguiente (opcional)",
                     "holiday_move_offset": "Move holidays by # of days(-7..7)",
                     "holiday_pop_named": "Ignore holidays (list) - optional",

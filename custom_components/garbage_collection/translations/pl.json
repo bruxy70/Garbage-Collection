@@ -15,6 +15,8 @@
                     "expire_after": "Wygasają po (HH:MM) - opcjonalnie",
                     "verbose_state": "Tryb gadatliwy (tekst, zamiast liczb)",
                     "verbose_format": "Format trybu gadatliwego (używa zmiennych `date` oraz `days` (w nawiasach klamerkowych))",
+                    "include_dates": "Dołącz daty (yyyy-mm-dd, yyyy-mm-dd, ...) - opcjonalnie",
+                    "exclude_dates": "Wyłącz daty (yyyy-mm-dd, yyyy-mm-dd, ...) - opcjonalnie",
                     "date_format": "Format daty (patrz http://strftime.org/)"
                 }
             },
@@ -59,8 +61,6 @@
                     "week_order_number_3": "Trzeci tydzień miesiąca",
                     "week_order_number_4": "Czwarty tydzień miesiąca",
                     "week_order_number_5": "Piąty tydzień miesiąca",
-                    "include_dates": "Dołącz daty (yyyy-mm-dd, yyyy-mm-dd, ...) - opcjonalnie",
-                    "exclude_dates": "Wyłącz daty (yyyy-mm-dd, yyyy-mm-dd, ...) - opcjonalnie",
                     "move_country_holidays": "Przesuń świąteczne dni na kolejny dzień (opcjonalnie)",
                     "holiday_move_offset": "Move holidays by # of days(-7..7)",
                     "holiday_pop_named": "Ignore holidays (list) - optional",
@@ -103,6 +103,8 @@
                     "expire_after": "Wygasają po (HH:MM) - opcjonalnie",
                     "verbose_state": "Tryb gadatliwy (tekst, zamiast liczb)",
                     "verbose_format": "Format trybu gadatliwego (używa zmiennych `date` oraz `days` (w nawiasach klamerkowych))",
+                    "include_dates": "Dołącz daty (yyyy-mm-dd, yyyy-mm-dd, ...) - opcjonalnie",
+                    "exclude_dates": "Wyłącz daty (yyyy-mm-dd, yyyy-mm-dd, ...) - opcjonalnie",
                     "date_format": "Format daty (patrz http://strftime.org/)"
                 }
             },
@@ -147,8 +149,6 @@
                     "week_order_number_3": "Trzeci tydzień miesiąca",
                     "week_order_number_4": "Czwarty tydzień miesiąca",
                     "week_order_number_5": "Piąty tydzień miesiąca",
-                    "include_dates": "Dołącz daty (yyyy-mm-dd, yyyy-mm-dd, ...) - opcjonalnie",
-                    "exclude_dates": "Wyłącz daty (yyyy-mm-dd, yyyy-mm-dd, ...) - opcjonalnie",
                     "move_country_holidays": "Przesuń państwowe święta na kolejny dzień (opcjonalnie)",
                     "holiday_move_offset": "Move holidays by # of days(-7..7)",
                     "holiday_pop_named": "Ignore holidays (list) - optional",

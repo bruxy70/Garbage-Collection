@@ -15,6 +15,8 @@
                     "expire_after": "Ajalõpp (HH:MM) - valikuline",
                     "verbose_state": "Teavitus tekstina (aeg tekstina numbrite asemel)",
                     "verbose_format": "Teavituse formaat (kasutades `date` and `days` muutujaid (kantsulgudes))",
+                    "include_dates": "Kaasatavad kuupäevad (yyyy-mm-dd, yyyy-mm-dd, ...) - valikuline",
+                    "exclude_dates": "Välditavad kuupäevad (yyyy-mm-dd, yyyy-mm-dd, ...) - valikuline",
                     "date_format": "Kuupäeva formaat (vaata http://strftime.org/)"
                 }
             },
@@ -59,8 +61,6 @@
                     "week_order_number_3": "Kuu kolmas nädal",
                     "week_order_number_4": "Kuu neljas nädal",
                     "week_order_number_5": "Kuu viies nädal",
-                    "include_dates": "Kaasatavad kuupäevad (yyyy-mm-dd, yyyy-mm-dd, ...) - valikuline",
-                    "exclude_dates": "Välditavad kuupäevad (yyyy-mm-dd, yyyy-mm-dd, ...) - valikuline",
                     "move_country_holidays": "Liiguta prügivedu pühade tõttu üks päev edasi (valikuline)",
                     "holiday_move_offset": "Liiguta prügivedu pühade tõttu n päeva edasi(-7..7)",
                     "holiday_pop_named": "Eira pühi (nimekiri) - valikuline",
@@ -104,6 +104,8 @@
                     "expire_after": "Ajalõpp (HH:MM) - valikuline",
                     "verbose_state": "Teavitus tekstina (aeg tekstina numbrite asemel)",
                     "verbose_format": "Teavituse formaat (kasutades `date` and `days` muutujaid (kantsulgudes))",
+                    "include_dates": "Kaasatavad kuupäevad (yyyy-mm-dd, yyyy-mm-dd, ...) - valikuline",
+                    "exclude_dates": "Välditavad kuupäevad (yyyy-mm-dd, yyyy-mm-dd, ...) - valikuline",
                     "date_format": "Kuupäeva formaat (vaata http://strftime.org/)"
                 }
             },
@@ -148,8 +150,6 @@
                     "week_order_number_3": "Kuu kolmas nädal",
                     "week_order_number_4": "Kuu neljas nädal",
                     "week_order_number_5": "Kuu viies nädal",
-                    "include_dates": "Kaasatavad kuupäevad (yyyy-mm-dd, yyyy-mm-dd, ...) - valikuline",
-                    "exclude_dates": "Välditavad kuupäevad (yyyy-mm-dd, yyyy-mm-dd, ...) - valikuline",
                     "move_country_holidays": "Liiguta prügivedu pühade tõttu üks päev edasi (valikuline)",
                     "holiday_move_offset": "Liiguta prügivedu pühade tõttu n päeva edasi(-7..7)",
                     "holiday_pop_named": "Eira pühi (nimekiri) - valikuline",
