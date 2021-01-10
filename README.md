@@ -26,7 +26,7 @@ These are some examples using this sensor. The Lovelace config examples are incl
 ## Table of Contents
 * [Installation](#installation)
   + [Manual Installation](#manual-installation)
-  + [Installation via Home Assistant Community Store (HACS)](#installation-via-hacs)
+  + [Installation via Home Assistant Community Store (HACS)](#installation-via-home-assistant-community-store-hacs)
 * [Configuration](#configuration)
   + [Configuration Parameters](#configuration-parameters)
 * [State and Attributes](#state-and-attributes)
