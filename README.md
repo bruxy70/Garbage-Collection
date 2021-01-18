@@ -26,7 +26,7 @@ These are some examples using this sensor. The Lovelace config examples are incl
 ## Table of Contents
 * [Installation](#installation)
   + [Manual Installation](#manual-installation)
-  + [Installation via Home Assistant Community Store (HACS)](#installation-via-hacs)
+  + [Installation via Home Assistant Community Store (HACS)](#installation-via-home-assistant-community-store-hacs)
 * [Configuration](#configuration)
   + [Configuration Parameters](#configuration-parameters)
 * [State and Attributes](#state-and-attributes)
@@ -121,10 +121,9 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 | `date_format` | No | In the `verbose_format`, you can configure the format of date (using [strftime](http://strftime.org/) format)  **Default**: `'%d-%b-%Y'`
 
 
-#### PARAMETERS FOR ALL FREQUENCIES EXCEPT ANNUAL
+#### PARAMETERS FOR ALL FREQUENCIES EXCEPT ANNUAL AND GROUP
 |Attribute |Required|Description
 |:----------|----------|------------
-| `collection_days` | Yes | Day three letter abbreviation, list of `"mon"`, `"tue"`, `"wed"`, `"thu"`, `"fri"`, `"sat"`, `"sun"`. 
 | `first_month` | No | Month three letter abbreviation, e.g. `"jan"`, `"feb"`...<br/>**Default**: `"jan"`
 | `last_month` | No | Month three letter abbreviation.<br/>**Default**: `"dec"`
 | `exclude_dates` | No | List of dates with no collection (using international date format `'yyyy-mm-dd'`. 
@@ -136,6 +135,13 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 | `prov` | No | Country holidays - province (see [holidays](https://github.com/dr-prodigy/python-holidays) ).
 | `state` | No | Country holidays - state (see [holidays](https://github.com/dr-prodigy/python-holidays) ).
 | `observed` | No | Country holidays - observed (see [holidays](https://github.com/dr-prodigy/python-holidays) ).
+
+
+#### PARAMETERS FOR ALL FREQUENCIES EXCEPT ANNUAL, EVERY-N-DAYS and GROUP
+|Attribute |Required|Description
+|:----------|----------|------------
+| `collection_days` | Yes | Day three letter abbreviation, list of `"mon"`, `"tue"`, `"wed"`, `"thu"`, `"fri"`, `"sat"`, `"sun"`. 
+
 
 #### PARAMETERS FOR COLLECTION EVERY-N-WEEKS
 |Attribute |Required|Description
@@ -192,6 +198,9 @@ If the `verbose_state` parameter is set, it will show date and remaining days, f
 |:----------|------------
 | `next_date` | The date of next collection
 | `days` | Days till the next collection
+| `holidays` | List of used country (showing this year)
+| `last_collection` | Date and time of the last collection
+
 
 ## Services
 ### garbage_collection.collect_garbage
