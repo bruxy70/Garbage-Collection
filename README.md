@@ -121,10 +121,9 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 | `date_format` | No | In the `verbose_format`, you can configure the format of date (using [strftime](http://strftime.org/) format)  **Default**: `'%d-%b-%Y'`
 
 
-#### PARAMETERS FOR ALL FREQUENCIES EXCEPT ANNUAL
+#### PARAMETERS FOR ALL FREQUENCIES EXCEPT ANNUAL AND GROUP
 |Attribute |Required|Description
 |:----------|----------|------------
-| `collection_days` | Yes | Day three letter abbreviation, list of `"mon"`, `"tue"`, `"wed"`, `"thu"`, `"fri"`, `"sat"`, `"sun"`. 
 | `first_month` | No | Month three letter abbreviation, e.g. `"jan"`, `"feb"`...<br/>**Default**: `"jan"`
 | `last_month` | No | Month three letter abbreviation.<br/>**Default**: `"dec"`
 | `exclude_dates` | No | List of dates with no collection (using international date format `'yyyy-mm-dd'`. 
@@ -136,6 +135,13 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 | `prov` | No | Country holidays - province (see [holidays](https://github.com/dr-prodigy/python-holidays) ).
 | `state` | No | Country holidays - state (see [holidays](https://github.com/dr-prodigy/python-holidays) ).
 | `observed` | No | Country holidays - observed (see [holidays](https://github.com/dr-prodigy/python-holidays) ).
+
+
+#### PARAMETERS FOR ALL FREQUENCIES EXCEPT ANNUAL, EVERY-N-DAYS and GROUP
+|Attribute |Required|Description
+|:----------|----------|------------
+| `collection_days` | Yes | Day three letter abbreviation, list of `"mon"`, `"tue"`, `"wed"`, `"thu"`, `"fri"`, `"sat"`, `"sun"`. 
+
 
 #### PARAMETERS FOR COLLECTION EVERY-N-WEEKS
 |Attribute |Required|Description
