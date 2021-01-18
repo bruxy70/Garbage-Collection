@@ -198,6 +198,9 @@ If the `verbose_state` parameter is set, it will show date and remaining days, f
 |:----------|------------
 | `next_date` | The date of next collection
 | `days` | Days till the next collection
+| `holidays` | List of used country (showing this year)
+| `last_collection` | Date and time of the last collection
+
 
 ## Services
 ### garbage_collection.collect_garbage
