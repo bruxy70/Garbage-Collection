@@ -567,6 +567,8 @@ class GarbageCollection(RestoreEntity):
                 except AttributeError:
                     members_ready = False
                     break
+                except TypeError:
+                    ready_for_update = True
             if ready_for_update and not members_ready:
                 ready_for_update = False
         else:
