@@ -1,4 +1,4 @@
-[![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://github.com/custom-components/hacs) [![Garbage-Collection](https://img.shields.io/github/v/release/bruxy70/Garbage-Collection.svg?1)](https://github.com/bruxy70/Garbage-Collection) ![Maintenance](https://img.shields.io/maintenance/yes/2020.svg)
+[![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://github.com/custom-components/hacs) [![Garbage-Collection](https://img.shields.io/github/v/release/bruxy70/Garbage-Collection.svg?1)](https://github.com/bruxy70/Garbage-Collection) ![Maintenance](https://img.shields.io/maintenance/yes/2021.svg)
 
 [![Buy me a coffee](https://img.shields.io/static/v1.svg?label=Buy%20me%20a%20coffee&message=🥨&color=black&logo=buy%20me%20a%20coffee&logoColor=white&labelColor=6f4e37)](https://www.buymeacoffee.com/3nXx0bJDP)
 
@@ -66,3 +66,14 @@ If the `verbose_state` parameter is set, it will show date and remaining days, f
 |:----------|------------
 | `next_date` | The date of next collection
 | `days` | Days till the next collection
+| `holidays` | List of used country (showing this year)
+| `last_collection` | Date and time of the last collection
+
+## Services
+### garbage_collection.collect_garbage
+If the collection is scheduled for today, mark it completed and look for the next collection.
+It will set the `last_collection` attribute to the current date and time.
+
+| Attribute | Description
+|:----------|------------
+| `entity_id` | The gatbage collection entity id (e.g. `sensor.general_waste`)
