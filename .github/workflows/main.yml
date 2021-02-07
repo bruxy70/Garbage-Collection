@@ -9,11 +9,10 @@ jobs:
     name: Prepare release
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v1
       - name: "Set version number"
-        uses: actions/checkout@v1
         run: |
           sed -i '/  "version": /c\  "version": "${{ github.ref }}",' custom_components/garbage_collection/manifest.json
-
       # Pack the HACS dir as a zip and upload to the release
       - name: ZIP garbage_collection Dir
         run: |
@@ -21,7 +20,6 @@ jobs:
           zip garbage_collection.zip -r ./
       - name: Upload zip to release
         uses: svenstaro/upload-release-action@v1-release
-
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: /home/runner/work/Garbage-Collection/Garbage-Collection/custom_components/garbage_collection/garbage_collection.zip
