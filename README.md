@@ -52,7 +52,8 @@ These are some examples using this sensor. The Lovelace config examples are incl
 ## Configuration
 There are 2 ways to configure the integration:
 1. Using *Config Flow*: in `Configuration/Integrations` click on the `+` button, select `Garbage Collection` and configure the sensor (prefered). If you configure Garbage Collection using Config Flow, you can change the entity_name, name and change the sensor parameters from the Integrations configuration. The changes are instant and do not require HA restart.
-2. Using *YAML*: add `garbage_collection` integration in your `configuration.yaml` and add individual sensors. Example:
+2. Using *YAML* (deprecated): add `garbage_collection` integration in your `configuration.yaml` and add individual sensors. **Based on the [Home Assistant design guideline](https://www.home-assistant.io/blog/2020/04/14/the-future-of-yaml/#the-future-of-yaml), this will be removed in the future. **
+Configurationh example:
 
 ```yaml
 # Example configuration.yaml entry
