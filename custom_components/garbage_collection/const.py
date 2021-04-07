@@ -102,7 +102,7 @@ EXCEPT_ANNUAL_GROUP = [
     "every-n-days",
     "monthly",
 ]
-WEEKLY_DAILY = ["every-n-weeks", "every-n-days"]
+WEEKLY_DAILY = ["every-n-weeks", "every-n-days", "monthly"]
 WEEKLY_FREQUENCY_X = ["every-n-weeks"]
 DAILY_FREQUENCY = ["every-n-days"]
 MONTHLY_FREQUENCY = ["monthly"]
