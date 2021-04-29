@@ -4,7 +4,7 @@
   "version": "1.1",
   "documentation": "https://github.com/bruxy70/Garbage-Collection/",
   "issue_tracker": "https://github.com/bruxy70/Garbage-Collection/issues",
-  "iot_class": "local_polling",
+  "iot_class": "calculated",
   "dependencies": [],
   "config_flow": true,
   "codeowners": [
