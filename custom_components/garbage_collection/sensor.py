@@ -574,8 +574,14 @@ class GarbageCollection(RestoreEntity):
         else:
             try:
                 if self._next_date == today and (
-                    now.time() >= self.expire_after
-                    or self.last_collection.date() == today
+                    (
+                        type(self.expire_after) is time
+                        and now.time() >= self.expire_after
+                    )
+                    or (
+                        type(self.last_collection) is datetime
+                        and self.last_collection.date() == today
+                    )
                 ):
                     ready_for_update = True
             except (AttributeError, TypeError):
