@@ -226,7 +226,7 @@ class GarbageCollection(RestoreEntity):
                 kwargs["prov"] = self._holiday_prov
             if (
                 self._holiday_observed is not None
-                and type(self._holiday_observed) == bool
+                and type(self._holiday_observed) is bool
                 and not self._holiday_observed
             ):
                 kwargs["observed"] = self._holiday_observed
