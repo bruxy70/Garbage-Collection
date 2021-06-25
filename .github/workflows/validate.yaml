@@ -20,6 +20,8 @@ jobs:
           python-version: 3.8
       - name: Install dependencies
         run: pip install 'isort==5.*' black flake8 mypy pydocstyle
+      - name: Install requirements
+        run: pip install -r requirements.txt
       - name: Change directory
         run: cd custom_components/garbage_collection
       - name: isort
@@ -30,8 +32,6 @@ jobs:
         run: flake8 --max-line-length 88 .
       - name: pydocstyle
         run: pydocstyle .
-      - name: Install mypy types
-        run: mypy --install-types
       - name: mypy
         run: mypy --ignore-missing-imports --follow-imports=silent custom_components/garbage_collection
   bandit:
