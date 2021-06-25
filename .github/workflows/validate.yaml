@@ -14,10 +14,10 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - uses: "actions/checkout@v2"
-      - name: Set up Python 3.9
+      - name: Set up Python 3.8
         uses: actions/setup-python@v2
         with:
-          python-version: 3.9
+          python-version: 3.8
       - name: Install dependencies
         run: pip install 'isort==5.*' black flake8 mypy pydocstyle
       - name: Change directory
@@ -31,6 +31,7 @@ jobs:
       - name: pydocstyle
         run: pydocstyle .
       - name: mypy
+        run: mypy --install-types
         run: mypy --ignore-missing-imports --follow-imports=silent custom_components/garbage_collection
   bandit:
     runs-on: "ubuntu-latest"
