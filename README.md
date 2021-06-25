@@ -54,8 +54,9 @@ __Based on the [Home Assistant design guideline](https://www.home-assistant.io/b
 
 There are 2 ways to configure the integration:
 1. Using *Config Flow*: in `Configuration/Integrations` click on the `+` button, select `Garbage Collection` and configure the sensor (prefered). If you configure Garbage Collection using Config Flow, you can change the entity_name, name and change the sensor parameters from the Integrations configuration. The changes are instant and do not require HA restart.
-2. Using *YAML* (deprecated): add `garbage_collection` integration in your `configuration.yaml` and add individual sensors. YAML configuration example:
-
+2. Using *YAML* (deprecated): add `garbage_collection` integration in your `configuration.yaml` and add individual sensors. 
+<details>
+  <summary>YAML configuration example:</summary>
 ```yaml
 # Example configuration.yaml entry
 garbage_collection:
@@ -104,6 +105,7 @@ garbage_collection:
     frequency: "annual"
     date: '11/24'
 ```
+</details>
 Entity_id change is not possible using the YAML configuration. Changing other paratemers require restarting Home Assistant.
 
 ### CONFIGURATION PARAMETERS
