@@ -57,6 +57,7 @@ There are 2 ways to configure the integration:
 2. Using *YAML* (deprecated): add `garbage_collection` integration in your `configuration.yaml` and add individual sensors. 
 <details>
   <summary>YAML configuration example:</summary>
+  
 ```yaml
 # Example configuration.yaml entry
 garbage_collection:
@@ -105,6 +106,7 @@ garbage_collection:
     frequency: "annual"
     date: '11/24'
 ```
+  
 </details>
 Entity_id change is not possible using the YAML configuration. Changing other paratemers require restarting Home Assistant.
 
