@@ -20,6 +20,8 @@ jobs:
           python-version: 3.8
       - name: Install dependencies
         run: pip install 'isort==5.*' black flake8 mypy pydocstyle
+      - name: Install mypy types
+        run: mypy --install-types
       - name: Change directory
         run: cd custom_components/garbage_collection
       - name: isort
@@ -31,7 +33,6 @@ jobs:
       - name: pydocstyle
         run: pydocstyle .
       - name: mypy
-        run: mypy --install-types
         run: mypy --ignore-missing-imports --follow-imports=silent custom_components/garbage_collection
   bandit:
     runs-on: "ubuntu-latest"
