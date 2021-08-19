@@ -229,7 +229,7 @@ class GarbageCollection(RestoreEntity):
                 and type(self._holiday_observed) is bool
                 and not self._holiday_observed
             ):
-                kwargs["observed"]: bool = False
+                kwargs["observed"] = False
             hol = holidays.CountryHoliday(self._country_holidays, **kwargs)
             if self._holiday_pop_named is not None:
                 for pop in self._holiday_pop_named:
