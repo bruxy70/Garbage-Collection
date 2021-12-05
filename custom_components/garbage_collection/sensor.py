@@ -324,7 +324,7 @@ class GarbageCollection(RestoreEntity):
         return self._icon
 
     @property
-    def extra_state_attributes(self):
+    def device_state_attributes(self):
         """Return the state attributes."""
         res = {}
         if self._next_date is None:
