@@ -713,14 +713,16 @@ class GarbageCollection(RestoreEntity):
         now = dt_util.now()
         today = now.date()
         await self._async_load_collection_dates()
-        _LOGGER.debug("(%s) Dates loaded, firing a garbage_collection_loaded event", self._name)
+        _LOGGER.debug(
+            "(%s) Dates loaded, firing a garbage_collection_loaded event", self._name
+        )
 
         """
         TO DO
         """
         event_data = {
             "entity_id": self.entity_id,
-            "collection_dates": dates_to_texts(self._collection_dates)
+            "collection_dates": dates_to_texts(self._collection_dates),
         }
         self.hass.bus.async_fire("garbage_collection_loaded", event_data)
         # self.hass.bus.fire("garbage_collection_loaded", event_data)
