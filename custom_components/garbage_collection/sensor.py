@@ -653,7 +653,7 @@ class GarbageCollection(RestoreEntity):
         return next_date
 
     async def _async_load_collection_dates(self) -> None:
-        """Fill the collection dates list"""
+        """Fill the collection dates list."""
         today = dt_util.now().date()
         start_date = end_date = date(today.year - 1, 1, 1)
         end_date = date(today.year + 1, 12, 31)
@@ -674,8 +674,7 @@ class GarbageCollection(RestoreEntity):
     async def async_next_date(
         self, first_date: date, ignore_today=False
     ) -> Optional[date]:
-        """Get next date from self._collection_dates"""
-
+        """Get next date from self._collection_dates."""
         now = dt_util.now()
         for d in self._collection_dates:
             if d < first_date:
@@ -708,6 +707,11 @@ class GarbageCollection(RestoreEntity):
         """
         TO DO
         """
+        event_data = {
+            "device_id": self.entity_id,
+            "type": "dates_loaded",
+        }
+        self.hass.bus.async_fire("garbage_collection", event_data)
 
         _LOGGER.debug(
             "(%s) Event haldlers finished, looking for next collection", self._name
