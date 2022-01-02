@@ -139,6 +139,17 @@ def to_dates(dates: List[Any]) -> List[date]:
     return converted
 
 
+def dates_to_texts(dates: List[date]) -> List[str]:
+    """Convert list of dates to texts"""
+    converted = []  # type: List[str]
+    for day in dates:
+        try:
+            converted.append(day.isoformat())
+        except ValueError:
+            continue
+    return converted
+
+
 class GarbageCollection(RestoreEntity):
     """GarbageCollection Sensor class."""
 
@@ -702,16 +713,17 @@ class GarbageCollection(RestoreEntity):
         now = dt_util.now()
         today = now.date()
         await self._async_load_collection_dates()
-        _LOGGER.debug("(%s) Dates loaded, waiting for event handlers", self._name)
+        _LOGGER.debug("(%s) Dates loaded, firing a garbage_collection_loaded event", self._name)
 
         """
         TO DO
         """
         event_data = {
-            "device_id": self.entity_id,
-            "type": "dates_loaded",
+            "entity_id": self.entity_id,
+            "collection_dates": dates_to_texts(self._collection_dates)
         }
-        self.hass.bus.async_fire("garbage_collection", event_data)
+        self.hass.bus.async_fire("garbage_collection_loaded", event_data)
+        # self.hass.bus.fire("garbage_collection_loaded", event_data)
 
         _LOGGER.debug(
             "(%s) Event haldlers finished, looking for next collection", self._name
