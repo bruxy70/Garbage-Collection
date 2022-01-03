@@ -59,7 +59,7 @@ async def async_setup(hass, config):
         _LOGGER.debug("called update_state for %s", entity_id)
         try:
             entity = hass.data[DOMAIN][SENSOR_PLATFORM][entity_id]
-            entity.async_update_state()
+            await entity.async_update_state()
         except Exception as err:
             _LOGGER.error("Failed updating state for %s - %s", entity_id, err)
 
