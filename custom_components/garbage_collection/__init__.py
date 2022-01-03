@@ -53,17 +53,17 @@ UPDATE_STATE_SCHEMA = vol.Schema(
 async def async_setup(hass, config):
     """Set up this component using YAML."""
 
-    def handle_update_state(call):
+    async def handle_update_state(call):
         """Handle the update_state service call."""
         entity_id = call.data.get(CONF_ENTITY_ID)
         _LOGGER.debug("called update_state for %s", entity_id)
         try:
             entity = hass.data[DOMAIN][SENSOR_PLATFORM][entity_id]
-            await entity.async_update_state()
+            entity.async_update_state()
         except Exception as err:
             _LOGGER.error("Failed updating state for %s - %s", entity_id, err)
 
-    def handle_collect_garbage(call):
+    async def handle_collect_garbage(call):
         """Handle the collect_garbage service call."""
         entity_id = call.data.get(CONF_ENTITY_ID)
         last_collection = call.data.get(ATTR_LAST_COLLECTION)
