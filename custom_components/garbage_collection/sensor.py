@@ -141,7 +141,7 @@ def to_dates(dates: List[Any]) -> List[date]:
 
 
 def dates_to_texts(dates: List[date]) -> List[str]:
-    """Convert list of dates to texts"""
+    """Convert list of dates to texts."""
     converted = []  # type: List[str]
     for day in dates:
         try:
