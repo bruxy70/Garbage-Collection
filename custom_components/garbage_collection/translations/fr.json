@@ -8,6 +8,7 @@
                     "name": "Friendly name",
                     "hidden": "Masquer dans le calendrier",
                     "frequency": "Fréquence",
+                    "manual_update": "Sensor state updated only by calling service",
                     "icon_normal": "Icône (mdi:trash-can)",
                     "icon_tomorrow": "Icône pour collecte à jour J+1 (mdi:delete-restore)",
                     "icon_today": "Icône pour collecte au jour J (mdi:delete-circle)",

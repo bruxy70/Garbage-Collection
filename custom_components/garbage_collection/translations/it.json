@@ -8,6 +8,7 @@
                     "name": "Nome personalizzato",
                     "hidden": "Nascondi nel calendario",
                     "frequency": "Frequenza",
+                    "manual_update": "Sensor state updated only by calling service",
                     "icon_normal": "Icona (mdi:trash-can)",
                     "icon_tomorrow": "Icona raccolta domani (mdi:delete-restore)",
                     "icon_today": "Icona raccolta oggi (mdi:delete-circle)",

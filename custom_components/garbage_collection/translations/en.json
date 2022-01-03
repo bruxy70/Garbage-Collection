@@ -7,6 +7,7 @@
                 "data": {
                     "name": "Friendly name",
                     "hidden": "Hide in calendar",
+                    "manual_update": "Sensor state updated only by calling service",
                     "frequency": "Frequency",
                     "icon_normal": "Icon (mdi:trash-can) - optional",
                     "icon_tomorrow": "Icon collection tomorrow (mdi:delete-restore) - optional",

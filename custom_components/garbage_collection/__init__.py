@@ -43,12 +43,28 @@ COLLECT_NOW_SCHEMA = vol.Schema(
     }
 )
 
+UPDATE_STATE_SCHEMA = vol.Schema(
+    {
+        vol.Required(CONF_ENTITY_ID): cv.string,
+    }
+)
+
 
 async def async_setup(hass, config):
     """Set up this component using YAML."""
 
+    def handle_update_state(call):
+        """Handle the update_state service call."""
+        entity_id = call.data.get(CONF_ENTITY_ID)
+        _LOGGER.debug("called update_state for %s", entity_id)
+        try:
+            entity = hass.data[DOMAIN][SENSOR_PLATFORM][entity_id]
+            await entity.async_update_state()
+        except Exception as err:
+            _LOGGER.error("Failed updating state for %s - %s", entity_id, err)
+
     def handle_collect_garbage(call):
-        """Handle the service call."""
+        """Handle the collect_garbage service call."""
         entity_id = call.data.get(CONF_ENTITY_ID)
         last_collection = call.data.get(ATTR_LAST_COLLECTION)
         _LOGGER.debug("called collect_garbage for %s", entity_id)
@@ -65,6 +81,9 @@ async def async_setup(hass, config):
     if DOMAIN not in hass.services.async_services():
         hass.services.async_register(
             DOMAIN, "collect_garbage", handle_collect_garbage, schema=COLLECT_NOW_SCHEMA
+        )
+        hass.services.async_register(
+            DOMAIN, "update_state", handle_update_state, schema=UPDATE_STATE_SCHEMA
         )
     else:
         _LOGGER.debug("Service already registered")

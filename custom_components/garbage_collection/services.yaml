@@ -7,4 +7,9 @@ collect_garbage:
     last_collection:
       description: Date and time of the last collection (optional)
       example: "2020-08-16 10:54:00"
-  
+update_state:
+  description: Update the entity state and attributes. Used with the manual_update option, do defer the update after changing the automatically created schedule by automation trigered by the garbage_collection_loaded event.
+  fields:
+    entity_id:
+      description: The garbage_collection sensor entity_id
+      example: sensor.general_waste

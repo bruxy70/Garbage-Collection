@@ -38,6 +38,7 @@ from .const import (
     CONF_ICON_TOMORROW,
     CONF_INCLUDE_DATES,
     CONF_LAST_MONTH,
+    CONF_MANUAL,
     CONF_MOVE_COUNTRY_HOLIDAYS,
     CONF_OBSERVED,
     CONF_OFFSET,
@@ -60,7 +61,7 @@ from .const import (
 
 _LOGGER = logging.getLogger(__name__)
 
-SCAN_INTERVAL = timedelta(seconds=60)
+SCAN_INTERVAL = timedelta(seconds=10)
 THROTTLE_INTERVAL = timedelta(seconds=60)
 
 
@@ -159,6 +160,7 @@ class GarbageCollection(RestoreEntity):
         self._name = title if title is not None else config.get(CONF_NAME)
         self._hidden = config.get(ATTR_HIDDEN, False)
         self._frequency = config.get(CONF_FREQUENCY)
+        self._manual = config.get(CONF_MANUAL)
         self._collection_days = config.get(CONF_COLLECTION_DAYS)
         first_month = config.get(CONF_FIRST_MONTH)
         if first_month in MONTH_OPTIONS:
@@ -707,29 +709,27 @@ class GarbageCollection(RestoreEntity):
 
     async def async_update(self) -> None:
         """Get the latest data and updates the states."""
-        if not await self._async_ready_for_update():
+        if not await self._async_ready_for_update() or not self.hass.is_running:
             return
+
         _LOGGER.debug("(%s) Calling update", self._name)
-        now = dt_util.now()
-        today = now.date()
         await self._async_load_collection_dates()
         _LOGGER.debug(
             "(%s) Dates loaded, firing a garbage_collection_loaded event", self._name
         )
-
-        """
-        TO DO
-        """
         event_data = {
             "entity_id": self.entity_id,
             "collection_dates": dates_to_texts(self._collection_dates),
         }
         self.hass.bus.async_fire("garbage_collection_loaded", event_data)
-        # self.hass.bus.fire("garbage_collection_loaded", event_data)
+        if not self._manual:
+            await self.async_update_state()
 
-        _LOGGER.debug(
-            "(%s) Event haldlers finished, looking for next collection", self._name
-        )
+    async def async_update_state(self) -> None:
+        """Pick the first event from collection dates, update attrubutes."""
+        _LOGGER.debug("(%s) Looking for next collection", self._name)
+        now = dt_util.now()
+        today = now.date()
         self._next_date = await self.async_next_date(today)
         self._last_updated = now
         if self._next_date is not None:

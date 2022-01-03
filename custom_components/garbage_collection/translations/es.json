@@ -8,6 +8,7 @@
                     "name": "Nombre amigable",
                     "hidden": "Esconderse en el calendario",
                     "frequency": "Frequencia",
+                    "manual_update": "Sensor state updated only by calling service",
                     "icon_normal": "Icono (mdi:trash-can)",
                     "icon_tomorrow": "Icono de recoleccion para mañana (mdi:delete-restore)",
                     "icon_today": "Icono de recoleccion para hoy (mdi:delete-circle)",
