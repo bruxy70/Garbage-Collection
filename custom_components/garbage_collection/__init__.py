@@ -64,24 +64,22 @@ async def async_setup(hass, config):
     async def handle_add_date(call):
         """Handle the add_date service call."""
         entity_id = call.data.get(CONF_ENTITY_ID)
-        dt = call.data.get(CONF_DATE)
-        _LOGGER.debug("called add_date %s to %s", dt, entity_id)
+        collection_date = call.data.get(CONF_DATE)
+        _LOGGER.debug("called add_date %s to %s", collection_date, entity_id)
         try:
             entity = hass.data[DOMAIN][SENSOR_PLATFORM][entity_id]
-            _LOGGER.debug("date type is %s", type(dt))
-            # await entity.add_date(dt)
+            await entity.add_date(collection_date)
         except Exception as err:
             _LOGGER.error("Failed adding date for %s - %s", entity_id, err)
 
     async def handle_remove_date(call):
         """Handle the remove_date service call."""
         entity_id = call.data.get(CONF_ENTITY_ID)
-        dt = call.data.get(CONF_DATE)
-        _LOGGER.debug("called remove_date %s to %s", dt, entity_id)
+        collection_date = call.data.get(CONF_DATE)
+        _LOGGER.debug("called remove_date %s to %s", collection_date, entity_id)
         try:
             entity = hass.data[DOMAIN][SENSOR_PLATFORM][entity_id]
-            _LOGGER.debug("date type is %s", type(dt))
-            # await entity.remove_date(dt)
+            await entity.remove_date(collection_date)
         except Exception as err:
             _LOGGER.error("Failed removing date for %s - %s", entity_id, err)
 
