@@ -106,9 +106,9 @@ def to_date(day: Any) -> date:
     """Convert datetime or text to date, if not already datetime."""
     if day is None:
         raise ValueError
-    if type(day) == date:
+    if isinstance(day, date):
         return day
-    if type(day) == datetime:
+    if isinstance(day, datetime):
         return day.date()
     return date.fromisoformat(day)
 
@@ -240,7 +240,7 @@ class GarbageCollection(RestoreEntity):
                 kwargs["prov"] = self._holiday_prov
             if (
                 self._holiday_observed is not None
-                and type(self._holiday_observed) is bool
+                and isinstance(self._holiday_observed, bool)
                 and not self._holiday_observed
             ):
                 kwargs["observed"] = self._holiday_observed  # type: ignore
@@ -252,11 +252,11 @@ class GarbageCollection(RestoreEntity):
                     except Exception as err:
                         _LOGGER.error("(%s) Holiday not removed (%s)", self._name, err)
             try:
-                for d, name in hol.items():
-                    self._holidays.append(d)
-                    log += f"\n  {d}: {name}"
-                    if d >= today and d <= year_from_today:
-                        self._holidays_log += f"\n  {d}: {name}"
+                for holiday_date, holiday_name in hol.items():
+                    self._holidays.append(holiday_date)
+                    log += f"\n  {holiday_date}: {holiday_name}"
+                    if holiday_date >= today and holiday_date <= year_from_today:
+                        self._holidays_log += f"\n  {holiday_date}: {holiday_name}"
             except KeyError:
                 _LOGGER.error(
                     "(%s) Invalid country code (%s)",
@@ -589,11 +589,11 @@ class GarbageCollection(RestoreEntity):
             try:
                 if self._next_date == today and (
                     (
-                        type(self.expire_after) is time
+                        isinstance(self.expire_after, time)
                         and now.time() >= self.expire_after
                     )
                     or (
-                        type(self.last_collection) is datetime
+                        isinstance(self.last_collection, datetime)
                         and self.last_collection.date() == today
                     )
                 ):
@@ -683,6 +683,12 @@ class GarbageCollection(RestoreEntity):
             self._collection_dates.append(d)
             d = await self._async_find_next_date(d + timedelta(days=1))
         self._collection_dates.sort()
+
+    async def add_date(self, collection_date: date) -> None:
+        """Add date to _collection_dates"""
+
+    async def remove_date(self, collection_date: date) -> None:
+        """Remove date from _collection dates"""
 
     async def async_next_date(
         self, first_date: date, ignore_today=False

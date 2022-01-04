@@ -12,6 +12,7 @@ from homeassistant.helpers import discovery
 
 from .const import (
     ATTR_LAST_COLLECTION,
+    CONF_DATE,
     CONF_FREQUENCY,
     CONF_SENSORS,
     DOMAIN,
@@ -49,9 +50,40 @@ UPDATE_STATE_SCHEMA = vol.Schema(
     }
 )
 
+ADD_REMOVE_DATE_SCHEMA = vol.Schema(
+    {
+        vol.Required(CONF_ENTITY_ID): cv.string,
+        vol.Required(CONF_DATE): cv.date,
+    }
+)
+
 
 async def async_setup(hass, config):
     """Set up this component using YAML."""
+
+    async def handle_add_date(call):
+        """Handle the add_date service call."""
+        entity_id = call.data.get(CONF_ENTITY_ID)
+        dt = call.data.get(CONF_DATE)
+        _LOGGER.debug("called add_date %s to %s", dt, entity_id)
+        try:
+            entity = hass.data[DOMAIN][SENSOR_PLATFORM][entity_id]
+            _LOGGER.debug("date type is %s", type(dt))
+            # await entity.add_date(dt)
+        except Exception as err:
+            _LOGGER.error("Failed adding date for %s - %s", entity_id, err)
+
+    async def handle_remove_date(call):
+        """Handle the remove_date service call."""
+        entity_id = call.data.get(CONF_ENTITY_ID)
+        dt = call.data.get(CONF_DATE)
+        _LOGGER.debug("called remove_date %s to %s", dt, entity_id)
+        try:
+            entity = hass.data[DOMAIN][SENSOR_PLATFORM][entity_id]
+            _LOGGER.debug("date type is %s", type(dt))
+            # await entity.remove_date(dt)
+        except Exception as err:
+            _LOGGER.error("Failed removing date for %s - %s", entity_id, err)
 
     async def handle_update_state(call):
         """Handle the update_state service call."""
@@ -85,8 +117,14 @@ async def async_setup(hass, config):
         hass.services.async_register(
             DOMAIN, "update_state", handle_update_state, schema=UPDATE_STATE_SCHEMA
         )
+        hass.services.async_register(
+            DOMAIN, "add_date", handle_add_date, schema=ADD_REMOVE_DATE_SCHEMA
+        )
+        hass.services.async_register(
+            DOMAIN, "remove_date", handle_remove_date, schema=ADD_REMOVE_DATE_SCHEMA
+        )
     else:
-        _LOGGER.debug("Service already registered")
+        _LOGGER.debug("Services already registered")
 
     if config.get(DOMAIN) is None:
         # We get here if the integration is set up using config flow

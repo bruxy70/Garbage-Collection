@@ -8,7 +8,7 @@
                     "name": "Kuvatav nimi",
                     "hidden": "Ära näita kalendris",
                     "frequency": "Sagedus",
-                    "manual_update": "Sensor state updated only by calling service",
+                    "manual_update": "Sensor state updated manually by calling a service",
                     "icon_normal": "Ikoon (mdi:trash-can) - valikuline",
                     "icon_tomorrow": "Homme on prügivedu ikoon (mdi:delete-restore) - valikuline",
                     "icon_today": "Täna on prügivedu ikoon (mdi:delete-circle) - valikuline",
