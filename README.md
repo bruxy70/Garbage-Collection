@@ -322,7 +322,7 @@ This is the configuration
         card:
           type: picture-entity
           name_template: >-
-            {{ states.sensor.bio.attributes.days }} days
+            {{ state_attr('sensor.bio','days') }} days
           show_name: True
           show_state: False
           entity: sensor.bio
