@@ -1,5 +1,8 @@
 collect_garbage:
   description: Set the last_collection attribute to the current date and time.
+  target:
+    entity:
+      integration: garbage_collection
   fields:
     entity_id:
       description: The garbage_collection sensor entity_id
@@ -9,6 +12,9 @@ collect_garbage:
       example: "2020-08-16 10:54:00"
 add_date:
   description: Manually add collection date.
+  target:
+    entity:
+      integration: garbage_collection
   fields:
     entity_id:
       description: The garbage_collection sensor entity_id
@@ -18,6 +24,9 @@ add_date:
       example: "2020-08-16"
 remove_date:
   description: Remove automatically calculated collection date.
+  target:
+    entity:
+      integration: garbage_collection
   fields:
     entity_id:
       description: The garbage_collection sensor entity_id
@@ -27,6 +36,9 @@ remove_date:
       example: "2020-08-16"
 update_state:
   description: Update the entity state and attributes. Used with the manual_update option, do defer the update after changing the automatically created schedule by automation trigered by the garbage_collection_loaded event.
+  target:
+    entity:
+      integration: garbage_collection
   fields:
     entity_id:
       description: The garbage_collection sensor entity_id
