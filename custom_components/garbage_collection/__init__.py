@@ -104,9 +104,9 @@ async def async_setup(hass, config):
                 entity.last_collection = dt_util.now()
             else:
                 entity.last_collection = dt_util.as_local(last_collection)
+            await entity.async_update_state()
         except Exception as err:
             _LOGGER.error("Failed setting last collection for %s - %s", entity_id, err)
-        hass.services.call("homeassistant", "update_entity", {"entity_id": entity_id})
 
     if DOMAIN not in hass.services.async_services():
         hass.services.async_register(
