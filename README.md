@@ -116,6 +116,7 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 |:----------|----------|------------
 | `name` | Yes | Sensor friendly name
 | `frequency` | Yes | `"weekly"`, `"even-weeks"`, `"odd-weeks"`, `"every-n-weeks"`, `"every-n-days"`, `"monthly"`, `"annual"` or `"group"`
+| `manual_update` | No | (Advanced). Do not automatically update the status. Status is updated manualy by calling the service `garbage_collection.update_state` from an automation triggered by event `garbage_collection_loaded`, that could manually add or remove collection dates, and manually trigger the state update at the end. [See the example](#manual-update-example).</br>**Default**: `False`
 | `offset` | No | Offset calculated date by `offset` days (makes most sense for monthly frequency). Examples of use:</br>for last Saurday each month, configure first Saturday each month with `offset: -7`</br>for 1<sup>st</sup> Wednesday in of full week, configure first Monday each month with `offset: 2`</br>(integer between -31 and 31) **Default**: 0
 | `hidden` | No | Hide in calendar (useful for sensors that are used in groups)<br/>**Default**: `False`
 | `icon_normal` | No | Default icon **Default**:  `mdi:trash-can`
@@ -215,7 +216,90 @@ It will set the `last_collection` attribute to the current date and time.
 
 | Attribute | Description
 |:----------|------------
-| `entity_id` | The gatbage collection entity id (e.g. `sensor.general_waste`)
+| `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
+
+
+### garbage_collection.add_date
+...see the manual update example below
+
+### garbage_collection.remove_date
+...see the manual update example below
+
+### garbage_collection.update_state
+...see the manual update example below
+
+
+## Manual update example
+(!!! Advanced - if you think this is too complicated, then this is not for you !!!)
+
+For the example below, the entity should be configured with `manual_update` set to `true`.
+Then, when the `garbage_collection` entity is updated (normally once a day at midnight, or restart, or when triggering entity update by script), it will calculate the collection schedule for previous, current and next year. But it will **NOT UPDATE** the entity state. 
+Instead, it will trigger an event `garbage_collection_loaded` with list of automatically calculated dates as a parameter. 
+You will **have to create an automation triggered by this event**. In this automation you will need to call the service `garbage_collection.update_state` to update the state. Before that, you can call the servics `garbage_collection.add_date` and/or `garbage_collection.remove_date` to programatically tweak the dates in whatever way you need (e.g. based on values from external API sensor, comparing the dates with list of holidays, calculating custom offsets based on the day of the week etc.). This is complicated, but gives you an ultimate flexibility.
+
+### garbage_collection.add_date
+Add a date to the list of dates calculated automatically. To add multiple dates, call this service multiple times with different dates.
+Note that this date will be removed on next sensor update when data is re-calculated and loaded. This is why this service should be called from the automation triggered be the event `garbage_collection_loaded`, that is called each time the sensor is updated. And at the end of this automation you need to call the `garbage_collection.update_state` service to update the sensor state based on automatically collected dates with the dates added and removed by the automation.
+
+| Attribute | Description
+|:----------|------------
+| `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
+| `date` | The date to be added, in ISO format (`yyyy-mm-dd`)
+
+### garbage_collection.remove_date
+Remove a date to the list of dates calculated automatically. To remove multiple dates, call this service multiple times with different dates.
+Note that this date will be removed on next sensor update when data is re-calculated and loaded. This is why this service should be called from the automation triggered be the event `garbage_collection_loaded`, that is called each time the sensor is updated. And at the end of this automation you need to call the `garbage_collection.update_state` service to update the sensor state based on automatically collected dates with the dates added and removed by the automation.
+
+| Attribute | Description
+|:----------|------------
+| `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
+| `date` | The date to be removed, in ISO format (`yyyy-mm-dd`)
+
+### garbage_collection.update_state
+Choose the next collection date from the list of dates calculated automatically, added by service calls (and not removed), and update the entity state and attributes.
+
+| Attribute | Description
+|:----------|------------
+| `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
+
+## Events
+### garbage_collection_loaded 
+This event is triggered each time a `garbage_collection` entity is being updated. You can create an automation to modify the collection schedule before the entity state update.
+
+Event data:
+| Attribute | Description
+|:----------|------------
+| `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
+| `collection_dates` | List of collection dates calculated automatically.
+
+## Simple example
+Adding an extra collection date (a fixed date in this case).
+
+
+```yaml
+alias: garbage_collection event
+description: 'Manually add a collection date, then trigger entity state update.'
+trigger:
+  - platform: event
+    event_type: garbage_collection_loaded
+    event_data:
+      entity_id: sensor.test
+action:
+  - service: garbage_collection.add_date
+    data:
+      entity_id: sensor.test
+      date: '2022-01-07'
+  - service: garbage_collection.update_state
+    data:
+      entity_id: sensor.test
+mode: single
+```
+
+## Advanced example
+Checking the automatically created collection schedule, comparing with list of public holidays and moving schecule by a custom offset.
+
+TBD...
+
 
 # Lovelace config examples
 
