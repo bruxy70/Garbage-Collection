@@ -239,7 +239,7 @@ You will **have to create an automation triggered by this event**. In this autom
 
 ### garbage_collection.add_date
 Add a date to the list of dates calculated automatically. To add multiple dates, call this service multiple times with different dates.
-Note that this date will be removed on next sensor update when data is re-calculated and loaded. This is why this service should be called from the automation triggered be the event `garbage_collection_loaded`, that is called each time the sensor is updated. And at the end of this automation you need to call the `garbage_collection.update_state` service to update the sensor state based on automatically collected dates with the dates added and removed by the automation.
+Note that this date will be removed on the next sensor update when data is re-calculated and loaded. This is why this service should be called from the automation triggered be the event `garbage_collection_loaded`, that is called each time the sensor is updated. And at the end of this automation you need to call the `garbage_collection.update_state` service to update the sensor state based on automatically collected dates with the dates added and removed by the automation.
 
 | Attribute | Description
 |:----------|------------
@@ -248,7 +248,7 @@ Note that this date will be removed on next sensor update when data is re-calcul
 
 ### garbage_collection.remove_date
 Remove a date to the list of dates calculated automatically. To remove multiple dates, call this service multiple times with different dates.
-Note that this date will be removed on next sensor update when data is re-calculated and loaded. This is why this service should be called from the automation triggered be the event `garbage_collection_loaded`, that is called each time the sensor is updated. And at the end of this automation you need to call the `garbage_collection.update_state` service to update the sensor state based on automatically collected dates with the dates added and removed by the automation.
+Note that this date will reappear on the next sensor update when data is re-calculated and loaded. This is why this service should be called from the automation triggered be the event `garbage_collection_loaded`, that is called each time the sensor is updated. And at the end of this automation you need to call the `garbage_collection.update_state` service to update the sensor state based on automatically collected dates with the dates added and removed by the automation.
 
 | Attribute | Description
 |:----------|------------
