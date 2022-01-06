@@ -334,7 +334,6 @@ trigger:
     event_type: garbage_collection_loaded
     event_data:
       entity_id: sensor.test
-condition: "{{ trigger.event.data.entity_id == 'sensor.test' }}"
 action:
   - repeat:
       count: '{{ trigger.event.data.collection_dates | count }}'
