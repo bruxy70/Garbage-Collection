@@ -322,10 +322,47 @@ mode: single
 ```
 
 ## Advanced example
-Checking the automatically created collection schedule, comparing with list of public holidays and moving schecule by a custom offset.
+This is an equivalent of "holiday in week" move - checking if there is a public holiday on the calculated collection day, or in the same day before, and if yes, moving the collection by one day. This is fully custom logic, so it toucl be further complicated by whatever rules anyone wants.
 
-TBD...
-
+```yaml
+alias: test garbage_collection event
+description: >-
+  Loop through all calculated dates, move the collection by 1 day if public holiday was in the week before or on the calculated collection date
+  calculate one
+trigger:
+  - platform: event
+    event_type: garbage_collection_loaded
+    event_data:
+      entity_id: sensor.test
+condition: "{{ trigger.event.data.entity_id == 'sensor.test' }}"
+action:
+  - repeat:
+      count: '{{ trigger.event.data.collection_dates | count }}'
+      sequence:
+        - condition: template
+          value_template: >-
+            {%- set ns = namespace(found=false) %}
+            {%- set d = trigger.event.data.collection_dates[repeat.index] %}
+            {%- for i in range(as_datetime(d).weekday()+1) %}
+              {%- if (as_datetime(d) + timedelta( days = -i)) | as_timestamp | timestamp_custom("%Y-%m-%d") in state_attr(trigger.event.data.entity_id,'holidays') %}
+                {%- set ns.found = true %}
+              {%- endif %}
+            {%- endfor %}  
+            {{ ns.found }}
+        - service: garbage_collection.add_date
+          data:
+            entity_id: "{{ trigger.event.data.entity_id }}"
+            date: >-
+              {{ (as_datetime(trigger.event.data.collection_dates[repeat.index]) + timedelta( days = 1)) | as_timestamp | timestamp_custom("%Y-%m-%d") }}
+        - service: garbage_collection.remove_date
+          data:
+            entity_id: "{{ trigger.event.data.entity_id }}"
+            date: '{{ trigger.event.data.collection_dates[repeat.index] }}'
+  - service: garbage_collection.update_state
+    data:
+      entity_id: sensor.test
+mode: single
+```
 
 # Lovelace config examples
 
