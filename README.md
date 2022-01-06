@@ -295,6 +295,32 @@ action:
 mode: single
 ```
 
+## Moderate example
+This will loop through the calculated dates, and add extra collection to a day after each calculated one. So if this is set for a collection each first Wednesday each month, it will result in a collection on first Wednesday, and the following day (kind of first Thursday, except if the week is starting on Thursday - just a random weird example :).
+
+```yaml
+alias: test garbage_collection event
+description: 'Loop through all calculated dates, add extra collection a day after the calculate one'
+trigger:
+  - platform: event
+    event_type: garbage_collection_loaded
+    event_data:
+      entity_id: sensor.test
+action:
+  - repeat:
+      count: '{{ trigger.event.data.collection_dates | count }}'
+      sequence:
+        - service: garbage_collection.add_date
+          data:
+            entity_id: sensor.test
+            date: >-
+              {{( as_datetime(trigger.event.data.collection_dates[repeat.index]) + timedelta( days = 1)) | as_timestamp | timestamp_custom("%Y-%m-%d") }}
+  - service: garbage_collection.update_state
+    data:
+      entity_id: sensor.test
+mode: single
+```
+
 ## Advanced example
 Checking the automatically created collection schedule, comparing with list of public holidays and moving schecule by a custom offset.
 
