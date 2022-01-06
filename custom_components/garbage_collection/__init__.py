@@ -39,20 +39,20 @@ CONFIG_SCHEMA = vol.Schema(
 
 COLLECT_NOW_SCHEMA = vol.Schema(
     {
-        vol.Required(CONF_ENTITY_ID): cv.string,
+        vol.Required(CONF_ENTITY_ID): vol.All(cv.ensure_list, [cv.string]),
         vol.Optional(ATTR_LAST_COLLECTION): cv.datetime,
     }
 )
 
 UPDATE_STATE_SCHEMA = vol.Schema(
     {
-        vol.Required(CONF_ENTITY_ID): cv.string,
+        vol.Required(CONF_ENTITY_ID): vol.All(cv.ensure_list, [cv.string]),
     }
 )
 
 ADD_REMOVE_DATE_SCHEMA = vol.Schema(
     {
-        vol.Required(CONF_ENTITY_ID): cv.string,
+        vol.Required(CONF_ENTITY_ID): vol.All(cv.ensure_list, [cv.string]),
         vol.Required(CONF_DATE): cv.date,
     }
 )
@@ -63,50 +63,52 @@ async def async_setup(hass, config):
 
     async def handle_add_date(call):
         """Handle the add_date service call."""
-        entity_id = call.data.get(CONF_ENTITY_ID)
-        collection_date = call.data.get(CONF_DATE)
-        _LOGGER.debug("called add_date %s to %s", collection_date, entity_id)
-        try:
-            entity = hass.data[DOMAIN][SENSOR_PLATFORM][entity_id]
-            await entity.add_date(collection_date)
-        except Exception as err:
-            _LOGGER.error("Failed adding date for %s - %s", entity_id, err)
+        for entity_id in call.data.get(CONF_ENTITY_ID):
+            collection_date = call.data.get(CONF_DATE)
+            _LOGGER.debug("called add_date %s to %s", collection_date, entity_id)
+            try:
+                entity = hass.data[DOMAIN][SENSOR_PLATFORM][entity_id]
+                await entity.add_date(collection_date)
+            except Exception as err:
+                _LOGGER.error("Failed adding date for %s - %s", entity_id, err)
 
     async def handle_remove_date(call):
         """Handle the remove_date service call."""
-        entity_id = call.data.get(CONF_ENTITY_ID)
-        collection_date = call.data.get(CONF_DATE)
-        _LOGGER.debug("called remove_date %s to %s", collection_date, entity_id)
-        try:
-            entity = hass.data[DOMAIN][SENSOR_PLATFORM][entity_id]
-            await entity.remove_date(collection_date)
-        except Exception as err:
-            _LOGGER.error("Failed removing date for %s - %s", entity_id, err)
+        for entity_id in call.data.get(CONF_ENTITY_ID):
+            collection_date = call.data.get(CONF_DATE)
+            _LOGGER.debug("called remove_date %s to %s", collection_date, entity_id)
+            try:
+                entity = hass.data[DOMAIN][SENSOR_PLATFORM][entity_id]
+                await entity.remove_date(collection_date)
+            except Exception as err:
+                _LOGGER.error("Failed removing date for %s - %s", entity_id, err)
 
     async def handle_update_state(call):
         """Handle the update_state service call."""
-        entity_id = call.data.get(CONF_ENTITY_ID)
-        _LOGGER.debug("called update_state for %s", entity_id)
-        try:
-            entity = hass.data[DOMAIN][SENSOR_PLATFORM][entity_id]
-            await entity.async_update_state()
-        except Exception as err:
-            _LOGGER.error("Failed updating state for %s - %s", entity_id, err)
+        for entity_id in call.data.get(CONF_ENTITY_ID):
+            _LOGGER.debug("called update_state for %s", entity_id)
+            try:
+                entity = hass.data[DOMAIN][SENSOR_PLATFORM][entity_id]
+                await entity.async_update_state()
+            except Exception as err:
+                _LOGGER.error("Failed updating state for %s - %s", entity_id, err)
 
     async def handle_collect_garbage(call):
         """Handle the collect_garbage service call."""
-        entity_id = call.data.get(CONF_ENTITY_ID)
-        last_collection = call.data.get(ATTR_LAST_COLLECTION)
-        _LOGGER.debug("called collect_garbage for %s", entity_id)
-        try:
-            entity = hass.data[DOMAIN][SENSOR_PLATFORM][entity_id]
-            if last_collection is None:
-                entity.last_collection = dt_util.now()
-            else:
-                entity.last_collection = dt_util.as_local(last_collection)
-            await entity.async_update_state()
-        except Exception as err:
-            _LOGGER.error("Failed setting last collection for %s - %s", entity_id, err)
+        for entity_id in call.data.get(CONF_ENTITY_ID):
+            last_collection = call.data.get(ATTR_LAST_COLLECTION)
+            _LOGGER.debug("called collect_garbage for %s", entity_id)
+            try:
+                entity = hass.data[DOMAIN][SENSOR_PLATFORM][entity_id]
+                if last_collection is None:
+                    entity.last_collection = dt_util.now()
+                else:
+                    entity.last_collection = dt_util.as_local(last_collection)
+                await entity.async_update_state()
+            except Exception as err:
+                _LOGGER.error(
+                    "Failed setting last collection for %s - %s", entity_id, err
+                )
 
     if DOMAIN not in hass.services.async_services():
         hass.services.async_register(
