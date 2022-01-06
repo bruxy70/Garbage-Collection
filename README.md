@@ -133,8 +133,8 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 |:----------|----------|------------
 | `first_month` | No | Month three letter abbreviation, e.g. `"jan"`, `"feb"`...<br/>**Default**: `"jan"`
 | `last_month` | No | Month three letter abbreviation.<br/>**Default**: `"dec"`
-| `exclude_dates` | No | List of dates with no collection (using international date format `'yyyy-mm-dd'`. 
-| `include_dates` | No | List of extra collection (using international date format `'yyyy-mm-dd'`.
+| `exclude_dates` | No | List of dates with no collection (using international date format `'yyyy-mm-dd'`. Make sure to enter the date in quotes!
+| `include_dates` | No | List of extra collection (using international date format `'yyyy-mm-dd'`. Make sure to enter the date in quotes!
 | `move_country_holidays` | No | Country holidays - the country code (see [holidays](https://github.com/dr-prodigy/python-holidays) for the list of valid country codes).<br/>Automatically move garbage collection on public holidays to the following day.<br/>*Example:* `US` 
 | `holiday_in_week_move` | No | Move garbage collection to the following day if a holiday is in week.<br/>**Default**: `false`
 | `holiday_move_offset` | No | Move the collection by the number of days (integer -7..7) **Default**: 1
@@ -244,7 +244,7 @@ Note that this date will be removed on the next sensor update when data is re-ca
 | Attribute | Description
 |:----------|------------
 | `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
-| `date` | The date to be added, in ISO format (`yyyy-mm-dd`)
+| `date` | The date to be added, in ISO format (`'yyyy-mm-dd'`). Make sure to enter the date in quotes!
 
 ### garbage_collection.remove_date
 Remove a date to the list of dates calculated automatically. To remove multiple dates, call this service multiple times with different dates.
@@ -253,7 +253,7 @@ Note that this date will reappear on the next sensor update when data is re-calc
 | Attribute | Description
 |:----------|------------
 | `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
-| `date` | The date to be removed, in ISO format (`yyyy-mm-dd`)
+| `date` | The date to be removed, in ISO format (`'yyyy-mm-dd'`). Make sure to enter the date in quotes!
 
 ### garbage_collection.update_state
 Choose the next collection date from the list of dates calculated automatically, added by service calls (and not removed), and update the entity state and attributes.
