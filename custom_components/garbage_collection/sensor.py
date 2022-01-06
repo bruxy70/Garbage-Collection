@@ -255,8 +255,7 @@ class GarbageCollection(RestoreEntity):
                 for holiday_date, holiday_name in hol.items():
                     self._holidays.append(holiday_date)
                     log += f"\n  {holiday_date}: {holiday_name}"
-                    if holiday_date >= today and holiday_date <= year_from_today:
-                        self._holidays_log += f"\n  {holiday_date}: {holiday_name}"
+                    self._holidays_log += f"\n  {holiday_date}: {holiday_name}"
             except KeyError:
                 _LOGGER.error(
                     "(%s) Invalid country code (%s)",
