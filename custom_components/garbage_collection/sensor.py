@@ -219,7 +219,6 @@ class GarbageCollection(RestoreEntity):
         """Load the holidays from from a date."""
         self._holidays_log = ""
         log = ""
-        year_from_today = today + relativedelta(years=1)
         self._holidays.clear()
         if self._country_holidays is not None and self._country_holidays != "":
             this_year = today.year
