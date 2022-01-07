@@ -6,6 +6,7 @@ from datetime import timedelta
 import homeassistant.helpers.config_validation as cv
 import homeassistant.util.dt as dt_util
 import voluptuous as vol
+from dateutil.relativedelta import relativedelta
 from homeassistant import config_entries
 from homeassistant.const import CONF_ENTITY_ID, CONF_NAME
 from homeassistant.helpers import discovery
@@ -14,6 +15,7 @@ from .const import (
     ATTR_LAST_COLLECTION,
     CONF_DATE,
     CONF_FREQUENCY,
+    CONF_OFFSET,
     CONF_SENSORS,
     DOMAIN,
     SENSOR_PLATFORM,
@@ -57,6 +59,14 @@ ADD_REMOVE_DATE_SCHEMA = vol.Schema(
     }
 )
 
+OFFSET_DATE_SCHEMA = vol.Schema(
+    {
+        vol.Required(CONF_ENTITY_ID): vol.All(cv.ensure_list, [cv.string]),
+        vol.Required(CONF_DATE): cv.date,
+        vol.Required(CONF_OFFSET): vol.All(vol.Coerce(int), vol.Range(min=-31, max=31)),
+    }
+)
+
 
 async def async_setup(hass, config):
     """Set up this component using YAML."""
@@ -65,7 +75,7 @@ async def async_setup(hass, config):
         """Handle the add_date service call."""
         for entity_id in call.data.get(CONF_ENTITY_ID):
             collection_date = call.data.get(CONF_DATE)
-            _LOGGER.debug("called add_date %s to %s", collection_date, entity_id)
+            _LOGGER.debug("called add_date %s from %s", collection_date, entity_id)
             try:
                 entity = hass.data[DOMAIN][SENSOR_PLATFORM][entity_id]
                 await entity.add_date(collection_date)
@@ -76,12 +86,35 @@ async def async_setup(hass, config):
         """Handle the remove_date service call."""
         for entity_id in call.data.get(CONF_ENTITY_ID):
             collection_date = call.data.get(CONF_DATE)
-            _LOGGER.debug("called remove_date %s to %s", collection_date, entity_id)
+            _LOGGER.debug("called remove_date %s from %s", collection_date, entity_id)
             try:
                 entity = hass.data[DOMAIN][SENSOR_PLATFORM][entity_id]
                 await entity.remove_date(collection_date)
             except Exception as err:
                 _LOGGER.error("Failed removing date for %s - %s", entity_id, err)
+
+    async def handle_offset_date(call):
+        """Handle the offset_date service call."""
+        for entity_id in call.data.get(CONF_ENTITY_ID):
+            offset = call.data.get(CONF_OFFSET)
+            collection_date = call.data.get(CONF_DATE)
+            _LOGGER.debug(
+                "called offset_date %s by %d days for %s",
+                collection_date,
+                offset,
+                entity_id,
+            )
+            try:
+                new_date = collection_date + relativedelta(days=offset)
+            except Exception as err:
+                _LOGGER.error("Failed to offset the date - %s", err)
+                break
+            try:
+                entity = hass.data[DOMAIN][SENSOR_PLATFORM][entity_id]
+                await entity.remove_date(collection_date)
+                await entity.add_date(new_date)
+            except Exception as err:
+                _LOGGER.error("Failed ofsetting date for %s - %s", entity_id, err)
 
     async def handle_update_state(call):
         """Handle the update_state service call."""
@@ -122,6 +155,9 @@ async def async_setup(hass, config):
         )
         hass.services.async_register(
             DOMAIN, "remove_date", handle_remove_date, schema=ADD_REMOVE_DATE_SCHEMA
+        )
+        hass.services.async_register(
+            DOMAIN, "offset_date", handle_offset_date, schema=OFFSET_DATE_SCHEMA
         )
     else:
         _LOGGER.debug("Services already registered")

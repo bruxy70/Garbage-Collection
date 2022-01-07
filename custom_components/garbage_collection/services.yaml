@@ -22,6 +22,21 @@ add_date:
     date:
       description: Collection date to add
       example: '"2020-08-16"'
+offset_date:
+  description: Move the collection date by a number of days.
+  target:
+    entity:
+      integration: garbage_collection
+  fields:
+    entity_id:
+      description: The garbage_collection sensor entity_id
+      example: sensor.general_waste
+    date:
+      description: Collection date to move
+      example: '"2020-08-16"'
+    offset:
+      description: Nuber of days to move (negative number will move it back)
+      example: 1
 remove_date:
   description: Remove automatically calculated collection date.
   target:
