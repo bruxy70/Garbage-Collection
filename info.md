@@ -46,7 +46,7 @@ garbage_collection:
     frequency: 'annual'
     date: '11/24'
 ```
-For more examples and configuration documentation check the <a href="https://github.com/bruxy70/Garbage-Collection">repository</a> file
+For more examples and configuration documentation check the <a href="https://github.com/bruxy70/Garbage-Collection/blob/development/README.md">repository</a> file
 
 ## STATE AND ATTRIBUTES
 
@@ -76,6 +76,6 @@ It will set the `last_collection` attribute to the current date and time.
 
 | Attribute | Description
 |:----------|------------
-| `entity_id` | The gatbage collection entity id (e.g. `sensor.general_waste`)
+| `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
 
-For more details see the <a href="https://github.com/bruxy70/Garbage-Collection">repository.</a>
+For more details see the <a href="https://github.com/bruxy70/Garbage-Collection/blob/development/README.md">repository.</a>
