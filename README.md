@@ -286,7 +286,7 @@ Event data:
 | `collection_dates` | List of collection dates calculated automatically.
 
 ## Simple example
-Adding an extra collection date (a fixed date in this case).
+Adding an extra collection date (a fixed date in this case) - for the entity `sensor.test`.
 
 
 ```yaml
@@ -300,7 +300,7 @@ trigger:
 action:
   - service: garbage_collection.add_date
     data:
-      entity_id: sensor.test
+      entity_id: "{{ trigger.event.data.entity_id }}"
       date: '2022-01-07'
   - service: garbage_collection.update_state
     data:
@@ -310,6 +310,8 @@ mode: single
 
 ## Moderate example
 This will loop through the calculated dates, and add extra collection to a day after each calculated one. So if this is set for a collection each first Wednesday each month, it will result in a collection on first Wednesday, and the following day (kind of first Thursday, except if the week is starting on Thursday - just a random weird example :).
+
+This example is for an entity `sensor.test`. If you want to use it for yours, replace it with the real entity name in the trigger.
 
 ```yaml
 alias: test garbage_collection event
@@ -325,23 +327,25 @@ action:
       sequence:
         - service: garbage_collection.add_date
           data:
-            entity_id: sensor.test
+            entity_id: "{{ trigger.event.data.entity_id }}"
             date: >-
               {{( as_datetime(trigger.event.data.collection_dates[repeat.index]) + timedelta( days = 1)) | as_timestamp | timestamp_custom("%Y-%m-%d") }}
   - service: garbage_collection.update_state
     data:
-      entity_id: sensor.test
+      entity_id: "{{ trigger.event.data.entity_id }}"
 mode: single
 ```
 
 ## Advanced example
-This is an equivalent of "holiday in week" move - checking if there is a public holiday on the calculated collection day, or in the same day before, and if yes, moving the collection by one day. This is fully custom logic, so it toucl be further complicated by whatever rules anyone wants.
+This is an equivalent of "holiday in week" move - checking if there is a public holiday on the calculated collection day, or in the same day before, and if yes, moving the collection by one day. This is fully custom logic, so it could be further complicated by whatever rules anyone wants.
+Note that this does not disable the current holiday exception handling in the integration - so if you have also configured that to move the collection, it will move it one more day. So if you want to use, configure the `offset` to `0` (so that the integration movves the holiday by "zero" days). Or you can configure the calendar on another entity - the automation is really using them to check the list of the dates - the list could be anywhere, does not even have to be a garbage_collection entity.
+
+This example is for an entity `sensor.test`. If you want to use it for yours, replace it with the real entity name in the trigger.
 
 ```yaml
 alias: test garbage_collection event
 description: >-
-  Loop through all calculated dates, move the collection by 1 day if public holiday was in the week before or on the calculated collection date
-  calculate one
+  Loop through all calculated dates, move the collection by 1 day if public holiday was in the week before or on the calculated collection date calculate one
 trigger:
   - platform: event
     event_type: garbage_collection_loaded
@@ -369,7 +373,7 @@ action:
             offset: 1
   - service: garbage_collection.update_state
     data:
-      entity_id: sensor.test
+      entity_id: "{{ trigger.event.data.entity_id }}"
 mode: single
 ```
 
