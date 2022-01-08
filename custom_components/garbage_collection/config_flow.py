@@ -108,7 +108,7 @@ class garbage_collection_shared:
             config_definition.reset_defaults()
             config_definition.set_defaults(1, defaults)
             config_definition.join_list(CONF_EXCLUDE_DATES)
-            config_definition.join_list(CONF_INCLUDE_DATES)            
+            config_definition.join_list(CONF_INCLUDE_DATES)
         self.data_schema = config_definition.compile_config_flow(step=1)
         # Do not show name for Options_Flow. The name cannot be changed here
         if defaults is not None and CONF_NAME in self.data_schema:
