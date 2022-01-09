@@ -8,6 +8,7 @@
                     "name": "Friendly name",
                     "hidden": "Skrýt v kalendáři",
                     "frequency": "Frekvence",
+                    "manual_update": "State je aktualizovaný manuálně voláním služby",
                     "icon_normal": "Ikona (mdi:trash-can)",
                     "icon_tomorrow": "Ikona svoz zítra (mdi:delete-restore)",
                     "icon_today": "Ikona svoz dnes (mdi:delete-circle)",
@@ -97,6 +98,7 @@
                 "data": {
                     "hidden": "Skrýt v kalendáři",
                     "frequency": "Frekvence",
+                    "manual_update": "State je aktualizovaný manuálně voláním služby",
                     "icon_normal": "Ikona (mdi:trash-can)",
                     "icon_tomorrow": "Ikona svoz zítra (mdi:delete-restore)",
                     "icon_today": "Ikona svoz dnes (mdi:delete-circle)",

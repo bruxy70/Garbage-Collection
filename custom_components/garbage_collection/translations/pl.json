@@ -8,6 +8,7 @@
                     "name": "Przyjazna nazwa",
                     "hidden": "Ukryj w kalendarzu",
                     "frequency": "Częstotliwość",
+                    "manual_update": "Stan czujnika aktualizowany ręcznie poprzez wywołanie usługi",
                     "icon_normal": "Ikona (mdi:trash-can) - opcjonalnie",
                     "icon_tomorrow": "Ikona wywozu jutro (mdi:delete-restore) - opcjonalnie",
                     "icon_today": "Ikona wywozu dzisiaj (mdi:delete-circle)- opcjonalnie",
@@ -96,6 +97,7 @@
                 "data": {
                     "hidden": "Ukryj w kalendarzu",
                     "frequency": "Częstotliwość",
+                    "manual_update": "Stan czujnika aktualizowany ręcznie poprzez wywołanie usługi",
                     "icon_normal": "Ikona (mdi:trash-can) - opcjonalnie",
                     "icon_tomorrow": "Ikona wywozu jutro (mdi:delete-restore) - opcjonalnie",
                     "icon_today": "Ikona wywozu dzisiaj (mdi:delete-circle)- opcjonalnie",

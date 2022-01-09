@@ -116,6 +116,7 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 |:----------|----------|------------
 | `name` | Yes | Sensor friendly name
 | `frequency` | Yes | `"weekly"`, `"even-weeks"`, `"odd-weeks"`, `"every-n-weeks"`, `"every-n-days"`, `"monthly"`, `"annual"` or `"group"`
+| `manual_update` | No | (Advanced). Do not automatically update the status. Status is updated manualy by calling the service `garbage_collection.update_state` from an automation triggered by event `garbage_collection_loaded`, that could manually add or remove collection dates, and manually trigger the state update at the end. [See the example](#manual-update-example).</br>**Default**: `False`
 | `offset` | No | Offset calculated date by `offset` days (makes most sense for monthly frequency). Examples of use:</br>for last Saurday each month, configure first Saturday each month with `offset: -7`</br>for 1<sup>st</sup> Wednesday in of full week, configure first Monday each month with `offset: 2`</br>(integer between -31 and 31) **Default**: 0
 | `hidden` | No | Hide in calendar (useful for sensors that are used in groups)<br/>**Default**: `False`
 | `icon_normal` | No | Default icon **Default**:  `mdi:trash-can`
@@ -132,8 +133,8 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 |:----------|----------|------------
 | `first_month` | No | Month three letter abbreviation, e.g. `"jan"`, `"feb"`...<br/>**Default**: `"jan"`
 | `last_month` | No | Month three letter abbreviation.<br/>**Default**: `"dec"`
-| `exclude_dates` | No | List of dates with no collection (using international date format `'yyyy-mm-dd'`. 
-| `include_dates` | No | List of extra collection (using international date format `'yyyy-mm-dd'`.
+| `exclude_dates` | No | List of dates with no collection (using international date format `'yyyy-mm-dd'`. Make sure to enter the date in quotes!
+| `include_dates` | No | List of extra collection (using international date format `'yyyy-mm-dd'`. Make sure to enter the date in quotes!
 | `move_country_holidays` | No | Country holidays - the country code (see [holidays](https://github.com/dr-prodigy/python-holidays) for the list of valid country codes).<br/>Automatically move garbage collection on public holidays to the following day.<br/>*Example:* `US` 
 | `holiday_in_week_move` | No | Move garbage collection to the following day if a holiday is in week.<br/>**Default**: `false`
 | `holiday_move_offset` | No | Move the collection by the number of days (integer -7..7) **Default**: 1
@@ -215,7 +216,166 @@ It will set the `last_collection` attribute to the current date and time.
 
 | Attribute | Description
 |:----------|------------
-| `entity_id` | The gatbage collection entity id (e.g. `sensor.general_waste`)
+| `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
+
+
+### garbage_collection.add_date
+...see the manual update example below
+
+### garbage_collection.remove_date
+...see the manual update example below
+
+### garbage_collection.offset_date
+...see the manual update example below
+
+### garbage_collection.update_state
+...see the manual update example below
+
+
+## Manual update example
+(!!! Advanced - if you think this is too complicated, then this is not for you !!!)
+
+For the example below, the entity should be configured with `manual_update` set to `true`.
+Then, when the `garbage_collection` entity is updated (normally once a day at midnight, or restart, or when triggering entity update by script), it will calculate the collection schedule for previous, current and next year. But it will **NOT UPDATE** the entity state. 
+Instead, it will trigger an event `garbage_collection_loaded` with list of automatically calculated dates as a parameter. 
+You will **have to create an automation triggered by this event**. In this automation you will need to call the service `garbage_collection.update_state` to update the state. Before that, you can call the servics `garbage_collection.add_date` and/or `garbage_collection.remove_date` to programatically tweak the dates in whatever way you need (e.g. based on values from external API sensor, comparing the dates with list of holidays, calculating custom offsets based on the day of the week etc.). This is complicated, but gives you an ultimate flexibility.
+
+### garbage_collection.add_date
+Add a date to the list of dates calculated automatically. To add multiple dates, call this service multiple times with different dates.
+Note that this date will be removed on the next sensor update when data is re-calculated and loaded. This is why this service should be called from the automation triggered be the event `garbage_collection_loaded`, that is called each time the sensor is updated. And at the end of this automation you need to call the `garbage_collection.update_state` service to update the sensor state based on automatically collected dates with the dates added, removed or offset by the automation.
+
+| Attribute | Description
+|:----------|------------
+| `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
+| `date` | The date to be added, in ISO format (`'yyyy-mm-dd'`). Make sure to enter the date in quotes!
+
+### garbage_collection.remove_date
+Remove a date to the list of dates calculated automatically. To remove multiple dates, call this service multiple times with different dates.
+Note that this date will reappear on the next sensor update when data is re-calculated and loaded. This is why this service should be called from the automation triggered be the event `garbage_collection_loaded`, that is called each time the sensor is updated. And at the end of this automation you need to call the `garbage_collection.update_state` service to update the sensor state based on automatically collected dates with the dates added, removed or offset by the automation.
+
+| Attribute | Description
+|:----------|------------
+| `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
+| `date` | The date to be removed, in ISO format (`'yyyy-mm-dd'`). Make sure to enter the date in quotes!
+
+### garbage_collection.offset_date
+Offset the calculated collection day by the `offset` number of days.
+Note that this offset will revert back on the next sensor update when data is re-calculated and loaded. This is why this service should be called from the automation triggered be the event `garbage_collection_loaded`, that is called each time the sensor is updated. And at the end of this automation you need to call the `garbage_collection.update_state` service to update the sensor state based on automatically collected dates with the dates added,  removed or offset by the automation.
+
+| Attribute | Description
+|:----------|------------
+| `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
+| `date` | The date to be removed, in ISO format (`'yyyy-mm-dd'`). Make sure to enter the date in quotes!
+| `offset` | By how many days to offset - integer between `-31` to `31` (e.g. `1`)
+
+### garbage_collection.update_state
+Choose the next collection date from the list of dates calculated automatically, added by service calls (and not removed), and update the entity state and attributes.
+
+| Attribute | Description
+|:----------|------------
+| `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
+
+## Events
+### garbage_collection_loaded 
+This event is triggered each time a `garbage_collection` entity is being updated. You can create an automation to modify the collection schedule before the entity state update.
+
+Event data:
+| Attribute | Description
+|:----------|------------
+| `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
+| `collection_dates` | List of collection dates calculated automatically.
+
+## Simple example
+Adding an extra collection date (a fixed date in this case) - for the entity `sensor.test`.
+
+
+```yaml
+alias: garbage_collection event
+description: 'Manually add a collection date, then trigger entity state update.'
+trigger:
+  - platform: event
+    event_type: garbage_collection_loaded
+    event_data:
+      entity_id: sensor.test
+action:
+  - service: garbage_collection.add_date
+    data:
+      entity_id: "{{ trigger.event.data.entity_id }}"
+      date: '2022-01-07'
+  - service: garbage_collection.update_state
+    data:
+      entity_id: sensor.test
+mode: single
+```
+
+## Moderate example
+This will loop through the calculated dates, and add extra collection to a day after each calculated one. So if this is set for a collection each first Wednesday each month, it will result in a collection on first Wednesday, and the following day (kind of first Thursday, except if the week is starting on Thursday - just a random weird example :).
+
+This example is for an entity `sensor.test`. If you want to use it for yours, replace it with the real entity name in the trigger.
+
+```yaml
+alias: test garbage_collection event
+description: 'Loop through all calculated dates, add extra collection a day after the calculate one'
+trigger:
+  - platform: event
+    event_type: garbage_collection_loaded
+    event_data:
+      entity_id: sensor.test
+action:
+  - repeat:
+      count: '{{ trigger.event.data.collection_dates | count }}'
+      sequence:
+        - service: garbage_collection.add_date
+          data:
+            entity_id: "{{ trigger.event.data.entity_id }}"
+            date: >-
+              {{( as_datetime(trigger.event.data.collection_dates[repeat.index]) + timedelta( days = 1)) | as_timestamp | timestamp_custom("%Y-%m-%d") }}
+  - service: garbage_collection.update_state
+    data:
+      entity_id: "{{ trigger.event.data.entity_id }}"
+mode: single
+```
+
+## Advanced example
+This is an equivalent of "holiday in week" move - checking if there is a public holiday on the calculated collection day, or in the same day before, and if yes, moving the collection by one day. This is fully custom logic, so it could be further complicated by whatever rules anyone wants.
+Note that this does not disable the current holiday exception handling in the integration - so if you have also configured that to move the collection, it will move it one more day. So if you want to use, configure the `offset` to `0` (so that the integration movves the holiday by "zero" days). Or you can configure the calendar on another entity - the automation is really using them to check the list of the dates - the list could be anywhere, does not even have to be a garbage_collection entity.
+
+This example is for an entity `sensor.test`. If you want to use it for yours, replace it with the real entity name in the trigger.
+
+```yaml
+alias: test garbage_collection event
+description: >-
+  Loop through all calculated dates, move the collection by 1 day if public holiday was in the week before or on the calculated collection date calculate one
+trigger:
+  - platform: event
+    event_type: garbage_collection_loaded
+    event_data:
+      entity_id: sensor.test
+action:
+  - repeat:
+      count: '{{ trigger.event.data.collection_dates | count }}'
+      sequence:
+        - condition: template
+          value_template: >-
+            {%- set collection_date = as_datetime(trigger.event.data.collection_dates[repeat.index]) %}
+            {%- set ns = namespace(found=false) %}
+            {%- for i in range(collection_date.weekday()+1) %}
+              {%- set d = ( collection_date + timedelta( days=-i) ) | as_timestamp | timestamp_custom("%Y-%m-%d") %}
+              {%- if d in state_attr(trigger.event.data.entity_id,'holidays') %}
+                {%- set ns.found = true %}
+              {%- endif %}
+            {%- endfor %}  
+            {{ ns.found }}
+        - service: garbage_collection.offset_date
+          data:
+            entity_id: "{{ trigger.event.data.entity_id }}"
+            date: '{{ trigger.event.data.collection_dates[repeat.index] }}'
+            offset: 1
+  - service: garbage_collection.update_state
+    data:
+      entity_id: "{{ trigger.event.data.entity_id }}"
+mode: single
+```
 
 # Lovelace config examples
 
@@ -238,7 +398,7 @@ This is the configuration
         card:
           type: picture-entity
           name_template: >-
-            {{ states.sensor.bio.attributes.days }} days
+            {{ state_attr('sensor.bio','days') }} days
           show_name: True
           show_state: False
           entity: sensor.bio

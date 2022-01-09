@@ -8,6 +8,7 @@
                     "name": "Friendly name",
                     "hidden": "Hide in calendar",
                     "frequency": "Frequency",
+                    "manual_update": "Sensor state updated manually by calling a service",
                     "icon_normal": "Icon (mdi:trash-can) - optional",
                     "icon_tomorrow": "Icon collection tomorrow (mdi:delete-restore) - optional",
                     "icon_today": "Icon collection today (mdi:delete-circle) - optional",
@@ -96,6 +97,7 @@
                 "data": {
                     "hidden": "Hide in calendar",
                     "frequency": "Frequency",
+                    "manual_update": "Sensor state updated manually by calling a service",
                     "icon_normal": "Icon (mdi:trash-can) - optional",
                     "icon_tomorrow": "Icon collection tomorrow (mdi:delete-restore) - optional",
                     "icon_today": "Icon collection today (mdi:delete-circle) - optional",

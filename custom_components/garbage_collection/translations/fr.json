@@ -8,6 +8,7 @@
                     "name": "Friendly name",
                     "hidden": "Masquer dans le calendrier",
                     "frequency": "Fréquence",
+                    "manual_update": "État du capteur mis à jour manuellement en appelant un service",
                     "icon_normal": "Icône (mdi:trash-can)",
                     "icon_tomorrow": "Icône pour collecte à jour J+1 (mdi:delete-restore)",
                     "icon_today": "Icône pour collecte au jour J (mdi:delete-circle)",
@@ -91,8 +92,9 @@
                 "title": "Garbage Collection - Fréquence de la collecte",
                 "description": "Modifier les paramètres des capteurs. Plus d'infos sur https://github.com/bruxy70/Garbage-Collection",
                 "data": {
-                    "frequency": "Fréquence",
                     "hidden": "Masquer dans le calendrier",
+                    "frequency": "Fréquence",
+                    "manual_update": "État du capteur mis à jour manuellement en appelant un service",
                     "icon_normal": "Icône (mdi:trash-can)",
                     "icon_tomorrow": "Icône pour collecte à jour J+1 (mdi:delete-restore)",
                     "icon_today": "Icône pour collecte au jour J (mdi:delete-circle)",

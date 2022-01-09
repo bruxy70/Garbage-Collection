@@ -8,6 +8,7 @@
                     "name": "Nombre amigable",
                     "hidden": "Esconderse en el calendario",
                     "frequency": "Frequencia",
+                    "manual_update": "El estado del sensor se actualiza manualmente llamando a un servicio",
                     "icon_normal": "Icono (mdi:trash-can)",
                     "icon_tomorrow": "Icono de recoleccion para mañana (mdi:delete-restore)",
                     "icon_today": "Icono de recoleccion para hoy (mdi:delete-circle)",
@@ -96,6 +97,7 @@
                 "data": {
                     "hidden": "Esconderse en el calendario",
                     "frequency": "Frequencia",
+                    "manual_update": "El estado del sensor se actualiza manualmente llamando a un servicio",
                     "icon_normal": "Icono (mdi:trash-can)",
                     "icon_tomorrow": "Icono de recoleccion para mañana (mdi:delete-restore)",
                     "icon_today": "Icono de recoleccion para hoy (mdi:delete-circle)",

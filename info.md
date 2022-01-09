@@ -1,4 +1,4 @@
-[![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://github.com/custom-components/hacs) [![Garbage-Collection](https://img.shields.io/github/v/release/bruxy70/Garbage-Collection.svg?1)](https://github.com/bruxy70/Garbage-Collection) ![Maintenance](https://img.shields.io/maintenance/yes/2021.svg)
+[![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://github.com/custom-components/hacs) [![Garbage-Collection](https://img.shields.io/github/v/release/bruxy70/Garbage-Collection.svg?1)](https://github.com/bruxy70/Garbage-Collection) ![Maintenance](https://img.shields.io/maintenance/yes/2022.svg)
 
 [![Buy me a coffee](https://img.shields.io/static/v1.svg?label=Buy%20me%20a%20coffee&message=🥨&color=black&logo=buy%20me%20a%20coffee&logoColor=white&labelColor=6f4e37)](https://www.buymeacoffee.com/3nXx0bJDP)
 
@@ -46,7 +46,7 @@ garbage_collection:
     frequency: 'annual'
     date: '11/24'
 ```
-For more examples and configuration documentation check the <a href="https://github.com/bruxy70/Garbage-Collection">repository</a> file
+For more examples and configuration documentation check the <a href="https://github.com/bruxy70/Garbage-Collection/blob/development/README.md">repository</a> file
 
 ## STATE AND ATTRIBUTES
 
@@ -76,4 +76,6 @@ It will set the `last_collection` attribute to the current date and time.
 
 | Attribute | Description
 |:----------|------------
-| `entity_id` | The gatbage collection entity id (e.g. `sensor.general_waste`)
+| `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
+
+For more details see the <a href="https://github.com/bruxy70/Garbage-Collection/blob/development/README.md">repository.</a>
