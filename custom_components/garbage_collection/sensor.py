@@ -644,7 +644,7 @@ class GarbageCollection(RestoreEntity):
             try:
                 next_date = await self._async_find_candidate_date(day1) + relativedelta(
                     days=self._offset
-                )
+                ) # type: ignore
                 next_date = await self._async_skip_holidays(next_date)
             except ValueError:
                 raise
