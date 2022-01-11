@@ -487,7 +487,7 @@ class GarbageCollection(RestoreEntity):
                 for entity_id in self._entities:
                     entity = self.hass.data[DOMAIN][SENSOR_PLATFORM][entity_id]
                     d = await entity.async_next_date(day1)
-                    if candidate_date is None or d < candidate_date:
+                    if d is not None and (candidate_date is None or d < candidate_date):
                         candidate_date = d
             except KeyError:
                 raise ValueError
@@ -641,8 +641,8 @@ class GarbageCollection(RestoreEntity):
                     days=self._offset
                 )
                 next_date = await self._async_skip_holidays(next_date)
-            except ValueError:
-                raise
+            except (TypeError, ValueError):
+                return None
             # Check if the date is within the range
             new_date = self.move_to_range(next_date)
             if new_date != next_date:
