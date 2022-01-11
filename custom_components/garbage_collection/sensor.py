@@ -524,9 +524,7 @@ class GarbageCollection(RestoreEntity):
             date_candidate = self._skip_holiday(date_candidate)
         return date_candidate
 
-    def _insert_include_date(
-        self, day1: date, next_date: Union[date, None]
-    ):
+    def _insert_include_date(self, day1: date, next_date: Union[date, None]):
         """Add include dates."""
         include_dates = list(filter(lambda date: date >= day1, self._include_dates))
         if len(include_dates) > 0 and (
