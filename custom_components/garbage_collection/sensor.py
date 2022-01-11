@@ -408,11 +408,13 @@ class GarbageCollection(RestoreEntity):
             WEEKDAYS.index(self._collection_days[0]),
         )
 
-    async def _async_find_candidate_date(self, day1: date) -> date:
+    async def _async_find_candidate_date(self, day1: date) -> Optional[date]:
         """Find the next possible date starting from day1.
 
         Only based on calendar, not looking at include/exclude days.
         """
+        if self._frequency == "blank":
+            return None
         week = day1.isocalendar()[1]
         weekday = day1.weekday()
         year = day1.year
@@ -626,6 +628,8 @@ class GarbageCollection(RestoreEntity):
     async def _async_find_next_date(self, first_date: date) -> Optional[date]:
         """Get date within configured date range."""
         # Today's collection can be triggered by past collection with offset
+        if self._frequency == "blank":
+            return None
         if self._holiday_in_week_move:
             look_back = max(
                 self._offset, self._holiday_move_offset, first_date.weekday()
@@ -665,6 +669,8 @@ class GarbageCollection(RestoreEntity):
 
     async def _async_load_collection_dates(self) -> None:
         """Fill the collection dates list."""
+        if self._frequency == "blank":
+            return
         today = dt_util.now().date()
         start_date = end_date = date(today.year - 1, 1, 1)
         end_date = date(today.year + 1, 12, 31)
@@ -732,7 +738,7 @@ class GarbageCollection(RestoreEntity):
             "collection_dates": dates_to_texts(self._collection_dates),
         }
         self.hass.bus.async_fire("garbage_collection_loaded", event_data)
-        if not self._manual:
+        if not self._manual and self._frequency != "blank":
             await self.async_update_state()
 
     async def async_update_state(self) -> None:

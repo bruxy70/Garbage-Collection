@@ -357,7 +357,7 @@ action:
       sequence:
         - condition: template
           value_template: >-
-            {%- set collection_date = as_datetime(trigger.event.data.collection_dates[repeat.index]) %}
+            {%- set collection_date = as_datetime(trigger.event.data.collection_dates[repeat.index-1]) %}
             {%- set ns = namespace(found=false) %}
             {%- for i in range(collection_date.weekday()+1) %}
               {%- set d = ( collection_date + timedelta( days=-i) ) | as_timestamp | timestamp_custom("%Y-%m-%d") %}
