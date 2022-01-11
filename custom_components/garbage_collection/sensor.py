@@ -65,9 +65,6 @@ SCAN_INTERVAL = timedelta(seconds=10)
 THROTTLE_INTERVAL = timedelta(seconds=60)
 
 
-_LOGGER = logging.getLogger(__name__)
-
-
 async def async_setup_platform(hass, _, async_add_entities, discovery_info=None):
     """Create garbage collection entities defined in YAML and add them to HA."""
     async_add_entities([GarbageCollection(hass, discovery_info)], True)
@@ -644,7 +641,7 @@ class GarbageCollection(RestoreEntity):
             try:
                 next_date = await self._async_find_candidate_date(day1) + relativedelta(
                     days=self._offset
-                ) # type: ignore
+                )  # type: ignore
                 next_date = await self._async_skip_holidays(next_date)
             except ValueError:
                 raise
