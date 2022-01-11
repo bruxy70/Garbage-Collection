@@ -405,7 +405,7 @@ class GarbageCollection(RestoreEntity):
             WEEKDAYS.index(self._collection_days[0]),
         )
 
-    async def _async_find_candidate_date(self, day1: date) -> Optional[date]:
+    async def _async_find_candidate_date(self, day1: date):
         """Find the next possible date starting from day1.
 
         Only based on calendar, not looking at include/exclude days.
@@ -526,7 +526,7 @@ class GarbageCollection(RestoreEntity):
 
     def _insert_include_date(
         self, day1: date, next_date: Union[date, None]
-    ) -> Union[date, None]:
+    ):
         """Add include dates."""
         include_dates = list(filter(lambda date: date >= day1, self._include_dates))
         if len(include_dates) > 0 and (
@@ -622,7 +622,7 @@ class GarbageCollection(RestoreEntity):
                 return date(year, self._first_month, 1)
         return day
 
-    async def _async_find_next_date(self, first_date: date) -> Optional[date]:
+    async def _async_find_next_date(self, first_date: date):
         """Get date within configured date range."""
         # Today's collection can be triggered by past collection with offset
         if self._frequency == "blank":
@@ -641,7 +641,7 @@ class GarbageCollection(RestoreEntity):
             try:
                 next_date = await self._async_find_candidate_date(day1) + relativedelta(
                     days=self._offset
-                )  # type: ignore
+                )
                 next_date = await self._async_skip_holidays(next_date)
             except ValueError:
                 raise
