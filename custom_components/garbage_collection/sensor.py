@@ -737,7 +737,7 @@ class GarbageCollection(RestoreEntity):
             await self.async_update_state()
 
     async def async_update_state(self) -> None:
-        """Pick the first event from collection dates, update attrubutes."""
+        """Pick the first event from collection dates, update attributes."""
         _LOGGER.debug("(%s) Looking for next collection", self._name)
         now = dt_util.now()
         today = now.date()
