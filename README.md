@@ -4,7 +4,7 @@
 
 # Garbage Collection
 
-The `garbage_collection` component is a Home Assistant custom sensor for monitoring regular garbage collection schedule. The sensor can be configured for number of different schedules:
+The `garbage_collection` componnent is a Home Assistant integration that creates a custom sensor for monitoring regular garbage collection schedule. The sensor can be configured for number of different schedules:
 - `weekly` schedule (including multiple collection days, e.g. on Tuesday and Thursday)
 - `every-n-weeks` repeats every `period` of weeks, starting from the week number `first_week`. It uses the week number - it therefore restarts each year, as the week numbers start again from 1.
 - bi-weekly in `even-weeks` or `odd-weeks` (technically, it is the same as every 2 weeks with 1<sup>st</sup> or 2<sup>nd</sup> `first_week`)

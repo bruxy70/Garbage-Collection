@@ -309,7 +309,7 @@ class GarbageCollection(RestoreEntity):
         return {
             "identifiers": {(DOMAIN, self.config.get("unique_id", None))},
             "name": self.config.get("name"),
-            "manufacturer": "Garbage Collection",
+            "manufacturer": "bruxy70",
         }
 
     @property
