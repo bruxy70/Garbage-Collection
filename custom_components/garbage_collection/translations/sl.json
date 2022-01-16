@@ -1,0 +1,179 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "title": "Odvoz odpadkov - Pogostost odvoza",
+                "description": "Vpišite ime senzorja in nastavite parametre. Več informacij na https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "name": "Prijazno ime",
+                    "hidden": "Skrij v koledarju",
+                    "frequency": "Pogostost",
+                    "manual_update": "Stanje senzorja se posodablja ročno s klicem storitve",
+                    "icon_normal": "Ikona (mdi:trash-can) - opcijsko",
+                    "icon_tomorrow": "Ikona pobiranja jutri (mdi:delete-restore) - opcijsko",
+                    "icon_today": "Ikona pobiranja danes (mdi:delete-circle) - opcijsko",
+                    "offset": "Zamik (med -31 in 31 dni)",
+                    "expire_after": "Poteče po (HH:MM) - opcijsko",
+                    "verbose_state": "Verbose stanje (tekst namesto številk)",
+                    "verbose_format": "Verbose format (uporaba spremenljivk `datum` in `dni` (v oglatih oklepajih))",
+                    "include_dates": "Vključi datume (yyyy-mm-dd, yyyy-mm-dd, ...) - opcijsko",
+                    "exclude_dates": "Izključi datume (yyyy-mm-dd, yyyy-mm-dd, ...) - opcijsko",
+                    "date_format": "Format datuma (glej http://strftime.org/)"
+                }
+            },
+            "annual_group": {
+                "title": "Odvoz odpadkov - Dodatni parametri",
+                "description": "Vpišite datum odvoza (npr. 11/20 za 20.November)",
+                "data": {
+                    "date": "Datum (mm/dd)",
+                    "entities": "Seznam vpisov (ločeno z vejico)"
+                }
+            },
+            "detail": {
+                "title": "Odvoz odpadkov - Collection days",
+                "description": "Izberite enega ali več dni odvoza. Več podrobnosti tukaj: https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "collection_days_mon": "Ponedeljek",
+                    "collection_days_tue": "Torek",
+                    "collection_days_wed": "Sreda",
+                    "collection_days_thu": "Četrtek",
+                    "collection_days_fri": "Petek",
+                    "collection_days_sat": "Sobota",
+                    "collection_days_sun": "Nedelja",
+                    "force_week_order_numbers": "Naročilo odvoza v tednu meseca namesto v dnevu tedna"
+                }
+            },
+            "final": {
+                "title": "Odvoz odpadkov - Dodatni parametri",
+                "description": "Vključeni in izključeni datumi so seznami datumov, ločeni z vejico v formatu yyyy-mm-dd. Podrobnosti na https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "first_month": "Prvi mesec odvoza",
+                    "last_month": "Zadnji mesec odvoza",
+                    "period": "Odvoz vsakih v tednov/dni: (1-365)",
+                    "first_week": "Prvi teden odvoza (1-52)",
+                    "first_date": "Prvi datum",
+                    "weekday_order_number_1": "1. dan tedna v mesecu",
+                    "weekday_order_number_2": "2. dan tedna v mesecu",
+                    "weekday_order_number_3": "3. dan tedna v mesecu",
+                    "weekday_order_number_4": "4. dan tedna v mesecu",
+                    "weekday_order_number_5": "5. dan tedna v mesecu",
+                    "week_order_number_1": "1. teden v mesecu",
+                    "week_order_number_2": "2. teden v mesecu",
+                    "week_order_number_3": "3. teden v mesecu",
+                    "week_order_number_4": "4. teden v mesecu",
+                    "week_order_number_5": "5. teden v mesecu",
+                    "move_country_holidays": "Premakni na naslednji dan, če je praznik (opcijsko)",
+                    "holiday_move_offset": "Premakni praznike za # dni(-7..7)",
+                    "holiday_pop_named": "Ignoriraj praznike (seznam) - opcijsko",
+                    "holiday_in_week_move": "Premakni na naslednji dan, če je praznik v tednu (opcijsko)",
+                    "prov": "Državni prazniki - provincialni (opcijsko)",
+                    "state": "Državni prazniki - državni (opcijsko)",
+                    "observed": "Državni prazniki - premični (opcijsko)"
+                }
+            }
+        },
+        "error": {
+            "value": "Neveljavna vrednost. Prosim, preverite vaš vnos!",
+            "icon": "Ikone morajo biti vpisane v formatu 'predpona:ime'.",
+            "days": "Iizberite enega ali več dni!",
+            "entities": "Entiteta ne obstaja!",
+            "month_day": "Neveljaven format datuma!",
+            "time": "Neveljaven format časa!",
+            "weekday_order_number": "Izberite enega ali več dni",
+            "week_order_number": "Izberite enega ali več tednov",
+            "period": "Interval mora biti številka med 1 in 365",
+            "first_week": "Prvi teden mora biti številka med 1 in 52",
+            "date": "Neveljaven format datuma!"
+        },
+        "abort": {
+            "single_instance_allowed": "Dovoljena je samo ena konfiguracija odvoza odpadkov."
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "title": "Odvoz odpadkov - Pogostost odvoza",
+                "description": "Spremenite parametre. Več informacij: https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "hidden": "Skrij v koledarju",
+                    "frequency": "Pogostost",
+                    "manual_update": "Stanje senzorja se posodablja ročno s klicanjem storitve",
+                    "icon_normal": "Ikona (mdi:trash-can) - opcijsko",
+                    "icon_tomorrow": "Ikona codvoz jutri (mdi:delete-restore) - opcijsko",
+                    "icon_today": "Ikona odvoz danes (mdi:delete-circle) - opcijsko",
+                    "offset": "Zamik (med -31 in 31 dni)",
+                    "expire_after": "Expire after (HH:MM) - opcijsko",
+                    "verbose_state": "Verbose stanje (tekst namesto številk)",
+                    "verbose_format": "Verbose format (uporaba spremenljivk `datum` in `dni` (v oglatih oklepajih))",
+                    "include_dates": "Vključi datume (yyyy-mm-dd, yyyy-mm-dd, ...) - opcijsko",
+                    "exclude_dates": "Izključi datume (yyyy-mm-dd, yyyy-mm-dd, ...) - opcijsko",
+                    "date_format": "Format datume (glej http://strftime.org/)"
+                }
+            },
+            "annual_group": {
+                "title": "Odvoz odpadkov - Dodatni parametri",
+                "description": "Vpišite datum dneva odvoza (npr. 11/20 za 20.November)",
+                "data": {
+                    "date": "Datum (mm/dd)",
+                    "entities": "Seznam entitet (ločenih z vejivo)"
+                }
+            },
+            "detail": {
+                "title": "Odvoz odpadkov - Collection days",
+                "description": "Izberite enega ali več dni odvoza. Več informacij tukaj: https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "collection_days_mon": "Ponedeljek",
+                    "collection_days_tue": "Torek",
+                    "collection_days_wed": "Sreda",
+                    "collection_days_thu": "Četrtek",
+                    "collection_days_fri": "Petek",
+                    "collection_days_sat": "Sobota",
+                    "collection_days_sun": "Nedelja",
+                    "force_week_order_numbers": "Naročilo odvoza v tednu meseca namesto v dnevu tedna"
+                }
+            },
+            "final": {
+                "title": "Odvoz odpadkov - Dodatni parametri",
+                "description": "Vključeni in izključeni datumi so seznami datumov, ločeni z vejico v formatu yyyy-mm-dd. Podrobnosti na https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "first_month": "Prvi mesec odvoza",
+                    "last_month": "Zdnji mesec odvoza",
+                    "period": "Odvoz vsakih n tednov/dni: (1-365)",
+                    "first_week": "Prvi teden odvoza (1-52)",
+                    "first_date": "Prvi datum",
+                    "weekday_order_number_1": "1. dan tedna v mesecu",
+                    "weekday_order_number_2": "2. dan tedna v mesecu",
+                    "weekday_order_number_3": "3. dan tedna v mesecu",
+                    "weekday_order_number_4": "4. dan tedna v mesecu",
+                    "weekday_order_number_5": "5. dan tedna v mesecu",
+                    "week_order_number_1": "1. teden v mesecu",
+                    "week_order_number_2": "2. teden v mesecu",
+                    "week_order_number_3": "3. teden v mesecu",
+                    "week_order_number_4": "4. teden v mesecu",
+                    "week_order_number_5": "5. teden v mesecu",
+                    "move_country_holidays": "Premakni praznik na naslednji dan (opcijsko)",
+                    "holiday_move_offset": "Premakni praznike za # dni(-7..7)",
+                    "holiday_pop_named": "Ignoriraj praznike (seznam) - opcijsko",
+                    "holiday_in_week_move": "Premakni na naslednji dan, če je praznik v tednu (opcijsko)",
+                    "prov": "Državni prazniki - provincialni (opcijsko)",
+                    "state": "Državni prazniki- državni (opcijsko)",
+                    "observed": "Državni prazniki - premični (opcijsko)"
+                }
+            }
+        },
+        "error": {
+            "value": "Neveljavna vrednost. Prosim, preverite vaš vnos!",
+            "icon": "Ikona mora biti vpisana v formatu 'predpona:ime'.",
+            "days": "Izberite enega ali več dni!",
+            "entities": "Entiteta ne obstaja!",
+            "month_day": "Neveljaven format datuma!",
+            "time": "Neveljaven format časa!",
+            "weekday_order_number": "Izberite enega ali več dni",
+            "week_order_number": "Izberite enega ali več tednov",
+            "period": "Interval mora biti številka med 1 in 365",
+            "first_week": "Prvi teden mora biti številka med 1 in 52",
+            "date": "Neveljaven format datuma!"
+        }
+    }
+
+}

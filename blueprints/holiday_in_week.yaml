@@ -1,0 +1,63 @@
+blueprint:
+  name: Holiday in week
+  description: Loop through all calculated dates, move the collection to the next day 
+    if public holiday was in the week before/on the calculated collection date.
+  source_url: https://github.com/bruxy70
+  domain: automation
+  input:
+    garbage_collection_entity:
+      name: Garbage Collection Entity
+      description: Triggered by the event for this entity.
+      selector:
+        entity:
+          integration: garbage_collection
+    holiday_entity:
+      name: Holidays (a garbage collection integration entity)
+      description: Entity containing the holidays. If you use the same
+        entity for the calendar and the collection schedule, make sure to configure
+        the collection schedule integration offset to 0, otherwise it will be moved twice.
+      selector:
+        entity:
+          integration: garbage_collection
+mode: parallel
+trigger:
+  - platform: event
+    event_type: garbage_collection_loaded
+    event_data:
+      entity_id: !input garbage_collection_entity
+action:
+  - variables:
+      holiday_entity: !input holiday_entity
+  - repeat:
+      count: '{{ trigger.event.data.collection_dates | count }}'
+      sequence:
+        - condition: template
+          value_template: >-
+            {%- set collection_date = as_datetime(trigger.event.data.collection_dates[repeat.index-1]) %}
+            {%- set ns = namespace(found=false) %}
+            {%- for i in range(collection_date.weekday()+1) %}
+              {%- set d = ( collection_date + timedelta( days=-i) ) | as_timestamp | timestamp_custom("%Y-%m-%d") %}
+              {%- if d in state_attr(holiday_entity,'holidays') %}
+                {%- set ns.found = true %}
+              {%- endif %}
+            {%- endfor %}  
+            {{ ns.found }}
+        - service: garbage_collection.offset_date
+          data:
+            entity_id: "{{ trigger.event.data.entity_id }}"
+            date: '{{ trigger.event.data.collection_dates[repeat.index] }}'
+            offset: >-
+              {%- set collection_date = as_datetime(trigger.event.data.collection_dates[repeat.index-1]) %}
+              {%- set ns = namespace(offset=1, found=false) %}
+              {%- for _ in range(7) if not ns.found %}
+                {%- set d = ( collection_date + timedelta( days=ns.offset) ) | as_timestamp | timestamp_custom("%Y-%m-%d") %}
+                {%- if d in state_attr(holiday_entity,'holidays') %}
+                  {%- set ns.offset = ns.offset + 1 %}
+                {% else %}
+                  {%- set ns.found = true %}
+                {%- endif %}
+              {% endfor %}
+              {{ ns.offset }}
+  - service: garbage_collection.update_state
+    data:
+      entity_id: "{{ trigger.event.data.entity_id }}"

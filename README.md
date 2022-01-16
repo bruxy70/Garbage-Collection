@@ -4,13 +4,14 @@
 
 # Garbage Collection
 
-The `garbage_collection` component is a Home Assistant custom sensor for monitoring regular garbage collection schedule. The sensor can be configured for number of different schedules:
+The `garbage_collection` componnent is a Home Assistant integration that creates a custom sensor for monitoring regular garbage collection schedule. The sensor can be configured for number of different schedules:
 - `weekly` schedule (including multiple collection days, e.g. on Tuesday and Thursday)
 - `every-n-weeks` repeats every `period` of weeks, starting from the week number `first_week`. It uses the week number - it therefore restarts each year, as the week numbers start again from 1.
 - bi-weekly in `even-weeks` or `odd-weeks` (technically, it is the same as every 2 weeks with 1<sup>st</sup> or 2<sup>nd</sup> `first_week`)
 - `every-n-days` (repeats regularly from the given first date). If n is multiply of 7, it works similar to `every-n-weeks`, with the difference that it does not use the week numbers (that restart each year) but continues infinitely from the initial date.
 - `monthly` schedule (n<sup>th</sup> weekday each month), or a specific weekday of each n<sup>th</sup> week. Using the `period` it could also be every 2<sup>nd</sup>, 3<sup>rd</sup> etc month.
 - `annually` (e.g. birthdays). This is once per year. Using include dates you can add additional dates manually.
+- `blank` does not automatically schedule any collections - in case you want make completely own schedule with `manual_update`.
 You can also configure seasonal calendars (e.g. for bio-waste collection), by configuring the first and last month. 
 And you can `group` entities, which will merge multiple schedules into one sensor.
 
@@ -115,7 +116,7 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 |Attribute |Required|Description
 |:----------|----------|------------
 | `name` | Yes | Sensor friendly name
-| `frequency` | Yes | `"weekly"`, `"even-weeks"`, `"odd-weeks"`, `"every-n-weeks"`, `"every-n-days"`, `"monthly"`, `"annual"` or `"group"`
+| `frequency` | Yes | `"weekly"`, `"even-weeks"`, `"odd-weeks"`, `"every-n-weeks"`, `"every-n-days"`, `"monthly"`, `"annual"`, `"group"` or `"blank"`
 | `manual_update` | No | (Advanced). Do not automatically update the status. Status is updated manualy by calling the service `garbage_collection.update_state` from an automation triggered by event `garbage_collection_loaded`, that could manually add or remove collection dates, and manually trigger the state update at the end. [See the example](#manual-update-example).</br>**Default**: `False`
 | `offset` | No | Offset calculated date by `offset` days (makes most sense for monthly frequency). Examples of use:</br>for last Saurday each month, configure first Saturday each month with `offset: -7`</br>for 1<sup>st</sup> Wednesday in of full week, configure first Monday each month with `offset: 2`</br>(integer between -31 and 31) **Default**: 0
 | `hidden` | No | Hide in calendar (useful for sensors that are used in groups)<br/>**Default**: `False`
@@ -128,7 +129,7 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 | `date_format` | No | In the `verbose_format`, you can configure the format of date (using [strftime](http://strftime.org/) format)  **Default**: `'%d-%b-%Y'`
 
 
-#### PARAMETERS FOR ALL FREQUENCIES EXCEPT ANNUAL AND GROUP
+#### PARAMETERS FOR ALL FREQUENCIES EXCEPT ANNUAL, GROUP and BLANK
 |Attribute |Required|Description
 |:----------|----------|------------
 | `first_month` | No | Month three letter abbreviation, e.g. `"jan"`, `"feb"`...<br/>**Default**: `"jan"`
@@ -144,7 +145,7 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 | `observed` | No | Country holidays - observed (see [holidays](https://github.com/dr-prodigy/python-holidays) ).
 
 
-#### PARAMETERS FOR ALL FREQUENCIES EXCEPT ANNUAL, EVERY-N-DAYS and GROUP
+#### PARAMETERS FOR ALL FREQUENCIES EXCEPT ANNUAL, EVERY-N-DAYS, GROUP and BLANK
 |Attribute |Required|Description
 |:----------|----------|------------
 | `collection_days` | Yes | Day three letter abbreviation, list of `"mon"`, `"tue"`, `"wed"`, `"thu"`, `"fri"`, `"sat"`, `"sun"`. 
@@ -239,6 +240,8 @@ For the example below, the entity should be configured with `manual_update` set 
 Then, when the `garbage_collection` entity is updated (normally once a day at midnight, or restart, or when triggering entity update by script), it will calculate the collection schedule for previous, current and next year. But it will **NOT UPDATE** the entity state. 
 Instead, it will trigger an event `garbage_collection_loaded` with list of automatically calculated dates as a parameter. 
 You will **have to create an automation triggered by this event**. In this automation you will need to call the service `garbage_collection.update_state` to update the state. Before that, you can call the servics `garbage_collection.add_date` and/or `garbage_collection.remove_date` to programatically tweak the dates in whatever way you need (e.g. based on values from external API sensor, comparing the dates with list of holidays, calculating custom offsets based on the day of the week etc.). This is complicated, but gives you an ultimate flexibility.
+
+I made couple of [Blueprints](https://github.com/bruxy70/Garbage-Collection/tree/development/blueprints) to automatically move collection on pubic holidays using the manual update. The goal is to simplify this integration moving forward by removing the holidays feature and moving that to bluprints called by manual update. I am also in a process of creating a dedicated integration just for holidays. So you can check it out now and let me know. If you try that, just make sure you either use holidays from another `garbage_collection` entity, or set the `move_offset` to `0` - otherwise both the integration and the blueprint will move the collection, so it might move twice I think.
 
 ### garbage_collection.add_date
 Add a date to the list of dates calculated automatically. To add multiple dates, call this service multiple times with different dates.
@@ -357,7 +360,7 @@ action:
       sequence:
         - condition: template
           value_template: >-
-            {%- set collection_date = as_datetime(trigger.event.data.collection_dates[repeat.index]) %}
+            {%- set collection_date = as_datetime(trigger.event.data.collection_dates[repeat.index-1]) %}
             {%- set ns = namespace(found=false) %}
             {%- for i in range(collection_date.weekday()+1) %}
               {%- set d = ( collection_date + timedelta( days=-i) ) | as_timestamp | timestamp_custom("%Y-%m-%d") %}
@@ -376,6 +379,8 @@ action:
       entity_id: "{{ trigger.event.data.entity_id }}"
 mode: single
 ```
+
+Or you can use the [blueprints](https://github.com/bruxy70/Garbage-Collection/tree/development/blueprints) I made for you. And you are welcome to create your own and share with the others.
 
 # Lovelace config examples
 
