@@ -332,7 +332,7 @@ action:
           data:
             entity_id: "{{ trigger.event.data.entity_id }}"
             date: >-
-              {{( as_datetime(trigger.event.data.collection_dates[repeat.index]) + timedelta( days = 1)) | as_timestamp | timestamp_custom("%Y-%m-%d") }}
+              {{( as_datetime(trigger.event.data.collection_dates[repeat.index-1]) + timedelta( days = 1)) | as_timestamp | timestamp_custom("%Y-%m-%d") }}
   - service: garbage_collection.update_state
     data:
       entity_id: "{{ trigger.event.data.entity_id }}"
@@ -372,7 +372,7 @@ action:
         - service: garbage_collection.offset_date
           data:
             entity_id: "{{ trigger.event.data.entity_id }}"
-            date: '{{ trigger.event.data.collection_dates[repeat.index] }}'
+            date: '{{ trigger.event.data.collection_dates[repeat.index-1] }}'
             offset: 1
   - service: garbage_collection.update_state
     data:

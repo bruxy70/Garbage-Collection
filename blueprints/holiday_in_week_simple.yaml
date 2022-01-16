@@ -46,7 +46,7 @@ action:
         - service: garbage_collection.offset_date
           data:
             entity_id: "{{ trigger.event.data.entity_id }}"
-            date: '{{ trigger.event.data.collection_dates[repeat.index] }}'
+            date: '{{ trigger.event.data.collection_dates[repeat.index-1] }}'
             offset: 1
   - service: garbage_collection.update_state
     data:
