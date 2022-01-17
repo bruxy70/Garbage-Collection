@@ -184,6 +184,15 @@ It will set the `last_collection` attribute to the current date and time.
 |:----------|------------
 | `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
 
+## Manual update
+There are standard [blueprints](#import-blueprints) provided to handle manual updates - to move collection on public holidays or offset the collection.
+
+If these **blueprints** do not work for you, you can create own custom rules to handle any scenario. If you do so, please share the blueprints with the others by posting them to the [blueprints directory](https://github.com/bruxy70/Garbage-Collection/tree/development/blueprints) - someone else might find them useful. Thanks! 
+To help you creating custom automations, see the following examples:
+
+## !!! Advanced !!! If you think this is too complicated, then this is not for you!!!
+<details>
+
 ## Services used for `manual_update`
 The following services are used within automations triggered by the [garbage_collection_loaded](#garbage_collection_loaded) event. Do not use them anywhere else, it won't work. For the examples of their use, see the [examples](#manual-update-example)
 
@@ -222,20 +231,6 @@ Choose the next collection date from the list of dates calculated automatically,
 |:----------|------------
 | `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
 
-## Manual update
-There are standard [blueprints](#import-blueprints) provided to handle manual updates - to move collection on public holidays or offset the collection.
-
-If these **blueprints** do not work for you, you can create own custom rules to handle any scenario. If you do so, please share the blueprints with the others by posting them to the [blueprints directory](https://github.com/bruxy70/Garbage-Collection/tree/development/blueprints) - someone else might find them useful. Thanks! 
-To help you creating custom automations, see the following examples:
-
-## !!! Advanced !!! Automation examples - if you think this is too complicated, then this is not for you !!!
-<details>
-For the example below, the entity should be configured with `manual_update` set to `true`.
-Then, when the `garbage_collection` entity is updated (normally once a day at midnight, or restart, or when triggering entity update by script), it will calculate the collection schedule for previous, current and next year. But it will **NOT UPDATE** the entity state. 
-Instead, it will trigger an event `garbage_collection_loaded` with list of automatically calculated dates as a parameter. 
-You will **have to create an automation triggered by this event**. In this automation you will need to call the service `garbage_collection.update_state` to update the state. Before that, you can call the servics `garbage_collection.add_date` and/or `garbage_collection.remove_date` to programatically tweak the dates in whatever way you need (e.g. based on values from external API sensor, comparing the dates with list of holidays, calculating custom offsets based on the day of the week etc.). This is complicated, but gives you an ultimate flexibility.
-
-
 ## Events
 ### `garbage_collection_loaded`
 This event is triggered each time a `garbage_collection` entity is being updated. You can create an automation to modify the collection schedule before the entity state update.
@@ -245,6 +240,12 @@ Event data:
 |:----------|------------
 | `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
 | `collection_dates` | List of collection dates calculated automatically.
+
+## Automation examples
+For the example below, the entity should be configured with `manual_update` set to `true`.
+Then, when the `garbage_collection` entity is updated (normally once a day at midnight, or restart, or when triggering entity update by script), it will calculate the collection schedule for previous, current and next year. But it will **NOT UPDATE** the entity state. 
+Instead, it will trigger an event `garbage_collection_loaded` with list of automatically calculated dates as a parameter. 
+You will **have to create an automation triggered by this event**. In this automation you will need to call the service `garbage_collection.update_state` to update the state. Before that, you can call the servics `garbage_collection.add_date` and/or `garbage_collection.remove_date` and/or `garbage_collection.offset_date` to programatically tweak the dates in whatever way you need (e.g. based on values from external API sensor, comparing the dates with list of holidays, calculating custom offsets based on the day of the week etc.). This is complicated, but gives you an ultimate flexibility.
 
 ## Simple example
 Adding an extra collection date (a fixed date in this case) - for the entity `sensor.test`.
