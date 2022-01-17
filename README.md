@@ -147,9 +147,9 @@ There are couple of `blueprints` that automatically move collections if they fal
 3. Install and configure the automation **blueprint**
 
 ### Import Blueprints
-* [![Move on holiday](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fraw.githubusercontent.com%2Fbruxy70%2FGarbage-Collection%2Fdevelopment%2Fblueprints%2Fmove_on_holiday.yaml)
-* [![Move forward when Holiday in the week](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fraw.githubusercontent.com%2Fbruxy70%2FGarbage-Collection%2Fdevelopment%2Fblueprints%2Fholiday_in_week.yaml)
-* [![Offset the collection](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fraw.githubusercontent.com%2Fbruxy70%2FGarbage-Collection%2Fdevelopment%2Fblueprints%2Fgarbage_collection_offset.yaml)
+* [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fraw.githubusercontent.com%2Fbruxy70%2FGarbage-Collection%2Fdevelopment%2Fblueprints%2Fmove_on_holiday.yaml) - Move on holiday
+* [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fraw.githubusercontent.com%2Fbruxy70%2FGarbage-Collection%2Fdevelopment%2Fblueprints%2Fholiday_in_week.yaml) - Move forward when Holiday in the week
+* [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fraw.githubusercontent.com%2Fbruxy70%2FGarbage-Collection%2Fdevelopment%2Fblueprints%2Fgarbage_collection_offset.yaml) - Offset the collection
 
 
 The offset blueprint will move the calculated collections by a number of days. Thsi can be used for example to schedule collection for last Saturday each month - just set the collection to teh first Saturday each month and offset it by -7 days.
