@@ -13,13 +13,11 @@ blueprint:
         entity:
           integration: garbage_collection
     holiday_entity:
-      name: Holidays (a garbage collection integration entity)
-      description: Entity containing the holidays. If you use the same
-        entity for the calendar and the collection schedule, make sure to configure
-        the collection schedule integration offset to 0, otherwise it will be moved twice.
+      name: Holidays
+      description: Entity containing the holidays - an instance of Holidays custom integration (available through HACS)
       selector:
         entity:
-          integration: garbage_collection
+          integration: Holidays
 mode: parallel
 trigger:
   - platform: event

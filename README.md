@@ -32,6 +32,7 @@ These are some examples using this sensor. The Lovelace config examples are incl
   + [Installation via Home Assistant Community Store (HACS)](#installation-via-home-assistant-community-store-hacs)
 * [Configuration](#configuration)
   + [Configuration Parameters](#configuration-parameters)
+* [Skipping public holidays](#public-holidays)
 * [State and Attributes](#state-and-attributes)
 * [Lovelace configuration examples](#lovelace-config-examples)
 
@@ -137,6 +138,22 @@ The monthly schedule has two flavors: it can trigger either on the **n<sup>th</s
 
 **IMPORTANT - put include/exclude dates within quotes. Dates without quotes might cause Home Assistant not loading configuration when starting - in case the date is invalid. Validation for dates within quotes works fine.** I think this is general bug, I am addressing that. (See the example above)
 
+## Public Holidays
+There are couple of `blueprints` that automatically move collections if they fall on public holiday, or if there was a public holiday earlier in the week. 
+
+### Prerequisites
+1. The **blueprints** use a separate custom integration **Holidays**, available through **HACS**, that you can configure for different countries. 
+2. You also need to set the `garbage_collection` entity for `manual_update`, that will fire the `garbage_collection_loaded` event on each sensor update and trigger the automation blueprint.
+3. Install and configure the automation **blueprint**
+
+### Import Blueprints
+* [![Move on holiday](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fraw.githubusercontent.com%2Fbruxy70%2FGarbage-Collection%2Fdevelopment%2Fblueprints%2Fmove_on_holiday.yaml)
+* [![Move forward when Holiday in the week](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fraw.githubusercontent.com%2Fbruxy70%2FGarbage-Collection%2Fdevelopment%2Fblueprints%2Fholiday_in_week.yaml)
+* [![Offset the collection](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fraw.githubusercontent.com%2Fbruxy70%2FGarbage-Collection%2Fdevelopment%2Fblueprints%2Fgarbage_collection_offset.yaml)
+
+
+The offset blueprint will move the calculated collections by a number of days. Thsi can be used for example to schedule collection for last Saturday each month - just set the collection to teh first Saturday each month and offset it by -7 days.
+
 ## STATE AND ATTRIBUTES
 ### State
 The state can be one of
@@ -168,7 +185,7 @@ It will set the `last_collection` attribute to the current date and time.
 | `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
 
 ## Services used for manual_update
-The following services are used within automations triggered by the [garbage_collection_loaded](#garbage_collection_loaded) event. Do not use them anywhere else, it won't work. For the examples of their use, see the [examples](#manual_update_example)
+The following services are used within automations triggered by the [garbage_collection_loaded](#garbage_collection_loaded) event. Do not use them anywhere else, it won't work. For the examples of their use, see the [examples](#manual-update-example)
 
 ### garbage_collection.add_date
 Add a date to the list of dates calculated automatically. To add multiple dates, call this service multiple times with different dates.
@@ -205,11 +222,13 @@ Choose the next collection date from the list of dates calculated automatically,
 |:----------|------------
 | `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
 
-## Manual update example
-There are standard [blueprints](https://github.com/bruxy70/Garbage-Collection/tree/development/blueprints) provided to handle manual updates - to move cillection on public holidays or offset the ccollection. 
-But if they do not work for you, you can create own custom rules to handle whatever scenario. If you do, please share with the others by posting them to the blueprints directory - someone else might find them useful. Thanks! To help you with that, see the following examples:
+## Manual update
+There are standard [blueprints](https://github.com/bruxy70/Garbage-Collection/tree/development/blueprints) provided to handle manual updates - to move collection on public holidays or offset the collection.
 
-(!!! Advanced - if you think this is too complicated, then this is not for you !!!)
+If these `blueprints` do not work for you, you can create own custom rules to handle any scenario. If you do so, please share the automation with the others by posting them to the blueprints directory - someone else might find them useful. Thanks! 
+To help you creating custom automations, see the following examples:
+
+## !!! Advanced !!! Automation examples - if you think this is too complicated, then this is not for you !!!
 <details>
 For the example below, the entity should be configured with `manual_update` set to `true`.
 Then, when the `garbage_collection` entity is updated (normally once a day at midnight, or restart, or when triggering entity update by script), it will calculate the collection schedule for previous, current and next year. But it will **NOT UPDATE** the entity state. 

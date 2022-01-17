@@ -1,7 +1,9 @@
 blueprint:
-  name: Holiday in week
+  name: Move on holiday
   description: Loop through all calculated dates, move the collection to the next day 
-    if public holiday was in the week before/on the calculated collection date.
+    if public holiday is scheduled on the calculated collection date. 
+    This does not move the collection if the holiday was in the week before the collection.
+    For that, use the holiday_in_week blueprint.
   source_url: https://github.com/bruxy70
   domain: automation
   input:
@@ -32,14 +34,7 @@ action:
         - condition: template
           value_template: >-
             {%- set collection_date = as_datetime(trigger.event.data.collection_dates[repeat.index-1]) %}
-            {%- set ns = namespace(found=false) %}
-            {%- for i in range(collection_date.weekday()+1) %}
-              {%- set d = ( collection_date + timedelta( days=-i) ) | as_timestamp | timestamp_custom("%Y-%m-%d") %}
-              {%- if d in state_attr(holiday_entity,'holidays') %}
-                {%- set ns.found = true %}
-              {%- endif %}
-            {%- endfor %}  
-            {{ ns.found }}
+            {{ collection_date in state_attr(holiday_entity,'holidays') }}
         - service: garbage_collection.offset_date
           data:
             entity_id: "{{ trigger.event.data.entity_id }}"
