@@ -12,6 +12,8 @@ The `garbage_collection` componnent is a Home Assistant integration that creates
 - `monthly` schedule (n<sup>th</sup> weekday each month), or a specific weekday of each n<sup>th</sup> week. Using the `period` it could also be every 2<sup>nd</sup>, 3<sup>rd</sup> etc month.
 - `annually` (e.g. birthdays). This is once per year. Using include dates you can add additional dates manually.
 - `blank` does not automatically schedule any collections - in case you want make completely own schedule with `manual_update`.
+
+
 You can also configure seasonal calendars (e.g. for bio-waste collection), by configuring the first and last month. 
 And you can `group` entities, which will merge multiple schedules into one sensor.
 
@@ -51,65 +53,11 @@ These are some examples using this sensor. The Lovelace config examples are incl
 4. Restart Home Assistant.
 
 ## Configuration
-__Based on the [Home Assistant design guideline](https://www.home-assistant.io/blog/2020/04/14/the-future-of-yaml/#the-future-of-yaml), the YAML configuratio option will be removed in the future.__
+__Based on the [Home Assistant design guideline](https://www.home-assistant.io/blog/2020/04/14/the-future-of-yaml/#the-future-of-yaml), the YAML configuratio option is obsolete and will be removed in the future.__
 
 There are 2 ways to configure the integration:
 1. Using *Config Flow*: in `Configuration`/`Devices & Services` click on the `+ ADD INTEGRATION` button, select `Garbage Collection` and configure the sensor (prefered). If you configure Garbage Collection using Config Flow, you can change the entity_name, name and change the sensor parameters from the Integrations configuration. The changes are instant and do not require HA restart.<br />If you would like to add more than 1 collection schedule, click on the `+ ADD INTEGRATION` button again and add another `Garbage Collection` integration instance.
 2. Using *YAML* (deprecated): add `garbage_collection` integration in your `configuration.yaml` and add individual sensors. 
-<details>
-  <summary>YAML configuration example:</summary>
-  
-```yaml
-# Example configuration.yaml entry
-garbage_collection:
-  sensors:
-  - name: "Regular waste" # Each week on Monday and Wednesday. No collection on Christmas, added extra collection on the 27th
-    frequency: "weekly"
-    collection_days:
-    - mon
-    - wed
-    expire_after: '12:00'
-    exclude_dates:
-    - '2019-12-25'
-    include_dates:
-    - '2019-12-27'
-  - name: "Bio-waste" # Bi-weekly (odd weeks) on Thursday. Between March and November
-    frequency: "odd-weeks"
-    first_month: "mar"
-    last_month: "nov"
-    collection_days: "thu"
-  - name: "Large waste summer" # First and third Saturday each month
-    frequency: "monthly"
-    collection_days: "sat"
-    weekday_order_number: 
-    - 1
-    - 3
-    first_month: "may"
-    last_month: "oct"
-  - name: "Large waste winter" # First Saturday each month only
-    frequency: "monthly"
-    collection_days: "sat"
-    weekday_order_number: 
-    - 1
-    first_month: "nov"
-    last_month: "apr"
-  - name: "Large waste" # Combination of winter and summer sensors
-    frequency: "group"
-    entities:
-    - sensor.large_waste_summer
-    - sensor.large_waste_winter
-  - name: Paper # Every 4 weeks on Tuesday, starting on 4th week each year
-    frequency: "every-n-weeks"
-    collection_days: "tue"
-    period: 4
-    first_week: 4
-  - name: "Someone's Birthday" 
-    frequency: "annual"
-    date: '11/24'
-```
-  
-</details>
-Entity_id change is not possible using the YAML configuration. Changing other paratemers require restarting Home Assistant.
 
 ### CONFIGURATION PARAMETERS
 #### SENSOR PARAMETERS
@@ -118,7 +66,7 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 | `name` | Yes | Sensor friendly name
 | `frequency` | Yes | `"weekly"`, `"even-weeks"`, `"odd-weeks"`, `"every-n-weeks"`, `"every-n-days"`, `"monthly"`, `"annual"`, `"group"` or `"blank"`
 | `manual_update` | No | (Advanced). Do not automatically update the status. Status is updated manualy by calling the service `garbage_collection.update_state` from an automation triggered by event `garbage_collection_loaded`, that could manually add or remove collection dates, and manually trigger the state update at the end. [See the example](#manual-update-example).</br>**Default**: `False`
-| `offset` | No | Offset calculated date by `offset` days (makes most sense for monthly frequency). Examples of use:</br>for last Saurday each month, configure first Saturday each month with `offset: -7`</br>for 1<sup>st</sup> Wednesday in of full week, configure first Monday each month with `offset: 2`</br>(integer between -31 and 31) **Default**: 0
+| `offset` | No | (obsolete) Offset calculated date by `offset` days (makes most sense for monthly frequency). Examples of use:</br>for last Saurday each month, configure first Saturday each month with `offset: -7`</br>for 1<sup>st</sup> Wednesday in of full week, configure first Monday each month with `offset: 2`</br>(integer between -31 and 31) **Default**: 0.<br />This is obsolete feature. Use a [blueprint](https://github.com/bruxy70/Garbage-Collection/tree/development/blueprints) with `manual_update`.
 | `hidden` | No | Hide in calendar (useful for sensors that are used in groups)<br/>**Default**: `False`
 | `icon_normal` | No | Default icon **Default**:  `mdi:trash-can`
 | `icon_today` | No | Icon if the collection is today **Default**: `mdi:delete-restore`
@@ -136,13 +84,13 @@ Entity_id change is not possible using the YAML configuration. Changing other pa
 | `last_month` | No | Month three letter abbreviation.<br/>**Default**: `"dec"`
 | `exclude_dates` | No | List of dates with no collection (using international date format `'yyyy-mm-dd'`. Make sure to enter the date in quotes!
 | `include_dates` | No | List of extra collection (using international date format `'yyyy-mm-dd'`. Make sure to enter the date in quotes!
-| `move_country_holidays` | No | Country holidays - the country code (see [holidays](https://github.com/dr-prodigy/python-holidays) for the list of valid country codes).<br/>Automatically move garbage collection on public holidays to the following day.<br/>*Example:* `US` 
-| `holiday_in_week_move` | No | Move garbage collection to the following day if a holiday is in week.<br/>**Default**: `false`
-| `holiday_move_offset` | No | Move the collection by the number of days (integer -7..7) **Default**: 1
-| `holiday_pop_named` | No | Ignore holidays (list of holiday names) *Example:* `"Columbus Day"`, `"Veterans Day"`
-| `prov` | No | Country holidays - province (see [holidays](https://github.com/dr-prodigy/python-holidays) ).
-| `state` | No | Country holidays - state (see [holidays](https://github.com/dr-prodigy/python-holidays) ).
-| `observed` | No | Country holidays - observed (see [holidays](https://github.com/dr-prodigy/python-holidays) ).
+| `move_country_holidays` | No | (obsolete) Country holidays - the country code (see [holidays](https://github.com/dr-prodigy/python-holidays) for the list of valid country codes).<br/>Automatically move garbage collection on public holidays to the following day.<br/>*Example:* `US`<br />This is obsolete feature. Use a [blueprint](https://github.com/bruxy70/Garbage-Collection/tree/development/blueprints) with `manual_update`. 
+| `holiday_in_week_move` | No | (obsolete) Move garbage collection to the following day if a holiday is in week.<br/>**Default**: `false`<br />This is obsolete feature. Use a [blueprint](https://github.com/bruxy70/Garbage-Collection/tree/development/blueprints) with `manual_update`.
+| `holiday_move_offset` | No | (obsolete) Move the collection by the number of days (integer -7..7) **Default**: 1<br />This is obsolete feature. Use a [blueprint](https://github.com/bruxy70/Garbage-Collection/tree/development/blueprints) with `manual_update`.
+| `holiday_pop_named` | No |  (obsolete) Ignore holidays (list of holiday names) *Example:* `"Columbus Day"`, `"Veterans Day"`<br />This is obsolete feature. Use a [blueprint](https://github.com/bruxy70/Garbage-Collection/tree/development/blueprints) with `manual_update`.
+| `prov` | No | (obsolete) Country holidays - province (see [holidays](https://github.com/dr-prodigy/python-holidays) ).<br />This is obsolete feature. Use a [blueprint](https://github.com/bruxy70/Garbage-Collection/tree/development/blueprints) with `manual_update`.
+| `state` | No | (obsolete) Country holidays - state (see [holidays](https://github.com/dr-prodigy/python-holidays) ).<br />This is obsolete feature. Use a [blueprint](https://github.com/bruxy70/Garbage-Collection/tree/development/blueprints) with `manual_update`.
+| `observed` | No | (obsolete) Country holidays - observed (see [holidays](https://github.com/dr-prodigy/python-holidays) ).<br />This is obsolete feature. Use a [blueprint](https://github.com/bruxy70/Garbage-Collection/tree/development/blueprints) with `manual_update`.
 
 
 #### PARAMETERS FOR ALL FREQUENCIES EXCEPT ANNUAL, EVERY-N-DAYS, GROUP and BLANK
@@ -206,7 +154,7 @@ If the `verbose_state` parameter is set, it will show date and remaining days, f
 |:----------|------------
 | `next_date` | The date of next collection
 | `days` | Days till the next collection
-| `holidays` | List of used country (showing this year)
+| `holidays` | (obsolete) List of used country (showing this year).<br />This is obsolete feature. Use the `Holidays` custom integration for this.
 | `last_collection` | Date and time of the last collection
 
 
@@ -219,29 +167,8 @@ It will set the `last_collection` attribute to the current date and time.
 |:----------|------------
 | `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
 
-
-### garbage_collection.add_date
-...see the manual update example below
-
-### garbage_collection.remove_date
-...see the manual update example below
-
-### garbage_collection.offset_date
-...see the manual update example below
-
-### garbage_collection.update_state
-...see the manual update example below
-
-
-## Manual update example
-(!!! Advanced - if you think this is too complicated, then this is not for you !!!)
-
-For the example below, the entity should be configured with `manual_update` set to `true`.
-Then, when the `garbage_collection` entity is updated (normally once a day at midnight, or restart, or when triggering entity update by script), it will calculate the collection schedule for previous, current and next year. But it will **NOT UPDATE** the entity state. 
-Instead, it will trigger an event `garbage_collection_loaded` with list of automatically calculated dates as a parameter. 
-You will **have to create an automation triggered by this event**. In this automation you will need to call the service `garbage_collection.update_state` to update the state. Before that, you can call the servics `garbage_collection.add_date` and/or `garbage_collection.remove_date` to programatically tweak the dates in whatever way you need (e.g. based on values from external API sensor, comparing the dates with list of holidays, calculating custom offsets based on the day of the week etc.). This is complicated, but gives you an ultimate flexibility.
-
-I made couple of [Blueprints](https://github.com/bruxy70/Garbage-Collection/tree/development/blueprints) to automatically move collection on pubic holidays using the manual update. The goal is to simplify this integration moving forward by removing the holidays feature and moving that to bluprints called by manual update. I am also in a process of creating a dedicated integration just for holidays. So you can check it out now and let me know. If you try that, just make sure you either use holidays from another `garbage_collection` entity, or set the `move_offset` to `0` - otherwise both the integration and the blueprint will move the collection, so it might move twice I think.
+## Services used for manual_update
+The following services are used within automations triggered by the [garbage_collection_loaded](#garbage_collection_loaded) event. Do not use them anywhere else, it won't work. For the examples of their use, see the [examples](#manual_update_example)
 
 ### garbage_collection.add_date
 Add a date to the list of dates calculated automatically. To add multiple dates, call this service multiple times with different dates.
@@ -277,6 +204,18 @@ Choose the next collection date from the list of dates calculated automatically,
 | Attribute | Description
 |:----------|------------
 | `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
+
+## Manual update example
+There are standard [blueprints](https://github.com/bruxy70/Garbage-Collection/tree/development/blueprints) provided to handle manual updates - to move cillection on public holidays or offset the ccollection. 
+But if they do not work for you, you can create own custom rules to handle whatever scenario. If you do, please share with the others by posting them to the blueprints directory - someone else might find them useful. Thanks! To help you with that, see the following examples:
+
+(!!! Advanced - if you think this is too complicated, then this is not for you !!!)
+<details>
+For the example below, the entity should be configured with `manual_update` set to `true`.
+Then, when the `garbage_collection` entity is updated (normally once a day at midnight, or restart, or when triggering entity update by script), it will calculate the collection schedule for previous, current and next year. But it will **NOT UPDATE** the entity state. 
+Instead, it will trigger an event `garbage_collection_loaded` with list of automatically calculated dates as a parameter. 
+You will **have to create an automation triggered by this event**. In this automation you will need to call the service `garbage_collection.update_state` to update the state. Before that, you can call the servics `garbage_collection.add_date` and/or `garbage_collection.remove_date` to programatically tweak the dates in whatever way you need (e.g. based on values from external API sensor, comparing the dates with list of holidays, calculating custom offsets based on the day of the week etc.). This is complicated, but gives you an ultimate flexibility.
+
 
 ## Events
 ### garbage_collection_loaded 
@@ -381,6 +320,7 @@ mode: single
 ```
 
 Or you can use the [blueprints](https://github.com/bruxy70/Garbage-Collection/tree/development/blueprints) I made for you. And you are welcome to create your own and share with the others.
+</details>
 
 # Lovelace config examples
 
