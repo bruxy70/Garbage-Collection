@@ -160,9 +160,9 @@ The state can be one of
 
 | Value | Meaning
 |:------|---------
-| 0 | Collection is today
-| 1 | Collection is tomorrow
-| 2 | Collection is later 
+| `0` | Collection is today
+| `1` | Collection is tomorrow
+| `2` | Collection is later 
 
 If the `verbose_state` parameter is set, it will show date and remaining days, for example "Today" or "Tomorrow" or "on 10-Sep-2019, in 2 days" (configurable)
 
@@ -176,7 +176,7 @@ If the `verbose_state` parameter is set, it will show date and remaining days, f
 
 
 ## Services
-### garbage_collection.collect_garbage
+### `garbage_collection.collect_garbage`
 If the collection is scheduled for today, mark it completed and look for the next collection.
 It will set the `last_collection` attribute to the current date and time.
 
@@ -184,10 +184,10 @@ It will set the `last_collection` attribute to the current date and time.
 |:----------|------------
 | `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
 
-## Services used for manual_update
+## Services used for `manual_update`
 The following services are used within automations triggered by the [garbage_collection_loaded](#garbage_collection_loaded) event. Do not use them anywhere else, it won't work. For the examples of their use, see the [examples](#manual-update-example)
 
-### garbage_collection.add_date
+### `garbage_collection.add_date`
 Add a date to the list of dates calculated automatically. To add multiple dates, call this service multiple times with different dates.
 Note that this date will be removed on the next sensor update when data is re-calculated and loaded. This is why this service should be called from the automation triggered be the event `garbage_collection_loaded`, that is called each time the sensor is updated. And at the end of this automation you need to call the `garbage_collection.update_state` service to update the sensor state based on automatically collected dates with the dates added, removed or offset by the automation.
 
@@ -196,7 +196,7 @@ Note that this date will be removed on the next sensor update when data is re-ca
 | `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
 | `date` | The date to be added, in ISO format (`'yyyy-mm-dd'`). Make sure to enter the date in quotes!
 
-### garbage_collection.remove_date
+### `garbage_collection.remove_date`
 Remove a date to the list of dates calculated automatically. To remove multiple dates, call this service multiple times with different dates.
 Note that this date will reappear on the next sensor update when data is re-calculated and loaded. This is why this service should be called from the automation triggered be the event `garbage_collection_loaded`, that is called each time the sensor is updated. And at the end of this automation you need to call the `garbage_collection.update_state` service to update the sensor state based on automatically collected dates with the dates added, removed or offset by the automation.
 
@@ -205,7 +205,7 @@ Note that this date will reappear on the next sensor update when data is re-calc
 | `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
 | `date` | The date to be removed, in ISO format (`'yyyy-mm-dd'`). Make sure to enter the date in quotes!
 
-### garbage_collection.offset_date
+### `garbage_collection.offset_date`
 Offset the calculated collection day by the `offset` number of days.
 Note that this offset will revert back on the next sensor update when data is re-calculated and loaded. This is why this service should be called from the automation triggered be the event `garbage_collection_loaded`, that is called each time the sensor is updated. And at the end of this automation you need to call the `garbage_collection.update_state` service to update the sensor state based on automatically collected dates with the dates added,  removed or offset by the automation.
 
@@ -215,7 +215,7 @@ Note that this offset will revert back on the next sensor update when data is re
 | `date` | The date to be removed, in ISO format (`'yyyy-mm-dd'`). Make sure to enter the date in quotes!
 | `offset` | By how many days to offset - integer between `-31` to `31` (e.g. `1`)
 
-### garbage_collection.update_state
+### `garbage_collection.update_state`
 Choose the next collection date from the list of dates calculated automatically, added by service calls (and not removed), and update the entity state and attributes.
 
 | Attribute | Description
@@ -237,7 +237,7 @@ You will **have to create an automation triggered by this event**. In this autom
 
 
 ## Events
-### garbage_collection_loaded 
+### `garbage_collection_loaded`
 This event is triggered each time a `garbage_collection` entity is being updated. You can create an automation to modify the collection schedule before the entity state update.
 
 Event data:
