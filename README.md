@@ -139,7 +139,7 @@ The monthly schedule has two flavors: it can trigger either on the **n<sup>th</s
 **IMPORTANT - put include/exclude dates within quotes. Dates without quotes might cause Home Assistant not loading configuration when starting - in case the date is invalid. Validation for dates within quotes works fine.** I think this is general bug, I am addressing that. (See the example above)
 
 ## Public Holidays
-There are couple of `blueprints` that automatically move collections if they fall on public holiday, or if there was a public holiday earlier in the week. 
+There are couple of **blueprints** that automatically move collections if they fall on public holiday, or if there was a public holiday earlier in the week. 
 
 ### Prerequisites
 1. The **blueprints** use a separate custom integration **Holidays**, available through **HACS**, that you can configure for different countries. 
@@ -225,7 +225,7 @@ Choose the next collection date from the list of dates calculated automatically,
 ## Manual update
 There are standard [blueprints](#import-blueprints) provided to handle manual updates - to move collection on public holidays or offset the collection.
 
-If these `blueprints` do not work for you, you can create own custom rules to handle any scenario. If you do so, please share the blueprints with the others by posting them to the [blueprints directory](https://github.com/bruxy70/Garbage-Collection/tree/development/blueprints) - someone else might find them useful. Thanks! 
+If these **blueprints** do not work for you, you can create own custom rules to handle any scenario. If you do so, please share the blueprints with the others by posting them to the [blueprints directory](https://github.com/bruxy70/Garbage-Collection/tree/development/blueprints) - someone else might find them useful. Thanks! 
 To help you creating custom automations, see the following examples:
 
 ## !!! Advanced !!! Automation examples - if you think this is too complicated, then this is not for you !!!
