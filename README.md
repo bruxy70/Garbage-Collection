@@ -66,7 +66,7 @@ There are 2 ways to configure the integration:
 |:----------|----------|------------
 | `name` | Yes | Sensor friendly name
 | `frequency` | Yes | `"weekly"`, `"even-weeks"`, `"odd-weeks"`, `"every-n-weeks"`, `"every-n-days"`, `"monthly"`, `"annual"`, `"group"` or `"blank"`
-| `manual_update` | No | (Advanced). Do not automatically update the status. Status is updated manualy by calling the service `garbage_collection.update_state` from an automation triggered by event `garbage_collection_loaded`, that could manually add or remove collection dates, and manually trigger the state update at the end. [See the example](#manual-update-example).</br>**Default**: `False`
+| `manual_update` | No | (Advanced). Do not automatically update the status. Status is updated manualy by calling the service `garbage_collection.update_state` from an automation triggered by event `garbage_collection_loaded`, that could manually add or remove collection dates, and manually trigger the state update at the end. [See the example](#manual-update-examples).</br>**Default**: `False`
 | `offset` | No | (obsolete) Offset calculated date by `offset` days (makes most sense for monthly frequency). Examples of use:</br>for last Saurday each month, configure first Saturday each month with `offset: -7`</br>for 1<sup>st</sup> Wednesday in of full week, configure first Monday each month with `offset: 2`</br>(integer between -31 and 31) **Default**: 0.<br />This is obsolete feature. Use a [blueprint](#import-blueprints) with `manual_update`.
 | `hidden` | No | Hide in calendar (useful for sensors that are used in groups)<br/>**Default**: `False`
 | `icon_normal` | No | Default icon **Default**:  `mdi:trash-can`
@@ -194,7 +194,7 @@ To help you creating custom automations, see the following examples:
 <details>
 
 ## Services used for `manual_update`
-The following services are used within automations triggered by the [garbage_collection_loaded](#garbage_collection_loaded) event. Do not use them anywhere else, it won't work. For the examples of their use, see the [examples](#manual-update-example)
+The following services are used within automations triggered by the [garbage_collection_loaded](#garbage_collection_loaded) event. Do not use them anywhere else, it won't work. For the examples of their use, see the [examples](#manual-update-examples)
 
 ### `garbage_collection.add_date`
 Add a date to the list of dates calculated automatically. To add multiple dates, call this service multiple times with different dates.
@@ -241,7 +241,7 @@ Event data:
 | `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
 | `collection_dates` | List of collection dates calculated automatically.
 
-## Automation examples
+## Manual update examples
 For the example below, the entity should be configured with `manual_update` set to `true`.
 Then, when the `garbage_collection` entity is updated (normally once a day at midnight, or restart, or when triggering entity update by script), it will calculate the collection schedule for previous, current and next year. But it will **NOT UPDATE** the entity state. 
 Instead, it will trigger an event `garbage_collection_loaded` with list of automatically calculated dates as a parameter. 
