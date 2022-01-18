@@ -1,11 +1,9 @@
 blueprint:
-  name: Holiday in week (simple)
+  name: Skip holiday
   description: >-
-    Loop through all calculated dates, move the collection to the next day 
-    if public holiday was in the week before/on the calculated collection date.
-    It will always move the collection by 1 day, even if the new day was also a public holiday.
+    Loop through all calculated dates, skip the collection that fall on public holiday.
   domain: automation
-  source_url: https://github.com/bruxy70/Garbage-Collection/blob/development/blueprints/holiday_in_week_simple.yaml
+  source_url: https://github.com/bruxy70/Garbage-Collection/blob/development/blueprints/slip_holiday.yaml
   input:
     garbage_collection_entity:
       name: Garbage Collection Entity
@@ -34,19 +32,11 @@ action:
         - condition: template
           value_template: >-
             {%- set collection_date = as_datetime(trigger.event.data.collection_dates[repeat.index-1]) %}
-            {%- set ns = namespace(found=false) %}
-            {%- for i in range(collection_date.weekday()+1) %}
-              {%- set d = ( collection_date + timedelta( days=-i) ) | as_timestamp | timestamp_custom("%Y-%m-%d") %}
-              {%- if d in state_attr(holiday_entity,'holidays') %}
-                {%- set ns.found = true %}
-              {%- endif %}
-            {%- endfor %}  
-            {{ ns.found }}
-        - service: garbage_collection.offset_date
+            {{ collection_date in state_attr(holiday_entity,'holidays') }}
+        - service: garbage_collection.remove_date
           data:
             entity_id: "{{ trigger.event.data.entity_id }}"
             date: '{{ trigger.event.data.collection_dates[repeat.index-1] }}'
-            offset: 1
   - service: garbage_collection.update_state
     data:
       entity_id: "{{ trigger.event.data.entity_id }}"
