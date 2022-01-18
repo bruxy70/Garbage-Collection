@@ -153,7 +153,7 @@ There are couple of **blueprints** that automatically move collections if they f
 * [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fimport_txt.yaml) - Import dates from txt file (via `command_line` sensor)
 
 
-The offset blueprint will move the calculated collections by a number of days. This can be used for example to schedule collection for last Saturday each month - just set the collection to teh first Saturday each month and offset it by -7 days.
+The offset blueprint will move the calculated collections by a number of days. This can be used for example to schedule collection for last Saturday each month - just set the collection to the first Saturday each month and offset it by -7 days.
 
 ## STATE AND ATTRIBUTES
 ### State
