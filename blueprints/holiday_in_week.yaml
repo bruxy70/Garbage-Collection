@@ -1,6 +1,7 @@
 blueprint:
   name: Holiday in week
-  description: Loop through all calculated dates, move the collection to the next day 
+  description: >-
+    Loop through all calculated dates, move the collection to the next day 
     if public holiday was in the week before/on the calculated collection date.
   source_url: https://github.com/bruxy70
   domain: automation

@@ -1,6 +1,7 @@
 blueprint:
   name: Move on holiday
-  description: Loop through all calculated dates, move the collection to the next day 
+  description: >-
+    Loop through all calculated dates, move the collection to the next day 
     if public holiday is scheduled on the calculated collection date. 
     This does not move the collection if the holiday was in the week before the collection.
     For that, use the holiday_in_week blueprint.

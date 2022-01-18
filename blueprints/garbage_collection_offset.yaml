@@ -12,7 +12,8 @@ blueprint:
           integration: garbage_collection
     offset:
       name: Offset (number of days)
-      description: Offset the collection by given number of days. This can be used 
+      description: >-
+        Offset the collection by given number of days. This can be used 
         for example to schedule an event for the last Wednesday each month.
         To do that, configuring it for first Wednesday each month and then offset by -7 days.
       selector:
