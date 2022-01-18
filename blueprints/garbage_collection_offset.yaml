@@ -28,8 +28,6 @@ trigger:
     event_data:
       entity_id: !input garbage_collection_entity
 action:
-  - variables:
-      holiday_entity: !input holiday_entity
   - repeat:
       count: '{{ trigger.event.data.collection_dates | count }}'
       sequence:
