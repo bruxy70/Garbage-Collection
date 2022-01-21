@@ -34,6 +34,7 @@ These are some examples using this sensor. The Lovelace config examples are incl
   + [Configuration Parameters](#configuration-parameters)
 * [Blueprints for Manual Update](#blueprints-for-manual-update)
   + [Public Holidays](#public-holidays)
+  + [Include and Exclude](include-and-exclude)
   + [Offset](#offset)
   + [Import TXT](#import-txt)
 * [Skipping public holidays](#public-holidays)
@@ -159,7 +160,6 @@ The Public Holidays **blueprints** use a separate custom integration **Holidays*
 [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fholiday_in_week.yaml)  Move forward when Holiday in the week
 
 [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fskip_holiday.yaml)  Skip holiday
-
 
 ### Include and Exclude
 A list of fixed dates to include and exclude from the calculated schedule.
