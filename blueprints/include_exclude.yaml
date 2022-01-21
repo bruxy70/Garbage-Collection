@@ -47,7 +47,7 @@ action:
   - repeat:
       count: "{{ include.split('\n') | count }}"
       sequence:
-        - service: garbage_collection.remove_date
+        - service: garbage_collection.add_date
           data:
             entity_id: "{{ trigger.event.data.entity_id }}"
             date: "{{ include.split('\n')[repeat.index-1] }}"
