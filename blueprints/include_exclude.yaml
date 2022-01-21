@@ -34,6 +34,9 @@ trigger:
     event_data:
       entity_id: !input garbage_collection_entity
 action:
+  - variables:
+      exclude: !input exclude
+      include: !input include
   - repeat:
       count: "{{ exclude.split('\n') | count }}"
       sequence:
