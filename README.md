@@ -59,11 +59,10 @@ These are some examples using this sensor. The Lovelace config examples are incl
 4. Restart Home Assistant.
 
 ## Configuration
-__Based on the [Home Assistant design guideline](https://www.home-assistant.io/blog/2020/04/14/the-future-of-yaml/#the-future-of-yaml), the YAML configuratio option is obsolete and will be removed in the future.__
 
-There are 2 ways to configure the integration:
-1. Using *Config Flow*: in `Configuration`/`Devices & Services` click on the `+ ADD INTEGRATION` button, select `Garbage Collection` and configure the sensor (prefered). If you configure Garbage Collection using Config Flow, you can change the entity_name, name and change the sensor parameters from the Integrations configuration. The changes are instant and do not require HA restart.<br />If you would like to add more than 1 collection schedule, click on the `+ ADD INTEGRATION` button again and add another `Garbage Collection` integration instance.
-2. Using *YAML* (deprecated): add `garbage_collection` integration in your `configuration.yaml` and add individual sensors. 
+Go to `Configuration`/`Devices & Services`, click on the `+ ADD INTEGRATION` button, select `Garbage Collection` and configure the sensor (prefered). If you configure Garbage Collection using Config Flow, you can change the entity_name, name and change the sensor parameters from the Integrations configuration. The changes are instant and do not require HA restart.<br />If you would like to add more than 1 collection schedule, click on the `+ ADD INTEGRATION` button again and add another `Garbage Collection` integration instance.
+
+The configuration via `configuration.yaml` has been deprecated. If you have previously configured the integration there, it will be imported to ConfigFlow and you shoudl remove it.
 
 ### CONFIGURATION PARAMETERS
 #### SENSOR PARAMETERS
@@ -370,6 +369,7 @@ Or you can use the [blueprints](#import-blueprints) I made for you. And you are 
 </details>
 
 # Lovelace config examples
+For information/inspiration - not supported.
 
 ## Garbage Collection custom card
 You can use the custom  [garbage collection card](https://github.com/amaximus/garbage-collection-card) developped by @amaximus.
@@ -407,16 +407,6 @@ The simplest visualisation is to use entities. In this case, I use `verbose_stat
 
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/entities.png">
 
-Integration configuration (you can customise state text by `verbose_format` and `date_format` parameters)
-```yaml
-garbage_collection:
-  sensors:
-  - name: General Waste
-    frequency: 'weekly'
-    collection_days: wed
-    verbose_state: True
-  etc...
-```
 Lovelace configuration
 ```yaml
       - type: entities
@@ -430,19 +420,7 @@ Lovelace configuration
 ## Icon view (glance)
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/sensor.png">
 
-Integration configuration
-```yaml
-garbage_collection:
-  sensors:
-  - name: General Waste
-    frequency: 'weekly'
-    collection_days: wed
-    verbose_state: True
-    verbose_format: "on {date}, in {days} days"
-  etc...
-```
-
-Configuration
+Lovelace Configuration
 ```yaml
       - type: glance
         entities:
