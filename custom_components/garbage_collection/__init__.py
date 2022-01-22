@@ -3,6 +3,7 @@
 import logging
 from datetime import timedelta
 
+from homeassistant.config_entries import ConfigEntry
 import homeassistant.helpers.config_validation as cv
 import homeassistant.util.dt as dt_util
 import voluptuous as vol
@@ -220,6 +221,31 @@ async def async_remove_entry(hass, config_entry):
     except ValueError:
         pass
 
+async def async_migrate_entry(_, config_entry: ConfigEntry) -> bool:
+    """Migrate old entry."""
+    _LOGGER.debug("Migrating from version %s", config_entry.version)
+    new_data = {**config_entry.data}
+    new_options = {**config_entry.options}
+    if config_entry.version == 1:
+        to_remove = [
+            "offset",
+            "move_country_holidays",
+            "holiday_in_week_move",
+            "holiday_pop_named",
+            "holiday_move_offset",
+            "prov",
+            "state",
+            "observed",
+            "exclude_dates",
+            "include_dates"
+        ]
+        for remove in to_remove:
+            if remove in new_data:
+                del new_data[remove]
+        config_entry.version = 4
+        config_entry.data = {**new_data}
+        _LOGGER.info("Migration to version %s successful", config_entry.version)
+    return True
 
 async def update_listener(hass, entry):
     """Update listener."""
