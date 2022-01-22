@@ -9,7 +9,6 @@ import voluptuous as vol
 from dateutil.relativedelta import relativedelta
 from homeassistant import config_entries
 from homeassistant.const import CONF_ENTITY_ID, CONF_NAME
-from homeassistant.helpers import discovery
 
 from .const import (
     ATTR_LAST_COLLECTION,
@@ -174,7 +173,8 @@ async def async_setup(hass, config):
     for entry in hass.config_entries.async_entries(DOMAIN):
         if entry.source == config_entries.SOURCE_IMPORT:
             _LOGGER.error(
-                "garbage_collection already imported. Remove it from configuration.yaml now!"
+                "garbage_collection already imported. "
+                "Remove it from configuration.yaml now!"
             )
             return True
     for entry in platform_config:
