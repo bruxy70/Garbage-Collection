@@ -37,7 +37,6 @@ These are some examples using this sensor. The Lovelace config examples are incl
   + [Include and Exclude](#include-and-exclude)
   + [Offset](#offset)
   + [Import TXT](#import-txt)
-* [Skipping public holidays](#public-holidays)
 * [State and Attributes](#state-and-attributes)
 * [Lovelace configuration examples](#lovelace-config-examples)
 
@@ -71,7 +70,6 @@ The configuration via `configuration.yaml` has been deprecated. If you have prev
 | `name` | Yes | Sensor friendly name
 | `frequency` | Yes | `"weekly"`, `"even-weeks"`, `"odd-weeks"`, `"every-n-weeks"`, `"every-n-days"`, `"monthly"`, `"annual"`, `"group"` or `"blank"`
 | `manual_update` | No | (Advanced). Do not automatically update the status. Status is updated manualy by calling the service `garbage_collection.update_state` from an automation triggered by event `garbage_collection_loaded`, that could manually add or remove collection dates, and manually trigger the state update at the end. [See the example](#manual-update-examples).</br>**Default**: `False`
-| `offset` | No | (obsolete) Offset calculated date by `offset` days (makes most sense for monthly frequency). Examples of use:</br>for last Saurday each month, configure first Saturday each month with `offset: -7`</br>for 1<sup>st</sup> Wednesday in of full week, configure first Monday each month with `offset: 2`</br>(integer between -31 and 31) **Default**: 0.<br />This is obsolete feature. Use a [blueprint](#import-blueprints) with `manual_update`.
 | `hidden` | No | Hide in calendar (useful for sensors that are used in groups)<br/>**Default**: `False`
 | `icon_normal` | No | Default icon **Default**:  `mdi:trash-can`
 | `icon_today` | No | Icon if the collection is today **Default**: `mdi:delete-restore`
@@ -87,15 +85,6 @@ The configuration via `configuration.yaml` has been deprecated. If you have prev
 |:----------|----------|------------
 | `first_month` | No | Month three letter abbreviation, e.g. `"jan"`, `"feb"`...<br/>**Default**: `"jan"`
 | `last_month` | No | Month three letter abbreviation.<br/>**Default**: `"dec"`
-| `exclude_dates` | No | List of dates with no collection (using international date format `'yyyy-mm-dd'`. Make sure to enter the date in quotes!
-| `include_dates` | No | List of extra collection (using international date format `'yyyy-mm-dd'`. Make sure to enter the date in quotes!
-| `move_country_holidays` | No | (obsolete) Country holidays - the country code (see [holidays](https://github.com/dr-prodigy/python-holidays) for the list of valid country codes).<br/>Automatically move garbage collection on public holidays to the following day.<br/>*Example:* `US`<br />This is obsolete feature. Use a [blueprint](#import-blueprints) with `manual_update`. 
-| `holiday_in_week_move` | No | (obsolete) Move garbage collection to the following day if a holiday is in week.<br/>**Default**: `false`<br />This is obsolete feature. Use a [blueprint](#import-blueprints) with `manual_update`.
-| `holiday_move_offset` | No | (obsolete) Move the collection by the number of days (integer -7..7) **Default**: 1<br />This is obsolete feature. Use a [blueprint](#import-blueprints) with `manual_update`.
-| `holiday_pop_named` | No |  (obsolete) Ignore holidays (list of holiday names) *Example:* `"Columbus Day"`, `"Veterans Day"`<br />This is obsolete feature. Use a [blueprint](#import-blueprints) with `manual_update`.
-| `prov` | No | (obsolete) Country holidays - province (see [holidays](https://github.com/dr-prodigy/python-holidays) ).<br />This is obsolete feature. Use a [blueprint](#import-blueprints) with `manual_update`.
-| `state` | No | (obsolete) Country holidays - state (see [holidays](https://github.com/dr-prodigy/python-holidays) ).<br />This is obsolete feature. Use a [blueprint](#import-blueprints) with `manual_update`.
-| `observed` | No | (obsolete) Country holidays - observed (see [holidays](https://github.com/dr-prodigy/python-holidays) ).<br />This is obsolete feature. Use a [blueprint](#import-blueprints) with `manual_update`.
 
 
 #### PARAMETERS FOR ALL FREQUENCIES EXCEPT ANNUAL, EVERY-N-DAYS, GROUP and BLANK
@@ -197,7 +186,6 @@ If the `verbose_state` parameter is set, it will show date and remaining days, f
 |:----------|------------
 | `next_date` | The date of next collection
 | `days` | Days till the next collection
-| `holidays` | (obsolete) List of used country (showing this year).<br />This is obsolete feature. Use the `Holidays` custom integration for this.
 | `last_collection` | Date and time of the last collection
 
 

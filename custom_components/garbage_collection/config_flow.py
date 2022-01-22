@@ -15,16 +15,13 @@ from .const import (
     ANNUAL_FREQUENCY,
     ANNUAL_GROUP_FREQUENCY,
     CONF_COLLECTION_DAYS,
-    CONF_EXCLUDE_DATES,
     CONF_EXPIRE_AFTER,
     CONF_FIRST_DATE,
     CONF_FORCE_WEEK_NUMBERS,
     CONF_FREQUENCY,
-    CONF_HOLIDAY_POP_NAMED,
     CONF_ICON_NORMAL,
     CONF_ICON_TODAY,
     CONF_ICON_TOMORROW,
-    CONF_INCLUDE_DATES,
     CONF_WEEK_ORDER_NUMBER,
     CONF_WEEKDAY_ORDER_NUMBER,
     DAILY_BLANK_FREQUENCY,
@@ -67,14 +64,6 @@ class GarbageCollectionShared:
         self.errors = {}
         if user_input is not None:
             validation = config_definition.compile_schema(step=1)
-            if CONF_INCLUDE_DATES in user_input:
-                user_input[CONF_INCLUDE_DATES] = string_to_list(
-                    user_input[CONF_INCLUDE_DATES]
-                )
-            if CONF_EXCLUDE_DATES in user_input:
-                user_input[CONF_EXCLUDE_DATES] = string_to_list(
-                    user_input[CONF_EXCLUDE_DATES]
-                )
             # Name is not used in OptionsFlow
             if defaults is not None and CONF_NAME in validation:
                 del validation[CONF_NAME]
@@ -83,11 +72,7 @@ class GarbageCollectionShared:
             except vol.Invalid as exception:
                 _LOGGER.debug("Config flow error (step1): %s", exception)
                 error = str(exception)
-                if (
-                    CONF_INCLUDE_DATES in error
-                    or CONF_EXCLUDE_DATES in error
-                    or CONF_FIRST_DATE in error
-                ):
+                if CONF_FIRST_DATE in error:
                     self.errors["base"] = "date"
                 elif (
                     CONF_ICON_NORMAL in error
@@ -108,8 +93,6 @@ class GarbageCollectionShared:
         elif defaults is not None:
             config_definition.reset_defaults()
             config_definition.set_defaults(1, defaults)
-            config_definition.join_list(CONF_EXCLUDE_DATES)
-            config_definition.join_list(CONF_INCLUDE_DATES)
         self.data_schema = config_definition.compile_config_flow(step=1)
         # Do not show name for Options_Flow. The name cannot be changed here
         if defaults is not None and CONF_NAME in self.data_schema:
@@ -211,10 +194,6 @@ class GarbageCollectionShared:
                 ),
                 extra=vol.ALLOW_EXTRA,
             )
-            if CONF_HOLIDAY_POP_NAMED in updates:
-                updates[CONF_HOLIDAY_POP_NAMED] = string_to_list(
-                    updates[CONF_HOLIDAY_POP_NAMED]
-                )
             try:
                 updates = validation(updates)
             except vol.Invalid as exception:
@@ -242,7 +221,6 @@ class GarbageCollectionShared:
                 return True
         elif defaults is not None:
             config_definition.set_defaults(4, defaults)
-            config_definition.join_list(CONF_HOLIDAY_POP_NAMED)
         self.data_schema = config_definition.compile_config_flow(
             step=4, valid_for=self._data[CONF_FREQUENCY]
         )
