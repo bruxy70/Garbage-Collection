@@ -370,6 +370,7 @@ Or you can use the [blueprints](#import-blueprints) I made for you. And you are 
 
 # Lovelace config examples
 For information/inspiration - not supported.
+<details>
 
 ## Garbage Collection custom card
 You can use the custom  [garbage collection card](https://github.com/amaximus/garbage-collection-card) developped by @amaximus.
@@ -426,3 +427,4 @@ Lovelace Configuration
         entities:
           - sensor.general_waste
 ```
+</details>
