@@ -242,9 +242,12 @@ async def async_migrate_entry(_, config_entry: ConfigEntry) -> bool:
         for remove in to_remove:
             if remove in new_data:
                 del new_data[remove]
-        config_entry.version = 4
-        config_entry.data = {**new_data}
-        _LOGGER.info("Migration to version %s successful", config_entry.version)
+            if remove in new_options:
+                del new_data[remove]
+    config_entry.version = 4
+    config_entry.data = {**new_data}
+    config_entry.options = {**new_options}
+    _LOGGER.info("Migration to version %s successful", config_entry.version)
     return True
 
 async def update_listener(hass, entry):
