@@ -37,7 +37,6 @@ These are some examples using this sensor. The Lovelace config examples are incl
   + [Include and Exclude](#include-and-exclude)
   + [Offset](#offset)
   + [Import TXT](#import-txt)
-* [Skipping public holidays](#public-holidays)
 * [State and Attributes](#state-and-attributes)
 * [Lovelace configuration examples](#lovelace-config-examples)
 
