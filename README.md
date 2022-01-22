@@ -199,7 +199,7 @@ It will set the `last_collection` attribute to the current date and time.
 | `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
 
 ## Manual update
-There are standard [blueprints](#import-blueprints) provided to handle manual updates - to move collection on public holidays or offset the collection.
+There are standard [blueprints](#blueprints-for-manual-update) provided to handle manual updates - to move collection on public holidays or offset the collection.
 
 If these **blueprints** do not work for you, you can create own custom rules to handle any scenario. If you do so, please share the blueprints with the others by posting them to the [blueprints directory](https://github.com/bruxy70/Garbage-Collection/tree/development/blueprints) - someone else might find them useful. Thanks! 
 To help you creating custom automations, see the following examples:
@@ -353,7 +353,7 @@ action:
 mode: single
 ```
 
-Or you can use the [blueprints](#import-blueprints) I made for you. And you are welcome to create your own and share with the others.
+Or you can use the [blueprints](#blueprints-for-manual-update) I made for you. And you are welcome to create your own and share with the others.
 </details>
 
 # Lovelace config examples
