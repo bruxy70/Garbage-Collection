@@ -2,6 +2,10 @@
 
 [![Buy me a coffee](https://img.shields.io/static/v1.svg?label=Buy%20me%20a%20coffee&message=🥨&color=black&logo=buy%20me%20a%20coffee&logoColor=white&labelColor=6f4e37)](https://www.buymeacoffee.com/3nXx0bJDP)
 
+{% if prerelease %}
+### NB!: This is a Beta version!
+{% endif %}
+
 # Garbage Collection
 
 The `garbage_collection` component is a Home Assistant custom sensor for scheduling/monitoring regular garbage collection. The sensor can be configured for weekly schedule (including multiple collection days), bi-weekly (in even or odd weeks), monthly schedule (nth day each month), or annual (e.g. birthdays). You can also configure seasonal calendars (e.g. for bio-waste collection) by configuring the first and last month, and you can also group entities, which will merge multiple schedules into one sensor.
@@ -24,29 +28,9 @@ Look to the <a href="https://github.com/bruxy70/Garbage-Collection">repository</
 ## Configuration
 There are 2 ways to configure the integration:
 1. Using *Config Flow*: in `Configuration/Integrations` click on the `+` button, select `Garbage Collection` and configure the sensor (prefered). If you configure Garbage Collection using Config Flow, you can change the entity_name, name and change the sensor parameters from the Integrations configuration. The changes are instant and do not require HA restart.
-2. Using *YAML*: add `garbage_collection` integration in your `configuration.yaml` and add individual sensors. Example:
+2. Using *YAML*: (obsolete) add `garbage_collection` integration in your `configuration.yaml` and add individual sensors. Example:
 
-```yaml
-# Example configuration.yaml entry
-garbage_collection:
-  sensors:
-  - name: Waste # Each week on Wednesday
-    frequency: "weekly"
-    collection_days: wed
-  - name: Bio # Each week on Wednesday
-    frequency: "odd-weeks"
-    collection_days: thu
-    first_month: "mar"
-    last_month: "nov"
-  - name: Large Waste
-    frequency: "monthly"
-    collection_days: sat
-    weekday_order_number: 1
-  - name: 'Someone's birthday'
-    frequency: 'annual'
-    date: '11/24'
-```
-For more examples and configuration documentation check the <a href="https://github.com/bruxy70/Garbage-Collection/blob/development/README.md">repository</a> file
+For the configuration documentation check the <a href="https://github.com/bruxy70/Garbage-Collection/blob/development/README.md">repository</a> file
 
 ## STATE AND ATTRIBUTES
 
@@ -66,7 +50,6 @@ If the `verbose_state` parameter is set, it will show date and remaining days, f
 |:----------|------------
 | `next_date` | The date of next collection
 | `days` | Days till the next collection
-| `holidays` | List of used country (showing this year)
 | `last_collection` | Date and time of the last collection
 
 ## Services

@@ -1,0 +1,43 @@
+blueprint:
+  name: Garbage collection offset
+  description: Loop through all calculated dates, offset them by a constant number of days.
+  domain: automation
+  source_url: https://github.com/bruxy70/Garbage-Collection/blob/development/blueprints/garbage_collection_offset.yaml
+  input:
+    garbage_collection_entity:
+      name: Garbage Collection Entity
+      description: Triggered by the event for this entity.
+      selector:
+        entity:
+          integration: garbage_collection
+    offset:
+      name: Offset (number of days)
+      description: >-
+        Offset the collection by given number of days. This can be used 
+        for example to schedule an event for the last Wednesday each month.
+        To do that, configuring it for first Wednesday each month and then offset by -7 days.
+      selector:
+        number:
+          min: -7
+          max: 7
+          mode: box
+mode: parallel
+trigger:
+  - platform: event
+    event_type: garbage_collection_loaded
+    event_data:
+      entity_id: !input garbage_collection_entity
+action:
+  - variables:
+      offset: !input offset
+  - repeat:
+      count: '{{ trigger.event.data.collection_dates | count }}'
+      sequence:
+        - service: garbage_collection.offset_date
+          data:
+            entity_id: "{{ trigger.event.data.entity_id }}"
+            date: '{{ trigger.event.data.collection_dates[repeat.index-1] }}'
+            offset: '{{ offset }}'
+  - service: garbage_collection.update_state
+    data:
+      entity_id: "{{ trigger.event.data.entity_id }}"

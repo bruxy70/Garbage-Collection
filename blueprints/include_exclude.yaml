@@ -1,0 +1,56 @@
+blueprint:
+  name: Include and exclude dates
+  description: >-
+    Remove a collection on provided set of dates. Then, add collection on set of additional collection dates.
+    After updating the list, make sure to trigger sensor update. The sensors are normally updated once a day.
+    The update can be triggered by updating the integration configuration.
+  domain: automation
+  source_url: https://github.com/bruxy70/Garbage-Collection/blob/development/blueprints/include_exclude.yaml
+  input:
+    garbage_collection_entity:
+      name: Garbage Collection Entity
+      description: Triggered by the event for this entity.
+      selector:
+        entity:
+          integration: garbage_collection
+    exclude:
+      name: Set of dates to exclude
+      description: >-
+        List of dates in format yyyy-mm-dd, one date per line
+      selector:
+        text:
+          multiline: true
+    include:
+      name: Set of dates to include
+      description: >-
+        List of dates in format yyyy-mm-dd, one date per line
+      selector:
+        text:
+          multiline: true
+mode: parallel
+trigger:
+  - platform: event
+    event_type: garbage_collection_loaded
+    event_data:
+      entity_id: !input garbage_collection_entity
+action:
+  - variables:
+      exclude: !input exclude
+      include: !input include
+  - repeat:
+      count: "{{ exclude.split('\n') | count }}"
+      sequence:
+        - service: garbage_collection.remove_date
+          data:
+            entity_id: "{{ trigger.event.data.entity_id }}"
+            date: "{{ exclude.split('\n')[repeat.index-1] }}"
+  - repeat:
+      count: "{{ include.split('\n') | count }}"
+      sequence:
+        - service: garbage_collection.add_date
+          data:
+            entity_id: "{{ trigger.event.data.entity_id }}"
+            date: "{{ include.split('\n')[repeat.index-1] }}"
+  - service: garbage_collection.update_state
+    data:
+      entity_id: "{{ trigger.event.data.entity_id }}"
