@@ -245,7 +245,7 @@ async def async_migrate_entry(_, config_entry: ConfigEntry) -> bool:
             if remove in new_data:
                 del new_data[remove]
             if remove in new_options:
-                del new_data[remove]
+                del new_options[remove]
     config_entry.version = 4
     config_entry.data = {**new_data}
     config_entry.options = {**new_options}
