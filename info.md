@@ -26,9 +26,9 @@ The `garbage_collection` component is a Home Assistant custom sensor for schedul
 Look to the <a href="https://github.com/bruxy70/Garbage-Collection">repository</a> for examples of Lovelace configuration.
 
 ## Configuration
-There are 2 ways to configure the integration:
-1. Using *Config Flow*: in `Configuration/Integrations` click on the `+` button, select `Garbage Collection` and configure the sensor (prefered). If you configure Garbage Collection using Config Flow, you can change the entity_name, name and change the sensor parameters from the Integrations configuration. The changes are instant and do not require HA restart.
-2. Using *YAML*: (obsolete) add `garbage_collection` integration in your `configuration.yaml` and add individual sensors. Example:
+Go to `Configuration`/`Devices & Services`, click on the `+ ADD INTEGRATION` button, select `Garbage Collection` and configure the sensor (prefered). If you configure Garbage Collection using Config Flow, you can change the entity_name, name and change the sensor parameters from the Integrations configuration. The changes are instant and do not require HA restart.<br />If you would like to add more than 1 collection schedule, click on the `+ ADD INTEGRATION` button again and add another `Garbage Collection` integration instance.
+
+The configuration via `configuration.yaml` has been deprecated. If you have previously configured the integration there, it will be imported to ConfigFlow and you shoudl remove it.
 
 For the configuration documentation check the <a href="https://github.com/bruxy70/Garbage-Collection/blob/development/README.md">repository</a> file
 
