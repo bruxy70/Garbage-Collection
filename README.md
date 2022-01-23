@@ -86,8 +86,8 @@ The configuration via `configuration.yaml` has been deprecated. If you have prev
 |:----------|----------|------------
 | `first_month` | No | Month three letter abbreviation, e.g. `"jan"`, `"feb"`...<br/>**Default**: `"jan"`
 | `last_month` | No | Month three letter abbreviation.<br/>**Default**: `"dec"`
-| `exclude_dates` | No | List of dates with no collection (using international date format `'yyyy-mm-dd'`. Make sure to enter the date in quotes!
-| `include_dates` | No | List of extra collection (using international date format `'yyyy-mm-dd'`. Make sure to enter the date in quotes!
+| `exclude_dates` | No | (obsolete) List of dates with no collection (using international date format `'yyyy-mm-dd'`. Make sure to enter the date in quotes!<br />This is obsolete feature. Use a [blueprint](#blueprints-for-manual-update) with `manual_update`. 
+| `include_dates` | No | (obsolete) List of extra collection (using international date format `'yyyy-mm-dd'`. Make sure to enter the date in quotes!<br />This is obsolete feature. Use a [blueprint](#blueprints-for-manual-update) with `manual_update`. 
 | `move_country_holidays` | No | (obsolete) Country holidays - the country code (see [holidays](https://github.com/dr-prodigy/python-holidays) for the list of valid country codes).<br/>Automatically move garbage collection on public holidays to the following day.<br/>*Example:* `US`<br />This is obsolete feature. Use a [blueprint](#blueprints-for-manual-update) with `manual_update`. 
 | `holiday_in_week_move` | No | (obsolete) Move garbage collection to the following day if a holiday is in week.<br/>**Default**: `false`<br />This is obsolete feature. Use a [blueprint](#blueprints-for-manual-update) with `manual_update`.
 | `holiday_move_offset` | No | (obsolete) Move the collection by the number of days (integer -7..7) **Default**: 1<br />This is obsolete feature. Use a [blueprint](#blueprints-for-manual-update) with `manual_update`.
