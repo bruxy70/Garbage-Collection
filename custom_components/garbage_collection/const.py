@@ -45,15 +45,6 @@ CONF_FORCE_WEEK_NUMBERS = "force_week_order_numbers"
 CONF_WEEKDAY_ORDER_NUMBER = "weekday_order_number"
 CONF_WEEK_ORDER_NUMBER = "week_order_number"
 CONF_DATE = "date"
-CONF_EXCLUDE_DATES = "exclude_dates"
-CONF_INCLUDE_DATES = "include_dates"
-CONF_MOVE_COUNTRY_HOLIDAYS = "move_country_holidays"
-CONF_HOLIDAY_IN_WEEK_MOVE = "holiday_in_week_move"
-CONF_HOLIDAY_POP_NAMED = "holiday_pop_named"
-CONF_HOLIDAY_MOVE_OFFSET = "holiday_move_offset"
-CONF_PROV = "prov"
-CONF_STATE = "state"
-CONF_OBSERVED = "observed"
 CONF_PERIOD = "period"
 CONF_FIRST_WEEK = "first_week"
 CONF_FIRST_DATE = "first_date"
@@ -138,63 +129,6 @@ MONTH_OPTIONS = [
     "dec",
 ]
 
-COUNTRY_CODES = [
-    "",
-    "AR",
-    "AT",
-    "AU",
-    "AW",
-    "BE",
-    "BG",
-    "BR",
-    "BY",
-    "CA",
-    "CH",
-    "CO",
-    "CZ",
-    "DE",
-    "DK",
-    "DO",
-    "ECB",
-    "EE",
-    "ES",
-    "FI",
-    "FRA",
-    "HR",
-    "HU",
-    "IE",
-    "IND",
-    "IS",
-    "IT",
-    "JP",
-    "KE",
-    "LT",
-    "LU",
-    "MX",
-    "NG",
-    "NI",
-    "NL",
-    "NO",
-    "NZ",
-    "PE",
-    "PL",
-    "PT",
-    "PTE",
-    "RU",
-    "SE",
-    "SI",
-    "SK",
-    "UA",
-    "UK",
-    "US",
-    "ZA",
-    "England",
-    "Wales",
-    "Scotland",
-    "IsleOfMan",
-    "NorthernIreland",
-]
-
 
 def date_text(value: Any) -> str:
     """Have to store date as text - datetime is not JSON serialisable."""
@@ -261,13 +195,6 @@ class configuration(config_singularity):
             "default": DEFAULT_FREQUENCY,
             "type": vol.In(FREQUENCY_OPTIONS),
         },
-        CONF_OFFSET: {
-            "step": 1,
-            "method": vol.Optional,
-            "default": 0,
-            "type": int,
-            "validator": vol.All(vol.Coerce(int), vol.Range(min=-31, max=31)),
-        },
         CONF_ICON_NORMAL: {
             "step": 1,
             "method": vol.Optional,
@@ -315,18 +242,6 @@ class configuration(config_singularity):
             "default": DEFAULT_DATE_FORMAT,
             "type": str,
             "validator": cv.string,
-        },
-        CONF_INCLUDE_DATES: {
-            "step": 1,
-            "method": vol.Optional,
-            "type": str,
-            "validator": vol.All(cv.ensure_list, [date_text]),
-        },
-        CONF_EXCLUDE_DATES: {
-            "step": 1,
-            "method": vol.Optional,
-            "type": str,
-            "validator": vol.All(cv.ensure_list, [date_text]),
         },
         CONF_DATE: {
             "step": 2,
@@ -403,57 +318,6 @@ class configuration(config_singularity):
             "method": vol.Optional,
             "type": str,
             "validator": date_text,
-        },
-        CONF_MOVE_COUNTRY_HOLIDAYS: {
-            "step": 4,
-            "valid_for": lambda f: f in EXCEPT_ANNUAL_GROUP,
-            "method": vol.Optional,
-            "type": vol.In(COUNTRY_CODES),
-        },
-        CONF_HOLIDAY_MOVE_OFFSET: {
-            "step": 4,
-            "valid_for": lambda f: f in EXCEPT_ANNUAL_GROUP_BLANK,
-            "default": 1,
-            "method": vol.Optional,
-            "type": int,
-            "validator": vol.All(vol.Coerce(int), vol.Range(min=-7, max=7)),
-        },
-        CONF_HOLIDAY_POP_NAMED: {
-            "step": 4,
-            "valid_for": lambda f: f in EXCEPT_ANNUAL_GROUP,
-            "method": vol.Optional,
-            "type": str,
-            "validator": vol.All(cv.ensure_list, [str]),
-        },
-        CONF_HOLIDAY_IN_WEEK_MOVE: {
-            "step": 4,
-            "valid_for": lambda f: f in EXCEPT_ANNUAL_GROUP_BLANK,
-            "method": vol.Optional,
-            "default": DEFAULT_HOLIDAY_IN_WEEK_MOVE,
-            "type": bool,
-            "validator": cv.boolean,
-        },
-        CONF_PROV: {
-            "step": 4,
-            "valid_for": lambda f: f in EXCEPT_ANNUAL_GROUP,
-            "method": vol.Optional,
-            "type": str,
-            "validator": cv.string,
-        },
-        CONF_STATE: {
-            "step": 4,
-            "valid_for": lambda f: f in EXCEPT_ANNUAL_GROUP,
-            "method": vol.Optional,
-            "type": str,
-            "validator": cv.string,
-        },
-        CONF_OBSERVED: {
-            "step": 4,
-            "valid_for": lambda f: f in EXCEPT_ANNUAL_GROUP,
-            "method": vol.Optional,
-            "default": True,
-            "type": bool,
-            "validator": cv.boolean,
         },
     }
 
