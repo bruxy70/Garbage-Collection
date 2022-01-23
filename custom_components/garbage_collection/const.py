@@ -129,6 +129,7 @@ MONTH_OPTIONS = [
     "dec",
 ]
 
+
 def date_text(value: Any) -> str:
     """Have to store date as text - datetime is not JSON serialisable."""
     if value is None or value == "":
