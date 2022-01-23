@@ -4,14 +4,14 @@
 
 # Garbage Collection
 
-The `garbage_collection` componnent is a Home Assistant integration that creates a custom sensor for monitoring regular garbage collection schedule. The sensor can be configured for number of different schedules:
+The `garbage_collection` component is a Home Assistant integration that creates a custom sensor for monitoring a regular garbage collection schedule. The sensor can be configured for a number of different patterns:
 - `weekly` schedule (including multiple collection days, e.g. on Tuesday and Thursday)
-- `every-n-weeks` repeats every `period` of weeks, starting from the week number `first_week`. It uses the week number - it therefore restarts each year, as the week numbers start again from 1.
+- `every-n-weeks` repeats every `period` of weeks, starting from the week number `first_week`. It uses the week number - therefore, it restarts each year, as the weeks start from number 1 each year.
 - bi-weekly in `even-weeks` or `odd-weeks` (technically, it is the same as every 2 weeks with 1<sup>st</sup> or 2<sup>nd</sup> `first_week`)
-- `every-n-days` (repeats regularly from the given first date). If n is multiply of 7, it works similar to `every-n-weeks`, with the difference that it does not use the week numbers (that restart each year) but continues infinitely from the initial date.
+- `every-n-days` (repeats regularly from the given first date). If n is a multiply of 7, it works similar to `every-n-weeks`, with the difference that it does not use the week numbers (that restart each year) but continues infinitely from the initial date.
 - `monthly` schedule (n<sup>th</sup> weekday each month), or a specific weekday of each n<sup>th</sup> week. Using the `period` it could also be every 2<sup>nd</sup>, 3<sup>rd</sup> etc month.
-- `annually` (e.g. birthdays). This is once per year. Using include dates you can add additional dates manually.
-- `blank` does not automatically schedule any collections - in case you want make completely own schedule with `manual_update`.
+- `annually` (e.g. birthdays). This is once per year. Using include dates, you can add additional dates manually.
+- `blank` does not automatically schedule any collections - to be used in cases where you want to make completely own schedule with `manual_update`.
 
 
 You can also configure seasonal calendars (e.g. for bio-waste collection), by configuring the first and last month. 
@@ -59,9 +59,9 @@ These are some examples using this sensor. The Lovelace config examples are incl
 
 ## Configuration
 
-Go to `Configuration`/`Devices & Services`, click on the `+ ADD INTEGRATION` button, select `Garbage Collection` and configure the sensor (prefered). If you configure Garbage Collection using Config Flow, you can change the entity_name, name and change the sensor parameters from the Integrations configuration. The changes are instant and do not require HA restart.<br />If you would like to add more than 1 collection schedule, click on the `+ ADD INTEGRATION` button again and add another `Garbage Collection` integration instance.
+Go to `Configuration`/`Devices & Services`, click on the `+ ADD INTEGRATION` button, select `Garbage Collection` and configure the integration.<br />If you would like to add more than one collection schedule, click on the `+ ADD INTEGRATION` button again and add another `Garbage Collection` integration instance.
 
-The configuration via `configuration.yaml` has been deprecated. If you have previously configured the integration there, it will be imported to ConfigFlow and you shoudl remove it.
+The configuration via `configuration.yaml` has been deprecated. If you have previously configured the integration there, it will be imported to ConfigFlow, and you should remove it.
 
 ### CONFIGURATION PARAMETERS
 #### SENSOR PARAMETERS
@@ -97,14 +97,14 @@ The configuration via `configuration.yaml` has been deprecated. If you have prev
 |Parameter |Required|Description
 |:----------|----------|------------
 |`period` | No | Collection every `"period"` weeks (integer 1-53)<br/>**Default**: 1
-|`first_week` | No | First collection on the `"first_week"` week (integer 1-53)<br/>**Default**: 1<br/>*(The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representatio of the week)<br/><br/>Note: This parameter cannot be used to set the beginning of the collection period (use the `first_month` parameter for that). The purpose of `first_week` is to simply 'offset' the week number, so that the collection every n weeks does not always trigger on week numbers that are multiply of n. Technically, the value of this parameter shall be less than `period`, otherwise it will give weird results. Also note that the week numbers restart each year. Use `every-n-days` frequency if you need consistent period across the year ends.*
+|`first_week` | No | First collection on the `"first_week"` week (integer 1-53)<br/>**Default**: 1<br/>*(The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representation of the week)<br/><br/>Note: This parameter cannot be used to set the beginning of the collection period (use the `first_month` parameter for that). The purpose of `first_week` is to simply 'offset' the week number, so the collection every ;'n' weeks does not always trigger on week numbers that are multiplication of 'n'. Technically, the value of this parameter shall be less than `period`, otherwise it will give weird results. Also note, that the week numbers restart each year. Use `every-n-days` frequency if you need a consistent period across the year ends.*
 
 
 #### PARAMETERS FOR COLLECTION EVERY-N-DAYS
 |Parameter |Required|Description
 |:----------|----------|------------
-|`first_date` | Yes | Repeats every n days from this first date<br>(date in the international ISO format `'yyyy-mm-dd'`).
-|`period` | No | Collection every `"period"` days (warning - in this configuration it is days, not weeks!)<br/>**Default**: 1 (daily, which makes no sense I suppose)
+|`first_date` | Yes | Repeats every n days from this first date<br/>(date in the international ISO format `'yyyy-mm-dd'`).
+|`period` | No | Collection every `"period"` days (warning - in this configuration, it is days, not weeks!)<br/>**Default**: 1 (daily, which makes no sense I suppose)
 
 
 #### PARAMETERS FOR MONTHLY COLLECTION
@@ -121,15 +121,15 @@ The monthly schedule has two flavors: it can trigger either on the **n<sup>th</s
 #### PARAMETERS FOR ANNUAL COLLECTION
 |Parameter |Required|Description
 |:----------|----------|------------
-|`date` | Yes | Date of the collection using format `'mm/dd'` (e.g. '11/24' for November 24 each year)
+|`date` | Yes | The date of collection, in format `'mm/dd'` (e.g. '11/24' for November 24 each year)
 
 #### PARAMETERS FOR GROUP
 |Parameter |Required|Description
 |:----------|----------|------------
-|`entities` | Yes | List of `entity_id`s to merge
+|`entities` | Yes | A list of `entity_id`s to merge
 
 
-**IMPORTANT - put include/exclude dates within quotes. Dates without quotes might cause Home Assistant not loading configuration when starting - in case the date is invalid. Validation for dates within quotes works fine.** I think this is general bug, I am addressing that. (See the example above)
+**IMPORTANT - put include/exclude dates within quotes. Dates without quotes might cause Home Assistant not loading configuration when starting - in case the date is invalid. Validation for dates within quotes works fine.** I think this is a general bug, I am addressing that. (See the example above)
 
 ## Blueprints for Manual Update
 
@@ -139,15 +139,15 @@ The monthly schedule has two flavors: it can trigger either on the **n<sup>th</s
 3. From the **blueprint**, create and configure the automation
 
 ### Public Holidays
-There are couple of **blueprints** that automatically move collections if they fall on public holiday, or if there was a public holiday earlier in the week.
+There are a couple of **blueprints**, automatically moving the collection falling on a public holiday. Or if there was a public holiday in the week before the scheduled collection.
 
 The Public Holidays **blueprints** use a separate custom integration **Holidays**, available through **HACS**, that you can configure for different countries. 
 
 [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fmove_on_holiday.yaml) Move on Holiday
 
-[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fholiday_in_week.yaml)  Move forward when Holiday in the week
+[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fholiday_in_week.yaml)  Move forward when a holiday was in the week
 
-[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fskip_holiday.yaml)  Skip holiday
+[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fskip_holiday.yaml)  Skip the holiday
 
 ### Include and Exclude
 A list of fixed dates to include and exclude from the calculated schedule.
@@ -159,12 +159,12 @@ A list of fixed dates to include and exclude from the calculated schedule.
 [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fexclude.yaml)  Exclude
 
 ### Offset
-The offset blueprint will move the calculated collections by a number of days. This can be used for example to schedule collection for last Saturday each month - just set the collection to the first Saturday each month and offset it by -7 days.
+The offset blueprint will move the calculated collections by a number of days. This can be used, for example, to schedule collection for last Saturday each month - just set the collection to the first Saturday each month and offset it by -7 days.
 
 [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fgarbage_collection_offset.yaml)
 
 ### Import txt
-This **blueprint** requires a `command_line` sensor reading content of a txt file, containg a set of dates, one per line.
+This **blueprint** requires a `command_line` sensor reading content of a txt file, containig a set of dates, one per line.
 
 [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fimport_txt.yaml)
 
@@ -179,14 +179,14 @@ The state can be one of
 | `1` | Collection is tomorrow
 | `2` | Collection is later 
 
-If the `verbose_state` parameter is set, it will show date and remaining days, for example "Today" or "Tomorrow" or "on 10-Sep-2019, in 2 days" (configurable)
+If the `verbose_state` parameter is set, it will show the date, and the remaining days. For example: "Today" or "Tomorrow" or "on 10-Sep-2019, in 2 days" (configurable)
 
 ### Attributes
 | Attribute | Description
 |:----------|------------
 | `next_date` | The date of next collection
 | `days` | Days till the next collection
-| `last_collection` | Date and time of the last collection
+| `last_collection` | The date and time of the last collection
 
 
 ## Services
@@ -201,18 +201,18 @@ It will set the `last_collection` attribute to the current date and time.
 ## Manual update
 There are standard [blueprints](#blueprints-for-manual-update) provided to handle manual updates - to move collection on public holidays or offset the collection.
 
-If these **blueprints** do not work for you, you can create own custom rules to handle any scenario. If you do so, please share the blueprints with the others by posting them to the [blueprints directory](https://github.com/bruxy70/Garbage-Collection/tree/development/blueprints) - someone else might find them useful. Thanks! 
-To help you creating custom automations, see the following examples:
+If these **blueprints** do not work for you, you can create your own custom rules to handle any scenario. If you do so, please share the blueprints with the others by posting them to the [blueprints directory](https://github.com/bruxy70/Garbage-Collection/tree/development/blueprints) - someone else might find them useful. Thanks! 
+To help you with creating custom automations, see the following examples:
 
 ## _!!! Advanced !!! If you think this is too complicated, then this is not for you!!!_
 <details>
 
 ## Services used for `manual_update`
-The following services are used within automations triggered by the [garbage_collection_loaded](#garbage_collection_loaded) event. Do not use them anywhere else, it won't work. For the examples of their use, see the [examples](#manual-update-examples)
+The following services are used within automations, triggered by the [garbage_collection_loaded](#garbage_collection_loaded) event. Don't use them anywhere else, it won't work. For the examples of their use, see the [examples](#manual-update-examples)
 
 ### `garbage_collection.add_date`
-Add a date to the list of dates calculated automatically. To add multiple dates, call this service multiple times with different dates.
-Note that this date will be removed on the next sensor update when data is re-calculated and loaded. This is why this service should be called from the automation triggered be the event `garbage_collection_loaded`, that is called each time the sensor is updated. And at the end of this automation you need to call the `garbage_collection.update_state` service to update the sensor state based on automatically collected dates with the dates added, removed or offset by the automation.
+Add a date to the list of dates calculated automatically. To add multiple dates, call this service multiple-times with different dates.
+Note that this date will be removed on the next sensor update, when the data is re-calculated and loaded. This is why, this service should be called from the automation triggered by the event `garbage_collection_loaded`. This event is called each time the sensor is updated. And at the end of this automation, you need to call the `garbage_collection.update_state` service to update the sensor state based on automatically collected dates, and the dates added, removed, or offset by the automation.
 
 | Attribute | Description
 |:----------|------------
@@ -220,8 +220,8 @@ Note that this date will be removed on the next sensor update when data is re-ca
 | `date` | The date to be added, in ISO format (`'yyyy-mm-dd'`). Make sure to enter the date in quotes!
 
 ### `garbage_collection.remove_date`
-Remove a date to the list of dates calculated automatically. To remove multiple dates, call this service multiple times with different dates.
-Note that this date will reappear on the next sensor update when data is re-calculated and loaded. This is why this service should be called from the automation triggered be the event `garbage_collection_loaded`, that is called each time the sensor is updated. And at the end of this automation you need to call the `garbage_collection.update_state` service to update the sensor state based on automatically collected dates with the dates added, removed or offset by the automation.
+Remove a date to the list of dates calculated automatically. To remove multiple dates, call this service multiple-times with different dates.
+Note that this date will be removed on the next sensor update, when the data is re-calculated and loaded. This is why, this service should be called from the automation triggered by the event `garbage_collection_loaded`. This event is called each time the sensor is updated. And at the end of this automation, you need to call the `garbage_collection.update_state` service to update the sensor state based on automatically collected dates, and the dates added, removed, or offset by the automation.
 
 | Attribute | Description
 |:----------|------------
@@ -230,7 +230,7 @@ Note that this date will reappear on the next sensor update when data is re-calc
 
 ### `garbage_collection.offset_date`
 Offset the calculated collection day by the `offset` number of days.
-Note that this offset will revert back on the next sensor update when data is re-calculated and loaded. This is why this service should be called from the automation triggered be the event `garbage_collection_loaded`, that is called each time the sensor is updated. And at the end of this automation you need to call the `garbage_collection.update_state` service to update the sensor state based on automatically collected dates with the dates added,  removed or offset by the automation.
+Note that this date will be removed on the next sensor update, when the data is re-calculated and loaded. This is why, this service should be called from the automation triggered by the event `garbage_collection_loaded`. This event is called each time the sensor is updated. And at the end of this automation, you need to call the `garbage_collection.update_state` service to update the sensor state based on automatically collected dates, and the dates added, removed, or offset by the automation.
 
 | Attribute | Description
 |:----------|------------
@@ -258,8 +258,8 @@ Event data:
 ## Manual update examples
 For the example below, the entity should be configured with `manual_update` set to `true`.
 Then, when the `garbage_collection` entity is updated (normally once a day at midnight, or restart, or when triggering entity update by script), it will calculate the collection schedule for previous, current and next year. But it will **NOT UPDATE** the entity state. 
-Instead, it will trigger an event `garbage_collection_loaded` with list of automatically calculated dates as a parameter. 
-You will **have to create an automation triggered by this event**. In this automation you will need to call the service `garbage_collection.update_state` to update the state. Before that, you can call the servics `garbage_collection.add_date` and/or `garbage_collection.remove_date` and/or `garbage_collection.offset_date` to programatically tweak the dates in whatever way you need (e.g. based on values from external API sensor, comparing the dates with list of holidays, calculating custom offsets based on the day of the week etc.). This is complicated, but gives you an ultimate flexibility.
+Instead, it will trigger an event `garbage_collection_loaded` with a list of automatically calculated dates as a parameter. 
+You will **have to create an automation triggered by this event**. In this automation, you will need to call the service `garbage_collection.update_state` to update the state. Before that, you can call the services `garbage_collection.add_date` and/or `garbage_collection.remove_date` and/or `garbage_collection.offset_date` to programmatically tweak the dates in whatever way you need (e.g. based on values from external API sensor, comparing the dates with the list of holidays, calculating custom offsets based on the day of the week etc.). This is complicated but gives you the ultimate flexibility.
 
 ## Simple example
 Adding an extra collection date (a fixed date in this case) - for the entity `sensor.test`.
@@ -285,7 +285,7 @@ mode: single
 ```
 
 ## Moderate example
-This will loop through the calculated dates, and add extra collection to a day after each calculated one. So if this is set for a collection each first Wednesday each month, it will result in a collection on first Wednesday, and the following day (kind of first Thursday, except if the week is starting on Thursday - just a random weird example :).
+This will loop through the calculated dates, and add an extra collection to a day after each calculated one. So if this is set for a collection every first Wednesday each month, it will result in a collection on the first Wednesday, and the following day (kind of first Thursday, except if the week is starting on Thursday - just a random weird example :).
 
 This example is for an entity `sensor.test`. If you want to use it for yours, replace it with the real entity name in the trigger.
 
@@ -313,15 +313,14 @@ mode: single
 ```
 
 ## Advanced example
-This is an equivalent of "holiday in week" move - checking if there is a public holiday on the calculated collection day, or in the same day before, and if yes, moving the collection by one day. This is fully custom logic, so it could be further complicated by whatever rules anyone wants.
-Note that this does not disable the current holiday exception handling in the integration - so if you have also configured that to move the collection, it will move it one more day. So if you want to use, configure the `offset` to `0` (so that the integration movves the holiday by "zero" days). Or you can configure the calendar on another entity - the automation is really using them to check the list of the dates - the list could be anywhere, does not even have to be a garbage_collection entity.
+This is an equivalent of "holiday in week" move - checking if there is a public holiday on the calculated collection day, or earlier in the week. And if yes, moving the collection by one day. This is fully custom logic, so it could be further complicated by whatever rules anyone wants.
 
-This example is for an entity `sensor.test`. If you want to use it for yours, replace it with the real entity name in the trigger.
+This example is for an entity `sensor.test`. If you want to use it for yours, replace it with a real entity name in the trigger.
 
 ```yaml
 alias: test garbage_collection event
 description: >-
-  Loop through all calculated dates, move the collection by 1 day if public holiday was in the week before or on the calculated collection date calculate one
+  Loop through all calculated dates, move the collection by 1 day if a public holiday was in the week before or on the calculated collection date calculate one
 trigger:
   - platform: event
     event_type: garbage_collection_loaded
@@ -353,7 +352,7 @@ action:
 mode: single
 ```
 
-Or you can use the [blueprints](#blueprints-for-manual-update) I made for you. And you are welcome to create your own and share with the others.
+Or you can use the [blueprints](#blueprints-for-manual-update) I made for you. And you are welcome to create your own and share with others.
 </details>
 
 # Lovelace config examples
@@ -361,17 +360,17 @@ For information/inspiration - not supported.
 <details>
 
 ## Garbage Collection custom card
-You can use the custom  [garbage collection card](https://github.com/amaximus/garbage-collection-card) developped by @amaximus.
+You can use the custom  [garbage collection card](https://github.com/amaximus/garbage-collection-card) developed by @amaximus.
 
 <img src="https://github.com/amaximus/garbage-collection-card/blob/master/garbage_collection_lovelace.jpg">
 
 
 ## With images (picture-entity)
-This is what I use (I like images). I use a horizontal stack of picture-entities, with `card-templater` plugin ([Lovelace Card Templater](https://github.com/gadgetchnnel/lovelace-card-templater)) to show number of days:
+This is what I use (I like images). I use a horizontal stack of picture-entities, with `card-templater` plugin ([Lovelace Card Templater](https://github.com/gadgetchnnel/lovelace-card-templater)) to show the number of days:
 
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/picture-entity.png">
 
-(The `state` is designed to be used like traffic lights, this is why it has 3 values. You obviously cannot use this with `verbose_state`)
+(The `state` is designed to be used as traffic lights. That's why it has 3 values. You obviously cannot use this with `verbose_state`)
 
 This is the configuration
 ```yaml
@@ -392,7 +391,7 @@ This is the configuration
 ```
 
 ## List view (entities)
-The simplest visualisation is to use entities. In this case, I use `verbose_state` to show `state` as text.
+The simplest visualization is to use entities. In this case, I use `verbose_state` to show `state` as text.
 
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/entities.png">
 
