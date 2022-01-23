@@ -63,7 +63,8 @@ OFFSET_DATE_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_ENTITY_ID): vol.All(cv.ensure_list, [cv.string]),
         vol.Required(CONF_DATE): cv.date,
-        vol.Required(CONF_OFFSET): cv.date,
+        vol.Required(CONF_OFFSET): vol.All(vol.Coerce(int), vol.Range(min=-31, max=31)),
+
     }
 )
 
