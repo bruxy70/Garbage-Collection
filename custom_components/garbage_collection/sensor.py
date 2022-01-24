@@ -53,6 +53,7 @@ SCAN_INTERVAL = timedelta(seconds=10)
 THROTTLE_INTERVAL = timedelta(seconds=60)
 
 
+# Do I still need this?
 async def async_setup_platform(hass, _, async_add_entities, discovery_info=None):
     """Create garbage collection entities defined in YAML and add them to HA."""
     async_add_entities([GarbageCollection(hass, discovery_info)], True)
@@ -65,29 +66,27 @@ async def async_setup_entry(hass, config_entry, async_add_devices):
     )
 
 
-def nth_week_date(
-    n: int, date_of_month: date, collection_day: int
-) -> date:  # pylint: disable=invalid-name
+def nth_week_date(week_number: int, date_of_month: date, collection_day: int) -> date:
     """Find weekday in the nth week of the month."""
     first_of_month = date(date_of_month.year, date_of_month.month, 1)
     return first_of_month + relativedelta(
-        days=collection_day - first_of_month.weekday() + (n - 1) * 7
+        days=collection_day - first_of_month.weekday() + (week_number - 1) * 7
     )
 
 
 def nth_weekday_date(
-    n: int, date_of_month: date, collection_day: int
-) -> date:  # pylint: disable=invalid-name
+    weekday_number: int, date_of_month: date, collection_day: int
+) -> date:
     """Find nth weekday of the month."""
     first_of_month = date(date_of_month.year, date_of_month.month, 1)
     # 1st of the month is before the day of collection
     # (so 1st collection week the week when month starts)
     if collection_day >= first_of_month.weekday():
         return first_of_month + relativedelta(
-            days=collection_day - first_of_month.weekday() + (n - 1) * 7
+            days=collection_day - first_of_month.weekday() + (weekday_number - 1) * 7
         )
     return first_of_month + relativedelta(
-        days=7 - first_of_month.weekday() + collection_day + (n - 1) * 7
+        days=7 - first_of_month.weekday() + collection_day + (weekday_number - 1) * 7
     )
 
 
@@ -417,11 +416,11 @@ class GarbageCollection(RestoreEntity):
             try:
                 for entity_id in self._entities:
                     entity = self.hass.data[DOMAIN][SENSOR_PLATFORM][entity_id]
-                    d = await entity.async_next_date(
-                        day1
-                    )  # pylint: disable=invalid-name
-                    if d is not None and (candidate_date is None or d < candidate_date):
-                        candidate_date = d
+                    next_date = await entity.async_next_date(day1)
+                    if next_date is not None and (
+                        candidate_date is None or next_date < candidate_date
+                    ):
+                        candidate_date = next_date
             except KeyError as error:
                 raise ValueError from error
             except TypeError as error:
@@ -541,18 +540,16 @@ class GarbageCollection(RestoreEntity):
 
         self._collection_dates.clear()
         try:
-            d = await self._async_find_next_date(
-                start_date
-            )  # pylint: disable=invalid-name
+            next_date = await self._async_find_next_date(start_date)
         except asyncio.TimeoutError:
             _LOGGER.error("(%s) Timeout loading collection dates", self._name)
             return
 
-        while d is not None and d >= start_date and d <= end_date:
-            self._collection_dates.append(d)
-            d = await self._async_find_next_date(
-                d + timedelta(days=1)
-            )  # pylint: disable=invalid-name
+        while (
+            next_date is not None and next_date >= start_date and next_date <= end_date
+        ):
+            self._collection_dates.append(next_date)
+            next_date = await self._async_find_next_date(next_date + timedelta(days=1))
         self._collection_dates.sort()
 
     async def add_date(self, collection_date: date) -> None:
