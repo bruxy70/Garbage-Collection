@@ -5,7 +5,7 @@ from datetime import date, datetime, time, timedelta
 from typing import Any, List, Optional
 
 import homeassistant.util.dt as dt_util
-from dateutil.parser import parse
+from dateutil.parser import parse, ParserError
 from dateutil.relativedelta import relativedelta
 from homeassistant.const import ATTR_HIDDEN, CONF_ENTITIES, CONF_NAME, WEEKDAYS
 from homeassistant.helpers.discovery import async_load_platform
@@ -65,7 +65,9 @@ async def async_setup_entry(hass, config_entry, async_add_devices):
     )
 
 
-def nth_week_date(n: int, date_of_month: date, collection_day: int) -> date:
+def nth_week_date(
+    n: int, date_of_month: date, collection_day: int
+) -> date:  # pylint: disable=invalid-name
     """Find weekday in the nth week of the month."""
     first_of_month = date(date_of_month.year, date_of_month.month, 1)
     return first_of_month + relativedelta(
@@ -73,7 +75,9 @@ def nth_week_date(n: int, date_of_month: date, collection_day: int) -> date:
     )
 
 
-def nth_weekday_date(n: int, date_of_month: date, collection_day: int) -> date:
+def nth_weekday_date(
+    n: int, date_of_month: date, collection_day: int
+) -> date:  # pylint: disable=invalid-name
     """Find nth weekday of the month."""
     first_of_month = date(date_of_month.year, date_of_month.month, 1)
     # 1st of the month is before the day of collection
@@ -102,7 +106,7 @@ def parse_datetime(text: str) -> Optional[datetime]:
     """Parse text to datetime object."""
     try:
         return parse(text)
-    except Exception:
+    except ParserError:
         return None
 
 
@@ -110,7 +114,7 @@ def parse_date(text: str) -> Optional[date]:
     """Parse text to date object."""
     try:
         return parse(text).date()
-    except Exception:
+    except (ParserError, AttributeError):
         return None
 
 
@@ -139,7 +143,7 @@ def dates_to_texts(dates: List[date]) -> List[str]:
 class GarbageCollection(RestoreEntity):
     """GarbageCollection Sensor class."""
 
-    def __init__(self, hass, config, title=None):
+    def __init__(self, _, config, title=None):
         """Read configuration and initialise class variables."""
         self.config = config
         self._name = title if title is not None else config.get(CONF_NAME)
@@ -378,11 +382,11 @@ class GarbageCollection(RestoreEntity):
                 if (day1 - self._first_date).days % self._period == 0:
                     return day1
                 offset = self._period - ((day1 - self._first_date).days % self._period)
-            except TypeError:
+            except TypeError as error:
                 raise ValueError(
                     f"({self._name}) Please configure first_date and period "
                     "for every-n-days collection frequency."
-                )
+                ) from error
             return day1 + relativedelta(days=offset)
         elif self._frequency == "monthly":
             # Monthly
@@ -399,11 +403,11 @@ class GarbageCollection(RestoreEntity):
             # Annual
             try:
                 conf_date = datetime.strptime(self._date, "%m/%d").date()
-            except TypeError:
+            except TypeError as error:
                 raise ValueError(
                     f"({self._name}) Please configure the date "
                     "for annual collection frequency."
-                )
+                ) from error
             candidate_date = date(year, conf_date.month, conf_date.day)
             if candidate_date < day1:
                 candidate_date = date(year + 1, conf_date.month, conf_date.day)
@@ -413,14 +417,16 @@ class GarbageCollection(RestoreEntity):
             try:
                 for entity_id in self._entities:
                     entity = self.hass.data[DOMAIN][SENSOR_PLATFORM][entity_id]
-                    d = await entity.async_next_date(day1)
+                    d = await entity.async_next_date(
+                        day1
+                    )  # pylint: disable=invalid-name
                     if d is not None and (candidate_date is None or d < candidate_date):
                         candidate_date = d
-            except KeyError:
-                raise ValueError
-            except TypeError:
+            except KeyError as error:
+                raise ValueError from error
+            except TypeError as error:
                 _LOGGER.error("(%s) Please add entities for the group.", self._name)
-                raise ValueError
+                raise ValueError from error
             return candidate_date
         _LOGGER.error("(%s) Unknown frequency %s", self._name, self._frequency)
         raise ValueError
@@ -535,14 +541,18 @@ class GarbageCollection(RestoreEntity):
 
         self._collection_dates.clear()
         try:
-            d = await self._async_find_next_date(start_date)
+            d = await self._async_find_next_date(
+                start_date
+            )  # pylint: disable=invalid-name
         except asyncio.TimeoutError:
             _LOGGER.error("(%s) Timeout loading collection dates", self._name)
             return
 
         while d is not None and d >= start_date and d <= end_date:
             self._collection_dates.append(d)
-            d = await self._async_find_next_date(d + timedelta(days=1))
+            d = await self._async_find_next_date(
+                d + timedelta(days=1)
+            )  # pylint: disable=invalid-name
         self._collection_dates.sort()
 
     async def add_date(self, collection_date: date) -> None:
@@ -562,7 +572,7 @@ class GarbageCollection(RestoreEntity):
     ) -> Optional[date]:
         """Get next date from self._collection_dates."""
         now = dt_util.now()
-        for d in self._collection_dates:
+        for d in self._collection_dates:  # pylint: disable=invalid-name
             if d < first_date:
                 continue
             if not ignore_today and d == now.date():

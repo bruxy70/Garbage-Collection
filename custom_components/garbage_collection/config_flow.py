@@ -341,13 +341,7 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
         return EmptyOptions(config_entry)
 
 
-"""
-
-
-O P T I O N S   F L O W
-
-
-"""
+# O P T I O N S   F L O W
 
 
 class OptionsFlowHandler(config_entries.OptionsFlow):
