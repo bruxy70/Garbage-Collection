@@ -335,6 +335,57 @@ class GarbageCollection(RestoreEntity):
             WEEKDAYS.index(self._collection_days[0]),
         )
 
+    async def _async_weekly_candidate(
+        self, day1: date, period: int, first_week: int
+    ) -> date:
+        """Calculate possible date, for weekly frequency."""
+        week = day1.isocalendar()[1]
+        weekday = day1.weekday()
+        offset = -1
+        if (week - first_week) % period == 0:  # Collection this week
+            for day_name in self._collection_days:
+                day_index = WEEKDAYS.index(day_name)
+                if day_index >= weekday:  # Collection still did not happen
+                    offset = day_index - weekday
+                    break
+        iterate_by_week = 7 - weekday + WEEKDAYS.index(self._collection_days[0])
+        while offset == -1:  # look in following weeks
+            candidate = day1 + relativedelta(days=iterate_by_week)
+            week = candidate.isocalendar()[1]
+            if (week - first_week) % period == 0:
+                offset = iterate_by_week
+                break
+            iterate_by_week += 7
+        return day1 + relativedelta(days=offset)
+
+    async def _async_daily_candidate(self, day1: date) -> date:
+        """Calculate possible date, for every-n-days frequency."""
+        try:
+            if (day1 - self._first_date).days % self._period == 0:
+                return day1
+            offset = self._period - ((day1 - self._first_date).days % self._period)
+        except TypeError as error:
+            raise ValueError(
+                f"({self._name}) Please configure first_date and period "
+                "for every-n-days collection frequency."
+            ) from error
+        return day1 + relativedelta(days=offset)
+
+    async def _async_annual_candidate(self, day1: date) -> date:
+        """Calculate possible date, for annual frequency."""
+        year = day1.year
+        try:
+            conf_date = datetime.strptime(self._date, "%m/%d").date()
+        except TypeError as error:
+            raise ValueError(
+                f"({self._name}) Please configure the date "
+                "for annual collection frequency."
+            ) from error
+        candidate_date = date(year, conf_date.month, conf_date.day)
+        if candidate_date < day1:
+            candidate_date = date(year + 1, conf_date.month, conf_date.day)
+        return candidate_date
+
     async def _async_find_candidate_date(self, day1: date):
         """Find the next possible date starting from day1.
 
@@ -342,12 +393,8 @@ class GarbageCollection(RestoreEntity):
         """
         if self._frequency == "blank":
             return None
-        week = day1.isocalendar()[1]
-        weekday = day1.weekday()
-        year = day1.year
         if self._frequency in ["weekly", "even-weeks", "odd-weeks", "every-n-weeks"]:
-            # Everything except montthly
-            # convert to every-n-weeks
+            # convert weekly and even/odd weeks to every-n-weeks
             if self._frequency == "weekly":
                 period = 1
                 first_week = 1
@@ -360,35 +407,10 @@ class GarbageCollection(RestoreEntity):
             else:
                 period = self._period
                 first_week = self._first_week
-            offset = -1
-            if (week - first_week) % period == 0:  # Collection this week
-                for day_name in self._collection_days:
-                    day_index = WEEKDAYS.index(day_name)
-                    if day_index >= weekday:  # Collection still did not happen
-                        offset = day_index - weekday
-                        break
-            iterate_by_week = 7 - weekday + WEEKDAYS.index(self._collection_days[0])
-            while offset == -1:  # look in following weeks
-                candidate = day1 + relativedelta(days=iterate_by_week)
-                week = candidate.isocalendar()[1]
-                if (week - first_week) % period == 0:
-                    offset = iterate_by_week
-                    break
-                iterate_by_week += 7
-            return day1 + relativedelta(days=offset)
+            return await self._async_weekly_candidate(day1, period, first_week)
         elif self._frequency == "every-n-days":
-            try:
-                if (day1 - self._first_date).days % self._period == 0:
-                    return day1
-                offset = self._period - ((day1 - self._first_date).days % self._period)
-            except TypeError as error:
-                raise ValueError(
-                    f"({self._name}) Please configure first_date and period "
-                    "for every-n-days collection frequency."
-                ) from error
-            return day1 + relativedelta(days=offset)
+            return await self._async_daily_candidate(day1)
         elif self._frequency == "monthly":
-            # Monthly
             if self._period is None or self._period == 1:
                 return await self._async_monthly_candidate(day1)
             else:
@@ -399,18 +421,7 @@ class GarbageCollection(RestoreEntity):
                     )
                 return candidate_date
         elif self._frequency == "annual":
-            # Annual
-            try:
-                conf_date = datetime.strptime(self._date, "%m/%d").date()
-            except TypeError as error:
-                raise ValueError(
-                    f"({self._name}) Please configure the date "
-                    "for annual collection frequency."
-                ) from error
-            candidate_date = date(year, conf_date.month, conf_date.day)
-            if candidate_date < day1:
-                candidate_date = date(year + 1, conf_date.month, conf_date.day)
-            return candidate_date
+            return await self._async_annual_candidate(day1)
         elif self._frequency == "group":
             candidate_date = None  # type: ignore
             try:
