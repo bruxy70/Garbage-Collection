@@ -79,7 +79,7 @@ async def async_setup(hass, config):
             try:
                 entity = hass.data[DOMAIN][SENSOR_PLATFORM][entity_id]
                 await entity.add_date(collection_date)
-            except Exception as err:
+            except KeyError as err:
                 _LOGGER.error("Failed adding date for %s - %s", entity_id, err)
 
     async def handle_remove_date(call):
@@ -90,7 +90,7 @@ async def async_setup(hass, config):
             try:
                 entity = hass.data[DOMAIN][SENSOR_PLATFORM][entity_id]
                 await entity.remove_date(collection_date)
-            except Exception as err:
+            except KeyError as err:
                 _LOGGER.error("Failed removing date for %s - %s", entity_id, err)
 
     async def handle_offset_date(call):
@@ -106,14 +106,14 @@ async def async_setup(hass, config):
             )
             try:
                 new_date = collection_date + relativedelta(days=offset)
-            except Exception as err:
+            except TypeError as err:
                 _LOGGER.error("Failed to offset the date - %s", err)
                 break
             try:
                 entity = hass.data[DOMAIN][SENSOR_PLATFORM][entity_id]
                 await entity.remove_date(collection_date)
                 await entity.add_date(new_date)
-            except Exception as err:
+            except KeyError as err:
                 _LOGGER.error("Failed ofsetting date for %s - %s", entity_id, err)
 
     async def handle_update_state(call):
@@ -123,7 +123,7 @@ async def async_setup(hass, config):
             try:
                 entity = hass.data[DOMAIN][SENSOR_PLATFORM][entity_id]
                 await entity.async_update_state()
-            except Exception as err:
+            except KeyError as err:
                 _LOGGER.error("Failed updating state for %s - %s", entity_id, err)
 
     async def handle_collect_garbage(call):
@@ -138,7 +138,7 @@ async def async_setup(hass, config):
                 else:
                     entity.last_collection = dt_util.as_local(last_collection)
                 await entity.async_update_state()
-            except Exception as err:
+            except KeyError as err:
                 _LOGGER.error(
                     "Failed setting last collection for %s - %s", entity_id, err
                 )
