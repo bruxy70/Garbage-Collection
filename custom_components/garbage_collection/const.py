@@ -7,9 +7,9 @@ import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 from homeassistant.const import ATTR_HIDDEN, CONF_ENTITIES, CONF_NAME, WEEKDAYS
 
-from .config_singularity import config_singularity
+from .config_singularity import ConfigSingularity
 
-"""Constants for garbage_collection."""
+# Constants for garbage_collection.
 # Base component constants
 DOMAIN = "garbage_collection"
 CALENDAR_NAME = "Garbage Collection"
@@ -136,8 +136,8 @@ def date_text(value: Any) -> str:
         return ""
     try:
         return datetime.strptime(value, "%Y-%m-%d").date().strftime("%Y-%m-%d")
-    except ValueError:
-        raise vol.Invalid(f"Invalid date: {value}")
+    except ValueError as error:
+        raise vol.Invalid(f"Invalid date: {value}") from error
 
 
 def time_text(value: Any) -> str:
@@ -146,8 +146,8 @@ def time_text(value: Any) -> str:
         return ""
     try:
         return datetime.strptime(value, "%H:%M").time().strftime("%H:%M")
-    except ValueError:
-        raise vol.Invalid(f"Invalid date: {value}")
+    except ValueError as error:
+        raise vol.Invalid(f"Invalid date: {value}") from error
 
 
 def month_day_text(value: Any) -> str:
@@ -156,11 +156,11 @@ def month_day_text(value: Any) -> str:
         return ""
     try:
         return datetime.strptime(value, "%m/%d").date().strftime("%m/%d")
-    except ValueError:
-        raise vol.Invalid(f"Invalid date: {value}")
+    except ValueError as error:
+        raise vol.Invalid(f"Invalid date: {value}") from error
 
 
-class configuration(config_singularity):
+class Configuration(ConfigSingularity):
     """Store validation schema for garbage_collection configuration.
 
     Type and validation seems duplicate, but I cannot use custom validators in ShowForm

@@ -19,14 +19,14 @@ from .const import (
     CONF_SENSORS,
     DOMAIN,
     SENSOR_PLATFORM,
-    configuration,
+    Configuration,
 )
 
 MIN_TIME_BETWEEN_UPDATES = timedelta(seconds=30)
 
 _LOGGER = logging.getLogger(__name__)
 
-config_definition = configuration()
+config_definition = Configuration()
 
 SENSOR_SCHEMA = vol.Schema(config_definition.compile_schema())
 
