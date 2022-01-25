@@ -249,6 +249,11 @@ class GarbageCollection(RestoreEntity):
         return self._name
 
     @property
+    def next_date(self):
+        """Return next date attribute."""
+        return self._next_date
+
+    @property
     def hidden(self):
         """Return the hidden attribute."""
         return self._hidden
