@@ -26,7 +26,7 @@ class GarbageCollectionCalendar(CalendarEventDevice):
 
     instances = 0
 
-    def __init__(self, hass): # pylint: disable=unused-argument
+    def __init__(self, hass):  # pylint: disable=unused-argument
         """Create empty calendar."""
         self._cal_data = {}
         self._name = CALENDAR_NAME
