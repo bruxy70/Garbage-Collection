@@ -59,4 +59,4 @@ It will set the `last_collection` attribute to the current date and time.
 |:----------|------------
 | `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
 
-For more details see the <a href="https://github.com/bruxy70/Garbage-Collection/blob/development/README.md">repository.</a>
+For more details see the <a href="https://github.com/bruxy70/Garbage-Collection/blob/master/README.md">repository.</a>
