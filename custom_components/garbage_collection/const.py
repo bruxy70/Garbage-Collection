@@ -159,6 +159,9 @@ def month_day_text(value: Any) -> str:
     except ValueError as error:
         raise vol.Invalid(f"Invalid date: {value}") from error
 
+# TO-DO: Move verbose format to second screen (conditional). 
+#        Move first & last month to second screen. Remove third step
+#        Say this is 1st step of 2. Only have second step specific to frequency
 
 class Configuration(ConfigSingularity):
     """Store validation schema for garbage_collection configuration.
@@ -174,20 +177,6 @@ class Configuration(ConfigSingularity):
             "method": vol.Required,
             "type": str,
             "validator": cv.string,
-        },
-        ATTR_HIDDEN: {
-            "step": 1,
-            "method": vol.Optional,
-            "default": False,
-            "type": bool,
-            "validator": cv.boolean,
-        },
-        CONF_MANUAL: {
-            "step": 1,
-            "method": vol.Optional,
-            "default": False,
-            "type": bool,
-            "validator": cv.boolean,
         },
         CONF_FREQUENCY: {
             "step": 1,
@@ -226,6 +215,20 @@ class Configuration(ConfigSingularity):
             "step": 1,
             "method": vol.Optional,
             "default": DEFAULT_VERBOSE_STATE,
+            "type": bool,
+            "validator": cv.boolean,
+        },
+        ATTR_HIDDEN: {
+            "step": 1,
+            "method": vol.Optional,
+            "default": False,
+            "type": bool,
+            "validator": cv.boolean,
+        },
+        CONF_MANUAL: {
+            "step": 1,
+            "method": vol.Optional,
+            "default": False,
             "type": bool,
             "validator": cv.boolean,
         },
