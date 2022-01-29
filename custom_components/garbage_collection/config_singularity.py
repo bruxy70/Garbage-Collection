@@ -4,7 +4,7 @@ from collections import OrderedDict
 from typing import Dict
 
 
-class config_singularity:
+class ConfigSingularity:
     """Store configuration and generate configs and default values.
 
     Options is a dictionary (key is the parameter name),
@@ -30,10 +30,10 @@ class config_singularity:
         for _, value in self.options.items():
             if "method" not in value:
                 raise KeyError(
-                    'config_singularity.options must contain the key "method"'
+                    'ConfigSingularity.options must contain the key "method"'
                 )
             if "type" not in value:
-                raise KeyError('config_singularity.options must contain the key "type"')
+                raise KeyError('ConfigSingularity.options must contain the key "type"')
         # Set defaults
         self.reset_defaults()
 
