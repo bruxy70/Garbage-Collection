@@ -10,8 +10,8 @@ assignees: ''
 1. The information within the angled brackets (like this text) contains instructions for you. 
     You can leave it in - it will not be included in the tickets anyway.
 2. DO NOT DELETE ANY TEXT from this template, and provide information in all sections please!
-    I need this to understand what I am looking at. 
-    Without it, I will not be able to start working on the issue.
+    I need this to understand what I am looking at - to be able to replicate the bug.
+    Without it, I will not be able to start working on the issue, and will close it.
 -->
 
 **Describe the bug**
@@ -26,11 +26,8 @@ assignees: ''
 
 **Configuration**
 
-Do you configure the integration in YAML or Config Flow (GUI)? : <!--Say YAML, or Config Flow-->
-
 <!--Copy the sensor configuration below.
-    For YAML, that is easy. 
-    For config flow, you can either include screenshots (copy & paste)
+    You can either include screenshots (copy & paste)
     or find the relevant part it in /config/.storage/core.config_entries and paste it below.-->
 
 ```yaml
