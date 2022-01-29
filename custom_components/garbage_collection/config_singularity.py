@@ -4,7 +4,7 @@ from collections import OrderedDict
 from typing import Dict
 
 
-class ConfigSingularity:
+class config_singularity:
     """Store configuration and generate configs and default values.
 
     Options is a dictionary (key is the parameter name),
@@ -30,10 +30,10 @@ class ConfigSingularity:
         for _, value in self.options.items():
             if "method" not in value:
                 raise KeyError(
-                    'ConfigSingularity.options must contain the key "method"'
+                    'config_singularity.options must contain the key "method"'
                 )
             if "type" not in value:
-                raise KeyError('ConfigSingularity.options must contain the key "type"')
+                raise KeyError('config_singularity.options must contain the key "type"')
         # Set defaults
         self.reset_defaults()
 
@@ -54,61 +54,60 @@ class ConfigSingularity:
     def compile_config_flow(self, step: int, valid_for=None) -> Dict:
         """Generate configuration options relevant for current step and frequency."""
         result = OrderedDict()
-        items = {
-            key: value
-            for (key, value) in self.options.items()
-            if ("step" in value and value["step"] == step)
-            and (
-                valid_for is None
-                or "valid_for" not in value
-                or bool(value["valid_for"](valid_for))
-            )
-        }
-        for key, value in items.items():
-            if key in self._defaults:
-                result[
-                    value["method"](
-                        key, description={"suggested_value": self._defaults[key]}
-                    )
-                ] = value["type"]
-            else:
-                result[value["method"](key)] = value["type"]
+        for key, value in self.options.items():
+            try:
+                if (step == value["step"] or step in value["step"]) and (
+                    valid_for is None
+                    or "valid_for" not in value
+                    or bool(value["valid_for"](valid_for))
+                ):
+                    if key in self._defaults:
+                        result[
+                            value["method"](
+                                key,
+                                description={"suggested_value": self._defaults[key]},
+                            )
+                        ] = value["type"]
+                    else:
+                        result[value["method"](key)] = value["type"]
+            except (TypeError, KeyError):
+                continue
         return result
 
     def compile_schema(self, step: int = None, valid_for=None) -> Dict:
         """For both YAML Scheme (step is None) or config_flow Scheme."""
         result = OrderedDict()
-        items = {
-            key: value
-            for (key, value) in self.options.items()
-            if (step is None or ("step" in value and value["step"] == step))
-            and (
-                valid_for is None
-                or "valid_for" not in value
-                or bool(value["valid_for"](valid_for))
-            )
-        }
-        for key, value in items.items():
-            # use the validator if exists, otherwise the type
-            test = value["validator"] if "validator" in value else value["type"]
-            if "default" in value:
-                result[value["method"](key, default=value["default"])] = test
-            else:
-                result[value["method"](key)] = test
+        for key, value in self.options.items():
+            try:
+                if (
+                    step is None or step == value["step"] or step in value["step"]
+                ) and (
+                    valid_for is None
+                    or "valid_for" not in value
+                    or bool(value["valid_for"](valid_for))
+                ):
+                    # use the validator if exists, otherwise the type
+                    test = value["validator"] if "validator" in value else value["type"]
+                    if "default" in value:
+                        result[value["method"](key, default=value["default"])] = test
+                    else:
+                        result[value["method"](key)] = test
+            except (TypeError, KeyError):
+                continue
         return result
 
     def set_defaults(self, step: int, data) -> None:
         """Generate default values."""
-        items = {
-            key: value
-            for (key, value) in self.options.items()
-            if "step" in value and value["step"] == step and key in data
-        }
-        for key, _ in items.items():
-            if data[key] is not None and (
-                type(data[key]) not in [list, dict] or len(data[key]) != 0
-            ):
-                self._defaults[key] = data[key]
+        for key, value in self.options.items():
+            try:
+                if (
+                    (step == value["step"] or step in value["step"])
+                    and data[key] is not None
+                    and (type(data[key]) not in [list, dict] or len(data[key]) != 0)
+                ):
+                    self._defaults[key] = data[key]
+            except (TypeError, KeyError):
+                continue
 
     def join_list(self, key: str) -> None:
         """Convert a list to comma separated string."""
