@@ -31,8 +31,7 @@ action:
       sequence:
         - condition: template
           value_template: >-
-            {%- set collection_date = as_datetime(trigger.event.data.collection_dates[repeat.index-1]) %}
-            {{ collection_date in state_attr(holiday_entity,'holidays') }}
+            {{ trigger.event.data.collection_dates[repeat.index-1] in state_attr(holiday_entity,'holidays') }}
         - service: garbage_collection.remove_date
           data:
             entity_id: "{{ trigger.event.data.entity_id }}"
