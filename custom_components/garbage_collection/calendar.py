@@ -1,6 +1,5 @@
 """Garbage collection calendar."""
 
-import logging
 from datetime import datetime, timedelta
 
 from homeassistant.components.calendar import CalendarEventDevice
@@ -8,7 +7,6 @@ from homeassistant.util import Throttle
 
 from .const import CALENDAR_NAME, CALENDAR_PLATFORM, DOMAIN, SENSOR_PLATFORM
 
-_LOGGER = logging.getLogger(__name__)
 MIN_TIME_BETWEEN_UPDATES = timedelta(minutes=1)
 
 

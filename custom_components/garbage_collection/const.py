@@ -3,11 +3,7 @@
 from datetime import datetime
 from typing import Any
 
-import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
-from homeassistant.const import ATTR_HIDDEN, CONF_ENTITIES, CONF_NAME, WEEKDAYS
-
-from .config_singularity import ConfigSingularity
 
 # Constants for garbage_collection.
 # Base component constants
@@ -21,7 +17,6 @@ ATTR_NEXT_DATE = "next_date"
 ATTR_DAYS = "days"
 ATTR_LAST_COLLECTION = "last_collection"
 ATTR_LAST_UPDATED = "last_updated"
-ATTR_HOLIDAYS = "holidays"
 
 # Device classes
 BINARY_SENSOR_DEVICE_CLASS = "connectivity"
@@ -165,174 +160,174 @@ def month_day_text(value: Any) -> str:
 #        Say this is 1st step of 2. Only have second step specific to frequency
 
 
-class Configuration(ConfigSingularity):
-    """Store validation schema for garbage_collection configuration.
+# class Configuration(ConfigSingularity):
+#     """Store validation schema for garbage_collection configuration.
 
-    Type and validation seems duplicate, but I cannot use custom validators in ShowForm
-    It calls convert from voluptuous-serialize that does not accept them
-    so I pass it twice - once the type, then the validator.
-    """
+#     Type and validation seems duplicate, but I cannot use custom validators in ShowForm
+#     It calls convert from voluptuous-serialize that does not accept them
+#     so I pass it twice - once the type, then the validator.
+#     """
 
-    options = {
-        CONF_NAME: {
-            "step": 1,
-            "method": vol.Required,
-            "type": str,
-            "validator": cv.string,
-        },
-        CONF_FREQUENCY: {
-            "step": 1,
-            "method": vol.Required,
-            "default": DEFAULT_FREQUENCY,
-            "type": vol.In(FREQUENCY_OPTIONS),
-        },
-        CONF_ICON_NORMAL: {
-            "step": 1,
-            "method": vol.Optional,
-            "default": DEFAULT_ICON_NORMAL,
-            "type": str,
-            "validator": cv.icon,
-        },
-        CONF_ICON_TODAY: {
-            "step": 1,
-            "method": vol.Optional,
-            "default": DEFAULT_ICON_TODAY,
-            "type": str,
-            "validator": cv.icon,
-        },
-        CONF_ICON_TOMORROW: {
-            "step": 1,
-            "method": vol.Optional,
-            "default": DEFAULT_ICON_TOMORROW,
-            "type": str,
-            "validator": cv.icon,
-        },
-        CONF_EXPIRE_AFTER: {
-            "step": 1,
-            "method": vol.Optional,
-            "type": str,
-            "validator": time_text,
-        },
-        CONF_VERBOSE_STATE: {
-            "step": 1,
-            "method": vol.Optional,
-            "default": DEFAULT_VERBOSE_STATE,
-            "type": bool,
-            "validator": cv.boolean,
-        },
-        ATTR_HIDDEN: {
-            "step": 1,
-            "method": vol.Optional,
-            "default": False,
-            "type": bool,
-            "validator": cv.boolean,
-        },
-        CONF_MANUAL: {
-            "step": 1,
-            "method": vol.Optional,
-            "default": False,
-            "type": bool,
-            "validator": cv.boolean,
-        },
-        CONF_VERBOSE_FORMAT: {
-            "step": 1,
-            "method": vol.Optional,
-            "default": DEFAULT_VERBOSE_FORMAT,
-            "type": str,
-            "validator": cv.string,
-        },
-        CONF_DATE_FORMAT: {
-            "step": 1,
-            "method": vol.Optional,
-            "default": DEFAULT_DATE_FORMAT,
-            "type": str,
-            "validator": cv.string,
-        },
-        CONF_DATE: {
-            "step": 2,
-            "valid_for": lambda f: f in ANNUAL_FREQUENCY,
-            "method": vol.Optional,
-            "type": str,
-            "validator": month_day_text,
-        },
-        CONF_ENTITIES: {
-            "step": 2,
-            "valid_for": lambda f: f in GROUP_FREQUENCY,
-            "method": vol.Optional,
-            "type": str,
-            "validator": cv.entity_ids,
-        },
-        CONF_COLLECTION_DAYS: {
-            "step": 3,
-            "valid_for": lambda f: f in EXCEPT_ANNUAL_GROUP_BLANK,
-            "method": vol.Optional,
-            "type": [str],
-            "validator": vol.All(cv.ensure_list, [vol.In(WEEKDAYS)]),
-        },
-        CONF_WEEKDAY_ORDER_NUMBER: {
-            "step": 4,
-            "valid_for": lambda f: f in MONTHLY_FREQUENCY,
-            "method": vol.Optional,
-            "type": [int],
-            "validator": vol.All(
-                cv.ensure_list, [vol.All(vol.Coerce(int), vol.Range(min=1, max=5))]
-            ),
-        },
-        CONF_WEEK_ORDER_NUMBER: {
-            "step": 4,
-            "valid_for": lambda f: f in MONTHLY_FREQUENCY,
-            "method": vol.Optional,
-            "type": [int],
-            "validator": vol.All(
-                cv.ensure_list, [vol.All(vol.Coerce(int), vol.Range(min=1, max=5))]
-            ),
-        },
-        CONF_FIRST_MONTH: {
-            "step": 4,
-            "valid_for": lambda f: f in EXCEPT_ANNUAL_GROUP_BLANK,
-            "method": vol.Optional,
-            "default": DEFAULT_FIRST_MONTH,
-            "type": vol.In(MONTH_OPTIONS),
-        },
-        CONF_LAST_MONTH: {
-            "step": 4,
-            "valid_for": lambda f: f in EXCEPT_ANNUAL_GROUP_BLANK,
-            "method": vol.Optional,
-            "default": DEFAULT_LAST_MONTH,
-            "type": vol.In(MONTH_OPTIONS),
-        },
-        CONF_PERIOD: {
-            "step": 4,
-            "valid_for": lambda f: f in WEEKLY_DAILY_MONTHLY,
-            "method": vol.Optional,
-            "default": DEFAULT_PERIOD,
-            "type": int,
-            "validator": vol.All(vol.Coerce(int), vol.Range(min=1, max=365)),
-        },
-        CONF_FIRST_WEEK: {
-            "step": 4,
-            "valid_for": lambda f: f in WEEKLY_FREQUENCY_X,
-            "method": vol.Optional,
-            "default": DEFAULT_FIRST_WEEK,
-            "type": int,
-            "validator": vol.All(vol.Coerce(int), vol.Range(min=1, max=52)),
-        },
-        CONF_FIRST_DATE: {
-            "step": 4,
-            "valid_for": lambda f: f in DAILY_FREQUENCY,
-            "method": vol.Optional,
-            "type": str,
-            "validator": date_text,
-        },
-    }
+#     options = {
+#         CONF_NAME: {
+#             "step": 1,
+#             "method": vol.Required,
+#             "type": str,
+#             "validator": cv.string,
+#         },
+#         CONF_FREQUENCY: {
+#             "step": 1,
+#             "method": vol.Required,
+#             "default": DEFAULT_FREQUENCY,
+#             "type": vol.In(FREQUENCY_OPTIONS),
+#         },
+#         CONF_ICON_NORMAL: {
+#             "step": 1,
+#             "method": vol.Optional,
+#             "default": DEFAULT_ICON_NORMAL,
+#             "type": str,
+#             "validator": cv.icon,
+#         },
+#         CONF_ICON_TODAY: {
+#             "step": 1,
+#             "method": vol.Optional,
+#             "default": DEFAULT_ICON_TODAY,
+#             "type": str,
+#             "validator": cv.icon,
+#         },
+#         CONF_ICON_TOMORROW: {
+#             "step": 1,
+#             "method": vol.Optional,
+#             "default": DEFAULT_ICON_TOMORROW,
+#             "type": str,
+#             "validator": cv.icon,
+#         },
+#         CONF_EXPIRE_AFTER: {
+#             "step": 1,
+#             "method": vol.Optional,
+#             "type": str,
+#             "validator": time_text,
+#         },
+#         CONF_VERBOSE_STATE: {
+#             "step": 1,
+#             "method": vol.Optional,
+#             "default": DEFAULT_VERBOSE_STATE,
+#             "type": bool,
+#             "validator": cv.boolean,
+#         },
+#         ATTR_HIDDEN: {
+#             "step": 1,
+#             "method": vol.Optional,
+#             "default": False,
+#             "type": bool,
+#             "validator": cv.boolean,
+#         },
+#         CONF_MANUAL: {
+#             "step": 1,
+#             "method": vol.Optional,
+#             "default": False,
+#             "type": bool,
+#             "validator": cv.boolean,
+#         },
+#         CONF_VERBOSE_FORMAT: {
+#             "step": 1,
+#             "method": vol.Optional,
+#             "default": DEFAULT_VERBOSE_FORMAT,
+#             "type": str,
+#             "validator": cv.string,
+#         },
+#         CONF_DATE_FORMAT: {
+#             "step": 1,
+#             "method": vol.Optional,
+#             "default": DEFAULT_DATE_FORMAT,
+#             "type": str,
+#             "validator": cv.string,
+#         },
+#         CONF_DATE: {
+#             "step": 2,
+#             "valid_for": lambda f: f in ANNUAL_FREQUENCY,
+#             "method": vol.Optional,
+#             "type": str,
+#             "validator": month_day_text,
+#         },
+#         CONF_ENTITIES: {
+#             "step": 2,
+#             "valid_for": lambda f: f in GROUP_FREQUENCY,
+#             "method": vol.Optional,
+#             "type": str,
+#             "validator": cv.entity_ids,
+#         },
+#         CONF_COLLECTION_DAYS: {
+#             "step": 3,
+#             "valid_for": lambda f: f in EXCEPT_ANNUAL_GROUP_BLANK,
+#             "method": vol.Optional,
+#             "type": [str],
+#             "validator": vol.All(cv.ensure_list, [vol.In(WEEKDAYS)]),
+#         },
+#         CONF_WEEKDAY_ORDER_NUMBER: {
+#             "step": 4,
+#             "valid_for": lambda f: f in MONTHLY_FREQUENCY,
+#             "method": vol.Optional,
+#             "type": [int],
+#             "validator": vol.All(
+#                 cv.ensure_list, [vol.All(vol.Coerce(int), vol.Range(min=1, max=5))]
+#             ),
+#         },
+#         CONF_WEEK_ORDER_NUMBER: {
+#             "step": 4,
+#             "valid_for": lambda f: f in MONTHLY_FREQUENCY,
+#             "method": vol.Optional,
+#             "type": [int],
+#             "validator": vol.All(
+#                 cv.ensure_list, [vol.All(vol.Coerce(int), vol.Range(min=1, max=5))]
+#             ),
+#         },
+#         CONF_FIRST_MONTH: {
+#             "step": 4,
+#             "valid_for": lambda f: f in EXCEPT_ANNUAL_GROUP_BLANK,
+#             "method": vol.Optional,
+#             "default": DEFAULT_FIRST_MONTH,
+#             "type": vol.In(MONTH_OPTIONS),
+#         },
+#         CONF_LAST_MONTH: {
+#             "step": 4,
+#             "valid_for": lambda f: f in EXCEPT_ANNUAL_GROUP_BLANK,
+#             "method": vol.Optional,
+#             "default": DEFAULT_LAST_MONTH,
+#             "type": vol.In(MONTH_OPTIONS),
+#         },
+#         CONF_PERIOD: {
+#             "step": 4,
+#             "valid_for": lambda f: f in WEEKLY_DAILY_MONTHLY,
+#             "method": vol.Optional,
+#             "default": DEFAULT_PERIOD,
+#             "type": int,
+#             "validator": vol.All(vol.Coerce(int), vol.Range(min=1, max=365)),
+#         },
+#         CONF_FIRST_WEEK: {
+#             "step": 4,
+#             "valid_for": lambda f: f in WEEKLY_FREQUENCY_X,
+#             "method": vol.Optional,
+#             "default": DEFAULT_FIRST_WEEK,
+#             "type": int,
+#             "validator": vol.All(vol.Coerce(int), vol.Range(min=1, max=52)),
+#         },
+#         CONF_FIRST_DATE: {
+#             "step": 4,
+#             "valid_for": lambda f: f in DAILY_FREQUENCY,
+#             "method": vol.Optional,
+#             "type": str,
+#             "validator": date_text,
+#         },
+#     }
 
 
-extra_options = {
-    CONF_FORCE_WEEK_NUMBERS: {
-        "valid_for": lambda f: f in MONTHLY_FREQUENCY,
-        "method": vol.Optional,
-        "default": False,
-        "type": bool,
-        "validator": cv.boolean,
-    }
-}
+# extra_options = {
+#     CONF_FORCE_WEEK_NUMBERS: {
+#         "valid_for": lambda f: f in MONTHLY_FREQUENCY,
+#         "method": vol.Optional,
+#         "default": False,
+#         "type": bool,
+#         "validator": cv.boolean,
+#     }
+# }
