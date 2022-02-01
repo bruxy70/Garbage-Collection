@@ -129,11 +129,11 @@ class GarbageCollectionShared:
         if self._data[const.CONF_FREQUENCY] in const.ANNUAL_FREQUENCY:
             self.data_schema[self.required(const.CONF_DATE, user_input)] = str
         elif self._data[const.CONF_FREQUENCY] in const.GROUP_FREQUENCY:
-            entities = [entity for entity in self.hass.data[const.DOMAIN][const.SENSOR_PLATFORM]]
-            # TO DO: Defaults from entity IDs, cv.multi_select
-            # self.data_schema[self.required(CONF_ENTITIES, user_input)] = cv.entity_ids
-            # TO DO: filter out own entity_id
-            self.data_schema[self.required(CONF_ENTITIES, user_input)] = cv.multi_select(entities)
+            entities = self.hass.data[const.DOMAIN][const.SENSOR_PLATFORM]
+            entity_ids = [entity for entity in entities]
+            self.data_schema[
+                self.required(CONF_ENTITIES, user_input)
+            ] = cv.multi_select(entity_ids)
         elif self._data[const.CONF_FREQUENCY] not in const.BLANK_FREQUENCY:
             self.data_schema[
                 self.required(const.CONF_COLLECTION_DAYS, user_input)
@@ -194,7 +194,7 @@ class GarbageCollectionShared:
 class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
     """Config flow for garbage_collection."""
 
-    VERSION = 1
+    VERSION = const.VERSION
     CONNECTION_CLASS = config_entries.CONN_CLASS_LOCAL_POLL
 
     def __init__(self):

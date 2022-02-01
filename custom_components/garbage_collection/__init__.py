@@ -265,42 +265,42 @@ async def async_remove_entry(hass, config_entry):
         pass
 
 
-# async def async_migrate_entry(_, config_entry: ConfigEntry) -> bool:
-#     """Migrate old entry."""
-#     _LOGGER.debug("Migrating from version %s", config_entry.version)
-#     new_data = {**config_entry.data}
-#     new_options = {**config_entry.options}
-#     removed_data = {}
-#     removed_options = {}
-#     if config_entry.version == 1:
-#         to_remove = [
-#             "offset",
-#             "move_country_holidays",
-#             "holiday_in_week_move",
-#             "holiday_pop_named",
-#             "holiday_move_offset",
-#             "prov",
-#             "state",
-#             "observed",
-#             "exclude_dates",
-#             "include_dates",
-#         ]
-#         for remove in to_remove:
-#             if remove in new_data:
-#                 removed_data[remove] = new_data[remove]
-#                 del new_data[remove]
-#             if remove in new_options:
-#                 removed_options[remove] = new_options[remove]
-#                 del new_options[remove]
-#     config_entry.version = 4
-#     config_entry.data = {**new_data}
-#     config_entry.options = {**new_options}
-#     if removed_data != {}:
-#         _LOGGER.info("Removed data %s", removed_data)
-#     if removed_options != {}:
-#         _LOGGER.info("Removed options %s", removed_options)
-#     _LOGGER.info("Migration to version %s successful", config_entry.version)
-#     return True
+async def async_migrate_entry(_, config_entry: config_entries.ConfigEntry) -> bool:
+    """Migrate old entry."""
+    _LOGGER.debug("Migrating from version %s", config_entry.version)
+    new_data = {**config_entry.data}
+    new_options = {**config_entry.options}
+    removed_data = {}
+    removed_options = {}
+    # if config_entry.version == 1:
+    #     to_remove = [
+    #         "offset",
+    #         "move_country_holidays",
+    #         "holiday_in_week_move",
+    #         "holiday_pop_named",
+    #         "holiday_move_offset",
+    #         "prov",
+    #         "state",
+    #         "observed",
+    #         "exclude_dates",
+    #         "include_dates",
+    #     ]
+    #     for remove in to_remove:
+    #         if remove in new_data:
+    #             removed_data[remove] = new_data[remove]
+    #             del new_data[remove]
+    #         if remove in new_options:
+    #             removed_options[remove] = new_options[remove]
+    #             del new_options[remove]
+    config_entry.version = const.VERSION
+    config_entry.data = {**new_data}
+    config_entry.options = {**new_options}
+    if removed_data != {}:
+        _LOGGER.info("Removed data %s", removed_data)
+    if removed_options != {}:
+        _LOGGER.info("Removed options %s", removed_options)
+    _LOGGER.info("Migration to version %s successful", config_entry.version)
+    return True
 
 
 async def update_listener(hass, entry):

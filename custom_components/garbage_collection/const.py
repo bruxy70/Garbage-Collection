@@ -12,6 +12,7 @@ CALENDAR_NAME = "Garbage Collection"
 SENSOR_PLATFORM = "sensor"
 CALENDAR_PLATFORM = "calendar"
 ATTRIBUTION = "Data from this is provided by garbage_collection."
+VERSION = 1
 
 ATTR_NEXT_DATE = "next_date"
 ATTR_DAYS = "days"
