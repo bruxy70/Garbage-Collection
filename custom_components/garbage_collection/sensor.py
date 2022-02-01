@@ -355,15 +355,15 @@ class GarbageCollection(RestoreEntity):
         """Calculate possible date, for annual frequency."""
         year = day1.year
         try:
-            const.CONF_DATE = datetime.strptime(self._date, "%m/%d").date()
+            conf_date = datetime.strptime(self._date, "%m/%d").date()
         except TypeError as error:
             raise ValueError(
                 f"({self._name}) Please configure the date "
                 "for annual collection frequency."
             ) from error
-        candidate_date = date(year, const.CONF_DATE.month, const.CONF_DATE.day)
+        candidate_date = date(year, conf_date.month, conf_date.day)
         if candidate_date < day1:
-            candidate_date = date(year + 1, const.CONF_DATE.month, const.CONF_DATE.day)
+            candidate_date = date(year + 1, conf_date.month, conf_date.day)
         return candidate_date
 
     async def _async_find_candidate_date(self, day1: date):
