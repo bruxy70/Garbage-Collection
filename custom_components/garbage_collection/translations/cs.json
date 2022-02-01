@@ -17,7 +17,7 @@
                 }
             },
             "detail": {
-                "title": "Garbage Collection - Detail (2/2)",
+                "title": "Garbage Collection - Další parametry (2/2)",
                 "description": "Více na: https://github.com/bruxy70/Garbage-Collection",
                 "data": {
                     "verbose_format": "Verbose format (Použij `date` a `days` proměnné (ve složených závorkách))",
