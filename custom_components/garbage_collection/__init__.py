@@ -2,6 +2,7 @@
 
 import logging
 from datetime import timedelta
+from typing import Any, Dict
 
 import homeassistant.helpers.config_validation as cv
 import homeassistant.util.dt as dt_util
@@ -270,8 +271,8 @@ async def async_migrate_entry(_, config_entry: config_entries.ConfigEntry) -> bo
     _LOGGER.debug("Migrating from version %s", config_entry.version)
     new_data = {**config_entry.data}
     new_options = {**config_entry.options}
-    removed_data: dict[str, Any] = {}
-    removed_options: dict[str, Any] = {}
+    removed_data: Dict[str, Any] = {}
+    removed_options: Dict[str, Any] = {}
     # if config_entry.version == 1:
     #     to_remove = [
     #         "offset",
