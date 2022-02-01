@@ -120,9 +120,11 @@ class GarbageCollectionShared:
         self.errors = {}
         self.data_schema = {}
         if user_input is not None and user_input != {}:
-            # TO DO: Checking, converting
-            if self._data[const.CONF_FREQUENCY] in const.GROUP_FREQUENCY:
-                user_input[CONF_ENTITIES] = string_to_list(user_input[CONF_ENTITIES])
+            # TO DO: Checking, converting (is group still gonna work?)
+            # Checking: mandatory fields for specific frequencies
+            # TO DO: Monthly - weekday order number of week order number!!!
+            # if self._data[const.CONF_FREQUENCY] in const.GROUP_FREQUENCY:
+            #     user_input[CONF_ENTITIES] = string_to_list(user_input[CONF_ENTITIES])
             self.update_data(user_input)
             return True
         self.data_schema = OrderedDict()
@@ -130,6 +132,7 @@ class GarbageCollectionShared:
             self.data_schema[self.required(const.CONF_DATE, user_input)] = str
         elif self._data[const.CONF_FREQUENCY] in const.GROUP_FREQUENCY:
             entities = self.hass.data[const.DOMAIN][const.SENSOR_PLATFORM]
+            # TO DO: Filter own entity
             entity_ids = [entity for entity in entities]
             self.data_schema[
                 self.required(CONF_ENTITIES, user_input)
