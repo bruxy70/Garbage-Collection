@@ -270,8 +270,8 @@ async def async_migrate_entry(_, config_entry: config_entries.ConfigEntry) -> bo
     _LOGGER.debug("Migrating from version %s", config_entry.version)
     new_data = {**config_entry.data}
     new_options = {**config_entry.options}
-    removed_data = {}
-    removed_options = {}
+    removed_data: dict[str, Any] = {}
+    removed_options: dict[str, Any] = {}
     # if config_entry.version == 1:
     #     to_remove = [
     #         "offset",
