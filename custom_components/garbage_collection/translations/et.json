@@ -13,9 +13,7 @@
                     "icon_tomorrow": "Homme on prügivedu ikoon (mdi:delete-restore) - valikuline",
                     "icon_today": "Täna on prügivedu ikoon (mdi:delete-circle) - valikuline",
                     "expire_after": "Ajalõpp (HH:MM) - valikuline",
-                    "verbose_state": "Teavitus tekstina (aeg tekstina numbrite asemel)",
-                    "verbose_format": "Teavituse formaat (kasutades `date` and `days` muutujaid (kantsulgudes))",
-                    "date_format": "Kuupäeva formaat (vaata http://strftime.org/)"
+                    "verbose_state": "Teavitus tekstina (aeg tekstina numbrite asemel)"
                 }
             },
             "detail": {
@@ -25,22 +23,15 @@
                     "date": "Kuupäev (mm/dd)",
                     "entities": "Olemite nimekiri (komadega eraldatud)",
                     "collection_days": "Tühjendamise nädalapäevad",
-                    "force_week_order_numbers": "Mitmes nädal kuus kui nädalapäev pole oluline",
                     "first_month": "Esimene prügiveo kuu",
                     "last_month": "Viimane prügiveo kuu",
                     "period": "Prügivedu iga n päeva/nädala tagant: (1-365)",
                     "first_week": "Esimese prügiveo nädal (1-52)",
                     "first_date": "Esimese prügiveo kuupäev",
-                    "weekday_order_number_1": "Kuu esimene tööpäev",
-                    "weekday_order_number_2": "Kuu teine tööpäev",
-                    "weekday_order_number_3": "Kuu kolmas tööpäev",
-                    "weekday_order_number_4": "Kuu neljas tööpäev",
-                    "weekday_order_number_5": "5th weekday of month",
-                    "week_order_number_1": "Kuu esimene nädal",
-                    "week_order_number_2": "Kuu teine nädal",
-                    "week_order_number_3": "Kuu kolmas nädal",
-                    "week_order_number_4": "Kuu neljas nädal",
-                    "week_order_number_5": "Kuu viies nädal"
+                    "weekday_order_number": "Kuu nädalapäevade järjekord (nt kuu esimene kolmapäev)",
+                    "force_week_order_numbers": "nädala järjekord kuus, mitte nädalapäevade järjekord (nt esimese nädala kolmapäeval).",
+                    "verbose_format": "Teavituse formaat (kasutades `date` and `days` muutujaid (kantsulgudes))",
+                    "date_format": "Kuupäeva formaat (vaata http://strftime.org/)"
                 }
             }
         },
@@ -74,9 +65,7 @@
                     "icon_tomorrow": "Homme on prügivedu ikoon (mdi:delete-restore) - valikuline",
                     "icon_today": "Täna on prügivedu ikoon (mdi:delete-circle) - valikuline",
                     "expire_after": "Ajalõpp (HH:MM) - valikuline",
-                    "verbose_state": "Teavitus tekstina (aeg tekstina numbrite asemel)",
-                    "verbose_format": "Teavituse formaat (kasutades `date` and `days` muutujaid (kantsulgudes))",
-                    "date_format": "Kuupäeva formaat (vaata http://strftime.org/)"
+                    "verbose_state": "Teavitus tekstina (aeg tekstina numbrite asemel)"
                 }
             },
             "detail": {
@@ -86,22 +75,15 @@
                     "date": "Kuupäev (mm/dd)",
                     "entities": "Olemite nimekiri (komadega eraldatud)",
                     "collection_days": "Tühjendamise nädalapäevad",
-                    "force_week_order_numbers": "Mitmes nädal kuus kui nädalapäev pole oluline",
                     "first_month": "Esimene prügiveo kuu",
                     "last_month": "Viimane prügiveo kuu",
                     "period": "Prügivedu iga n päeva/nädala tagant: (1-365)",
                     "first_week": "Esimese prügiveo nädal (1-52)",
                     "first_date": "Esimese prügiveo kuupäev",
-                    "weekday_order_number_1": "Kuu esimene tööpäev",
-                    "weekday_order_number_2": "Kuu teine tööpäev",
-                    "weekday_order_number_3": "Kuu kolmas tööpäev",
-                    "weekday_order_number_4": "Kuu neljas tööpäev",
-                    "weekday_order_number_5": "5th weekday of month",
-                    "week_order_number_1": "Kuu esimene nädal",
-                    "week_order_number_2": "Kuu teine nädal",
-                    "week_order_number_3": "Kuu kolmas nädal",
-                    "week_order_number_4": "Kuu neljas nädal",
-                    "week_order_number_5": "Kuu viies nädal"
+                    "weekday_order_number": "Kuu nädalapäevade järjekord (nt kuu esimene kolmapäev)",
+                    "force_week_order_numbers": "nädala järjekord kuus, mitte nädalapäevade järjekord (nt esimese nädala kolmapäeval).",
+                    "verbose_format": "Teavituse formaat (kasutades `date` and `days` muutujaid (kantsulgudes))",
+                    "date_format": "Kuupäeva formaat (vaata http://strftime.org/)"
                 }
             }
         },

@@ -127,11 +127,13 @@ class GarbageCollection(RestoreEntity):
             self._last_month = const.MONTH_OPTIONS.index(last_month) + 1
         else:
             self._last_month = 12
-        self._weekday_order_numbers = config.get(const.CONF_WEEKDAY_ORDER_NUMBER)
-        self._week_order_numbers = config.get(const.CONF_WEEK_ORDER_NUMBER)
-        self._monthly_force_week_numbers = bool(
-            self._week_order_numbers is not None and len(self._week_order_numbers) != 0
-        )
+        self._monthly_force_week_numbers = config.get(const.CONF_FORCE_WEEK_NUMBERS, False)
+        if self._monthly_force_week_numbers:
+            self._weekday_order_numbers = []
+            self._week_order_numbers = config.get(const.CONF_WEEKDAY_ORDER_NUMBER)
+        else:
+            self._weekday_order_numbers = config.get(const.CONF_WEEKDAY_ORDER_NUMBER)
+            self._week_order_numbers = []
         self._period = config.get(const.CONF_PERIOD)
         self._first_week = config.get(const.CONF_FIRST_WEEK)
         try:
@@ -271,13 +273,6 @@ class GarbageCollection(RestoreEntity):
             f"state: {self.state}\n"
             f"config: {self.config}]"
         )
-
-    def date_inside(self, dat: date) -> bool:
-        """Check if the date is inside first and last date."""
-        month = dat.month
-        if self._first_month <= self._last_month:
-            return bool(month >= self._first_month and month <= self._last_month)
-        return bool(month <= self._last_month or month >= self._first_month)
 
     async def _async_monthly_candidate(self, day1: date) -> date:
         """Calculate possible date, for monthly frequency."""
@@ -478,6 +473,13 @@ class GarbageCollection(RestoreEntity):
                 pass
         return ready_for_update
 
+    def date_inside(self, dat: date) -> bool:
+        """Check if the date is inside first and last date."""
+        month = dat.month
+        if self._first_month <= self._last_month:
+            return bool(month >= self._first_month and month <= self._last_month)
+        return bool(month <= self._last_month or month >= self._first_month)
+
     def move_to_range(self, day: date) -> date:
         """If the date is not in range, move to the range."""
         if not self.date_inside(day):
@@ -504,7 +506,7 @@ class GarbageCollection(RestoreEntity):
     async def _async_find_next_date(self, first_date: date):
         """Get date within configured date range."""
         # Today's collection can be triggered by past collection with offset
-        if self._frequency == "blank" or first_date is None:
+        if self._frequency == "blank":
             return None
         # Move starting date if today is out of range
         day1 = self.move_to_range(first_date)
@@ -513,6 +515,8 @@ class GarbageCollection(RestoreEntity):
             try:
                 next_date = await self._async_find_candidate_date(day1)
             except (TypeError, ValueError):
+                return None
+            if next_date is None:
                 return None
             # Check if the date is within the range
             new_date = self.move_to_range(next_date)

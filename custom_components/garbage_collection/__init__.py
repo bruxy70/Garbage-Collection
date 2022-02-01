@@ -268,38 +268,54 @@ async def async_remove_entry(hass, config_entry):
 
 async def async_migrate_entry(_, config_entry: config_entries.ConfigEntry) -> bool:
     """Migrate old entry."""
-    _LOGGER.debug("Migrating from version %s", config_entry.version)
+    _LOGGER.info("Migrating from version %s", config_entry.version)
     new_data = {**config_entry.data}
     new_options = {**config_entry.options}
     removed_data: Dict[str, Any] = {}
     removed_options: Dict[str, Any] = {}
-    # if config_entry.version == 1:
-    #     to_remove = [
-    #         "offset",
-    #         "move_country_holidays",
-    #         "holiday_in_week_move",
-    #         "holiday_pop_named",
-    #         "holiday_move_offset",
-    #         "prov",
-    #         "state",
-    #         "observed",
-    #         "exclude_dates",
-    #         "include_dates",
-    #     ]
-    #     for remove in to_remove:
-    #         if remove in new_data:
-    #             removed_data[remove] = new_data[remove]
-    #             del new_data[remove]
-    #         if remove in new_options:
-    #             removed_options[remove] = new_options[remove]
-    #             del new_options[remove]
+    _LOGGER.debug("new_data %s", new_data)
+    _LOGGER.debug("new_options %s", new_options)
+    if config_entry.version == 1:
+        to_remove = [
+            "offset",
+            "move_country_holidays",
+            "holiday_in_week_move",
+            "holiday_pop_named",
+            "holiday_move_offset",
+            "prov",
+            "state",
+            "observed",
+            "exclude_dates",
+            "include_dates",
+        ]
+        for remove in to_remove:
+            if remove in new_data:
+                removed_data[remove] = new_data[remove]
+                del new_data[remove]
+            if remove in new_options:
+                removed_options[remove] = new_options[remove]
+                del new_options[remove]
+        if const.CONF_WEEK_ORDER_NUMBER in new_data:
+            new_data[const.CONF_WEEKDAY_ORDER_NUMBER] = new_data[
+                const.CONF_WEEK_ORDER_NUMBER
+            ]
+            new_data[const.CONF_FORCE_WEEK_NUMBERS] = True
+            del new_data[const.CONF_WEEK_ORDER_NUMBER]
+            _LOGGER.info("Updated data config for week_order_number")
+        if const.CONF_WEEK_ORDER_NUMBER in new_options:
+            new_options[const.CONF_WEEKDAY_ORDER_NUMBER] = new_options[
+                const.CONF_WEEK_ORDER_NUMBER
+            ]
+            new_options[const.CONF_FORCE_WEEK_NUMBERS] = True
+            del new_options[const.CONF_WEEK_ORDER_NUMBER]
+            _LOGGER.info("Updated options config for week_order_number")
     config_entry.version = const.VERSION
     config_entry.data = {**new_data}
     config_entry.options = {**new_options}
     if removed_data != {}:
-        _LOGGER.info("Removed data %s", removed_data)
+        _LOGGER.info("Removed data config %s", removed_data)
     if removed_options != {}:
-        _LOGGER.info("Removed options %s", removed_options)
+        _LOGGER.info("Removed options config %s", removed_options)
     _LOGGER.info("Migration to version %s successful", config_entry.version)
     return True
 

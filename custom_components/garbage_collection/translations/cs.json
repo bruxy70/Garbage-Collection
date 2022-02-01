@@ -20,27 +20,18 @@
                 "title": "Garbage Collection - Další parametry (2/2)",
                 "description": "Více na: https://github.com/bruxy70/Garbage-Collection",
                 "data": {
-                    "verbose_format": "Verbose format (Použij `date` a `days` proměnné (ve složených závorkách))",
-                    "date_format": "Formát data(see http://strftime.org/)",
                     "date": "Datum (mm/dd)",
                     "entities": "Seznam entit (odděleno čárkou)",
                     "collection_days": "Dny svozu",
-                    "force_week_order_numbers": "Číslo týdne v měsící místo čísla dne",
                     "first_month": "První měsíc svozu",
                     "last_month": "Poslední měsíc svozu",
                     "period": "Perioda (svoz každých n týdnů/dnů): (1-365)",
                     "first_week": "První týden svozu (1-52)",
                     "first_date": "První datum",
-                    "weekday_order_number_1": "Prvn den v měsíci",
-                    "weekday_order_number_2": "Druhý den v měsíci",
-                    "weekday_order_number_3": "Třetí den v měsíci",
-                    "weekday_order_number_4": "Čtvrtý den v měsíci",
-                    "weekday_order_number_5": "Pátý den v měsíci",
-                    "week_order_number_1": "Prvn týden v měsíci",
-                    "week_order_number_2": "Druhý týden v měsíci",
-                    "week_order_number_3": "Třetí týden v měsíci",
-                    "week_order_number_4": "Čtvrtý týden v měsíci",
-                    "week_order_number_5": "Pátý týden v měsíci"
+                    "weekday_order_number": "Pořadí dne v měsící (např. první středa v měsíci)",
+                    "force_week_order_numbers": "Číslo týdne v měsící místo čísla dne",
+                    "verbose_format": "Verbose format (Použij `date` a `days` proměnné (ve složených závorkách))",
+                    "date_format": "Formát data(see http://strftime.org/)"
                 }
             }
         },
@@ -81,27 +72,18 @@
                 "title": "Garbage Collection - Další parametry (2/2)",
                 "description": "",
                 "data": {
-                    "verbose_format": "Verbose format (Použij `date` a `days` proměnné (ve složených závorkách))",
-                    "date_format": "Formát data(see http://strftime.org/)",
                     "date": "Datum (mm/dd)",
                     "entities": "Seznam entit (odděleno čárkou)",
                     "collection_days": "Dny svozu",
-                    "force_week_order_numbers": "Číslo týdne v měsící místo čísla dne",
                     "first_month": "První měsíc svozu",
                     "last_month": "Poslední měsíc scozu",
                     "period": "Perioda (svoz každých n týdnů-dnů): (1-365)",
                     "first_week": "První týden svozu (1-52)",
                     "first_date": "První datum",
-                    "weekday_order_number_1": "Prvn den v měsíci",
-                    "weekday_order_number_2": "Druhý den v měsíci",
-                    "weekday_order_number_3": "Třetí den v měsíci",
-                    "weekday_order_number_4": "Čtvrtý den v měsíci",
-                    "weekday_order_number_5": "Pátý den v měsíci",
-                    "week_order_number_1": "Prvn týden v měsíci",
-                    "week_order_number_2": "Druhý týden v měsíci",
-                    "week_order_number_3": "Třetí týden v měsíci",
-                    "week_order_number_4": "Čtvrtý týden v měsíci",
-                    "week_order_number_5": "Pátý týden v měsíci"
+                    "weekday_order_number": "Pořadí dne v měsící (např. první středa v měsíci)",
+                    "force_week_order_numbers": "Číslo týdne v měsící místo čísla dne",
+                    "verbose_format": "Verbose format (Použij `date` a `days` proměnné (ve složených závorkách))",
+                    "date_format": "Formát data(see http://strftime.org/)"
                 }
             }
         },

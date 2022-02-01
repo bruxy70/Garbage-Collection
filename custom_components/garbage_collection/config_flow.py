@@ -122,9 +122,6 @@ class GarbageCollectionShared:
         if user_input is not None and user_input != {}:
             # TO DO: Checking, converting (is group still gonna work?)
             # Checking: mandatory fields for specific frequencies
-            # TO DO: Monthly - weekday order number of week order number!!!
-            # if self._data[const.CONF_FREQUENCY] in const.GROUP_FREQUENCY:
-            #     user_input[CONF_ENTITIES] = string_to_list(user_input[CONF_ENTITIES])
             self.update_data(user_input)
             return True
         self.data_schema = OrderedDict()
@@ -132,8 +129,11 @@ class GarbageCollectionShared:
             self.data_schema[self.required(const.CONF_DATE, user_input)] = str
         elif self._data[const.CONF_FREQUENCY] in const.GROUP_FREQUENCY:
             entities = self.hass.data[const.DOMAIN][const.SENSOR_PLATFORM]
-            # TO DO: Filter own entity
-            entity_ids = [entity for entity in entities]
+            entity_ids = [
+                entity
+                for entity in entities
+                if entities[entity].unique_id != self._data["unique_id"]
+            ]
             self.data_schema[
                 self.required(CONF_ENTITIES, user_input)
             ] = cv.multi_select(entity_ids)
@@ -150,14 +150,10 @@ class GarbageCollectionShared:
             if self._data[const.CONF_FREQUENCY] in const.MONTHLY_FREQUENCY:
                 self.data_schema[
                     self.optional(const.CONF_WEEKDAY_ORDER_NUMBER, user_input)
-                ] = vol.All(
-                    cv.ensure_list, [vol.All(vol.Coerce(int), vol.Range(min=1, max=5))]
-                )
+                ] = cv.multi_select([1, 2, 3, 4, 5])
                 self.data_schema[
-                    self.optional(const.CONF_WEEK_ORDER_NUMBER, user_input)
-                ] = vol.All(
-                    cv.ensure_list, [vol.All(vol.Coerce(int), vol.Range(min=1, max=5))]
-                )
+                    self.optional(const.CONF_FORCE_WEEK_NUMBERS, user_input)
+                ] = bool
             if self._data[const.CONF_FREQUENCY] in const.WEEKLY_DAILY_MONTHLY:
                 self.data_schema[
                     self.required(const.CONF_PERIOD, user_input)
