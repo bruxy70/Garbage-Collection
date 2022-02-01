@@ -22,6 +22,7 @@ class GarbageCollectionShared:
     def __init__(self, data):
         """Create class attributes and set initial values."""
         self._data = data.copy()
+        self.hass = None
         self.name = None
         self.errors = {}
         self.data_schema = {}
@@ -128,8 +129,11 @@ class GarbageCollectionShared:
         if self._data[const.CONF_FREQUENCY] in const.ANNUAL_FREQUENCY:
             self.data_schema[self.required(const.CONF_DATE, user_input)] = str
         elif self._data[const.CONF_FREQUENCY] in const.GROUP_FREQUENCY:
+            entities = [entity for entity in self.hass.data[const.DOMAIN][const.SENSOR_PLATFORM]]
             # TO DO: Defaults from entity IDs, cv.multi_select
-            self.data_schema[self.required(CONF_ENTITIES, user_input)] = cv.entity_ids
+            # self.data_schema[self.required(CONF_ENTITIES, user_input)] = cv.entity_ids
+            # TO DO: filter out own entity_id
+            self.data_schema[self.required(CONF_ENTITIES, user_input)] = cv.multi_select(entities)
         elif self._data[const.CONF_FREQUENCY] not in const.BLANK_FREQUENCY:
             self.data_schema[
                 self.required(const.CONF_COLLECTION_DAYS, user_input)
@@ -203,7 +207,7 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
         """Step 1 - set general parameters."""
         next_step = self.shared_class.step1_frequency(user_input)
         if next_step:
-            return await self.async_step_detail(self._import)
+            return await self.async_step_detail()
         return self.async_show_form(
             step_id="user",
             data_schema=vol.Schema(
@@ -217,6 +221,7 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
     ):  # pylint: disable=dangerous-default-value
         """Step 2 - enter detail depending on frequency."""
         # TO DO: Test import
+        self.shared_class.hass = self.hass
         next_step = self.shared_class.step2_detail(user_input)
         if next_step:
             return self.async_create_entry(
@@ -235,7 +240,7 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
         """Import config from configuration.yaml."""
         _LOGGER.debug("Importing config for %s", user_input)
         self.shared_class.update_data(user_input)
-        return await self.async_step_user(self._import)
+        return await self.async_step_user()
 
     @staticmethod
     @callback
@@ -272,6 +277,7 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         self, user_input={}
     ):  # pylint: disable=dangerous-default-value
         """Step 2 - annual or group (no week days)."""
+        self.shared_class.hass = self.hass
         next_step = self.shared_class.step2_detail(user_input)
         if next_step:
             return self.async_create_entry(title="", data=self.shared_class.data)
