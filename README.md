@@ -158,6 +158,7 @@ The Public Holidays **blueprints** use a separate custom integration **Holidays*
 
 [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fskip_holday.yaml)  Skip holiday
 
+[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgist.githubusercontent.com%2Fstboch%2Fc93befde7a8699f90b8180e60283be40%2Fraw%2Fad7af07b09154f018842f3a11c07c883f55d96da%2Fgarbage_collection_slide_in_week.yaml) Offset by configured number of days (contributed by @stboch - Thanks ❤️)
 
 
 ### Include and Exclude
