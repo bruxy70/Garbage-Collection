@@ -268,7 +268,9 @@ async def async_remove_entry(hass, config_entry):
 
 async def async_migrate_entry(_, config_entry: config_entries.ConfigEntry) -> bool:
     """Migrate old entry."""
-    _LOGGER.info("Migrating from version %s", config_entry.version)
+    _LOGGER.info(
+        "Migrating %s from version %s", config_entry.title, config_entry.version
+    )
     new_data = {**config_entry.data}
     new_options = {**config_entry.options}
     removed_data: Dict[str, Any] = {}
@@ -316,7 +318,11 @@ async def async_migrate_entry(_, config_entry: config_entries.ConfigEntry) -> bo
         _LOGGER.info("Removed data config %s", removed_data)
     if removed_options != {}:
         _LOGGER.info("Removed options config %s", removed_options)
-    _LOGGER.info("Migration to version %s successful", config_entry.version)
+    _LOGGER.info(
+        "%s migration to version %s successful",
+        config_entry.title,
+        config_entry.version,
+    )
     return True
 
 
