@@ -183,13 +183,13 @@ class GarbageCollection(RestoreEntity):
                 state.attributes.get(const.ATTR_LAST_COLLECTION)
             )
 
-        # device_registry = dr.async_get(self.hass)
-        # device_registry.async_get_or_create(
-        #     config_entry_id= self.config_entry,
-        #     identifiers={(const.DOMAIN, self.unique_id)},
-        #     name = self.config_entry.data.get("name"),
-        #     manufacturer="bruxy70"
-        # )
+        device_registry = dr.async_get(self.hass)
+        device_registry.async_get_or_create(
+            config_entry_id= self.config_entry.entry_id,
+            identifiers={(const.DOMAIN, self.unique_id)},
+            name = self.name,
+            manufacturer="bruxy70"
+        )
 
         if not self.hidden:
             if const.CALENDAR_PLATFORM not in self.hass.data[const.DOMAIN]:
