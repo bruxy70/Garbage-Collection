@@ -297,7 +297,7 @@ async def async_migrate_entry(_, config_entry: config_entries.ConfigEntry) -> bo
             if remove in new_options:
                 removed_options[remove] = new_options[remove]
                 del new_options[remove]
-        if new_data[const.CONF_FREQUENCY] in const.MONTHLY_FREQUENCY:
+        if new_data.get(const.CONF_FREQUENCY) in const.MONTHLY_FREQUENCY:
             if const.CONF_WEEK_ORDER_NUMBER in new_data:
                 new_data[const.CONF_WEEKDAY_ORDER_NUMBER] = new_data[
                     const.CONF_WEEK_ORDER_NUMBER
@@ -307,7 +307,7 @@ async def async_migrate_entry(_, config_entry: config_entries.ConfigEntry) -> bo
             else:
                 new_data[const.CONF_FORCE_WEEK_NUMBERS] = False
             _LOGGER.info("Updated data config for week_order_number")
-        if new_options[const.CONF_FREQUENCY] in const.MONTHLY_FREQUENCY:
+        if new_options.get(const.CONF_FREQUENCY) in const.MONTHLY_FREQUENCY:
             if const.CONF_WEEK_ORDER_NUMBER in new_options:
                 new_options[const.CONF_WEEKDAY_ORDER_NUMBER] = new_options[
                     const.CONF_WEEK_ORDER_NUMBER

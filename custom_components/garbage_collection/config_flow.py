@@ -252,7 +252,7 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
             if remove in user_input:
                 removed_data[remove] = user_input[remove]
                 del user_input[remove]
-        if user_input[const.CONF_FREQUENCY] in const.MONTHLY_FREQUENCY:
+        if user_input.get(const.CONF_FREQUENCY) in const.MONTHLY_FREQUENCY:
             if const.CONF_WEEK_ORDER_NUMBER in user_input:
                 user_input[const.CONF_WEEKDAY_ORDER_NUMBER] = user_input[
                     const.CONF_WEEK_ORDER_NUMBER
