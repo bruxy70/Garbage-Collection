@@ -218,7 +218,6 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
         self, user_input={}
     ):  # pylint: disable=dangerous-default-value
         """Step 2 - enter detail depending on frequency."""
-        # TO DO: Test import
         self.shared_class.hass = self.hass
         next_step = self.shared_class.step2_detail(user_input)
         if next_step:
@@ -264,7 +263,11 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
             else:
                 user_input[const.CONF_FORCE_WEEK_NUMBERS] = False
         if removed_data != {}:
-            _LOGGER.info("Removed obsolete config values: %s", removed_data)
+            _LOGGER.error(
+                "Removed obsolete config values: %s. "
+                "Please check the documentation how to configure the functionality.",
+                removed_data,
+            )
         self.shared_class.update_data(user_input)
         return self.async_create_entry(
             title=self.shared_class.name, data=self.shared_class.data

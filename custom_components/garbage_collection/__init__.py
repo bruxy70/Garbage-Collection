@@ -321,9 +321,17 @@ async def async_migrate_entry(_, config_entry: config_entries.ConfigEntry) -> bo
     config_entry.data = {**new_data}
     config_entry.options = {**new_options}
     if removed_data != {}:
-        _LOGGER.info("Removed data config %s", removed_data)
+        _LOGGER.error(
+            "Removed data config %s. "
+            "Please check the documentation how to configure the functionality.",
+            removed_data,
+        )
     if removed_options != {}:
-        _LOGGER.info("Removed options config %s", removed_options)
+        _LOGGER.error(
+            "Removed options config %s. "
+            "Please check the documentation how to configure the functionality.",
+            removed_options,
+        )
     _LOGGER.info(
         "%s migration to version %s successful",
         config_entry.title,
