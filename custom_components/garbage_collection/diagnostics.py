@@ -25,4 +25,4 @@ async def async_get_config_entry_diagnostics(
         "attributes": entity_data.extra_state_attributes,
         "config_entry": entry.as_dict(),
     }
-    return async_redact_data(data, (const.TOKEN,))
+    return async_redact_data(data, ("token",))
