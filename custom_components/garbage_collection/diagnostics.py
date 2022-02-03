@@ -1,6 +1,4 @@
 """Diagnostics support for Garbage Collection."""
-from __future__ import annotations
-
 from typing import Any
 
 from homeassistant.components.diagnostics import async_redact_data
@@ -22,7 +20,9 @@ async def async_get_config_entry_diagnostics(
         if entities[entity].unique_id == entry.data["unique_id"]
     ][0]
     data = {
-        "entry": entry.as_dict(),
-        "entity": entity_data,
+        "entity_id": entity_data.entity_id,
+        "state": entity_data.state,
+        "attributes": entity_data.extra_state_attributes,
+        "config_entry": entry.as_dict(),
     }
     return async_redact_data(data, (const.TOKEN,))
