@@ -26,7 +26,7 @@ assignees: ''
 
 **Configuration**
 
-<!--Copy the sensor configuration below.
+<!--Copy the device configuration below.
     Go to the device (e.g. from Configuration / Devices & Services, select the integration and the device.)
     Hit DOWNLOAD DIAGNOSTICS, and paste the content of the file below.-->
 
