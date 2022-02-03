@@ -70,6 +70,8 @@ ICON = DEFAULT_ICON_NORMAL
 STATE_TODAY = "today"
 STATE_TOMORROW = "tomorrow"
 
+TOKEN = "token"
+
 FREQUENCY_OPTIONS = [
     "weekly",
     "even-weeks",

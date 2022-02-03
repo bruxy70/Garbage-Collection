@@ -127,7 +127,9 @@ class GarbageCollection(RestoreEntity):
             self._last_month = const.MONTH_OPTIONS.index(last_month) + 1
         else:
             self._last_month = 12
-        self._monthly_force_week_numbers = config.get(const.CONF_FORCE_WEEK_NUMBERS, False)
+        self._monthly_force_week_numbers = config.get(
+            const.CONF_FORCE_WEEK_NUMBERS, False
+        )
         if self._monthly_force_week_numbers:
             self._weekday_order_numbers = []
             self._week_order_numbers = config.get(const.CONF_WEEKDAY_ORDER_NUMBER)
