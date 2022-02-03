@@ -29,9 +29,7 @@ async def async_setup_platform(hass, _, async_add_entities, discovery_info=None)
 
 async def async_setup_entry(hass, config_entry, async_add_devices):
     """Create garbage collection entities defined in config_flow and add them to HA."""
-    async_add_devices(
-        [GarbageCollection(hass, config_entry)], True
-    )
+    async_add_devices([GarbageCollection(hass, config_entry)], True)
 
 
 def nth_week_date(week_number: int, date_of_month: date, collection_day: int) -> date:
@@ -114,7 +112,11 @@ class GarbageCollection(RestoreEntity):
         """Read configuration and initialise class variables."""
         config = config_entry.data
         self.config_entry = config_entry
-        self._name = config_entry.title if config_entry.title is not None else config.get(CONF_NAME)
+        self._name = (
+            config_entry.title
+            if config_entry.title is not None
+            else config.get(CONF_NAME)
+        )
         self._hidden = config.get(ATTR_HIDDEN, False)
         self._frequency = config.get(const.CONF_FREQUENCY)
         self._manual = config.get(const.CONF_MANUAL)
@@ -185,10 +187,10 @@ class GarbageCollection(RestoreEntity):
 
         device_registry = dr.async_get(self.hass)
         device_registry.async_get_or_create(
-            config_entry_id= self.config_entry.entry_id,
+            config_entry_id=self.config_entry.entry_id,
             identifiers={(const.DOMAIN, self.unique_id)},
-            name = self.name,
-            manufacturer="bruxy70"
+            name=self.name,
+            manufacturer="bruxy70",
         )
 
         if not self.hidden:
