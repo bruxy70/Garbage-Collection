@@ -8,6 +8,7 @@ import homeassistant.util.dt as dt_util
 from dateutil.parser import ParserError, parse
 from dateutil.relativedelta import relativedelta
 from homeassistant.const import ATTR_HIDDEN, CONF_ENTITIES, CONF_NAME, WEEKDAYS
+from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.discovery import async_load_platform
 from homeassistant.helpers.restore_state import RestoreEntity
 
@@ -23,13 +24,13 @@ THROTTLE_INTERVAL = timedelta(seconds=60)
 # Do I still need this?
 async def async_setup_platform(hass, _, async_add_entities, discovery_info=None):
     """Create garbage collection entities defined in YAML and add them to HA."""
-    async_add_entities([GarbageCollection(hass, discovery_info)], True)
+    # async_add_entities([GarbageCollection(hass, discovery_info)], True)
 
 
 async def async_setup_entry(hass, config_entry, async_add_devices):
     """Create garbage collection entities defined in config_flow and add them to HA."""
     async_add_devices(
-        [GarbageCollection(hass, config_entry.data, config_entry.title)], True
+        [GarbageCollection(hass, config_entry)], True
     )
 
 
@@ -109,10 +110,11 @@ def dates_to_texts(dates: List[date]) -> List[str]:
 class GarbageCollection(RestoreEntity):
     """GarbageCollection Sensor class."""
 
-    def __init__(self, _, config, title=None):
+    def __init__(self, hass, config_entry):
         """Read configuration and initialise class variables."""
-        self.config = config
-        self._name = title if title is not None else config.get(CONF_NAME)
+        config = config_entry.data
+        self.config_entry = config_entry
+        self._name = config_entry.title if config_entry.title is not None else config.get(CONF_NAME)
         self._hidden = config.get(ATTR_HIDDEN, False)
         self._frequency = config.get(const.CONF_FREQUENCY)
         self._manual = config.get(const.CONF_MANUAL)
@@ -181,6 +183,14 @@ class GarbageCollection(RestoreEntity):
                 state.attributes.get(const.ATTR_LAST_COLLECTION)
             )
 
+        # device_registry = dr.async_get(self.hass)
+        # device_registry.async_get_or_create(
+        #     config_entry_id= self.config_entry,
+        #     identifiers={(const.DOMAIN, self.unique_id)},
+        #     name = self.config_entry.data.get("name"),
+        #     manufacturer="bruxy70"
+        # )
+
         if not self.hidden:
             if const.CALENDAR_PLATFORM not in self.hass.data[const.DOMAIN]:
                 self.hass.data[const.DOMAIN][
@@ -211,14 +221,14 @@ class GarbageCollection(RestoreEntity):
     @property
     def unique_id(self):
         """Return a unique ID to use for this sensor."""
-        return self.config.get("unique_id", None)
+        return self.config_entry.data.get("unique_id", None)
 
     @property
     def device_info(self):
         """Return device info."""
         return {
             "identifiers": {(const.DOMAIN, self.unique_id)},
-            "name": self.config.get("name"),
+            "name": self.config_entry.data.get("name"),
             "manufacturer": "bruxy70",
         }
 
@@ -270,7 +280,7 @@ class GarbageCollection(RestoreEntity):
     def __repr__(self):
         """Return main sensor parameters."""
         return (
-            f"GarbageCollection[ name: {self._name}, "
+            f"GarbageCollection[name: {self._name}, "
             f"entity_id: {self.entity_id}, "
             f"state: {self.state}\n"
             f"attributes: {self.extra_state_attributes}]"
