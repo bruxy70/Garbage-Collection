@@ -217,7 +217,7 @@ class GarbageCollection(RestoreEntity):
     def device_info(self):
         """Return device info."""
         return {
-            "identifiers": {(const.DOMAIN, self.config.get("unique_id", None))},
+            "identifiers": {(const.DOMAIN, self.unique_id)},
             "name": self.config.get("name"),
             "manufacturer": "bruxy70",
         }
@@ -270,10 +270,10 @@ class GarbageCollection(RestoreEntity):
     def __repr__(self):
         """Return main sensor parameters."""
         return (
-            f"Garbagecollection[ name: {self._name}, "
+            f"GarbageCollection[ name: {self._name}, "
             f"entity_id: {self.entity_id}, "
             f"state: {self.state}\n"
-            f"config: {self.config}]"
+            f"attributes: {self.extra_state_attributes}]"
         )
 
     async def _async_monthly_candidate(self, day1: date) -> date:

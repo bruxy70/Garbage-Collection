@@ -16,8 +16,13 @@ async def async_get_config_entry_diagnostics(
 ) -> dict[str, Any]:
     """Return diagnostics for a config entry."""
     entities = hass.data[const.DOMAIN][const.SENSOR_PLATFORM]
-
+    entity_data = [
+        entities[entity]
+        for entity in entities
+        if entities[entity].unique_id == entry.data["unique_id"]
+    ][0]
     data = {
         "entry": entry.as_dict(),
+        "entity": entity_data,
     }
     return async_redact_data(data, (const.TOKEN,))
