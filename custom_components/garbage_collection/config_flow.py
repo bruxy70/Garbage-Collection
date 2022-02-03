@@ -266,7 +266,6 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
         if removed_data != {}:
             _LOGGER.info("Removed obsolete config values: %s", removed_data)
         self.shared_class.update_data(user_input)
-        # return await self.async_step_detail()
         return self.async_create_entry(
             title=self.shared_class.name, data=self.shared_class.data
         )
