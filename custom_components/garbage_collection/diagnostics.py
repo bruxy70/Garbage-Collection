@@ -1,5 +1,5 @@
 """Diagnostics support for Garbage Collection."""
-from typing import Any
+from typing import Any, Dict
 
 from homeassistant.components.diagnostics import async_redact_data
 from homeassistant.config_entries import ConfigEntry
@@ -11,7 +11,7 @@ from . import const
 async def async_get_config_entry_diagnostics(
     hass: HomeAssistant,
     entry: ConfigEntry,
-) -> dict[str, Any]:
+) -> Dict[str, Any]:
     """Return diagnostics for a config entry."""
     entities = hass.data[const.DOMAIN][const.SENSOR_PLATFORM]
     entity_data = [
