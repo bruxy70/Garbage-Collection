@@ -27,8 +27,8 @@ assignees: ''
 **Configuration**
 
 <!--Copy the sensor configuration below.
-    You can either include screenshots (copy & paste)
-    or find the relevant part it in /config/.storage/core.config_entries and paste it below.-->
+    Go to the device (e.g. from Configuration / Devices & Services, select the integration and the device.)
+    Hit DOWNLOAD DIAGNOSTICS, and paste the content of the file below.-->
 
 ```yaml
 
@@ -37,7 +37,7 @@ assignees: ''
 **Error log/debug information**
 <!--Copy the error message from Developer tools/Logs below.
     To enable debug logging, add `custom_components.garbage_collection: debug` 
-    to your config under logger/logs.-->
+    to your `configuration.yaml` under `logger/logs`.-->
 
 ```txt
 

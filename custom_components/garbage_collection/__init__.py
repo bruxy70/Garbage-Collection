@@ -297,20 +297,26 @@ async def async_migrate_entry(_, config_entry: config_entries.ConfigEntry) -> bo
             if remove in new_options:
                 removed_options[remove] = new_options[remove]
                 del new_options[remove]
-        if const.CONF_WEEK_ORDER_NUMBER in new_data:
-            new_data[const.CONF_WEEKDAY_ORDER_NUMBER] = new_data[
-                const.CONF_WEEK_ORDER_NUMBER
-            ]
-            new_data[const.CONF_FORCE_WEEK_NUMBERS] = True
-            del new_data[const.CONF_WEEK_ORDER_NUMBER]
+        if new_data[const.CONF_FREQUENCY] in const.MONTHLY_FREQUENCY:
+            if const.CONF_WEEK_ORDER_NUMBER in new_data:
+                new_data[const.CONF_WEEKDAY_ORDER_NUMBER] = new_data[
+                    const.CONF_WEEK_ORDER_NUMBER
+                ]
+                new_data[const.CONF_FORCE_WEEK_NUMBERS] = True
+                del new_data[const.CONF_WEEK_ORDER_NUMBER]
+            else:
+                new_data[const.CONF_FORCE_WEEK_NUMBERS] = False
             _LOGGER.info("Updated data config for week_order_number")
-        if const.CONF_WEEK_ORDER_NUMBER in new_options:
-            new_options[const.CONF_WEEKDAY_ORDER_NUMBER] = new_options[
-                const.CONF_WEEK_ORDER_NUMBER
-            ]
-            new_options[const.CONF_FORCE_WEEK_NUMBERS] = True
-            del new_options[const.CONF_WEEK_ORDER_NUMBER]
-            _LOGGER.info("Updated options config for week_order_number")
+        if new_options[const.CONF_FREQUENCY] in const.MONTHLY_FREQUENCY:
+            if const.CONF_WEEK_ORDER_NUMBER in new_options:
+                new_options[const.CONF_WEEKDAY_ORDER_NUMBER] = new_options[
+                    const.CONF_WEEK_ORDER_NUMBER
+                ]
+                new_options[const.CONF_FORCE_WEEK_NUMBERS] = True
+                del new_options[const.CONF_WEEK_ORDER_NUMBER]
+                _LOGGER.info("Updated options config for week_order_number")
+            else:
+                new_options[const.CONF_FORCE_WEEK_NUMBERS] = False
     config_entry.version = const.VERSION
     config_entry.data = {**new_data}
     config_entry.options = {**new_options}

@@ -2,8 +2,7 @@
 import logging
 import uuid
 from collections import OrderedDict
-from datetime import datetime
-from typing import Dict
+from typing import Any, Dict
 
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
@@ -226,20 +225,51 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
             return self.async_create_entry(
                 title=self.shared_class.name, data=self.shared_class.data
             )
-        else:
-            return self.async_show_form(
-                step_id="detail",
-                data_schema=vol.Schema(
-                    self.shared_class.data_schema, extra=vol.ALLOW_EXTRA
-                ),
-                errors=self.shared_class.errors,
-            )
+        return self.async_show_form(
+            step_id="detail",
+            data_schema=vol.Schema(
+                self.shared_class.data_schema, extra=vol.ALLOW_EXTRA
+            ),
+            errors=self.shared_class.errors,
+        )
 
     async def async_step_import(self, user_input):  # pylint: disable=unused-argument
         """Import config from configuration.yaml."""
-        _LOGGER.debug("Importing config for %s", user_input)
+        _LOGGER.info("Importing config for %s", user_input)
+        to_remove = [
+            "offset",
+            "move_country_holidays",
+            "holiday_in_week_move",
+            "holiday_pop_named",
+            "holiday_move_offset",
+            "prov",
+            "state",
+            "observed",
+            "exclude_dates",
+            "include_dates",
+        ]
+        removed_data: Dict[str, Any] = {}
+        for remove in to_remove:
+            if remove in user_input:
+                removed_data[remove] = user_input[remove]
+                del user_input[remove]
+        if user_input[const.CONF_FREQUENCY] in const.MONTHLY_FREQUENCY:
+            if const.CONF_WEEK_ORDER_NUMBER in user_input:
+                user_input[const.CONF_WEEKDAY_ORDER_NUMBER] = user_input[
+                    const.CONF_WEEK_ORDER_NUMBER
+                ]
+                user_input[const.CONF_FORCE_WEEK_NUMBERS] = True
+                del user_input[const.CONF_WEEK_ORDER_NUMBER]
+                _LOGGER.debug("Updated data config for week_order_number")
+            else:
+                user_input[const.CONF_FORCE_WEEK_NUMBERS] = False
+        if removed_data != {}:
+            _LOGGER.info("Removed obsolete config values: %s", removed_data)
         self.shared_class.update_data(user_input)
-        return await self.async_step_user()
+        # return await self.async_step_detail()
+        return self.async_create_entry(
+            title=self.shared_class.name, data=self.shared_class.data
+        )
 
     @staticmethod
     @callback
@@ -265,12 +295,11 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         next_step = self.shared_class.step1_frequency(user_input, options=True)
         if next_step:
             return await self.async_step_detail()
-        else:
-            return self.async_show_form(
-                step_id="init",
-                data_schema=vol.Schema(self.shared_class.data_schema),
-                errors=self.shared_class.errors,
-            )
+        return self.async_show_form(
+            step_id="init",
+            data_schema=vol.Schema(self.shared_class.data_schema),
+            errors=self.shared_class.errors,
+        )
 
     async def async_step_detail(
         self, user_input={}
@@ -280,12 +309,11 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         next_step = self.shared_class.step2_detail(user_input)
         if next_step:
             return self.async_create_entry(title="", data=self.shared_class.data)
-        else:
-            return self.async_show_form(
-                step_id="detail",
-                data_schema=vol.Schema(self.shared_class.data_schema),
-                errors=self.shared_class.errors,
-            )
+        return self.async_show_form(
+            step_id="detail",
+            data_schema=vol.Schema(self.shared_class.data_schema),
+            errors=self.shared_class.errors,
+        )
 
 
 class EmptyOptions(config_entries.OptionsFlow):
@@ -294,43 +322,3 @@ class EmptyOptions(config_entries.OptionsFlow):
     def __init__(self, _):
         """Just set the config_entry parameter."""
         return
-
-
-def is_month_day(date) -> bool:
-    """Validate mm/dd format."""
-    try:
-        date = datetime.strptime(date, "%m/%d")
-        return True
-    except ValueError:
-        return False
-
-
-def is_date(date) -> bool:
-    """Validate yyyy-mm-dd format."""
-    if date == "":
-        return True
-    try:
-        datetime.strptime(date, "%Y-%m-%d")
-        return True
-    except ValueError:
-        return False
-
-
-def string_to_list(string) -> list:
-    """Convert comma separated text to list."""
-    if isinstance(string, list):
-        return string  # Already list
-    if string is None or string == "":
-        return []
-    return list(map(lambda x: x.strip("'\" "), string.split(",")))
-
-
-def is_dates(dates) -> bool:
-    """Validate list of dates (yyyy-mm-dd, yyyy-mm-dd)."""
-    if dates == []:
-        return True
-    check = True
-    for date in dates:
-        if not is_date(date):
-            check = False
-    return check
