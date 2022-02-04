@@ -5,6 +5,7 @@
 # Garbage Collection
 
 The `garbage_collection` component is a Home Assistant integration that creates a custom sensor for monitoring a regular garbage collection schedule. The sensor can be configured for a number of different patterns:
+
 - `weekly` schedule (including multiple collection days, e.g. on Tuesday and Thursday)
 - `every-n-weeks` repeats every `period` of weeks, starting from the week number `first_week`. It uses the week number - therefore, it restarts each year, as the weeks start from number 1 each year.
 - bi-weekly in `even-weeks` or `odd-weeks` (technically, it is the same as every 2 weeks with 1<sup>st</sup> or 2<sup>nd</sup> `first_week`)
@@ -13,8 +14,7 @@ The `garbage_collection` component is a Home Assistant integration that creates 
 - `annually` (e.g. birthdays). This is once per year. Using include dates, you can add additional dates manually.
 - `blank` does not automatically schedule any collections - to be used in cases where you want to make completely own schedule with `manual_update`.
 
-
-You can also configure seasonal calendars (e.g. for bio-waste collection), by configuring the first and last month. 
+You can also configure seasonal calendars (e.g. for bio-waste collection), by configuring the first and last month.
 And you can `group` entities, which will merge multiple schedules into one sensor.
 
 These are some examples using this sensor. The Lovelace config examples are included below.
@@ -27,22 +27,24 @@ These are some examples using this sensor. The Lovelace config examples are incl
 <img src="https://github.com/amaximus/garbage-collection-card/blob/master/garbage_collection_lovelace.jpg">
 
 ## Table of Contents
+
 * [Installation](#installation)
-  + [Manual Installation](#manual-installation)
-  + [Installation via Home Assistant Community Store (HACS)](#installation-via-home-assistant-community-store-hacs)
-* [Configuration](#configuration)
-  + [Configuration Parameters](#configuration-parameters)
-* [Blueprints for Manual Update](#blueprints-for-manual-update)
-  + [Public Holidays](#public-holidays)
-  + [Include and Exclude](#include-and-exclude)
-  + [Offset](#offset)
-  + [Import TXT](#import-txt)
-* [State and Attributes](#state-and-attributes)
-* [Lovelace configuration examples](#lovelace-config-examples)
+  - [Manual Installation](#manual-installation)
+  - [Installation via Home Assistant Community Store (HACS)](#installation-via-home-assistant-community-store-hacs)
+- [Configuration](#configuration)
+  - [Configuration Parameters](#configuration-parameters)
+- [Blueprints for Manual Update](#blueprints-for-manual-update)
+  - [Public Holidays](#public-holidays)
+  - [Include and Exclude](#include-and-exclude)
+  - [Offset](#offset)
+  - [Import TXT](#import-txt)
+- [State and Attributes](#state-and-attributes)
+- [Lovelace configuration examples](#lovelace-config-examples)
 
 ## Installation
 
 ### MANUAL INSTALLATION
+
 1. Download the
    [latest release](https://github.com/bruxy70/garbage_collection/releases/latest).
 2. Unpack the release and copy the `custom_components/garbage_collection` directory
@@ -52,6 +54,7 @@ These are some examples using this sensor. The Lovelace config examples are incl
 4. Restart Home Assistant.
 
 ### INSTALLATION VIA Home Assistant Community Store (HACS)
+
 1. Ensure that [HACS](https://hacs.xyz/) is installed.
 2. Search for and install the "Garbage Collection" integration.
 3. Configure the `garbage_collection` sensor.
@@ -64,7 +67,9 @@ Go to `Configuration`/`Devices & Services`, click on the `+ ADD INTEGRATION` but
 The configuration via `configuration.yaml` has been deprecated. If you have previously configured the integration there, it will be imported to ConfigFlow, and you should remove it.
 
 ### CONFIGURATION PARAMETERS
+
 #### SENSOR PARAMETERS
+
 |Parameter |Required|Description
 |:----------|----------|------------
 | `name` | Yes | Sensor friendly name
@@ -79,35 +84,35 @@ The configuration via `configuration.yaml` has been deprecated. If you have prev
 | `verbose_format` | No | (relevant when `verbose_state` is `True`). Verbose status formatting string. Can use placeholders `{date}` and `{days}` to show the date of next collection and remaining days. **Default**: `'on {date}, in {days} days'`</br>*When the collection is today or tomorrow, it will show `Today` or `Tomorrow`*</br>*(currently in English, French, Czech and Italian).*
 | `date_format` | No | In the `verbose_format`, you can configure the format of date (using [strftime](http://strftime.org/) format)  **Default**: `'%d-%b-%Y'`
 
-
 #### PARAMETERS FOR ALL FREQUENCIES EXCEPT ANNUAL, GROUP and BLANK
+
 |Parameter |Required|Description
 |:----------|----------|------------
 | `first_month` | No | Month three letter abbreviation, e.g. `"jan"`, `"feb"`...<br/>**Default**: `"jan"`
 | `last_month` | No | Month three letter abbreviation.<br/>**Default**: `"dec"`
 
-
 #### PARAMETERS FOR ALL FREQUENCIES EXCEPT ANNUAL, EVERY-N-DAYS, GROUP and BLANK
+
 |Parameter |Required|Description
 |:----------|----------|------------
-| `collection_days` | Yes | Day three letter abbreviation, list of `"mon"`, `"tue"`, `"wed"`, `"thu"`, `"fri"`, `"sat"`, `"sun"`. 
-
+| `collection_days` | Yes | Day three letter abbreviation, list of `"mon"`, `"tue"`, `"wed"`, `"thu"`, `"fri"`, `"sat"`, `"sun"`.
 
 #### PARAMETERS FOR COLLECTION EVERY-N-WEEKS
+
 |Parameter |Required|Description
 |:----------|----------|------------
 |`period` | No | Collection every `"period"` weeks (integer 1-53)<br/>**Default**: 1
 |`first_week` | No | First collection on the `"first_week"` week (integer 1-53)<br/>**Default**: 1<br/>*(The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representation of the week)<br/><br/>Note: This parameter cannot be used to set the beginning of the collection period (use the `first_month` parameter for that). The purpose of `first_week` is to simply 'offset' the week number, so the collection every ;'n' weeks does not always trigger on week numbers that are multiplication of 'n'. Technically, the value of this parameter shall be less than `period`, otherwise it will give weird results. Also note, that the week numbers restart each year. Use `every-n-days` frequency if you need a consistent period across the year ends.*
 
-
 #### PARAMETERS FOR COLLECTION EVERY-N-DAYS
+
 |Parameter |Required|Description
 |:----------|----------|------------
 |`first_date` | Yes | Repeats every n days from this first date<br/>(date in the international ISO format `'yyyy-mm-dd'`).
 |`period` | No | Collection every `"period"` days (warning - in this configuration, it is days, not weeks!)<br/>**Default**: 1 (daily, which makes no sense I suppose)
 
-
 #### PARAMETERS FOR MONTHLY COLLECTION
+
 The monthly schedule has two flavors: it can trigger either on the **n<sup>th</sup> occurrence of the weekday** in a month, or on the weekday in the **n<sup>th</sup> week** of each month.
 
 |Parameter |Required|Description
@@ -119,29 +124,32 @@ The monthly schedule has two flavors: it can trigger either on the **n<sup>th</s
 *One of the parameters `weekday_order_number` or `week_order_number` has to be defined. But you cannot combine both options in one sensor.*
 
 #### PARAMETERS FOR ANNUAL COLLECTION
+
 |Parameter |Required|Description
 |:----------|----------|------------
 |`date` | Yes | The date of collection, in format `'mm/dd'` (e.g. '11/24' for November 24 each year)
 
 #### PARAMETERS FOR GROUP
+
 |Parameter |Required|Description
 |:----------|----------|------------
 |`entities` | Yes | A list of `entity_id`s to merge
-
 
 **IMPORTANT - put include/exclude dates within quotes. Dates without quotes might cause Home Assistant not loading configuration when starting - in case the date is invalid. Validation for dates within quotes works fine.** I think this is a general bug, I am addressing that. (See the example above)
 
 ## Blueprints for Manual Update
 
 ### Prerequisites
+
 1. To use the **blueprints**, you need to set the `garbage_collection` entity for `manual_update`, that will fire the `garbage_collection_loaded` event on each sensor update and trigger the automation **blueprint**.
 2. Install/Import **blueprint**
 3. From the **blueprint**, create and configure the automation
 
 ### Public Holidays
+
 There are a couple of **blueprints**, automatically moving the collection falling on a public holiday. Or if there was a public holiday in the week before the scheduled collection.
 
-The Public Holidays **blueprints** use a separate custom integration **Holidays**, available through **HACS**, that you can configure for different countries. 
+The Public Holidays **blueprints** use a separate custom integration **Holidays**, available through **HACS**, that you can configure for different countries.
 
 [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fmove_on_holiday.yaml) Move on Holiday
 
@@ -150,6 +158,7 @@ The Public Holidays **blueprints** use a separate custom integration **Holidays*
 [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fskip_holday.yaml)  Skip the holiday
 
 ### Include and Exclude
+
 A list of fixed dates to include and exclude from the calculated schedule.
 
 [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Finclude_exclude.yaml)  Include and Exclude
@@ -159,38 +168,43 @@ A list of fixed dates to include and exclude from the calculated schedule.
 [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fexclude.yaml)  Exclude
 
 ### Offset
+
 The offset blueprint will move the calculated collections by a number of days. This can be used, for example, to schedule collection for last Saturday each month - just set the collection to the first Saturday each month and offset it by -7 days.
 
-[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fgarbage_collection_offset.yaml)
+[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Foffset.yaml)
 
 ### Import txt
+
 This **blueprint** requires a `command_line` sensor reading content of a txt file, containig a set of dates, one per line.
 
 [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fimport_txt.yaml)
 
-
 ## STATE AND ATTRIBUTES
+
 ### State
+
 The state can be one of
 
 | Value | Meaning
 |:------|---------
 | `0` | Collection is today
 | `1` | Collection is tomorrow
-| `2` | Collection is later 
+| `2` | Collection is later
 
 If the `verbose_state` parameter is set, it will show the date, and the remaining days. For example: "Today" or "Tomorrow" or "on 10-Sep-2019, in 2 days" (configurable)
 
 ### Attributes
+
 | Attribute | Description
 |:----------|------------
 | `next_date` | The date of next collection
 | `days` | Days till the next collection
 | `last_collection` | The date and time of the last collection
 
-
 ## Services
+
 ### `garbage_collection.collect_garbage`
+
 If the collection is scheduled for today, mark it completed and look for the next collection.
 It will set the `last_collection` attribute to the current date and time.
 
@@ -199,18 +213,22 @@ It will set the `last_collection` attribute to the current date and time.
 | `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
 
 ## Manual update
+
 There are standard [blueprints](#blueprints-for-manual-update) provided to handle manual updates - to move collection on public holidays or offset the collection.
 
-If these **blueprints** do not work for you, you can create your own custom rules to handle any scenario. If you do so, please share the blueprints with the others by posting them to the [blueprints directory](https://github.com/bruxy70/Garbage-Collection/tree/development/blueprints) - someone else might find them useful. Thanks! 
+If these **blueprints** do not work for you, you can create your own custom rules to handle any scenario. If you do so, please share the blueprints with the others by posting them to the [blueprints directory](https://github.com/bruxy70/Garbage-Collection/tree/development/blueprints) - someone else might find them useful. Thanks!
 To help you with creating custom automations, see the following examples:
 
-## _!!! Advanced !!! If you think this is too complicated, then this is not for you!!!_
+## *!!! Advanced !!! If you think this is too complicated, then this is not for you!!!*
+
 <details>
 
 ## Services used for `manual_update`
+
 The following services are used within automations, triggered by the [garbage_collection_loaded](#garbage_collection_loaded) event. Don't use them anywhere else, it won't work. For the examples of their use, see the [examples](#manual-update-examples)
 
 ### `garbage_collection.add_date`
+
 Add a date to the list of dates calculated automatically. To add multiple dates, call this service multiple-times with different dates.
 Note that this date will be removed on the next sensor update, when the data is re-calculated and loaded. This is why, this service should be called from the automation triggered by the event `garbage_collection_loaded`. This event is called each time the sensor is updated. And at the end of this automation, you need to call the `garbage_collection.update_state` service to update the sensor state based on automatically collected dates, and the dates added, removed, or offset by the automation.
 
@@ -220,6 +238,7 @@ Note that this date will be removed on the next sensor update, when the data is 
 | `date` | The date to be added, in ISO format (`'yyyy-mm-dd'`). Make sure to enter the date in quotes!
 
 ### `garbage_collection.remove_date`
+
 Remove a date to the list of dates calculated automatically. To remove multiple dates, call this service multiple-times with different dates.
 Note that this date will be removed on the next sensor update, when the data is re-calculated and loaded. This is why, this service should be called from the automation triggered by the event `garbage_collection_loaded`. This event is called each time the sensor is updated. And at the end of this automation, you need to call the `garbage_collection.update_state` service to update the sensor state based on automatically collected dates, and the dates added, removed, or offset by the automation.
 
@@ -229,6 +248,7 @@ Note that this date will be removed on the next sensor update, when the data is 
 | `date` | The date to be removed, in ISO format (`'yyyy-mm-dd'`). Make sure to enter the date in quotes!
 
 ### `garbage_collection.offset_date`
+
 Offset the calculated collection day by the `offset` number of days.
 Note that this date will be removed on the next sensor update, when the data is re-calculated and loaded. This is why, this service should be called from the automation triggered by the event `garbage_collection_loaded`. This event is called each time the sensor is updated. And at the end of this automation, you need to call the `garbage_collection.update_state` service to update the sensor state based on automatically collected dates, and the dates added, removed, or offset by the automation.
 
@@ -239,6 +259,7 @@ Note that this date will be removed on the next sensor update, when the data is 
 | `offset` | By how many days to offset - integer between `-31` to `31` (e.g. `1`)
 
 ### `garbage_collection.update_state`
+
 Choose the next collection date from the list of dates calculated automatically, added by service calls (and not removed), and update the entity state and attributes.
 
 | Attribute | Description
@@ -246,7 +267,9 @@ Choose the next collection date from the list of dates calculated automatically,
 | `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
 
 ## Events
+
 ### `garbage_collection_loaded`
+
 This event is triggered each time a `garbage_collection` entity is being updated. You can create an automation to modify the collection schedule before the entity state update.
 
 Event data:
@@ -256,14 +279,15 @@ Event data:
 | `collection_dates` | List of collection dates calculated automatically.
 
 ## Manual update examples
+
 For the example below, the entity should be configured with `manual_update` set to `true`.
-Then, when the `garbage_collection` entity is updated (normally once a day at midnight, or restart, or when triggering entity update by script), it will calculate the collection schedule for previous, current and next year. But it will **NOT UPDATE** the entity state. 
-Instead, it will trigger an event `garbage_collection_loaded` with a list of automatically calculated dates as a parameter. 
+Then, when the `garbage_collection` entity is updated (normally once a day at midnight, or restart, or when triggering entity update by script), it will calculate the collection schedule for previous, current and next year. But it will **NOT UPDATE** the entity state.
+Instead, it will trigger an event `garbage_collection_loaded` with a list of automatically calculated dates as a parameter.
 You will **have to create an automation triggered by this event**. In this automation, you will need to call the service `garbage_collection.update_state` to update the state. Before that, you can call the services `garbage_collection.add_date` and/or `garbage_collection.remove_date` and/or `garbage_collection.offset_date` to programmatically tweak the dates in whatever way you need (e.g. based on values from external API sensor, comparing the dates with the list of holidays, calculating custom offsets based on the day of the week etc.). This is complicated but gives you the ultimate flexibility.
 
 ## Simple example
-Adding an extra collection date (a fixed date in this case) - for the entity `sensor.test`.
 
+Adding an extra collection date (a fixed date in this case) - for the entity `sensor.test`.
 
 ```yaml
 alias: garbage_collection event
@@ -285,6 +309,7 @@ mode: single
 ```
 
 ## Moderate example
+
 This will loop through the calculated dates, and add an extra collection to a day after each calculated one. So if this is set for a collection every first Wednesday each month, it will result in a collection on the first Wednesday, and the following day (kind of first Thursday, except if the week is starting on Thursday - just a random weird example :).
 
 This example is for an entity `sensor.test`. If you want to use it for yours, replace it with the real entity name in the trigger.
@@ -313,6 +338,7 @@ mode: single
 ```
 
 ## Advanced example
+
 This is an equivalent of "holiday in week" move - checking if there is a public holiday on the calculated collection day, or earlier in the week. And if yes, moving the collection by one day. This is fully custom logic, so it could be further complicated by whatever rules anyone wants.
 
 This example is for an entity `sensor.test`. If you want to use it for yours, replace it with a real entity name in the trigger.
@@ -356,16 +382,18 @@ Or you can use the [blueprints](#blueprints-for-manual-update) I made for you. A
 </details>
 
 # Lovelace config examples
+
 For information/inspiration - not supported.
 <details>
 
 ## Garbage Collection custom card
+
 You can use the custom  [garbage collection card](https://github.com/amaximus/garbage-collection-card) developed by @amaximus.
 
 <img src="https://github.com/amaximus/garbage-collection-card/blob/master/garbage_collection_lovelace.jpg">
 
-
 ## With images (picture-entity)
+
 This is what I use (I like images). I use a horizontal stack of picture-entities, with `card-templater` plugin ([Lovelace Card Templater](https://github.com/gadgetchnnel/lovelace-card-templater)) to show the number of days:
 
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/picture-entity.png">
@@ -373,6 +401,7 @@ This is what I use (I like images). I use a horizontal stack of picture-entities
 (The `state` is designed to be used as traffic lights. That's why it has 3 values. You obviously cannot use this with `verbose_state`)
 
 This is the configuration
+
 ```yaml
       - type: 'custom:card-templater'
         card:
@@ -391,11 +420,13 @@ This is the configuration
 ```
 
 ## List view (entities)
+
 The simplest visualization is to use entities. In this case, I use `verbose_state` to show `state` as text.
 
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/entities.png">
 
 Lovelace configuration
+
 ```yaml
       - type: entities
         entities:
@@ -406,12 +437,15 @@ Lovelace configuration
 ```
 
 ## Icon view (glance)
+
 <img src="https://github.com/bruxy70/Garbage-Collection/blob/master/images/sensor.png">
 
 Lovelace Configuration
+
 ```yaml
       - type: glance
         entities:
           - sensor.general_waste
 ```
+
 </details>

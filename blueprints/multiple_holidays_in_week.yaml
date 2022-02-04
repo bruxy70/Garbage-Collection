@@ -1,10 +1,10 @@
 blueprint:
-  name: Holiday in week
+  name: Multiple holidays in week
   description: >-
-    Loop through all calculated dates, move the collection to the next day 
-    if public holiday was in the week before/on the calculated collection date.
+    Loop through all calculated dates, move the collection by a day for each
+    public holiday in the collection week, before or on the collection date.
   domain: automation
-  source_url: https://github.com/bruxy70/Garbage-Collection/blob/development/blueprints/holiday_in_week.yaml
+  source_url: https://github.com/bruxy70/Garbage-Collection/blob/development/blueprints/multiple_holidays_in_week.yaml
   input:
     garbage_collection_entity:
       name: Garbage Collection Entity
@@ -47,10 +47,17 @@ action:
             entity_id: "{{ trigger.event.data.entity_id }}"
             date: "{{ trigger.event.data.collection_dates[repeat.index-1] }}"
             offset: >-
-              # Make sure the new collection day does not fall on another public holiday. Increment offset if yes
               {%- set collection_date = as_datetime(trigger.event.data.collection_dates[repeat.index-1]) %}
-              {%- set ns = namespace(offset=1, found=false) %}
-              {%- for _ in range(7) if not ns.found %}
+              {%- set ns = namespace(found_free=false, offset=0) %}
+              # Calculate number of public holidays before the collection (offset)
+              {%- for i in range(collection_date.weekday()+1) %}
+                {%- set d = ( collection_date + timedelta( days=-i) ) | as_timestamp | timestamp_custom("%Y-%m-%d") %}
+                {%- if d in state_attr(holiday_entity,'holidays') %}
+                  {%- set ns.offset = ns.offset + 1 %}
+                {%- endif %}
+              {%- endfor %}  
+              # Make sure the new collection day does not fall on another public holiday. Increment offset if yes
+              {%- for _ in range(7) if not ns.found_free %}
                 {%- set d = ( collection_date + timedelta( days=ns.offset) ) | as_timestamp | timestamp_custom("%Y-%m-%d") %}
                 {%- if d in state_attr(holiday_entity,'holidays') %}
                   {%- set ns.offset = ns.offset + 1 %}

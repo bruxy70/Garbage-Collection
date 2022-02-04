@@ -31,6 +31,7 @@ action:
       sequence:
         - condition: template
           value_template: >-
+            # Only skip the collection if there is a public holiday on the collection day
             {{ trigger.event.data.collection_dates[repeat.index-1] in state_attr(holiday_entity,'holidays') }}
         - service: garbage_collection.remove_date
           data:
