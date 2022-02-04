@@ -46,10 +46,5 @@ assignees: ''
 **Screenshots**
 <!--If applicable, add screenshots to help explain the problem.-->
 
-**Version**
-
-Integration version: 
-
-Home Assistant version: 
 
 <!--Thanks-->
