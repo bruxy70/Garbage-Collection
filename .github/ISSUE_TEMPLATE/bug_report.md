@@ -23,14 +23,13 @@ assignees: ''
     not the actual sensor state. So this will save both of us lots of time.
 -->
 
-
 **Configuration**
 
 <!--Copy the device configuration below.
     Go to the device (e.g. from Configuration / Devices & Services, select the integration and the device.)
     Hit DOWNLOAD DIAGNOSTICS, and paste the content of the file below.-->
 
-```yaml
+```json
 
 ```
 
@@ -45,6 +44,5 @@ assignees: ''
 
 **Screenshots**
 <!--If applicable, add screenshots to help explain the problem.-->
-
 
 <!--Thanks-->
