@@ -59,7 +59,7 @@ action:
                 {%- if d in state_attr(holiday_entity,'holidays') %}
                   {%- set ns.offset = ns.offset + 1 %}
                 {% else %}
-                  {%- set ns.found = true %}
+                  {%- set ns.found_free = true %}
                 {%- endif %}
               {% endfor %}
               {{ ns.offset }}
