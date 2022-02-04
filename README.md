@@ -28,9 +28,10 @@ These are some examples using this sensor. The Lovelace config examples are incl
 
 ## Table of Contents
 
-* [Installation](#installation)
+- [Installation](#installation)
   - [Manual Installation](#manual-installation)
   - [Installation via Home Assistant Community Store (HACS)](#installation-via-home-assistant-community-store-hacs)
+
 - [Configuration](#configuration)
   - [Configuration Parameters](#configuration-parameters)
 - [Blueprints for Manual Update](#blueprints-for-manual-update)
@@ -153,7 +154,9 @@ The Public Holidays **blueprints** use a separate custom integration **Holidays*
 
 [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fmove_on_holiday.yaml) Move on Holiday
 
-[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fholiday_in_week.yaml)  Move forward when a holiday was in the week
+[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fholiday_in_week.yaml)  Move forward one day if a public holiday was in the  collection week, before or on the collection day (and keep moving if the new collection day also falls on a holiday)
+
+[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fmultiple_holidays_in_week.yaml) Move forward a day for each public holiday in the collection week, before or on the collection day (and keep moving if the new collection day also falls on a holiday)
 
 [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fskip_holday.yaml)  Skip the holiday
 
