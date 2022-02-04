@@ -32,7 +32,6 @@ action:
       sequence:
         - condition: template
           value_template: >-
-            # Only offset the collection if there was a public holiday in that week
             {%- set collection_date = as_datetime(trigger.event.data.collection_dates[repeat.index-1]) %}
             {%- set ns = namespace(found=false) %}
             {%- for i in range(collection_date.weekday()+1) %}
@@ -49,14 +48,12 @@ action:
             offset: >-
               {%- set collection_date = as_datetime(trigger.event.data.collection_dates[repeat.index-1]) %}
               {%- set ns = namespace(found_free=false, offset=0) %}
-              # Calculate number of public holidays before the collection (offset)
               {%- for i in range(collection_date.weekday()+1) %}
                 {%- set d = ( collection_date + timedelta( days=-i) ) | as_timestamp | timestamp_custom("%Y-%m-%d") %}
                 {%- if d in state_attr(holiday_entity,'holidays') %}
                   {%- set ns.offset = ns.offset + 1 %}
                 {%- endif %}
               {%- endfor %}  
-              # Make sure the new collection day does not fall on another public holiday. Increment offset if yes
               {%- for _ in range(7) if not ns.found_free %}
                 {%- set d = ( collection_date + timedelta( days=ns.offset) ) | as_timestamp | timestamp_custom("%Y-%m-%d") %}
                 {%- if d in state_attr(holiday_entity,'holidays') %}

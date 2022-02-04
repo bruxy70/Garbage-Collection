@@ -32,7 +32,6 @@ action:
       sequence:
         - condition: template
           value_template: >-
-            # Only offset the collection if there was a public holiday in that week
             {%- set collection_date = as_datetime(trigger.event.data.collection_dates[repeat.index-1]) %}
             {%- set ns = namespace(found=false) %}
             {%- for i in range(collection_date.weekday()+1) %}
@@ -47,7 +46,6 @@ action:
             entity_id: "{{ trigger.event.data.entity_id }}"
             date: "{{ trigger.event.data.collection_dates[repeat.index-1] }}"
             offset: >-
-              # Make sure the new collection day does not fall on another public holiday. Increment offset if yes
               {%- set collection_date = as_datetime(trigger.event.data.collection_dates[repeat.index-1]) %}
               {%- set ns = namespace(offset=1, found=false) %}
               {%- for _ in range(7) if not ns.found %}
