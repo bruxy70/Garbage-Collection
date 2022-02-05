@@ -71,70 +71,70 @@ The configuration via `configuration.yaml` has been deprecated. If you have prev
 
 #### SENSOR PARAMETERS
 
-|Parameter |Required|Description
-|:----------|----------|------------
-| `name` | Yes | Sensor friendly name
-| `frequency` | Yes | `"weekly"`, `"even-weeks"`, `"odd-weeks"`, `"every-n-weeks"`, `"every-n-days"`, `"monthly"`, `"annual"`, `"group"` or `"blank"`
-| `manual_update` | No | (Advanced). Do not automatically update the status. Status is updated manualy by calling the service `garbage_collection.update_state` from an automation triggered by event `garbage_collection_loaded`, that could manually add or remove collection dates, and manually trigger the state update at the end. [See the example](#manual-update-examples).</br>**Default**: `False`
-| `hidden` | No | Hide in calendar (useful for sensors that are used in groups)<br/>**Default**: `False`
-| `icon_normal` | No | Default icon **Default**:  `mdi:trash-can`
-| `icon_today` | No | Icon if the collection is today **Default**: `mdi:delete-restore`
-| `icon_tomorrow` | No | Icon if the collection is tomorrow **Default**: `mdi:delete-circle`
-| `expire_after` | No | Time in format format `HH:MM`. If the collection is due today, start looking for the next occurence after this time (i.e. if the weekly collection is in the morning, change the state from 'today' to next week in the afternoon)
-| `verbose_state` | No | The sensor state will show collection date and remaining days, instead of number **Default**: `False`
-| `verbose_format` | No | (relevant when `verbose_state` is `True`). Verbose status formatting string. Can use placeholders `{date}` and `{days}` to show the date of next collection and remaining days. **Default**: `'on {date}, in {days} days'`</br>*When the collection is today or tomorrow, it will show `Today` or `Tomorrow`*</br>*(currently in English, French, Czech and Italian).*
-| `date_format` | No | In the `verbose_format`, you can configure the format of date (using [strftime](http://strftime.org/) format)  **Default**: `'%d-%b-%Y'`
+|Parameter |Required|Description |
+|:----------|----------|------------ |
+| `name` | Yes | Sensor friendly name |
+| `frequency` | Yes | `"weekly"`, `"even-weeks"`, `"odd-weeks"`, `"every-n-weeks"`, `"every-n-days"`, `"monthly"`, `"annual"`, `"group"` or `"blank"` |
+| `manual_update` | No | (Advanced). Do not automatically update the status. Status is updated manualy by calling the service `garbage_collection.update_state` from an automation triggered by event `garbage_collection_loaded`, that could manually add or remove collection dates, and manually trigger the state update at the end. [See the example](#manual-update-examples).</br>**Default**: `False` |
+| `hidden` | No | Hide in calendar (useful for sensors that are used in groups)<br/>**Default**: `False` |
+| `icon_normal` | No | Default icon **Default**:  `mdi:trash-can` |
+| `icon_today` | No | Icon if the collection is today **Default**: `mdi:delete-restore` |
+| `icon_tomorrow` | No | Icon if the collection is tomorrow **Default**: `mdi:delete-circle` |
+| `expire_after` | No | Time in format format `HH:MM`. If the collection is due today, start looking for the next occurence after this time (i.e. if the weekly collection is in the morning, change the state from 'today' to next week in the afternoon) |
+| `verbose_state` | No | The sensor state will show collection date and remaining days, instead of number **Default**: `False` |
+| `verbose_format` | No | (relevant when `verbose_state` is `True`). Verbose status formatting string. Can use placeholders `{date}` and `{days}` to show the date of next collection and remaining days. **Default**: `'on {date}, in {days} days'`</br>*When the collection is today or tomorrow, it will show `Today` or `Tomorrow`*</br>*(currently in English, French, Czech and Italian).* |
+| `date_format` | No | In the `verbose_format`, you can configure the format of date (using [strftime](http://strftime.org/) format)  **Default**: `'%d-%b-%Y'` |
 
 #### PARAMETERS FOR ALL FREQUENCIES EXCEPT ANNUAL, GROUP and BLANK
 
-|Parameter |Required|Description
-|:----------|----------|------------
-| `first_month` | No | Month three letter abbreviation, e.g. `"jan"`, `"feb"`...<br/>**Default**: `"jan"`
-| `last_month` | No | Month three letter abbreviation.<br/>**Default**: `"dec"`
+|Parameter |Required|Description |
+|:----------|----------|------------ |
+| `first_month` | No | Month three letter abbreviation, e.g. `"jan"`, `"feb"`...<br/>**Default**: `"jan"` |
+| `last_month` | No | Month three letter abbreviation.<br/>**Default**: `"dec"` |
 
 #### PARAMETERS FOR ALL FREQUENCIES EXCEPT ANNUAL, EVERY-N-DAYS, GROUP and BLANK
 
-|Parameter |Required|Description
-|:----------|----------|------------
-| `collection_days` | Yes | Day three letter abbreviation, list of `"mon"`, `"tue"`, `"wed"`, `"thu"`, `"fri"`, `"sat"`, `"sun"`.
+|Parameter |Required|Description |
+|:----------|----------|------------ |
+| `collection_days` | Yes | Day three letter abbreviation, list of `"mon"`, `"tue"`, `"wed"`, `"thu"`, `"fri"`, `"sat"`, `"sun"`. |
 
 #### PARAMETERS FOR COLLECTION EVERY-N-WEEKS
 
-|Parameter |Required|Description
-|:----------|----------|------------
-|`period` | No | Collection every `"period"` weeks (integer 1-53)<br/>**Default**: 1
-|`first_week` | No | First collection on the `"first_week"` week (integer 1-53)<br/>**Default**: 1<br/>*(The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representation of the week)<br/><br/>Note: This parameter cannot be used to set the beginning of the collection period (use the `first_month` parameter for that). The purpose of `first_week` is to simply 'offset' the week number, so the collection every ;'n' weeks does not always trigger on week numbers that are multiplication of 'n'. Technically, the value of this parameter shall be less than `period`, otherwise it will give weird results. Also note, that the week numbers restart each year. Use `every-n-days` frequency if you need a consistent period across the year ends.*
+|Parameter |Required|Description |
+|:----------|----------|------------ |
+|`period` | No | Collection every `"period"` weeks (integer 1-53)<br/>**Default**: 1 |
+|`first_week` | No | First collection on the `"first_week"` week (integer 1-53)<br/>**Default**: 1<br/>*(The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representation of the week)<br/><br/>Note: This parameter cannot be used to set the beginning of the collection period (use the `first_month` parameter for that). The purpose of `first_week` is to simply 'offset' the week number, so the collection every ;'n' weeks does not always trigger on week numbers that are multiplication of 'n'. Technically, the value of this parameter shall be less than `period`, otherwise it will give weird results. Also note, that the week numbers restart each year. Use `every-n-days` frequency if you need a consistent period across the year ends.* |
 
 #### PARAMETERS FOR COLLECTION EVERY-N-DAYS
 
-|Parameter |Required|Description
-|:----------|----------|------------
-|`first_date` | Yes | Repeats every n days from this first date<br/>(date in the international ISO format `'yyyy-mm-dd'`).
-|`period` | No | Collection every `"period"` days (warning - in this configuration, it is days, not weeks!)<br/>**Default**: 1 (daily, which makes no sense I suppose)
+|Parameter |Required|Description |
+|:----------|----------|------------ |
+|`first_date` | Yes | Repeats every n days from this first date<br/>(date in the international ISO format `'yyyy-mm-dd'`). |
+|`period` | No | Collection every `"period"` days (warning - in this configuration, it is days, not weeks!)<br/>**Default**: 1 (daily, which makes no sense I suppose) |
 
 #### PARAMETERS FOR MONTHLY COLLECTION
 
 The monthly schedule has two flavors: it can trigger either on the **n<sup>th</sup> occurrence of the weekday** in a month, or on the weekday in the **n<sup>th</sup> week** of each month.
 
-|Parameter |Required|Description
-|:----------|----------|------------
-|`weekday_order_number` | Yes/No | List of week numbers of `collection_day` each month. E.g., if `collection_day` is `"sat"`, 1 will mean 1<sup>st</sup> Saturday each month (integer 1-5)
-|`week_order_number` | Yes/No | Similar to `weekday_order_number`, but instead of n<sup>th</sup> weekday of each month, take the weekday of the n<sup>th</sup> week of each month.</br>So if the month starts on Friday, the Wednesday of the 1<sup>st</sup> week would actually be last Wednesday of the previous month and the Wednesday of 2<sup>nd</sup> week will be the 1<sup>st</sup> Wednesday of the month.
-|`period` | No | If `period` is not defined (or 1), the schedule will repeat monthly. If `period` is 2, it will be every 2<sup>nd</sup> month. If `period` is 3, it will be once per quarter, and so on.<br/>The `first_month` parameter will then define the starting month. So if the `first_month` is `jan` (or not defined), and `period` is 2, the collection will be in odd months (`jan`, `mar`, `may`, `jul`, `sep` and `nov`). If `first_month` is `feb`, it will be in even months. (integer 1-12)<br/>**Default**: 1
+|Parameter |Required|Description |
+|:----------|----------|------------ |
+|`weekday_order_number` | Yes/No | List of week numbers of `collection_day` each month. E.g., if `collection_day` is `"sat"`, 1 will mean 1<sup>st</sup> Saturday each month (integer 1-5) |
+|`week_order_number` | Yes/No | Similar to `weekday_order_number`, but instead of n<sup>th</sup> weekday of each month, take the weekday of the n<sup>th</sup> week of each month.</br>So if the month starts on Friday, the Wednesday of the 1<sup>st</sup> week would actually be last Wednesday of the previous month and the Wednesday of 2<sup>nd</sup> week will be the 1<sup>st</sup> Wednesday of the month. |
+|`period` | No | If `period` is not defined (or 1), the schedule will repeat monthly. If `period` is 2, it will be every 2<sup>nd</sup> month. If `period` is 3, it will be once per quarter, and so on.<br/>The `first_month` parameter will then define the starting month. So if the `first_month` is `jan` (or not defined), and `period` is 2, the collection will be in odd months (`jan`, `mar`, `may`, `jul`, `sep` and `nov`). If `first_month` is `feb`, it will be in even months. (integer 1-12)<br/>**Default**: 1 |
 
 *One of the parameters `weekday_order_number` or `week_order_number` has to be defined. But you cannot combine both options in one sensor.*
 
 #### PARAMETERS FOR ANNUAL COLLECTION
 
-|Parameter |Required|Description
-|:----------|----------|------------
-|`date` | Yes | The date of collection, in format `'mm/dd'` (e.g. '11/24' for November 24 each year)
+|Parameter |Required|Description |
+|:----------|----------|------------ |
+|`date` | Yes | The date of collection, in format `'mm/dd'` (e.g. '11/24' for November 24 each year) |
 
 #### PARAMETERS FOR GROUP
 
-|Parameter |Required|Description
-|:----------|----------|------------
-|`entities` | Yes | A list of `entity_id`s to merge
+|Parameter |Required|Description |
+|:----------|----------|------------ |
+|`entities` | Yes | A list of `entity_id`s to merge |
 
 **IMPORTANT - put include/exclude dates within quotes. Dates without quotes might cause Home Assistant not loading configuration when starting - in case the date is invalid. Validation for dates within quotes works fine.** I think this is a general bug, I am addressing that. (See the example above)
 
@@ -152,23 +152,22 @@ There are a couple of **blueprints**, automatically moving the collection fallin
 
 The Public Holidays **blueprints** use a separate custom integration **Holidays**, available through **HACS**, that you can configure for different countries.
 
-[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fmove_on_holiday.yaml) Move on Holiday
-
-[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fholiday_in_week.yaml)  Move forward one day if a public holiday was in the  collection week, before or on the collection day (and keep moving if the new collection day also falls on a holiday)
-
-[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fmultiple_holidays_in_week.yaml) Move forward a day for each public holiday in the collection week, before or on the collection day (and keep moving if the new collection day also falls on a holiday)
-
-[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fskip_holday.yaml)  Skip the holiday
+| <!-- --> | <!-- --> |
+| --- | --- |
+| [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fmove_on_holiday.yaml) | Move on Holiday |
+| [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fholiday_in_week.yaml) | Move forward one day if a public holiday was in the  collection week, before or on the collection day (and keep moving if the new collection day also falls on a holiday) |
+| [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fmultiple_holidays_in_week.yaml) | Move forward a day for each public holiday in the collection week, before or on the collection day (and keep moving if the new collection day also falls on a holiday) |
+| [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fskip_holday.yaml) | Skip the holiday |
 
 ### Include and Exclude
 
 A list of fixed dates to include and exclude from the calculated schedule.
 
-[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Finclude_exclude.yaml)  Include and Exclude
-
-[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Finclude.yaml)  Include
-
-[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fexclude.yaml)  Exclude
+| <!-- --> | <!-- --> |
+| --- | --- |
+| [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Finclude_exclude.yaml) | Include and Exclude |
+| [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Finclude.yaml) | Include |
+| [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fexclude.yaml) | Exclude |
 
 ### Offset
 
@@ -188,21 +187,21 @@ This **blueprint** requires a `command_line` sensor reading content of a txt fil
 
 The state can be one of
 
-| Value | Meaning
-|:------|---------
-| `0` | Collection is today
-| `1` | Collection is tomorrow
-| `2` | Collection is later
+| Value | Meaning |
+|:------|--------- |
+| `0` | Collection is today |
+| `1` | Collection is tomorrow |
+| `2` | Collection is later |
 
 If the `verbose_state` parameter is set, it will show the date, and the remaining days. For example: "Today" or "Tomorrow" or "on 10-Sep-2019, in 2 days" (configurable)
 
 ### Attributes
 
-| Attribute | Description
-|:----------|------------
-| `next_date` | The date of next collection
-| `days` | Days till the next collection
-| `last_collection` | The date and time of the last collection
+| Attribute | Description |
+|:----------|------------ |
+| `next_date` | The date of next collection |
+| `days` | Days till the next collection |
+| `last_collection` | The date and time of the last collection |
 
 ## Services
 
@@ -211,9 +210,9 @@ If the `verbose_state` parameter is set, it will show the date, and the remainin
 If the collection is scheduled for today, mark it completed and look for the next collection.
 It will set the `last_collection` attribute to the current date and time.
 
-| Attribute | Description
-|:----------|------------
-| `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
+| Attribute | Description |
+|:----------|------------ |
+| `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`) |
 
 ## Manual update
 
@@ -235,39 +234,39 @@ The following services are used within automations, triggered by the [garbage_co
 Add a date to the list of dates calculated automatically. To add multiple dates, call this service multiple-times with different dates.
 Note that this date will be removed on the next sensor update, when the data is re-calculated and loaded. This is why, this service should be called from the automation triggered by the event `garbage_collection_loaded`. This event is called each time the sensor is updated. And at the end of this automation, you need to call the `garbage_collection.update_state` service to update the sensor state based on automatically collected dates, and the dates added, removed, or offset by the automation.
 
-| Attribute | Description
-|:----------|------------
-| `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
-| `date` | The date to be added, in ISO format (`'yyyy-mm-dd'`). Make sure to enter the date in quotes!
+| Attribute | Description |
+|:----------|------------ |
+| `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`) |
+| `date` | The date to be added, in ISO format (`'yyyy-mm-dd'`). Make sure to enter the date in quotes! |
 
 ### `garbage_collection.remove_date`
 
 Remove a date to the list of dates calculated automatically. To remove multiple dates, call this service multiple-times with different dates.
 Note that this date will be removed on the next sensor update, when the data is re-calculated and loaded. This is why, this service should be called from the automation triggered by the event `garbage_collection_loaded`. This event is called each time the sensor is updated. And at the end of this automation, you need to call the `garbage_collection.update_state` service to update the sensor state based on automatically collected dates, and the dates added, removed, or offset by the automation.
 
-| Attribute | Description
-|:----------|------------
-| `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
-| `date` | The date to be removed, in ISO format (`'yyyy-mm-dd'`). Make sure to enter the date in quotes!
+| Attribute | Description |
+|:----------|------------ |
+| `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`) |
+| `date` | The date to be removed, in ISO format (`'yyyy-mm-dd'`). Make sure to enter the date in quotes! |
 
 ### `garbage_collection.offset_date`
 
 Offset the calculated collection day by the `offset` number of days.
 Note that this date will be removed on the next sensor update, when the data is re-calculated and loaded. This is why, this service should be called from the automation triggered by the event `garbage_collection_loaded`. This event is called each time the sensor is updated. And at the end of this automation, you need to call the `garbage_collection.update_state` service to update the sensor state based on automatically collected dates, and the dates added, removed, or offset by the automation.
 
-| Attribute | Description
-|:----------|------------
-| `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
-| `date` | The date to be removed, in ISO format (`'yyyy-mm-dd'`). Make sure to enter the date in quotes!
-| `offset` | By how many days to offset - integer between `-31` to `31` (e.g. `1`)
+| Attribute | Description |
+|:----------|------------ |
+| `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`) |
+| `date` | The date to be removed, in ISO format (`'yyyy-mm-dd'`). Make sure to enter the date in quotes! |
+| `offset` | By how many days to offset - integer between `-31` to `31` (e.g. `1`) |
 
 ### `garbage_collection.update_state`
 
 Choose the next collection date from the list of dates calculated automatically, added by service calls (and not removed), and update the entity state and attributes.
 
-| Attribute | Description
-|:----------|------------
-| `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
+| Attribute | Description |
+|:----------|------------ |
+| `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`) |
 
 ## Events
 
@@ -276,10 +275,10 @@ Choose the next collection date from the list of dates calculated automatically,
 This event is triggered each time a `garbage_collection` entity is being updated. You can create an automation to modify the collection schedule before the entity state update.
 
 Event data:
-| Attribute | Description
-|:----------|------------
-| `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
-| `collection_dates` | List of collection dates calculated automatically.
+| Attribute | Description |
+|:----------|------------ |
+| `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`) |
+| `collection_dates` | List of collection dates calculated automatically. |
 
 ## Manual update examples
 
