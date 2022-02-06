@@ -16,7 +16,7 @@ blueprint:
       description: Entity containing the holidays - an instance of Holidays custom integration (available through HACS)
       selector:
         entity:
-          integration: Holidays
+          integration: holidays          
 mode: parallel
 trigger:
   - platform: event
