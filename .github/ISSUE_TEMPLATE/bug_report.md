@@ -10,8 +10,8 @@ assignees: ''
 1. The information within the angled brackets (like this text) contains instructions for you. 
     You can leave it in - it will not be included in the tickets anyway.
 2. DO NOT DELETE ANY TEXT from this template, and provide information in all sections please!
-    I need this to understand what I am looking at. 
-    Without it, I will not be able to start working on the issue.
+    I need this to understand what I am looking at - to be able to replicate the bug.
+    Without it, I will not be able to start working on the issue, and will close it.
 -->
 
 **Describe the bug**
@@ -23,24 +23,20 @@ assignees: ''
     not the actual sensor state. So this will save both of us lots of time.
 -->
 
-
 **Configuration**
 
-Do you configure the integration in YAML or Config Flow (GUI)? : <!--Say YAML, or Config Flow-->
+<!--Copy the device configuration below.
+    Go to the device (e.g. from Configuration / Devices & Services, select the integration and the device.)
+    Hit DOWNLOAD DIAGNOSTICS, and paste the content of the file below.-->
 
-<!--Copy the sensor configuration below.
-    For YAML, that is easy. 
-    For config flow, you can either include screenshots (copy & paste)
-    or find the relevant part it in /config/.storage/core.config_entries and paste it below.-->
-
-```yaml
+```json
 
 ```
 
 **Error log/debug information**
 <!--Copy the error message from Developer tools/Logs below.
     To enable debug logging, add `custom_components.garbage_collection: debug` 
-    to your config under logger/logs.-->
+    to your `configuration.yaml` under `logger/logs`.-->
 
 ```txt
 
@@ -48,11 +44,5 @@ Do you configure the integration in YAML or Config Flow (GUI)? : <!--Say YAML, o
 
 **Screenshots**
 <!--If applicable, add screenshots to help explain the problem.-->
-
-**Version**
-
-Integration version: 
-
-Home Assistant version: 
 
 <!--Thanks-->

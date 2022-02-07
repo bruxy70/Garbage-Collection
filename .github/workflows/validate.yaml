@@ -25,7 +25,7 @@ jobs:
       - name: Change directory
         run: cd custom_components/garbage_collection
       - name: isort
-        run: isort --line-width 88 --trailing-comma -m 3 --check-only .
+        run: isort --line-width 88 --trailing-comma -m 3 --profile black --check-only .
       - name: black
         run: black --check .
       - name: flake8

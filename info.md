@@ -8,7 +8,7 @@
 
 # Garbage Collection
 
-The `garbage_collection` component is a Home Assistant custom sensor for scheduling/monitoring regular garbage collection. The sensor can be configured for weekly schedule (including multiple collection days), bi-weekly (in even or odd weeks), monthly schedule (nth day each month), or annual (e.g. birthdays). You can also configure seasonal calendars (e.g. for bio-waste collection) by configuring the first and last month, and you can also group entities, which will merge multiple schedules into one sensor.
+The `garbage_collection` component is a Home Assistant custom sensor for scheduling/monitoring regular garbage collection. The sensor can be configured for weekly schedule (including multiple collection days), bi-weekly (in even or odd weeks), monthly schedule (nth day each month), or annual (e.g. birthdays). You can also configure seasonal calendars (e.g. for bio-waste collection) by configuring the first and last month. You can also group entities, which will merge multiple schedules into one sensor.
 
 ## Examples
 ### Images (picture-entity)
@@ -26,9 +26,11 @@ The `garbage_collection` component is a Home Assistant custom sensor for schedul
 Look to the <a href="https://github.com/bruxy70/Garbage-Collection">repository</a> for examples of Lovelace configuration.
 
 ## Configuration
-Go to `Configuration`/`Devices & Services`, click on the `+ ADD INTEGRATION` button, select `Garbage Collection` and configure the sensor (prefered). If you configure Garbage Collection using Config Flow, you can change the entity_name, name and change the sensor parameters from the Integrations configuration. The changes are instant and do not require HA restart.<br />If you would like to add more than 1 collection schedule, click on the `+ ADD INTEGRATION` button again and add another `Garbage Collection` integration instance.
+Go to `Configuration`/`Devices & Services`, click on the `+ ADD INTEGRATION` button, select `Garbage Collection` and configure the integration.<br />If you would like to add more than one collection schedule, click on the `+ ADD INTEGRATION` button again and add another `Garbage Collection` integration instance.
 
-The configuration via `configuration.yaml` has been deprecated. If you have previously configured the integration there, it will be imported to ConfigFlow and you shoudl remove it.
+The configuration via `configuration.yaml` has been deprecated. If you have previously configured the integration there, it will be imported to ConfigFlow, and you should remove it.
+
+For the configuration documentation check the <a href="https://github.com/bruxy70/Garbage-Collection/blob/development/README.md">repository</a> file
 
 ## STATE AND ATTRIBUTES
 
@@ -41,14 +43,14 @@ The state can be one of
 | 1 | Collection is tomorrow
 | 2 | Collection is later 
 
-If the `verbose_state` parameter is set, it will show date and remaining days, for example "Today" or "Tomorrow" or "on 2019-09-10, in 2 days"
+If the `verbose_state` parameter is set, it will show the date, and remaining days. For example "Today" or "Tomorrow" or "on 2019-09-10, in 2 days"
 
 ### Attributes
 | Attribute | Description
 |:----------|------------
 | `next_date` | The date of next collection
 | `days` | Days till the next collection
-| `last_collection` | Date and time of the last collection
+| `last_collection` | The date and time of the last collection
 
 ## Services
 ### garbage_collection.collect_garbage
@@ -59,4 +61,4 @@ It will set the `last_collection` attribute to the current date and time.
 |:----------|------------
 | `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
 
-For more details see the <a href="https://github.com/bruxy70/Garbage-Collection/blob/master/README.md">repository.</a>
+For more details see the <a href="https://github.com/bruxy70/Garbage-Collection/blob/development/README.md">repository.</a>

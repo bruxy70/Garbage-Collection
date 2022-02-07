@@ -2,74 +2,36 @@
     "config": {
         "step": {
             "user": {
-                "title": "Garbage Collection - Konfigurace",
+                "title": "Garbage Collection - Konfigurace (1/2)",
                 "description": "Zadej jméno sensoru a nastav parametry. Více na https://github.com/bruxy70/Garbage-Collection",
                 "data": {
                     "name": "Friendly name",
                     "hidden": "Skrýt v kalendáři",
                     "frequency": "Frekvence",
-                    "manual_update": "State je aktualizovaný manuálně voláním služby",
+                    "manual_update": "Manual update - state je aktualizovaný manuálně voláním služby",
                     "icon_normal": "Ikona (mdi:trash-can)",
                     "icon_tomorrow": "Ikona svoz zítra (mdi:delete-restore)",
                     "icon_today": "Ikona svoz dnes (mdi:delete-circle)",
-                    "offset": "Odsadit (mezi -31 a 31 dny)",
                     "expire_after": "Čas expirace (HH:MM)",
-                    "verbose_state": "Verbose state (popis místo čísel)",
-                    "verbose_format": "Verbose format (Použij `date` a `days` proměnné (ve složených závorkách))",
-                    "include_dates": "Přidané datumy (yyyy-mm-dd, yyyy-mm-dd, ...) - volitelné",
-                    "exclude_dates": "Zakázané datumy (yyyy-mm-dd, yyyy-mm-dd, ...) - volitelné",
-                    "date_format": "Formát data(see http://strftime.org/)"
-                }
-            },
-            "annual_group": {
-                "title": "Garbage Collection - Další parametry",
-                "description": "Zadej datum svozu (např. 11/20 pro 20. listoped)",
-                "data": {
-                    "date": "Datum (mm/dd)",
-                    "entities": "Seznam entit (odděleno čárkou)"
+                    "verbose_state": "Verbose state (popis místo čísel)"
                 }
             },
             "detail": {
-                "title": "Garbage Collection - Dny svozu",
-                "description": "Vyber jeden nebo více dnů svozu. Více na: https://github.com/bruxy70/Garbage-Collection",
+                "title": "Garbage Collection - Další parametry (2/2)",
+                "description": "Více na: https://github.com/bruxy70/Garbage-Collection",
                 "data": {
-                    "collection_days_mon": "Pondělí",
-                    "collection_days_tue": "Úterý",
-                    "collection_days_wed": "Středa",
-                    "collection_days_thu": "Čtvrtek",
-                    "collection_days_fri": "Pátek",
-                    "collection_days_sat": "Sobota",
-                    "collection_days_sun": "Neděle",
-                    "force_week_order_numbers": "Číslo týdne v měsící místo čísla dne"
-                }
-            },
-            "final": {
-                "title": "Garbage Collection - Další parametry",
-                "description": "Přidané a zakázané datumy jsou seznamy datumů ve formátu yyyy-mm-dd, oddělených čárkou. Více info na https://github.com/bruxy70/Garbage-Collection",
-                "data": {
+                    "date": "Datum (mm/dd)",
+                    "entities": "Seznam entit (odděleno čárkou)",
+                    "collection_days": "Dny svozu",
                     "first_month": "První měsíc svozu",
                     "last_month": "Poslední měsíc svozu",
                     "period": "Perioda (svoz každých n týdnů/dnů): (1-365)",
                     "first_week": "První týden svozu (1-52)",
                     "first_date": "První datum",
-                    "weekday_order_number_1": "Prvn den v měsíci",
-                    "weekday_order_number_2": "Druhý den v měsíci",
-                    "weekday_order_number_3": "Třetí den v měsíci",
-                    "weekday_order_number_4": "Čtvrtý den v měsíci",
-                    "weekday_order_number_5": "Pátý den v měsíci",
-                    "week_order_number_1": "Prvn týden v měsíci",
-                    "week_order_number_2": "Druhý týden v měsíci",
-                    "week_order_number_3": "Třetí týden v měsíci",
-                    "week_order_number_4": "Čtvrtý týden v měsíci",
-                    "week_order_number_5": "Pátý týden v měsíci",
-                    "move_country_holidays": "Státní svátky - země (volitelné)",
-                    "holiday_move_offset": "Posunout svátek o (dní: -7..7)",
-                    "holiday_pop_named": "Ignorovat svátky (volitelné)",
-                    "holiday_in_week_move": "Move to next day if holiday in week (optional)",
-                    "prov": "Státní svátky - provincie (volitelné)",
-                    "state": "Státní svátky - stát (volitelné)",
-                    "observed": "Státní svátky - observed (volitelné)"
-
+                    "weekday_order_number": "Pořadí dne v měsící (např. první středa v měsíci)",
+                    "force_week_order_numbers": "Číslo týdne v měsící místo čísla dne",
+                    "verbose_format": "Verbose format (Použij `date` a `days` proměnné (ve složených závorkách))",
+                    "date_format": "Formát data(see http://strftime.org/)"
                 }
             }
         },
@@ -93,7 +55,7 @@
     "options": {
         "step": {
             "init": {
-                "title": "Garbage Collection - Konfigurace",
+                "title": "Garbage Collection - Konfigurace (1/2)",
                 "description": "Zadej jméno sensoru a nastav parametry. Více na https://github.com/bruxy70/Garbage-Collection",
                 "data": {
                     "hidden": "Skrýt v kalendáři",
@@ -102,64 +64,26 @@
                     "icon_normal": "Ikona (mdi:trash-can)",
                     "icon_tomorrow": "Ikona svoz zítra (mdi:delete-restore)",
                     "icon_today": "Ikona svoz dnes (mdi:delete-circle)",
-                    "offset": "Odsadit (mezi -31 a 31 dny)",
                     "expire_after": "Čas expirace (HH:MM)",
-                    "verbose_state": "Verbose state (popis místo čísel)",
-                    "verbose_format": "Verbose format (Použij `date` a `days` proměnné (ve složených závorkách))",
-                    "include_dates": "Přidané datumy (yyyy-mm-dd, yyyy-mm-dd, ...) - volitelné",
-                    "exclude_dates": "Zakázané datumy (yyyy-mm-dd, yyyy-mm-dd, ...) - volitelné",
-                    "date_format": "Formát data(see http://strftime.org/)"
-                }
-            },
-            "annual_group": {
-                "title": "Garbage Collection - Další parametry",
-                "description": "Zadej datum svozu (např. 11/20 pro 20. listoped)",
-                "data": {
-                    "date": "Datum (mm/dd)",
-                    "entities": "Seznam entit (odděleno čárkou)"
+                    "verbose_state": "Verbose state (popis místo čísel)"
                 }
             },
             "detail": {
-                "title": "Garbage Collection - Dny svozu",
-                "description": "Vyber jeden nebo více dnů svozu. Více na: https://github.com/bruxy70/Garbage-Collection",
+                "title": "Garbage Collection - Další parametry (2/2)",
+                "description": "",
                 "data": {
-                    "collection_days_mon": "Pondělí",
-                    "collection_days_tue": "Úterý",
-                    "collection_days_wed": "Středa",
-                    "collection_days_thu": "Čtvrtek",
-                    "collection_days_fri": "Pátek",
-                    "collection_days_sat": "Sobota",
-                    "collection_days_sun": "Neděle",
-                    "force_week_order_numbers": "Číslo týdne v měsící místo čísla dne"
-
-                }
-            },
-            "final": {
-                "title": "Garbage Collection - Další parametry",
-                "description": "Přidané a zakázané datumy jsou seznamy datumů ve formátu yyyy-mm-dd, oddělených čárkou. Více info na https://github.com/bruxy70/Garbage-Collection",
-                "data": {
+                    "date": "Datum (mm/dd)",
+                    "entities": "Seznam entit (odděleno čárkou)",
+                    "collection_days": "Dny svozu",
                     "first_month": "První měsíc svozu",
                     "last_month": "Poslední měsíc scozu",
                     "period": "Perioda (svoz každých n týdnů-dnů): (1-365)",
                     "first_week": "První týden svozu (1-52)",
                     "first_date": "První datum",
-                    "weekday_order_number_1": "Prvn den v měsíci",
-                    "weekday_order_number_2": "Druhý den v měsíci",
-                    "weekday_order_number_3": "Třetí den v měsíci",
-                    "weekday_order_number_4": "Čtvrtý den v měsíci",
-                    "weekday_order_number_5": "Pátý den v měsíci",
-                    "week_order_number_1": "Prvn týden v měsíci",
-                    "week_order_number_2": "Druhý týden v měsíci",
-                    "week_order_number_3": "Třetí týden v měsíci",
-                    "week_order_number_4": "Čtvrtý týden v měsíci",
-                    "week_order_number_5": "Pátý týden v měsíci",
-                    "move_country_holidays": "Státní svátky - země (volitelné)",
-                    "holiday_move_offset": "Posunout svátek o (dní: -7..7)",
-                    "holiday_pop_named": "Ignorovat svátky (volitelné)",
-                    "holiday_in_week_move": "Move to next day if holiday in week (optional)",
-                    "prov": "Státní svátky - provincie (volitelné)",
-                    "state": "Státní svátky - stát (volitelné)",
-                    "observed": "Státní svátky - observed (volitelné)"
+                    "weekday_order_number": "Pořadí dne v měsící (např. první středa v měsíci)",
+                    "force_week_order_numbers": "Číslo týdne v měsící místo čísla dne",
+                    "verbose_format": "Verbose format (Použij `date` a `days` proměnné (ve složených závorkách))",
+                    "date_format": "Formát data(see http://strftime.org/)"
                 }
             }
         },
@@ -177,5 +101,4 @@
             "date": "Špatný formát data!"
         }
     }
-
 }

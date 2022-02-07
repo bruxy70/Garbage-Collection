@@ -2,7 +2,7 @@
     "config": {
         "step": {
             "user": {
-                "title": "Prügivedu - tühjendamiste ajad",
+                "title": "Prügivedu - tühjendamiste ajad (1/2)",
                 "description": "Sisesta nduri andmed. Rohkem infot leiab https://github.com/bruxy70/Garbage-Collection",
                 "data": {
                     "name": "Kuvatav nimi",
@@ -12,63 +12,26 @@
                     "icon_normal": "Ikoon (mdi:trash-can) - valikuline",
                     "icon_tomorrow": "Homme on prügivedu ikoon (mdi:delete-restore) - valikuline",
                     "icon_today": "Täna on prügivedu ikoon (mdi:delete-circle) - valikuline",
-                    "offset": "Ajanihe (-31 kuni 31 päeva)",
                     "expire_after": "Ajalõpp (HH:MM) - valikuline",
-                    "verbose_state": "Teavitus tekstina (aeg tekstina numbrite asemel)",
-                    "verbose_format": "Teavituse formaat (kasutades `date` and `days` muutujaid (kantsulgudes))",
-                    "include_dates": "Kaasatavad kuupäevad (yyyy-mm-dd, yyyy-mm-dd, ...) - valikuline",
-                    "exclude_dates": "Välditavad kuupäevad (yyyy-mm-dd, yyyy-mm-dd, ...) - valikuline",
-                    "date_format": "Kuupäeva formaat (vaata http://strftime.org/)"
-                }
-            },
-            "annual_group": {
-                "title": "Prügivedu - lisaparameetrid",
-                "description": "Sisesta prügiveo kuupäev (näiteks. 11/20 kui on 20. novembril)",
-                "data": {
-                    "date": "Kuupäev (mm/dd)",
-                    "entities": "Olemite nimekiri (komadega eraldatud)"
+                    "verbose_state": "Teavitus tekstina (aeg tekstina numbrite asemel)"
                 }
             },
             "detail": {
-                "title": "Prügivedu - tühjendamise nädalapäevad",
+                "title": "Prügivedu - täiendavad sätted (2/2)",
                 "description": "Vali üks või mitu tühjendamise nädalapäeva. Rohkem teavet: https://github.com/bruxy70/Garbage-Collection",
                 "data": {
-                    "collection_days_mon": "Esmaspäev",
-                    "collection_days_tue": "Teisipäev",
-                    "collection_days_wed": "Kolmapäev",
-                    "collection_days_thu": "Neljapäev",
-                    "collection_days_fri": "Reede",
-                    "collection_days_sat": "Laupäev",
-                    "collection_days_sun": "Pühapäev",
-                    "force_week_order_numbers": "Mitmes nädal kuus kui nädalapäev pole oluline"
-                }
-            },
-            "final": {
-                "title": "Prügivedu - täiendavad sätted",
-                "description": "Kaasatud ja välditavad kuupäevad on komadega eraldatud kuupäevade nimekiri järgmises formaadis: yyyy-mm-dd. Rohkem teavet https://github.com/bruxy70/Garbage-Collection",
-                "data": {
+                    "date": "Kuupäev (mm/dd)",
+                    "entities": "Olemite nimekiri (komadega eraldatud)",
+                    "collection_days": "Tühjendamise nädalapäevad",
                     "first_month": "Esimene prügiveo kuu",
                     "last_month": "Viimane prügiveo kuu",
                     "period": "Prügivedu iga n päeva/nädala tagant: (1-365)",
                     "first_week": "Esimese prügiveo nädal (1-52)",
                     "first_date": "Esimese prügiveo kuupäev",
-                    "weekday_order_number_1": "Kuu esimene tööpäev",
-                    "weekday_order_number_2": "Kuu teine tööpäev",
-                    "weekday_order_number_3": "Kuu kolmas tööpäev",
-                    "weekday_order_number_4": "Kuu neljas tööpäev",
-                    "weekday_order_number_5": "5th weekday of month",
-                    "week_order_number_1": "Kuu esimene nädal",
-                    "week_order_number_2": "Kuu teine nädal",
-                    "week_order_number_3": "Kuu kolmas nädal",
-                    "week_order_number_4": "Kuu neljas nädal",
-                    "week_order_number_5": "Kuu viies nädal",
-                    "move_country_holidays": "Liiguta prügivedu pühade tõttu üks päev edasi (valikuline)",
-                    "holiday_move_offset": "Liiguta prügivedu pühade tõttu n päeva edasi(-7..7)",
-                    "holiday_pop_named": "Eira pühi (nimekiri) - valikuline",
-                    "holiday_in_week_move": "Liiguta prügivedu üks päev edasi kui püha on tööpäeval (valikuline)",
-                    "prov": "Kohalikud pühad (valikuline)",
-                    "state": "Riiklikud pühad (valikuline)",
-                    "observed": "Ise määratud pühad (valikuline)"
+                    "weekday_order_number": "Kuu nädalapäevade järjekord (nt kuu esimene kolmapäev)",
+                    "force_week_order_numbers": "nädala järjekord kuus, mitte nädalapäevade järjekord (nt esimese nädala kolmapäeval).",
+                    "verbose_format": "Teavituse formaat (kasutades `date` and `days` muutujaid (kantsulgudes))",
+                    "date_format": "Kuupäeva formaat (vaata http://strftime.org/)"
                 }
             }
         },
@@ -92,73 +55,35 @@
     "options": {
         "step": {
             "init": {
-                "title": "Prügivedu - tühjendamiste ajad",
+                "title": "Prügivedu - tühjendamiste ajad (1/2)",
                 "description": "Sisesta nduri andmed. Rohkem infot leiab https://github.com/bruxy70/Garbage-Collection",
                 "data": {
-                    "name": "Kuvatav nimi",
                     "hidden": "Ära näita kalendris",
                     "frequency": "Sagedus",
                     "manual_update": "Sensor state updated manually by calling a service",
                     "icon_normal": "Ikoon (mdi:trash-can) - valikuline",
                     "icon_tomorrow": "Homme on prügivedu ikoon (mdi:delete-restore) - valikuline",
                     "icon_today": "Täna on prügivedu ikoon (mdi:delete-circle) - valikuline",
-                    "offset": "Ajanihe (-31 kuni 31 päeva)",
                     "expire_after": "Ajalõpp (HH:MM) - valikuline",
-                    "verbose_state": "Teavitus tekstina (aeg tekstina numbrite asemel)",
-                    "verbose_format": "Teavituse formaat (kasutades `date` and `days` muutujaid (kantsulgudes))",
-                    "include_dates": "Kaasatavad kuupäevad (yyyy-mm-dd, yyyy-mm-dd, ...) - valikuline",
-                    "exclude_dates": "Välditavad kuupäevad (yyyy-mm-dd, yyyy-mm-dd, ...) - valikuline",
-                    "date_format": "Kuupäeva formaat (vaata http://strftime.org/)"
-                }
-            },
-            "annual_group": {
-                "title": "Prügivedu - lisaparameetrid",
-                "description": "Sisesta prügiveo kuupäev (näiteks. 11/20 kui on 20. novembril)",
-                "data": {
-                    "date": "Kuupäev (mm/dd)",
-                    "entities": "Olemite nimekiri (komadega eraldatud)"
+                    "verbose_state": "Teavitus tekstina (aeg tekstina numbrite asemel)"
                 }
             },
             "detail": {
-                "title": "Prügivedu - tühjendamise nädalapäevad",
+                "title": "Prügivedu - täiendavad sätted (2/2)",
                 "description": "Vali üks või mitu tühjendamise nädalapäeva. Rohkem teavet: https://github.com/bruxy70/Garbage-Collection",
                 "data": {
-                    "collection_days_mon": "Esmaspäev",
-                    "collection_days_tue": "Teisipäev",
-                    "collection_days_wed": "Kolmapäev",
-                    "collection_days_thu": "Neljapäev",
-                    "collection_days_fri": "Reede",
-                    "collection_days_sat": "Laupäev",
-                    "collection_days_sun": "Pühapäev",
-                    "force_week_order_numbers": "Mitmes nädal kuus kui nädalapäev pole oluline"
-                }
-            },
-            "final": {
-                "title": "Prügivedu - täiendavad sätted",
-                "description": "Kaasatud ja välditavad kuupäevad on komadega eraldatud kuupäevade nimekiri järgmises formaadis: yyyy-mm-dd. Rohkem teavet https://github.com/bruxy70/Garbage-Collection",
-                "data": {
+                    "date": "Kuupäev (mm/dd)",
+                    "entities": "Olemite nimekiri (komadega eraldatud)",
+                    "collection_days": "Tühjendamise nädalapäevad",
                     "first_month": "Esimene prügiveo kuu",
                     "last_month": "Viimane prügiveo kuu",
                     "period": "Prügivedu iga n päeva/nädala tagant: (1-365)",
                     "first_week": "Esimese prügiveo nädal (1-52)",
                     "first_date": "Esimese prügiveo kuupäev",
-                    "weekday_order_number_1": "Kuu esimene tööpäev",
-                    "weekday_order_number_2": "Kuu teine tööpäev",
-                    "weekday_order_number_3": "Kuu kolmas tööpäev",
-                    "weekday_order_number_4": "Kuu neljas tööpäev",
-                    "weekday_order_number_5": "5th weekday of month",
-                    "week_order_number_1": "Kuu esimene nädal",
-                    "week_order_number_2": "Kuu teine nädal",
-                    "week_order_number_3": "Kuu kolmas nädal",
-                    "week_order_number_4": "Kuu neljas nädal",
-                    "week_order_number_5": "Kuu viies nädal",
-                    "move_country_holidays": "Liiguta prügivedu pühade tõttu üks päev edasi (valikuline)",
-                    "holiday_move_offset": "Liiguta prügivedu pühade tõttu n päeva edasi(-7..7)",
-                    "holiday_pop_named": "Eira pühi (nimekiri) - valikuline",
-                    "holiday_in_week_move": "Liiguta prügivedu üks päev edasi kui püha on tööpäeval (valikuline)",
-                    "prov": "Kohalikud pühad (valikuline)",
-                    "state": "Riiklikud pühad (valikuline)",
-                    "observed": "Ise määratud pühad (valikuline)"
+                    "weekday_order_number": "Kuu nädalapäevade järjekord (nt kuu esimene kolmapäev)",
+                    "force_week_order_numbers": "nädala järjekord kuus, mitte nädalapäevade järjekord (nt esimese nädala kolmapäeval).",
+                    "verbose_format": "Teavituse formaat (kasutades `date` and `days` muutujaid (kantsulgudes))",
+                    "date_format": "Kuupäeva formaat (vaata http://strftime.org/)"
                 }
             }
         },

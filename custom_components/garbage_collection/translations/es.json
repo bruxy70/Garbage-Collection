@@ -2,7 +2,7 @@
     "config": {
         "step": {
             "user": {
-                "title": "Recolección de basura - Frecuencia de recogida",
+                "title": "Recolección de basura - Frecuencia de recogida (1/2)",
                 "description": "Ingrese el nombre del sensor y configure los parámetros del sensor. Más información en https://github.com/bruxy70/Garbage-Collection",
                 "data": {
                     "name": "Nombre amigable",
@@ -12,63 +12,26 @@
                     "icon_normal": "Icono (mdi:trash-can)",
                     "icon_tomorrow": "Icono de recoleccion para mañana (mdi:delete-restore)",
                     "icon_today": "Icono de recoleccion para hoy (mdi:delete-circle)",
-                    "offset": "Compensación (entre -31 y 31 días)",
                     "expire_after": "Caduca después (HH:MM)",
-                    "verbose_state": "Estado detallado (texto, en lugar de número)",
-                    "verbose_format": "Formato detallado (usando las variables `fecha` y` dias` (entre corchetes))",
-                    "include_dates": "Incluir fechas (yyyy-mm-dd, yyyy-mm-dd, ...) - opcional",
-                    "exclude_dates": "Excluir fechas (yyyy-mm-dd, yyyy-mm-dd, ...) - opcional",
-                    "date_format": "Formato de fecha(ver en http://strftime.org/)"
-                }
-            },
-            "annual_group": {
-                "title": "Recolección de basura - Parámetros adicionales",
-                "description": "Ingrese la fecha del día de recolección (por ejemplo, 20/11 para el 20 de noviembre)",
-                "data": {
-                    "date": "Fecha (mm/dd)",
-                    "entities": "Lista de entidades (separadas por comas)"
+                    "verbose_state": "Estado detallado (texto, en lugar de número)"
                 }
             },
             "detail": {
-                "title": "Recolección de basura - Días de recogida",
-                "description": "Seleccione uno o más días de recolección. Más detalles aquí: https://github.com/bruxy70/Garbage-Collection",
+                "title": "Recolección de basura - Parámetros adicionales (2/2)",
+                "description": "Más detalles aquí: https://github.com/bruxy70/Garbage-Collection",
                 "data": {
-                    "collection_days_mon": "Lunes",
-                    "collection_days_tue": "Martes",
-                    "collection_days_wed": "Miercoles",
-                    "collection_days_thu": "Jueves",
-                    "collection_days_fri": "Viernes",
-                    "collection_days_sat": "Sabado",
-                    "collection_days_sun": "Domingo",
-                    "force_week_order_numbers": "Orden de la semana en un mes en lugar del orden del día de la semana"
-                }
-            },
-            "final": {
-                "title": "Recolección de basura - Parámetros adicionales",
-                "description": "Las fechas de inclusión y exclusión son listas de fechas separadas por comas, en formato yyyy-mm-dd. Más información en https://github.com/bruxy70/Garbage-Collection",
-                "data": {
+                    "date": "Fecha (mm/dd)",
+                    "entities": "Lista de entidades (separadas por comas)",
+                    "collection_days": "Días de recogida",
                     "first_month": "Primer mes de recogida",
                     "last_month": "Último mes de recogida",
                     "period": "Recolección cada n semanas / días: (1-365)",
                     "first_week": "Primera semana de recolección (1-52)",
                     "first_date": "Primera fecha",
-                    "weekday_order_number_1": "Primer día de la semana del mes",
-                    "weekday_order_number_2": "Segundo día de la semana del mes",
-                    "weekday_order_number_3": "Tercer día de la semana del mes",
-                    "weekday_order_number_4": "Cuarto día de la semana del mes",
-                    "weekday_order_number_5": "Quinto día de la semana del mes",
-                    "week_order_number_1": "1ra semana del mes",
-                    "week_order_number_2": "2da semana del mes",
-                    "week_order_number_3": "3ra semana del mes",
-                    "week_order_number_4": "4ta semana del mes",
-                    "week_order_number_5": "5ta semana del mes",
-                    "move_country_holidays": "Mover vacaciones al día siguiente (opcional)",
-                    "holiday_move_offset": "Move holidays by # of days(-7..7)",
-                    "holiday_pop_named": "Ignore holidays (list) - optional",
-                    "holiday_in_week_move": "Move to next day if holiday in week (optional)",
-                    "prov": "Días festivos - prov (opcional)",
-                    "state": "Días festivos - estado (opcional)",
-                    "observed": "Días festivos - observado (opcional)"
+                    "weekday_order_number": "Orden del día de la semana en el mes (por ejemplo, primer miércoles del mes)",
+                    "force_week_order_numbers": "Orden de la semana en un mes en lugar de orden del día de la semana (por ejemplo, el miércoles de la primera semana)",
+                    "verbose_format": "Formato detallado (usando las variables `fecha` y` dias` (entre corchetes))",
+                    "date_format": "Formato de fecha(ver en http://strftime.org/)"
                 }
             }
         },
@@ -92,7 +55,7 @@
     "options": {
         "step": {
             "init": {
-                "title": "Recolección de basura - Frecuencia de recogida",
+                "title": "Recolección de basura - Frecuencia de recogida (1/2)",
                 "description": "Cambiar los parámetros del sensor. Más información en https://github.com/bruxy70/Garbage-Collection",
                 "data": {
                     "hidden": "Esconderse en el calendario",
@@ -101,63 +64,26 @@
                     "icon_normal": "Icono (mdi:trash-can)",
                     "icon_tomorrow": "Icono de recoleccion para mañana (mdi:delete-restore)",
                     "icon_today": "Icono de recoleccion para hoy (mdi:delete-circle)",
-                    "offset": "Compensación (entre -31 y 31 días)",
                     "expire_after": "Caduca después (HH:MM)",
-                    "verbose_state": "Estado detallado (texto, en lugar de número)",
-                    "verbose_format": "Formato detallado (usando las variables `fecha` y` dias` (entre corchetes))",
-                    "include_dates": "Incluir fechas (yyyy-mm-dd, yyyy-mm-dd, ...) - opcional",
-                    "exclude_dates": "Excluir fechas (yyyy-mm-dd, yyyy-mm-dd, ...) - opcional",
-                    "date_format": "Formato de fecha(ver en http://strftime.org/)"
-                }
-            },
-            "annual_group": {
-                "title": "Recolección de basura - Parámetros adicionales",
-                "description": "Ingrese la fecha del día de recolección (por ejemplo, 20/11 para el 20 de noviembre)",
-                "data": {
-                    "date": "Fecha (mm/dd)",
-                    "entities": "Lista de entidades (separadas por comas)"
+                    "verbose_state": "Estado detallado (texto, en lugar de número)"
                 }
             },
             "detail": {
-                "title": "Recolección de basura - Días de recogida",
-                "description": "Seleccione uno o más días de recolección. Más detalles aquí: https://github.com/bruxy70/Garbage-Collection",
+                "title": "Recolección de basura - Parámetros adicionales (2/2)",
+                "description": "Más detalles aquí: https://github.com/bruxy70/Garbage-Collection",
                 "data": {
-                    "collection_days_mon": "Lunes",
-                    "collection_days_tue": "Martes",
-                    "collection_days_wed": "Miercoles",
-                    "collection_days_thu": "Jueves",
-                    "collection_days_fri": "Viernes",
-                    "collection_days_sat": "Sabado",
-                    "collection_days_sun": "Domingo",
-                    "force_week_order_numbers": "Orden de la semana en un mes en lugar del orden del día de la semana"
-                }
-            },
-            "final": {
-                "title": "Recolección de basura - Parámetros adicionales",
-                "description": "Las fechas de inclusión y exclusión son listas de fechas separadas por comas, en formato yyyy-mm-dd. Más información en https://github.com/bruxy70/Garbage-Collection",
-                "data": {
+                    "date": "Fecha (mm/dd)",
+                    "entities": "Lista de entidades (separadas por comas)",
+                    "collection_days": "Días de recogida",
                     "first_month": "Primer mes de recogida",
                     "last_month": "Último mes de recogida",
                     "period": "Recolección cada n semanas / días: (1-365)",
                     "first_week": "Primera semana de recolección (1-52)",
                     "first_date": "Primera fecha",
-                    "weekday_order_number_1": "Primer día de la semana del mes",
-                    "weekday_order_number_2": "Segundo día de la semana del mes",
-                    "weekday_order_number_3": "Tercer día de la semana del mes",
-                    "weekday_order_number_4": "Cuarto día de la semana del mes",
-                    "weekday_order_number_5": "Quinto día de la semana del mes",
-                    "week_order_number_1": "1ra semana del mes",
-                    "week_order_number_2": "2da semana del mes",
-                    "week_order_number_3": "3ra semana del mes",
-                    "week_order_number_4": "4ta semana del mes",
-                    "week_order_number_5": "5ta semana del mes",
-                    "move_country_holidays": "Mover vacaciones al día siguiente (opcional)",
-                    "holiday_move_offset": "Move holidays by # of days(-7..7)",
-                    "holiday_pop_named": "Ignore holidays (list) - optional",
-                    "holiday_in_week_move": "Move to next day if holiday in week (optional)",
-                    "prov": "Días festivos - prov (opcional)",
-                    "state": "Días festivos - estado (opcional)",
-                    "observed": "Días festivos - observado (opcional)"
+                    "weekday_order_number": "Orden del día de la semana en el mes (por ejemplo, primer miércoles del mes)",
+                    "force_week_order_numbers": "Orden de la semana en un mes en lugar de orden del día de la semana (por ejemplo, el miércoles de la primera semana)",
+                    "verbose_format": "Formato detallado (usando las variables `fecha` y` dias` (entre corchetes))",
+                    "date_format": "Formato de fecha(ver en http://strftime.org/)"
                 }
             }
         },

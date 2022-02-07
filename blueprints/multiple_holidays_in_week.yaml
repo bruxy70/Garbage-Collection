@@ -1,12 +1,10 @@
 blueprint:
-  name: Move on holiday
+  name: Multiple holidays in week
   description: >-
-    Loop through all calculated dates, move the collection to the next day 
-    if public holiday is scheduled on the calculated collection date. 
-    This does not move the collection if the holiday was in the week before the collection.
-    For that, use the holiday_in_week blueprint.
+    Loop through all calculated dates, move the collection by a day for each
+    public holiday in the collection week, before or on the collection date.
   domain: automation
-  source_url: https://github.com/bruxy70/Garbage-Collection/blob/development/blueprints/move_on_holiday.yaml
+  source_url: https://github.com/bruxy70/Garbage-Collection/blob/development/blueprints/multiple_holidays_in_week.yaml
   input:
     garbage_collection_entity:
       name: Garbage Collection Entity
@@ -34,20 +32,34 @@ action:
       sequence:
         - condition: template
           value_template: >-
-            {{ trigger.event.data.collection_dates[repeat.index-1] in state_attr(holiday_entity,'holidays') }}
+            {%- set collection_date = as_datetime(trigger.event.data.collection_dates[repeat.index-1]) %}
+            {%- set ns = namespace(found=false) %}
+            {%- for i in range(collection_date.weekday()+1) %}
+              {%- set d = ( collection_date + timedelta( days=-i) ) | as_timestamp | timestamp_custom("%Y-%m-%d") %}
+              {%- if d in state_attr(holiday_entity,'holidays') %}
+                {%- set ns.found = true %}
+              {%- endif %}
+            {%- endfor %}  
+            {{ ns.found }}
         - service: garbage_collection.offset_date
           data:
             entity_id: "{{ trigger.event.data.entity_id }}"
             date: "{{ trigger.event.data.collection_dates[repeat.index-1] }}"
             offset: >-
               {%- set collection_date = as_datetime(trigger.event.data.collection_dates[repeat.index-1]) %}
-              {%- set ns = namespace(offset=1, found=false) %}
-              {%- for _ in range(7) if not ns.found %}
+              {%- set ns = namespace(found_free=false, offset=0) %}
+              {%- for i in range(collection_date.weekday()+1) %}
+                {%- set d = ( collection_date + timedelta( days=-i) ) | as_timestamp | timestamp_custom("%Y-%m-%d") %}
+                {%- if d in state_attr(holiday_entity,'holidays') %}
+                  {%- set ns.offset = ns.offset + 1 %}
+                {%- endif %}
+              {%- endfor %}  
+              {%- for _ in range(7) if not ns.found_free %}
                 {%- set d = ( collection_date + timedelta( days=ns.offset) ) | as_timestamp | timestamp_custom("%Y-%m-%d") %}
                 {%- if d in state_attr(holiday_entity,'holidays') %}
                   {%- set ns.offset = ns.offset + 1 %}
                 {% else %}
-                  {%- set ns.found = true %}
+                  {%- set ns.found_free = true %}
                 {%- endif %}
               {% endfor %}
               {{ ns.offset }}

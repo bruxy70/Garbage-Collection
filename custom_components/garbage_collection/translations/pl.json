@@ -2,7 +2,7 @@
     "config": {
         "step": {
             "user": {
-                "title": "Wywóz Śmieci - Częstotliwość wywozu",
+                "title": "Wywóz Śmieci - Częstotliwość wywozu (1/2)",
                 "description": "Wprowadź nazwę dla sensora i zkonfiguruj jego parametry. Więcej informacji na stronie https://github.com/bruxy70/Garbage-Collection",
                 "data": {
                     "name": "Przyjazna nazwa",
@@ -12,63 +12,26 @@
                     "icon_normal": "Ikona (mdi:trash-can) - opcjonalnie",
                     "icon_tomorrow": "Ikona wywozu jutro (mdi:delete-restore) - opcjonalnie",
                     "icon_today": "Ikona wywozu dzisiaj (mdi:delete-circle)- opcjonalnie",
-                    "offset": "przesunięcie (od -31 do 31 dni)",
                     "expire_after": "Wygasają po (HH:MM) - opcjonalnie",
-                    "verbose_state": "Tryb gadatliwy (tekst, zamiast liczb)",
-                    "verbose_format": "Format trybu gadatliwego (używa zmiennych `date` oraz `days` (w nawiasach klamerkowych))",
-                    "include_dates": "Dołącz daty (yyyy-mm-dd, yyyy-mm-dd, ...) - opcjonalnie",
-                    "exclude_dates": "Wyłącz daty (yyyy-mm-dd, yyyy-mm-dd, ...) - opcjonalnie",
-                    "date_format": "Format daty (patrz http://strftime.org/)"
-                }
-            },
-            "annual_group": {
-                "title": "Wywóz Śmieci - Dodatkowe parametry",
-                "description": "Podaj datę wywozu (np. 11/20 dla Listopad 20)",
-                "data": {
-                    "date": "Data (mm/dd)",
-                    "entities": "Lista encji (rozdzielane przecinkami)"
+                    "verbose_state": "Tryb gadatliwy (tekst, zamiast liczb)"
                 }
             },
             "detail": {
-                "title": "Wywóz Śmieci - Dni wywozu",
+                "title": "Wywóz Śmieci - (2/2)",
                 "description": "Wybierz jeden lub więcej dni wywozu. Więcej szczegółów tutaj: https://github.com/bruxy70/Garbage-Collection",
                 "data": {
-                    "collection_days_mon": "Poniedziałek",
-                    "collection_days_tue": "Wtorek",
-                    "collection_days_wed": "Środa",
-                    "collection_days_thu": "Czwartek",
-                    "collection_days_fri": "Piątek",
-                    "collection_days_sat": "Sobota",
-                    "collection_days_sun": "Niedziela",
-                    "force_week_order_numbers": "Kolejność `tydzień w miesiącu` zamiast `dzień tygodnia`"
-                }
-            },
-            "final": {
-                "title": "Wywóz Śmieci - Dodatkowe parametry",
-                "description": "Dołączone i wyłączone daty są listą, rozdzielanych przecinkami, dat w formacie rrrr-mm-dd. Więcej informacji tutaj https://github.com/bruxy70/Garbage-Collection",
-                "data": {
+                    "date": "Data (mm/dd)",
+                    "entities": "Lista encji (rozdzielane przecinkami)",
+                    "collection_days": "Dni wywozu",
                     "first_month": "Miesiąc pierwszego wywozu",
                     "last_month": "Miesiąc ostatniego wywozu",
                     "period": "Wywóz co n dni/tygodni: (1-365)",
                     "first_week": "Tydzień pierwszego wywozu: (1-52)",
                     "first_date": "Pierwsza data",
-                    "weekday_order_number_1": "Pierwszy dzień tygodnia",
-                    "weekday_order_number_2": "Drugi dzień tygodnia",
-                    "weekday_order_number_3": "Trzeci dzień tygodnia",
-                    "weekday_order_number_4": "Czwarty dzień tygodnia",
-                    "weekday_order_number_5": "Piąty dzień tygodnia",
-                    "week_order_number_1": "Pierwszy tydzień miesiąca",
-                    "week_order_number_2": "Drugi tydzień miesiąca",
-                    "week_order_number_3": "Trzeci tydzień miesiąca",
-                    "week_order_number_4": "Czwarty tydzień miesiąca",
-                    "week_order_number_5": "Piąty tydzień miesiąca",
-                    "move_country_holidays": "Przesuń świąteczne dni na kolejny dzień (opcjonalnie)",
-                    "holiday_move_offset": "Move holidays by # of days(-7..7)",
-                    "holiday_pop_named": "Ignore holidays (list) - optional",
-                    "holiday_in_week_move": "Move to next day if holiday in week (optional)",
-                    "prov": "Święta państwowe - prowincje (opcjonalnie) - BRAK dla PL patrz https://github.com/dr-prodigy/python-holidays",
-                    "state": "Święta państwowe - stan (opcjonalnie)",
-                    "observed": "Święta państwowe - przesunięte obchody (opcjonalnie)"
+                    "weekday_order_number": "Kolejność dni tygodnia w miesiącu (np. pierwsza środa miesiąca)",
+                    "force_week_order_numbers": "Kolejność tygodni w miesiącu zamiast kolejności dni tygodnia (np. w środę pierwszego tygodnia)",
+                    "verbose_format": "Format trybu gadatliwego (używa zmiennych `date` oraz `days` (w nawiasach klamerkowych))",
+                    "date_format": "Format daty (patrz http://strftime.org/)"
                 }
             }
         },
@@ -92,7 +55,7 @@
     "options": {
         "step": {
             "init": {
-                "title": "Wywóz Śmieci - Częstotliwośc wywozu",
+                "title": "Wywóz Śmieci - Częstotliwośc wywozu (1/2)",
                 "description": "Zmień parametry sensora. Więcej informacji tutaj https://github.com/bruxy70/Garbage-Collection",
                 "data": {
                     "hidden": "Ukryj w kalendarzu",
@@ -101,63 +64,26 @@
                     "icon_normal": "Ikona (mdi:trash-can) - opcjonalnie",
                     "icon_tomorrow": "Ikona wywozu jutro (mdi:delete-restore) - opcjonalnie",
                     "icon_today": "Ikona wywozu dzisiaj (mdi:delete-circle)- opcjonalnie",
-                    "offset": "przesunięcie (od -31 do 31 dni)",
                     "expire_after": "Wygasają po (HH:MM) - opcjonalnie",
-                    "verbose_state": "Tryb gadatliwy (tekst, zamiast liczb)",
-                    "verbose_format": "Format trybu gadatliwego (używa zmiennych `date` oraz `days` (w nawiasach klamerkowych))",
-                    "include_dates": "Dołącz daty (yyyy-mm-dd, yyyy-mm-dd, ...) - opcjonalnie",
-                    "exclude_dates": "Wyłącz daty (yyyy-mm-dd, yyyy-mm-dd, ...) - opcjonalnie",
-                    "date_format": "Format daty (patrz http://strftime.org/)"
-                }
-            },
-            "annual_group": {
-                "title": "Wywóz Śmieci - Dodatkowe parametry",
-                "description": "Podaj datę wywozu (np. 11/20 dla Listopad 20)",
-                "data": {
-                    "date": "Data (mm/dd)",
-                    "entities": "Lista encji (rozdzielane przecinkami)"
+                    "verbose_state": "Tryb gadatliwy (tekst, zamiast liczb)"
                 }
             },
             "detail": {
-                "title": "Wywóz Śmieci - Dni wywozu",
-                "description": "Wybierz jeden lub więcej dni wywozu. Więcej szczegółów tutaj: https://github.com/bruxy70/Garbage-Collection",
-                "data": {
-                    "collection_days_mon": "Poniedziałek",
-                    "collection_days_tue": "Wtorek",
-                    "collection_days_wed": "Środa",
-                    "collection_days_thu": "Czwartek",
-                    "collection_days_fri": "Piątek",
-                    "collection_days_sat": "Sobota",
-                    "collection_days_sun": "Niedziela",
-                    "force_week_order_numbers": "Kolejność `tydzień w miesiącu` zamiast `dzień tygodnia`"
-                }
-            },
-            "final": {
-                "title": "Wywóz Śmieci - Dodatkowe parametry",
+                "title": "Wywóz Śmieci - Dodatkowe parametry (2/2)",
                 "description": "Dołączone i wyłączone daty są listą, rozdzielanych przecinkami, dat w formacie rrrr-mm-dd. Więcej informacji tutaj https://github.com/bruxy70/Garbage-Collection",
                 "data": {
+                    "date": "Data (mm/dd)",
+                    "entities": "Lista encji (rozdzielane przecinkami)",
+                    "collection_days": "Dni wywozu",
                     "first_month": "Miesiąc pierwszego wywozu",
                     "last_month": "Miesiąc ostatniego wywozu",
                     "period": "Wywóz co n dni/tygodni: (1-365)",
                     "first_week": "Tydzień pierwszego wywozu: (1-52)",
                     "first_date": "Pierwsza data",
-                    "weekday_order_number_1": "Pierwszy dzień tygodnia",
-                    "weekday_order_number_2": "Drugi dzień tygodnia",
-                    "weekday_order_number_3": "Trzeci dzień tygodnia",
-                    "weekday_order_number_4": "Czwarty dzień tygodnia",
-                    "weekday_order_number_5": "Piąty dzień tygodnia",
-                    "week_order_number_1": "Pierwszy tydzień miesiąca",
-                    "week_order_number_2": "Drugi tydzień miesiąca",
-                    "week_order_number_3": "Trzeci tydzień miesiąca",
-                    "week_order_number_4": "Czwarty tydzień miesiąca",
-                    "week_order_number_5": "Piąty tydzień miesiąca",
-                    "move_country_holidays": "Przesuń państwowe święta na kolejny dzień (opcjonalnie)",
-                    "holiday_move_offset": "Move holidays by # of days(-7..7)",
-                    "holiday_pop_named": "Ignore holidays (list) - optional",
-                    "holiday_in_week_move": "Move to next day if holiday in week (optional)",
-                    "prov": "Przesuń święta na kolejny dzień (opcjonalnie)",
-                    "state": "Święta państwowe - stan (opcjonalnie)",
-                    "observed": "Święta państwowe - przesunięte obchody (opcjonalnie)"
+                    "weekday_order_number": "Kolejność dni tygodnia w miesiącu (np. pierwsza środa miesiąca)",
+                    "force_week_order_numbers": "Kolejność tygodni w miesiącu zamiast kolejności dni tygodnia (np. w środę pierwszego tygodnia)",
+                    "verbose_format": "Format trybu gadatliwego (używa zmiennych `date` oraz `days` (w nawiasach klamerkowych))",
+                    "date_format": "Format daty (patrz http://strftime.org/)"
                 }
             }
         },
