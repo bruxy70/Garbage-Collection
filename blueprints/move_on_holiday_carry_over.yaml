@@ -1,0 +1,72 @@
+blueprint:
+  name: Move collection if a publyc holiday in the week, with carry-over to next week.
+  description: >-
+    Move collection by 1 day if there is a holiday in the week. 
+    If there are multiple holidays, carry it over to the next week.
+  domain: automation
+  source_url: https://github.com/bruxy70/Garbage-Collection/blob/development/blueprints/move_on_holiday_carry_over.yaml
+  input:
+    garbage_collection_entity:
+      name: Garbage Collection Entity
+      description: Triggered by the event for this entity.
+      selector:
+        entity:
+          integration: garbage_collection
+    holiday_entity:
+      name: Holidays
+      description: Entity containing the holidays - an instance of Holidays custom integration (available through HACS)
+      selector:
+        entity:
+          integration: holidays
+mode: parallel
+trigger:
+  - platform: event
+    event_type: garbage_collection_loaded
+    event_data:
+      entity_id: !input garbage_collection_entity
+action:
+  - variables:
+      holiday_entity: !input holiday_entity
+  - repeat:
+      count: "{{ trigger.event.data.collection_dates | count }}"
+      sequence:
+        - condition: template
+          value_template: >-
+            {%- set collection_date = as_datetime(trigger.event.data.collection_dates[repeat.index-1]) %}
+            {%- set ns = namespace(week_0 = 0, week_1 = 0, week_2 = 0) %}
+            {%- for i in range(5) %}
+              {%- set d2 = ( collection_date - collection_date.weekday() - 14 + timedelta( days=i) ) | as_timestamp | timestamp_custom("%Y-%m-%d") %}
+              {%- set d1 = ( collection_date - collection_date.weekday() - 7 + timedelta( days=i) ) | as_timestamp | timestamp_custom("%Y-%m-%d") %}
+              {%- if d1 in state_attr(holiday_entity,'holidays') %}
+                {%- set ns.week_1 = ns.week_1 + 1 %}
+              {%- endif %}
+              {%- if d2 in state_attr(holiday_entity,'holidays') %}
+                {%- set ns.week_2 = ns.week_2 + 1 %}
+              {%- endif %}
+            {%- endfor %}  
+            {%- for i in range(collection_date.weekday()+1) %}
+              {%- set d0 = ( collection_date + timedelta( days=-i) ) | as_timestamp | timestamp_custom("%Y-%m-%d") %}
+              {%- if d0 in state_attr(holiday_entity,'holidays') %}
+                {%- set ns.week_0 = ns.week_0 + 1 %}
+              {%- endif %}
+            {%- endfor %}
+            {{ ns.week_0 > 0 or ns.week_1 > 1 or (ns.week_1 + ns.week_2) > 3 }}
+        - service: garbage_collection.offset_date
+          data:
+            entity_id: "{{ trigger.event.data.entity_id }}"
+            date: "{{ trigger.event.data.collection_dates[repeat.index-1] }}"
+            offset: >-
+              {%- set collection_date = as_datetime(trigger.event.data.collection_dates[repeat.index-1]) %}
+              {%- set ns = namespace(offset = 1, found_free=false) %}
+              {%- for _ in range(7) if not ns.found_free %}
+                {%- set d = ( collection_date + timedelta( days=ns.offset) ) | as_timestamp | timestamp_custom("%Y-%m-%d") %}
+                {%- if d in state_attr(holiday_entity,'holidays') %}
+                  {%- set ns.offset = ns.offset + 1 %}
+                {% else %}
+                  {%- set ns.found_free = true %}
+                {%- endif %}
+              {% endfor %}
+              {{ ns.offset }}
+  - service: garbage_collection.update_state
+    data:
+      entity_id: "{{ trigger.event.data.entity_id }}"
