@@ -1,7 +1,8 @@
 blueprint:
-  name: Move collection if a publyc holiday in the week, with carry-over to next week.
+  name: Move to next day on public holiday, carry-over to next week if there are more public holidays.
   description: >-
-    Move collection by 1 day if there is a holiday in the week. 
+    Loop through all calculated dates, move collection by 1 day if there is a holiday in the week, 
+    before the collection date. Keep moving if the new collection date also falls on a public holiday.
     If there are multiple holidays, carry it over to the next week.
   domain: automation
   source_url: https://github.com/bruxy70/Garbage-Collection/blob/development/blueprints/move_on_holiday_carry_over.yaml
@@ -35,22 +36,22 @@ action:
             {%- set collection_date = as_datetime(trigger.event.data.collection_dates[repeat.index-1]) %}
             {%- set ns = namespace(week_0 = 0, week_1 = 0, week_2 = 0) %}
             {%- for i in range(5) %}
-              {%- set d2 = ( collection_date + timedelta( days=i - collection_date.weekday() - 14) ) | as_timestamp | timestamp_custom("%Y-%m-%d") %}
-              {%- set d1 = ( collection_date + timedelta( days=i - collection_date.weekday() - 7) ) | as_timestamp | timestamp_custom("%Y-%m-%d") %}
+              {%- set d1 = ( collection_date - timedelta( days=(collection_date.weekday() + 7)) + timedelta(days=i) ) | as_timestamp | timestamp_custom("%Y-%m-%d") %}
+              {%- set d2 = ( collection_date - timedelta( days=(collection_date.weekday() + 14)) + timedelta(days=i) ) | as_timestamp | timestamp_custom("%Y-%m-%d") %}
               {%- if d1 in state_attr(holiday_entity,'holidays') %}
                 {%- set ns.week_1 = ns.week_1 + 1 %}
               {%- endif %}
               {%- if d2 in state_attr(holiday_entity,'holidays') %}
                 {%- set ns.week_2 = ns.week_2 + 1 %}
               {%- endif %}
-            {%- endfor %}  
+            {%- endfor %}
             {%- for i in range(collection_date.weekday()+1) %}
-              {%- set d0 = ( collection_date + timedelta( days=-i) ) | as_timestamp | timestamp_custom("%Y-%m-%d") %}
+              {%- set d0 = ( collection_date - timedelta( days=i) ) | as_timestamp | timestamp_custom("%Y-%m-%d") %}
               {%- if d0 in state_attr(holiday_entity,'holidays') %}
                 {%- set ns.week_0 = ns.week_0 + 1 %}
               {%- endif %}
             {%- endfor %}
-            {{ ns.week_0 > 0 or ns.week_1 > 1 or (ns.week_1 + ns.week_2) > 3 }}
+            {{ (ns.week_0 > 0) or (ns.week_1 > 1) or ((ns.week_1 + ns.week_2) > 3) }}
         - service: garbage_collection.offset_date
           data:
             entity_id: "{{ trigger.event.data.entity_id }}"
