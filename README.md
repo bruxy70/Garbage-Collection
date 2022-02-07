@@ -148,37 +148,38 @@ The monthly schedule has two flavors: it can trigger either on the **n<sup>th</s
 3. From the **blueprint**, create and configure the automation
 
 ### Public Holidays
-There are couple of **blueprints** that automatically move collections if they fall on public holiday, or if there was a public holiday earlier in the week.
 
-The Public Holidays **blueprints** use a separate custom integration **Holidays**, available through **HACS**, that you can configure for different countries. 
+There are a couple of **blueprints**, automatically moving the collection falling on a public holiday. Or if there was a public holiday in the week before the scheduled collection.
 
-[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fmove_on_holiday.yaml) Move on Holiday
+The Public Holidays **blueprints** use a separate custom integration **Holidays**, available through **HACS**, that you can configure for different countries.
 
-[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fholiday_in_week.yaml)  Move forward one day if a public holiday was in the  collection week, before or on the collection day (and keep moving if the new collection day also falls on a holiday)
-
-[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fmultiple_holidays_in_week.yaml) Move forward a day for each public holiday in the collection week, before or on the collection day (and keep moving if the new collection day also falls on a holiday)
-
-[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fskip_holday.yaml)  Skip holiday
-
-[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgist.github.com%2Fstboch%2Fc93befde7a8699f90b8180e60283be40) Offset by configured number of days (contributed by @stboch - Thanks ❤️)
-
+| <!-- --> | <!-- --> |
+|:--- | --- |
+| [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fmove_on_holiday.yaml) | Move if collection day falls on public holiday |
+| [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fholiday_in_week.yaml) | Move forward one day if a public holiday was in the collection week, before the collection day (and keep moving if the new collection day also falls on a holiday) |
+| [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fmultiple_holidays_in_week.yaml) | Move forward a day for each public holiday in the collection week, before or on the collection day (and keep moving if the new collection day also falls on a holiday) |
+| [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fmove_on_holiday_carry_over.yaml) | Move forward 1 day if there was a public holiday in the collection week, before or on the collection day (and keep moving if the new collection day also falls on a holiday). If there was more than 1 public holiday in the week, carry it over to the following week.  |
+| [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fskip_holday.yaml) | Skip the holiday |
 
 ### Include and Exclude
+
 A list of fixed dates to include and exclude from the calculated schedule.
 
-[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Finclude_exclude.yaml)  Include and Exclude
-
-[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Finclude.yaml)  Include
-
-[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fexclude.yaml)  Exclude
+| <!-- --> | <!-- --> |
+|:--- | --- |
+| [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Finclude_exclude.yaml) | Include and Exclude |
+| [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Finclude.yaml) | Include |
+| [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fexclude.yaml) | Exclude |
 
 ### Offset
-The offset blueprint will move the calculated collections by a number of days. This can be used for example to schedule collection for last Saturday each month - just set the collection to the first Saturday each month and offset it by -7 days.
 
-[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fgarbage_collection_offset.yaml)
+The offset blueprint will move the calculated collections by a number of days. This can be used, for example, to schedule collection for last Saturday each month - just set the collection to the first Saturday each month and offset it by -7 days.
+
+[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Foffset.yaml)
 
 ### Import txt
-This **blueprint** requires a `command_line` sensor reading content of a txt file, containg a set of dates, one per line.
+
+This **blueprint** requires a `command_line` sensor reading content of a txt file, containig a set of dates, one per line.
 
 [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fdevelopment%2Fblueprints%2Fimport_txt.yaml)
 
