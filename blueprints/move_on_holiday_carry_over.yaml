@@ -35,8 +35,8 @@ action:
             {%- set collection_date = as_datetime(trigger.event.data.collection_dates[repeat.index-1]) %}
             {%- set ns = namespace(week_0 = 0, week_1 = 0, week_2 = 0) %}
             {%- for i in range(5) %}
-              {%- set d2 = ( collection_date - collection_date.weekday() - 14 + timedelta( days=i) ) | as_timestamp | timestamp_custom("%Y-%m-%d") %}
-              {%- set d1 = ( collection_date - collection_date.weekday() - 7 + timedelta( days=i) ) | as_timestamp | timestamp_custom("%Y-%m-%d") %}
+              {%- set d2 = ( collection_date + timedelta( days=i - collection_date.weekday() - 14) ) | as_timestamp | timestamp_custom("%Y-%m-%d") %}
+              {%- set d1 = ( collection_date + timedelta( days=i - collection_date.weekday() - 7) ) | as_timestamp | timestamp_custom("%Y-%m-%d") %}
               {%- if d1 in state_attr(holiday_entity,'holidays') %}
                 {%- set ns.week_1 = ns.week_1 + 1 %}
               {%- endif %}
