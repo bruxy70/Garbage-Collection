@@ -2,6 +2,22 @@
 
 [![Buy me a coffee](https://img.shields.io/static/v1.svg?label=Buy%20me%20a%20coffee&message=🥨&color=black&logo=buy%20me%20a%20coffee&logoColor=white&labelColor=6f4e37)](https://www.buymeacoffee.com/3nXx0bJDP)
 
+## Table of Contents
+
+- [Description](#garbage-collection)
+- [Installation](#installation)
+  - [Manual Installation](#manual-installation)
+  - [Installation via Home Assistant Community Store (HACS)](#installation-via-home-assistant-community-store-hacs)
+
+- [Configuration](#configuration)
+- [Blueprints for Manual Update](#blueprints-for-manual-update)
+  - [Public Holidays](#public-holidays)
+  - [Include and Exclude](#include-and-exclude)
+  - [Offset](#offset)
+  - [Import TXT](#import-txt)
+- [State and Attributes](#state-and-attributes)
+- [Lovelace configuration examples](#lovelace-config-examples)
+
 # Garbage Collection
 
 The `garbage_collection` component is a Home Assistant integration that creates a custom sensor for monitoring a regular garbage collection schedule. The sensor can be configured for a number of different patterns:
@@ -26,22 +42,6 @@ These are some examples using this sensor. The Lovelace config examples are incl
 
 <img src="https://github.com/amaximus/garbage-collection-card/blob/master/garbage_collection_lovelace.jpg">
 
-## Table of Contents
-
-- [Installation](#installation)
-  - [Manual Installation](#manual-installation)
-  - [Installation via Home Assistant Community Store (HACS)](#installation-via-home-assistant-community-store-hacs)
-
-- [Configuration](#configuration)
-  - [Configuration Parameters](#configuration-parameters)
-- [Blueprints for Manual Update](#blueprints-for-manual-update)
-  - [Public Holidays](#public-holidays)
-  - [Include and Exclude](#include-and-exclude)
-  - [Offset](#offset)
-  - [Import TXT](#import-txt)
-- [State and Attributes](#state-and-attributes)
-- [Lovelace configuration examples](#lovelace-config-examples)
-
 ## Installation
 
 ### MANUAL INSTALLATION
@@ -51,25 +51,25 @@ These are some examples using this sensor. The Lovelace config examples are incl
 2. Unpack the release and copy the `custom_components/garbage_collection` directory
    into the `custom_components` directory of your Home Assistant
    installation.
-3. Configure the `garbage_collection` sensor.
-4. Restart Home Assistant.
+3. Restart Home Assistant.
+4. Configure the `garbage_collection` sensor.
 
 ### INSTALLATION VIA Home Assistant Community Store (HACS)
 
 1. Ensure that [HACS](https://hacs.xyz/) is installed.
 2. Search for and install the "Garbage Collection" integration.
-3. Configure the `garbage_collection` sensor.
-4. Restart Home Assistant.
+3. Restart Home Assistant.
+4. Configure the `garbage_collection` sensor.
 
 ## Configuration
 
 Go to `Configuration`/`Devices & Services`, click on the `+ ADD INTEGRATION` button, select `Garbage Collection` and configure the integration.<br />If you would like to add more than one collection schedule, click on the `+ ADD INTEGRATION` button again and add another `Garbage Collection` integration instance.
 
-The configuration via `configuration.yaml` has been deprecated. If you have previously configured the integration there, it will be imported to ConfigFlow, and you should remove it.
+**The configuration hapend in 2 steps.** In the first step, you select the `frequency` and common parameters. In the second step you configure additional parameters depending on the selected frequency.
 
-### CONFIGURATION PARAMETERS
+*The configuration via `configuration.yaml` has been deprecated. If you have previously configured the integration there, it will be imported to ConfigFlow, and you should remove it.*
 
-#### SENSOR PARAMETERS
+### STEP 1 - Common Parameters
 
 |Parameter |Required|Description |
 |:--- | --- | --- |
@@ -85,58 +85,57 @@ The configuration via `configuration.yaml` has been deprecated. If you have prev
 | `verbose_format` | No | (relevant when `verbose_state` is `True`). Verbose status formatting string. Can use placeholders `{date}` and `{days}` to show the date of next collection and remaining days. **Default**: `'on {date}, in {days} days'`</br>*When the collection is today or tomorrow, it will show `Today` or `Tomorrow`*</br>*(currently in English, French, Czech and Italian).* |
 | `date_format` | No | In the `verbose_format`, you can configure the format of date (using [strftime](http://strftime.org/) format)  **Default**: `'%d-%b-%Y'` |
 
-#### PARAMETERS FOR ALL FREQUENCIES EXCEPT ANNUAL, GROUP and BLANK
+### STEP 2 - parameters depending on the selected frequency
+
+#### ...FOR ALL FREQUENCIES EXCEPT ANNUAL, GROUP and BLANK
 
 |Parameter |Required|Description |
 |:--- | --- | --- |
 | `first_month` | No | Month three letter abbreviation, e.g. `"jan"`, `"feb"`...<br/>**Default**: `"jan"` |
 | `last_month` | No | Month three letter abbreviation.<br/>**Default**: `"dec"` |
 
-#### PARAMETERS FOR ALL FREQUENCIES EXCEPT ANNUAL, EVERY-N-DAYS, GROUP and BLANK
+#### ...FOR ALL FREQUENCIES EXCEPT ANNUAL, EVERY-N-DAYS, GROUP and BLANK
 
 |Parameter |Required|Description |
 |:--- | --- | --- |
 | `collection_days` | Yes | Day three letter abbreviation, list of `"mon"`, `"tue"`, `"wed"`, `"thu"`, `"fri"`, `"sat"`, `"sun"`. |
 
-#### PARAMETERS FOR COLLECTION EVERY-N-WEEKS
+#### ...FOR COLLECTION EVERY-N-WEEKS
 
 |Parameter |Required|Description |
 |:--- | --- | --- |
 |`period` | No | Collection every `"period"` weeks (integer 1-53)<br/>**Default**: 1 |
 |`first_week` | No | First collection on the `"first_week"` week (integer 1-53)<br/>**Default**: 1<br/>*(The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representation of the week)<br/><br/>Note: This parameter cannot be used to set the beginning of the collection period (use the `first_month` parameter for that). The purpose of `first_week` is to simply 'offset' the week number, so the collection every ;'n' weeks does not always trigger on week numbers that are multiplication of 'n'. Technically, the value of this parameter shall be less than `period`, otherwise it will give weird results. Also note, that the week numbers restart each year. Use `every-n-days` frequency if you need a consistent period across the year ends.* |
 
-#### PARAMETERS FOR COLLECTION EVERY-N-DAYS
+#### ...FOR COLLECTION EVERY-N-DAYS
 
 |Parameter |Required|Description |
 |:--- | --- | --- |
 |`first_date` | Yes | Repeats every n days from this first date<br/>(date in the international ISO format `'yyyy-mm-dd'`). |
 |`period` | No | Collection every `"period"` days (warning - in this configuration, it is days, not weeks!)<br/>**Default**: 1 (daily, which makes no sense I suppose) |
 
-#### PARAMETERS FOR MONTHLY COLLECTION
+#### ...FOR MONTHLY COLLECTION
 
 The monthly schedule has two flavors: it can trigger either on the **n<sup>th</sup> occurrence of the weekday** in a month, or on the weekday in the **n<sup>th</sup> week** of each month.
 
 |Parameter |Required|Description |
 |:--- | --- | --- |
-|`weekday_order_number` | Yes/No | List of week numbers of `collection_day` each month. E.g., if `collection_day` is `"sat"`, 1 will mean 1<sup>st</sup> Saturday each month (integer 1-5) |
-|`week_order_number` | Yes/No | Similar to `weekday_order_number`, but instead of n<sup>th</sup> weekday of each month, take the weekday of the n<sup>th</sup> week of each month.</br>So if the month starts on Friday, the Wednesday of the 1<sup>st</sup> week would actually be last Wednesday of the previous month and the Wednesday of 2<sup>nd</sup> week will be the 1<sup>st</sup> Wednesday of the month. |
+|`weekday_order_number` | Yes | List of week numbers of `collection_day` each month. E.g., if `collection_day` is `"sat"`, 1 will mean 1<sup>st</sup> Saturday each month (integer 1-5) |
+|`force_week_order_numbers` | No | **CONFIGURE THIS ONE ONLY IF YOU ARE SURE YOU NEED IT**. This will **alter** the behaviour of `weekday_order_number`, so that instead of n<sup>th</sup> weekday of each month, take the weekday of the n<sup>th</sup> week of each month.</br>So if the month starts on Friday, the Wednesday of the 1<sup>st</sup> week would actually be last Wednesday of the previous month and the Wednesday of 2<sup>nd</sup> week will be the 1<sup>st</sup> Wednesday of the month. So if you have just randomy clicked on the option, it might appear as if it calculates a wrong date! Yes, this is confusing, but there are apparently some use case for this. |
 |`period` | No | If `period` is not defined (or 1), the schedule will repeat monthly. If `period` is 2, it will be every 2<sup>nd</sup> month. If `period` is 3, it will be once per quarter, and so on.<br/>The `first_month` parameter will then define the starting month. So if the `first_month` is `jan` (or not defined), and `period` is 2, the collection will be in odd months (`jan`, `mar`, `may`, `jul`, `sep` and `nov`). If `first_month` is `feb`, it will be in even months. (integer 1-12)<br/>**Default**: 1 |
 
-*One of the parameters `weekday_order_number` or `week_order_number` has to be defined. But you cannot combine both options in one sensor.*
-
-#### PARAMETERS FOR ANNUAL COLLECTION
+#### ...FOR ANNUAL COLLECTION
 
 |Parameter |Required|Description |
 |:--- | --- | --- |
 |`date` | Yes | The date of collection, in format `'mm/dd'` (e.g. '11/24' for November 24 each year) |
 
-#### PARAMETERS FOR GROUP
+#### ...FOR GROUP
 
 |Parameter |Required|Description |
 |:--- | --- | --- |
 |`entities` | Yes | A list of `entity_id`s to merge |
 
-**IMPORTANT - put include/exclude dates within quotes. Dates without quotes might cause Home Assistant not loading configuration when starting - in case the date is invalid. Validation for dates within quotes works fine.** I think this is a general bug, I am addressing that. (See the example above)
 
 ## Blueprints for Manual Update
 
