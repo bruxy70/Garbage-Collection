@@ -95,7 +95,7 @@ class GarbageCollectionShared:
                 const.time_text(user_input.get(const.CONF_EXPIRE_AFTER))
             except vol.Invalid:
                 self.errors["base"] = "time"
-            if self.errors == {}:
+            if not self.errors:
                 self.update_data(user_input)
                 return True
         self.data_schema = OrderedDict()
@@ -119,10 +119,14 @@ class GarbageCollectionShared:
         self.errors = {}
         self.data_schema = {}
         if user_input is not None and user_input != {}:
-            # TO DO: Checking, converting (is group still gonna work?)
-            # Checking: mandatory fields for specific frequencies
-            self.update_data(user_input)
-            return True
+            if user_input.get(const.CONF_FREQUENCY) in const.DAILY_FREQUENCY:
+                try:
+                    cv.date(user_input.get(const.CONF_FIRST_DATE, ""))
+                except vol.Invalid:
+                    self.errors["base"] = "date"
+            if not self.errors:
+                self.update_data(user_input)
+                return True
         self.data_schema = OrderedDict()
         if self._data[const.CONF_FREQUENCY] in const.ANNUAL_FREQUENCY:
             self.data_schema[self.required(const.CONF_DATE, user_input)] = str
@@ -162,9 +166,7 @@ class GarbageCollectionShared:
                     self.required(const.CONF_FIRST_WEEK, user_input)
                 ] = vol.All(vol.Coerce(int), vol.Range(min=1, max=52))
             if self._data[const.CONF_FREQUENCY] in const.DAILY_FREQUENCY:
-                self.data_schema[
-                    self.required(const.CONF_FIRST_DATE, user_input)
-                ] = cv.date
+                self.data_schema[self.required(const.CONF_FIRST_DATE, user_input)] = str
         if self._data.get(const.CONF_VERBOSE_STATE, False):
             self.data_schema[
                 self.required(const.CONF_VERBOSE_FORMAT, user_input)
@@ -262,7 +264,7 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
                 _LOGGER.debug("Updated data config for week_order_number")
             else:
                 user_input[const.CONF_FORCE_WEEK_NUMBERS] = False
-        if removed_data != {}:
+        if removed_data:
             _LOGGER.error(
                 "Removed obsolete config values: %s. "
                 "Please check the documentation how to configure the functionality.",
