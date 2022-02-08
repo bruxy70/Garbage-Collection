@@ -1,0 +1,19 @@
+---
+name: "Question"
+description: I have a question, or need a help with the configuration of the integration or Lovelace
+labels: "question"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before you submit a new question, please check the [frequently asked questions and limitations](https://github.com/bruxy70/Garbage-Collection/wiki/Review-before-submitting-a-new-issue-or-feature-request).
+        Also, please search through the existing issues to see if others made the same question.
+  - type: textarea
+    attributes:
+      label: "Write your question here"
+      description: "If your question is about the configuration, please make it clear 
+    if you need help with the configuration of integration, 
+    or lovelace card configuration
+    or perhaps an automation?"
+    validations:
+      required: true
