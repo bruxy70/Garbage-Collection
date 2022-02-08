@@ -1,6 +1,6 @@
 {
     "state": {
-        "garbage_collection__schedule": {
+        "_": {
             "today": "Hoy",
             "tomorrow": "Mañana"
         }
