@@ -23,6 +23,7 @@ assignees: ''
     not the actual sensor state. So this will save both of us lots of time.
 -->
 
+
 **Configuration**
 
 <!--Copy the device configuration below.
