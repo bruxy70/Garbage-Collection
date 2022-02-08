@@ -278,6 +278,7 @@ class GarbageCollection(RestoreEntity):
         res[const.ATTR_DAYS] = self._days
         res[const.ATTR_LAST_COLLECTION] = self.last_collection
         res[const.ATTR_LAST_UPDATED] = self._last_updated
+        # Needed for translations to work
         res[ATTR_DEVICE_CLASS] = self.DEVICE_CLASS
         return res
 
