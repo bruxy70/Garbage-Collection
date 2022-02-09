@@ -7,7 +7,13 @@ from typing import Any, List, Optional
 import homeassistant.util.dt as dt_util
 from dateutil.parser import ParserError, parse
 from dateutil.relativedelta import relativedelta
-from homeassistant.const import ATTR_HIDDEN, CONF_ENTITIES, CONF_NAME, WEEKDAYS
+from homeassistant.const import (
+    ATTR_DEVICE_CLASS,
+    ATTR_HIDDEN,
+    CONF_ENTITIES,
+    CONF_NAME,
+    WEEKDAYS,
+)
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.discovery import async_load_platform
 from homeassistant.helpers.restore_state import RestoreEntity
@@ -272,10 +278,12 @@ class GarbageCollection(RestoreEntity):
         res[const.ATTR_DAYS] = self._days
         res[const.ATTR_LAST_COLLECTION] = self.last_collection
         res[const.ATTR_LAST_UPDATED] = self._last_updated
+        # Needed for translations to work
+        res[ATTR_DEVICE_CLASS] = self.DEVICE_CLASS
         return res
 
     @property
-    def DEVICE_CLASS(self):
+    def DEVICE_CLASS(self):  # pylint: disable=C0103
         """Return the class of the sensor."""
         return const.DEVICE_CLASS
 

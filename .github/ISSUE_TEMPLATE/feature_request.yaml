@@ -3,11 +3,12 @@ name: "Feature request"
 description: Suggest an idea for this project
 labels: "enhancement"
 body:
-  - type: markdown
+  - type: checkboxes
     attributes:
-      value: |
-        Before you submit a new feature request, please check the [frequently asked questions and limitations](https://github.com/bruxy70/Garbage-Collection/wiki/Review-before-submitting-a-new-issue-or-feature-request).
-        Also, please search through the existing issues to see if others made the same suggestion.
+      label: Before you submit a new bug report, please check that
+      options:
+        - label: I have read [frequently asked questions and limitations](https://github.com/bruxy70/Garbage-Collection/wiki/Review-before-submitting-a-new-issue-or-feature-request)
+          required: true
   - type: textarea
     attributes:
       label: "Is your feature request related to a problem? Please describe."

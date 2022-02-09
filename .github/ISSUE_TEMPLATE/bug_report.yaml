@@ -3,11 +3,16 @@ name: "Bug report"
 description: Create a report to help us improve
 labels: "bug"
 body:
-- type: markdown
+- type: checkboxes
   attributes:
-    value: |
-      Before you submit a new bug report, please check the [frequently asked questions and limitations](https://github.com/bruxy70/Garbage-Collection/wiki/Review-before-submitting-a-new-issue-or-feature-request).
-      Also, please search through the existing issues to see if others have had the same problem.
+    label: Before you submit a new bug report, please check that
+    options:
+      - label: I have read [frequently asked questions and limitations](https://github.com/bruxy70/Garbage-Collection/wiki/Review-before-submitting-a-new-issue-or-feature-request)
+        required: true
+      - label: I'm running the newest version of Garbage Collection, or the next pre-release.
+        required: true
+      - label: I have enabled debug logging for my installation.
+        required: true
 - type: textarea
   attributes:
     label: "Describe the bug"

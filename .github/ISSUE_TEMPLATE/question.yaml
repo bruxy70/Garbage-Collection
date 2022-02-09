@@ -3,11 +3,12 @@ name: "Question"
 description: I have a question, or need a help with the configuration of the integration or Lovelace
 labels: "question"
 body:
-  - type: markdown
+  - type: checkboxes
     attributes:
-      value: |
-        Before you submit a new question, please check the [frequently asked questions and limitations](https://github.com/bruxy70/Garbage-Collection/wiki/Review-before-submitting-a-new-issue-or-feature-request).
-        Also, please search through the existing issues to see if others made the same question.
+      label: Before you submit a new bug report, please check that
+      options:
+        - label: I have read [frequently asked questions and limitations](https://github.com/bruxy70/Garbage-Collection/wiki/Review-before-submitting-a-new-issue-or-feature-request)
+          required: true
   - type: textarea
     attributes:
       label: "Write your question here"
