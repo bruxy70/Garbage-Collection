@@ -119,6 +119,11 @@ class GarbageCollectionShared:
         self.errors = {}
         self.data_schema = {}
         if user_input is not None and user_input != {}:
+            if user_input.get(const.CONF_FREQUENCY) in const.ANNUAL_FREQUENCY:
+                try:
+                    const.month_day_text(user_input.get(const.CONF_DATE, ""))
+                except vol.Invalid:
+                    self.errors["base"] = "month_day"
             if user_input.get(const.CONF_FREQUENCY) in const.DAILY_FREQUENCY:
                 try:
                     cv.date(user_input.get(const.CONF_FIRST_DATE, ""))
