@@ -1,9 +1,19 @@
 blueprint:
   name: Move to next day on public holiday, carry-over to next week if there are more public holidays.
   description: >-
-    Loop through all calculated dates, move collection by 1 day if there is a holiday in the week, 
-    before the collection date. Keep moving if the new collection date also falls on a public holiday.
-    If there are multiple holidays, carry it over to the next week.
+    This automation is triggered from the `garbage_collection` integration by event `garbage_collection_loaded`,
+    during the device state update. It PROCESSES DATA SENT WITH THE EVENT, and then FINISHES THE UPDATE.
+    DO NOT CALL THIS SERVICE MANUALLY, IT WON'T WORK (it won't have the data).
+    Also, make sure the INTEGRATION IS CONFIGURED FOR `manual_update`
+    (that will disable the state update by the integration and pass it to this automation).
+
+    It loops through the calculated dates and checks for a public holiday the week, 
+    before/on the calculated collection date. If found, it will move the event to the next day.
+    It will keep moving if the new collection date also falls on a public holiday.
+    If there are multiple holidays, It will carry it over to the next week.
+
+    The sensors are normally updated once a day, or when Home Assistant starts.
+    The update can be triggered by updating the integration configuration (just hit configure and submit).
   domain: automation
   source_url: https://github.com/bruxy70/Garbage-Collection/blob/master/blueprints/move_on_holiday_carry_over.yaml
   input:
