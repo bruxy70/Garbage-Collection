@@ -1,9 +1,19 @@
 blueprint:
   name: Include dates
   description: >-
-    Add collection on set of additional collection dates.
-    After updating the list, make sure to trigger sensor update. The sensors are normally updated once a day.
-    The update can be triggered by updating the integration configuration.
+    Add collection on set of additional collection dates. Enter one date per line. For example:
+
+    2022-01-03
+
+    2022-04-04
+
+    2022-07-04
+
+    2022-10-03
+
+    After updating the list, make sure to trigger the entity update. 
+    The sensors are normally updated once a day, or when Home Assistant starts.
+    The update can be triggered by updating the integration configuration (just hit configure and submit).
   domain: automation
   source_url: https://github.com/bruxy70/Garbage-Collection/blob/master/blueprints/include.yaml
   input:
@@ -15,8 +25,8 @@ blueprint:
           integration: garbage_collection
     include:
       name: Set of dates to include
-      description: >-
-        List of dates in format yyyy-mm-dd, one date per line
+      description: |-
+        List of dates in format yyyy-mm-dd, one date per line.
       selector:
         text:
           multiline: true
