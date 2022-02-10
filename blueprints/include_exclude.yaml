@@ -4,7 +4,6 @@ blueprint:
     Remove a collection on provided set of dates. Then, add collection on set of additional collection dates.
     Enter one date per line. For example:
 
-    ```
     2022-01-03
 
     2022-04-04
@@ -12,7 +11,6 @@ blueprint:
     2022-07-04
 
     2022-10-03
-    ```
 
     After updating the list, make sure to trigger the entity update. 
     The sensors are normally updated once a day, or when Home Assistant starts.
