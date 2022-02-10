@@ -2,8 +2,21 @@ blueprint:
   name: Include and exclude dates
   description: >-
     Remove a collection on provided set of dates. Then, add collection on set of additional collection dates.
-    After updating the list, make sure to trigger sensor update. The sensors are normally updated once a day.
-    The update can be triggered by updating the integration configuration.
+    Enter one date per line. For example:
+
+    ```
+    2022-01-03
+
+    2022-04-04
+
+    2022-07-04
+
+    2022-10-03
+    ```
+
+    After updating the list, make sure to trigger the entity update. 
+    The sensors are normally updated once a day, or when Home Assistant starts.
+    The update can be triggered by updating the integration configuration (just hit configure and submit).
   domain: automation
   source_url: https://github.com/bruxy70/Garbage-Collection/blob/master/blueprints/include_exclude.yaml
   input:
@@ -16,19 +29,14 @@ blueprint:
     exclude:
       name: Set of dates to exclude
       description: |-
-        List of dates in format yyyy-mm-dd, one date per line. For example:
-        `2022-01-01`
+        List of dates in format yyyy-mm-dd, one date per line.
       selector:
         text:
           multiline: true
     include:
       name: Set of dates to include
       description: |-
-        List of dates in format yyyy-mm-dd, one date per line. For example:
-        `2022-01-03`
-        `2022-04-04`
-        `2022-07-04`
-        `2022-10-03`
+        List of dates in format yyyy-mm-dd, one date per line.
       selector:
         text:
           multiline: true

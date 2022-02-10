@@ -1,12 +1,15 @@
 blueprint:
   name: Include dates
   description: >-
-    Add collection on set of additional collection dates. Include one date per line. For example:
+    Add collection on set of additional collection dates. Enter one date per line. For example:
 
     ```
     2022-01-03
+
     2022-04-04
+
     2022-07-04
+
     2022-10-03
     ```
 
