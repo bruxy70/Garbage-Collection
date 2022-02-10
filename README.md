@@ -214,6 +214,7 @@ It will set the `last_collection` attribute to the current date and time.
 | Attribute | Description |
 |:--- | --- |
 | `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`) |
+| `last_collection` | (optional) Set the last collection date to this value. This can be used to re-set the next collection calculation, if the last collection date was set in error. If omitted, it will set the last collection to the current date & time.  |
 
 ## Manual update
 
