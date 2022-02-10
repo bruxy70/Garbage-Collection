@@ -4,7 +4,7 @@ blueprint:
     Loop through all calculated dates, move the collection by a day for each
     public holiday in the collection week, before or on the collection date.
   domain: automation
-  source_url: https://github.com/bruxy70/Garbage-Collection/blob/development/blueprints/multiple_holidays_in_week.yaml
+  source_url: https://github.com/bruxy70/Garbage-Collection/blob/master/blueprints/multiple_holidays_in_week.yaml
   input:
     garbage_collection_entity:
       name: Garbage Collection Entity

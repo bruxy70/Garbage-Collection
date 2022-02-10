@@ -3,7 +3,7 @@ blueprint:
   description: >-
     Loop through all calculated dates, skip the collection that fall on public holiday.
   domain: automation
-  source_url: https://github.com/bruxy70/Garbage-Collection/blob/development/blueprints/slip_holiday.yaml
+  source_url: https://github.com/bruxy70/Garbage-Collection/blob/master/blueprints/slip_holiday.yaml
   input:
     garbage_collection_entity:
       name: Garbage Collection Entity
@@ -16,7 +16,7 @@ blueprint:
       description: Entity containing the holidays - an instance of Holidays custom integration (available through HACS)
       selector:
         entity:
-          integration: holidays          
+          integration: holidays
 mode: parallel
 trigger:
   - platform: event
@@ -27,7 +27,7 @@ action:
   - variables:
       holiday_entity: !input holiday_entity
   - repeat:
-      count: '{{ trigger.event.data.collection_dates | count }}'
+      count: "{{ trigger.event.data.collection_dates | count }}"
       sequence:
         - condition: template
           value_template: >-
@@ -35,7 +35,7 @@ action:
         - service: garbage_collection.remove_date
           data:
             entity_id: "{{ trigger.event.data.entity_id }}"
-            date: '{{ trigger.event.data.collection_dates[repeat.index-1] }}'
+            date: "{{ trigger.event.data.collection_dates[repeat.index-1] }}"
   - service: garbage_collection.update_state
     data:
       entity_id: "{{ trigger.event.data.entity_id }}"

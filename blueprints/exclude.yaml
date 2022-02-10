@@ -5,7 +5,7 @@ blueprint:
     After updating the list, make sure to trigger sensor update. The sensors are normally updated once a day.
     The update can be triggered by updating the integration configuration.
   domain: automation
-  source_url: https://github.com/bruxy70/Garbage-Collection/blob/development/blueprints/exclude.yaml
+  source_url: https://github.com/bruxy70/Garbage-Collection/blob/master/blueprints/exclude.yaml
   input:
     garbage_collection_entity:
       name: Garbage Collection Entity

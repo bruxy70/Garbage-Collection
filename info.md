@@ -30,7 +30,7 @@ Go to `Configuration`/`Devices & Services`, click on the `+ ADD INTEGRATION` but
 
 The configuration via `configuration.yaml` has been deprecated. If you have previously configured the integration there, it will be imported to ConfigFlow, and you should remove it.
 
-For the configuration documentation check the <a href="https://github.com/bruxy70/Garbage-Collection/blob/development/README.md">repository</a> file
+For the configuration documentation check the <a href="https://github.com/bruxy70/Garbage-Collection/blob/master/README.md">repository</a> file
 
 ## STATE AND ATTRIBUTES
 
@@ -61,4 +61,4 @@ It will set the `last_collection` attribute to the current date and time.
 |:----------|------------
 | `entity_id` | The garbage collection entity id (e.g. `sensor.general_waste`)
 
-For more details see the <a href="https://github.com/bruxy70/Garbage-Collection/blob/development/README.md">repository.</a>
+For more details see the <a href="https://github.com/bruxy70/Garbage-Collection/blob/master/README.md">repository.</a>

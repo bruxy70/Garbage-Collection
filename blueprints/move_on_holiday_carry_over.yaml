@@ -5,7 +5,7 @@ blueprint:
     before the collection date. Keep moving if the new collection date also falls on a public holiday.
     If there are multiple holidays, carry it over to the next week.
   domain: automation
-  source_url: https://github.com/bruxy70/Garbage-Collection/blob/development/blueprints/move_on_holiday_carry_over.yaml
+  source_url: https://github.com/bruxy70/Garbage-Collection/blob/master/blueprints/move_on_holiday_carry_over.yaml
   input:
     garbage_collection_entity:
       name: Garbage Collection Entity

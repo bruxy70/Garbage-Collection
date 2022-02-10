@@ -4,7 +4,7 @@ blueprint:
     Import dates from a txt file containing colection dates, one date per line.
     To read the file, you will need to create a `command_line` sensor reading the file content.
   domain: automation
-  source_url: https://github.com/bruxy70/Garbage-Collection/blob/development/blueprints/import_txt.yaml
+  source_url: https://github.com/bruxy70/Garbage-Collection/blob/master/blueprints/import_txt.yaml
   input:
     garbage_collection_entity:
       name: Garbage Collection Entity
