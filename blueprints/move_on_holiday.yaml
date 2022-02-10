@@ -5,7 +5,6 @@ blueprint:
     during the device state update. 
 
     It PROCESSES DATA SENT WITH THE EVENT, and then FINISHES THE UPDATE.
-
     DO NOT CALL THIS SERVICE MANUALLY, IT WON'T WORK (it won't have the data).
 
     Also, make sure the INTEGRATION IS CONFIGURED FOR `manual_update`
