@@ -3,46 +3,46 @@ name: "Bug report"
 description: Create a report to help us improve
 labels: "bug"
 body:
-- type: checkboxes
-  attributes:
-    label: Before you submit a new bug report, please check that
-    options:
-      - label: I have read [frequently asked questions and limitations](https://github.com/bruxy70/Garbage-Collection/wiki/Review-before-submitting-a-new-issue-or-feature-request)
-        required: true
-      - label: I'm running the newest version of Garbage Collection, or the next pre-release.
-        required: true
-      - label: I have enabled debug logging for my installation.
-        required: true
-- type: textarea
-  attributes:
-    label: "Describe the bug"
-    description: |
-      Please provide a clear and concise description of what the bug is, including the steps to reproduce.
-      Include screenshots to illustrate the issus.
+  - type: checkboxes
+    attributes:
+      label: Before you submit a new bug report, please check that
+      options:
+        - label: I have read [frequently asked questions and limitations](https://github.com/bruxy70/Garbage-Collection/wiki/Review-before-submitting-a-new-issue-or-feature-request)
+          required: true
+        - label: I'm running the newest version of Garbage Collection, or the next pre-release.
+          required: true
+        - label: I have enabled debug logging for my installation.
+          required: true
+  - type: textarea
+    attributes:
+      label: "Describe the bug"
+      description: |
+        Please provide a clear and concise description of what the bug is, including the steps to reproduce.
+        Include screenshots to illustrate the issus.
 
-      If this is an issue with the sensor state or translation, please go to Developer Tools/States, 
-      find the entity under Current entities, click on the sensor's (i) icon and check the status in the right top corner. 
-    
-      The issues related to status are usually related to the Lovelace config, not the actual sensor state. So this will save both of us lots of time.
-  validations:
-    required: true
-- type: textarea
-  attributes:
-    label: "Configuration"
-    description: |
-      Copy the device configuration below.
-      Go to the device (e.g. from `Configuration` / `Devices & Services`, select the integration and the device.
-      Hit `DOWNLOAD DIAGNOSTICS`, and paste the content of the file below.
-  render: JSON
-  validations:
-    required: true
-- type: textarea
-  attributes:
-    label: "Debug logs"
-    description: |
-      Copy the error message from Developer tools/Logs below.
-      To enable debug logging, add `custom_components.garbage_collection: debug` 
-      to your `configuration.yaml` under `logger`/`logs`.
-    render: shell
-  validations:
-    required: true
+        If this is an issue with the sensor state or translation, please go to Developer Tools/States, 
+        find the entity under Current entities, click on the sensor's (i) icon and check the status in the right top corner. 
+
+        The issues related to status are usually related to the Lovelace config, not the actual sensor state. So this will save both of us lots of time.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "Configuration"
+      description: |
+        Copy the device configuration below.
+        Go to the device (e.g. from `Configuration` / `Devices & Services`, select the integration and the device.
+        Hit `DOWNLOAD DIAGNOSTICS`, and paste the content of the file below.
+      render: JSON
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "Debug logs"
+      description: |
+        Copy the error message from Developer tools/Logs below.
+        To enable debug logging, add `custom_components.garbage_collection: debug` 
+        to your `configuration.yaml` under `logger`/`logs`.
+      render: shell
+    validations:
+      required: true
