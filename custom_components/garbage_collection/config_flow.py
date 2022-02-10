@@ -118,7 +118,10 @@ class GarbageCollectionShared:
         """Step 2 - enter detail that depend on frequency."""
         self.errors = {}
         self.data_schema = {}
-        if user_input is not None and user_input != {}:
+        # Skip second step on blank frequency
+        if self._data[const.CONF_FREQUENCY] in const.BLANK_FREQUENCY:
+            return True
+        if user_input is not None and user_input:
             if user_input.get(const.CONF_FREQUENCY) in const.ANNUAL_FREQUENCY:
                 try:
                     const.month_day_text(user_input.get(const.CONF_DATE, ""))
