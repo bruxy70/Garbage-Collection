@@ -15,15 +15,20 @@ blueprint:
           integration: garbage_collection
     exclude:
       name: Set of dates to exclude
-      description: >-
-        List of dates in format yyyy-mm-dd, one date per line
+      description: |-
+        List of dates in format yyyy-mm-dd, one date per line. For example:
+        `2022-01-01`
       selector:
         text:
           multiline: true
     include:
       name: Set of dates to include
-      description: >-
-        List of dates in format yyyy-mm-dd, one date per line
+      description: |-
+        List of dates in format yyyy-mm-dd, one date per line. For example:
+        `2022-01-03`
+        `2022-04-04`
+        `2022-07-04`
+        `2022-10-03`
       selector:
         text:
           multiline: true
