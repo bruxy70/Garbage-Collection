@@ -10,6 +10,7 @@ blueprint:
     Also, make sure the INTEGRATION IS CONFIGURED FOR `manual_update`
     (that will disable the state update by the integration and pass it to this automation).
 
+
     It imports dates from a txt file containing colection dates, one date per line.
     To read the file, you will need to create a `command_line` sensor reading the file content (see below).
 

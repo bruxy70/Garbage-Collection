@@ -10,6 +10,7 @@ blueprint:
     Also, make sure the INTEGRATION IS CONFIGURED FOR `manual_update`
     (that will disable the state update by the integration and pass it to this automation).
 
+
     It loops through the calculated dates and checks for a public holiday on the calculated collection date.
     If found, it will move the event to the next day. It will keep moving if the new collection date also falls on a public holiday.
 

@@ -10,6 +10,7 @@ blueprint:
     Also, make sure the INTEGRATION IS CONFIGURED FOR `manual_update`
     (that will disable the state update by the integration and pass it to this automation).
 
+
     It removes events on provided set of dates. Enter one date per line. For example:
 
     2022-01-03
