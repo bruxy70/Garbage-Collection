@@ -15,20 +15,20 @@ async def async_setup_platform(
 ):  # pylint: disable=unused-argument
     """Add calendar entities to HA, of there are calendar instances."""
     # Only single instance allowed
-    if GarbageCollectionCalendar.instances == 0:
-        async_add_entities([GarbageCollectionCalendar(hass)], True)
+    if not GarbageCollectionCalendar.instances:
+        async_add_entities([GarbageCollectionCalendar()], True)
 
 
 class GarbageCollectionCalendar(CalendarEventDevice):
     """The garbage collection calendar class."""
 
-    instances = 0
+    instances = False
 
-    def __init__(self, hass):  # pylint: disable=unused-argument
+    def __init__(self):
         """Create empty calendar."""
         self._cal_data = {}
         self._name = CALENDAR_NAME
-        GarbageCollectionCalendar.instances += 1
+        GarbageCollectionCalendar.instances = True
 
     @property
     def event(self):

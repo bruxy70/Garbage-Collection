@@ -287,9 +287,7 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
     @callback
     def async_get_options_flow(config_entry):
         """Return options flow handler, or empty options flow if no unique_id."""
-        if config_entry.data.get("unique_id", None) is not None:
-            return OptionsFlowHandler(config_entry)
-        return EmptyOptions(config_entry)
+        return OptionsFlowHandler(config_entry)
 
 
 # O P T I O N S   F L O W
@@ -326,11 +324,3 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
             data_schema=vol.Schema(self.shared_class.data_schema),
             errors=self.shared_class.errors,
         )
-
-
-class EmptyOptions(config_entries.OptionsFlow):
-    """A class for default options. Not sure why this is required."""
-
-    def __init__(self, _):
-        """Just set the config_entry parameter."""
-        return

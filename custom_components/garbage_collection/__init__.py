@@ -25,7 +25,6 @@ _LOGGER = logging.getLogger(__name__)
 
 SENSOR_SCHEMA = vol.Schema(
     {
-        # vol.Optional(const.CONF_NAME): str,
         vol.Required(const.CONF_FREQUENCY): vol.In(const.FREQUENCY_OPTIONS),
         vol.Optional(const.CONF_ICON_NORMAL): cv.icon,
         vol.Optional(const.CONF_ICON_TODAY): cv.icon,
