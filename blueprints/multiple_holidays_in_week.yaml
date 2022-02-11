@@ -14,6 +14,7 @@ blueprint:
     It loops through the calculated dates and checks for a public holiday the week, before/on the calculated collection date.
     If found, it will move the event by one day for each found public holiday.
 
+
     The sensors are normally updated once a day, or when Home Assistant starts.
     The update can be triggered by updating the integration configuration (just hit configure and submit).
   domain: automation

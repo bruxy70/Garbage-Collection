@@ -22,6 +22,7 @@ blueprint:
 
     2022-10-03
 
+
     After updating the list, make sure to trigger the entity update. 
     The sensors are normally updated once a day, or when Home Assistant starts.
     The update can be triggered by updating the integration configuration (just hit configure and submit).
