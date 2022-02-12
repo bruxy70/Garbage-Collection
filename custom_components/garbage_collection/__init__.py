@@ -103,7 +103,7 @@ OFFSET_DATE_SCHEMA = vol.Schema(
 async def async_setup(hass: HomeAssistant, config: Config) -> bool:
     """Set up this component using YAML."""
 
-    async def handle_add_date(call: Dict[str, Any]) -> None:
+    async def handle_add_date(call) -> None:
         """Handle the add_date service call."""
         for entity_id in call.data.get(CONF_ENTITY_ID):
             collection_date = call.data.get(const.CONF_DATE)
@@ -114,7 +114,7 @@ async def async_setup(hass: HomeAssistant, config: Config) -> bool:
             except KeyError as err:
                 _LOGGER.error("Failed adding date for %s - %s", entity_id, err)
 
-    async def handle_remove_date(call: Dict[str, Any]) -> None:
+    async def handle_remove_date(call) -> None:
         """Handle the remove_date service call."""
         for entity_id in call.data.get(CONF_ENTITY_ID):
             collection_date = call.data.get(const.CONF_DATE)
@@ -125,7 +125,7 @@ async def async_setup(hass: HomeAssistant, config: Config) -> bool:
             except KeyError as err:
                 _LOGGER.error("Failed removing date for %s - %s", entity_id, err)
 
-    async def handle_offset_date(call: Dict[str, Any]) -> None:
+    async def handle_offset_date(call) -> None:
         """Handle the offset_date service call."""
         for entity_id in call.data.get(CONF_ENTITY_ID):
             offset = call.data.get(const.CONF_OFFSET)
@@ -148,7 +148,7 @@ async def async_setup(hass: HomeAssistant, config: Config) -> bool:
             except KeyError as err:
                 _LOGGER.error("Failed ofsetting date for %s - %s", entity_id, err)
 
-    async def handle_update_state(call: Dict[str, Any]) -> None:
+    async def handle_update_state(call) -> None:
         """Handle the update_state service call."""
         for entity_id in call.data.get(CONF_ENTITY_ID):
             _LOGGER.debug("called update_state for %s", entity_id)
@@ -158,7 +158,7 @@ async def async_setup(hass: HomeAssistant, config: Config) -> bool:
             except KeyError as err:
                 _LOGGER.error("Failed updating state for %s - %s", entity_id, err)
 
-    async def handle_collect_garbage(call: Dict[str, Any]) -> None:
+    async def handle_collect_garbage(call) -> None:
         """Handle the collect_garbage service call."""
         for entity_id in call.data.get(CONF_ENTITY_ID):
             last_collection = call.data.get(const.ATTR_LAST_COLLECTION)
