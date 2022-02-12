@@ -65,7 +65,10 @@ def to_date(day: Any) -> date:
         raise ValueError
     if isinstance(day, date):
         return day
-    _LOGGER.error("Wrong date format %s. Converting.", day)
+    _LOGGER.error(
+        "Getting date in wrong format: %s. Converting, but raising error to get this reported.",
+        day,
+    )
     if isinstance(day, datetime):
         return day.date()
     return date.fromisoformat(day)
