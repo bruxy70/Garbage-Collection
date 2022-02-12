@@ -255,7 +255,7 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
     return True
 
 
-async def async_remove_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
+async def async_remove_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> None:
     """Handle removal of an entry."""
     try:
         await hass.config_entries.async_forward_entry_unload(

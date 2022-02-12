@@ -83,7 +83,7 @@ class EntitiesCalendarData:
 
     async def async_get_events(
         self, hass: HomeAssistant, start_datetime: datetime, end_datetime: datetime
-    ) -> None:
+    ) -> list:
         """Get all tasks in a specific time frame."""
         events = []
         if SENSOR_PLATFORM not in hass.data[DOMAIN]:
