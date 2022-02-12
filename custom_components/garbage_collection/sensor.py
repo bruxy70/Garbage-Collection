@@ -503,7 +503,7 @@ class GarbageCollection(RestoreEntity):
                 return date(year, self._first_month, 1)
         return day
 
-    async def _async_find_next_date(self, first_date: date) -> date:
+    async def _async_find_next_date(self, first_date: date) -> Optional[date]:
         """Get date within configured date range."""
         # Today's collection can be triggered by past collection with offset
         if self._frequency == "blank":

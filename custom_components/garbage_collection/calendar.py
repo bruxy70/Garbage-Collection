@@ -1,6 +1,7 @@
 """Garbage collection calendar."""
 
 from datetime import datetime, timedelta
+from typing import List
 
 from homeassistant.components.calendar import CalendarEventDevice
 from homeassistant.core import HomeAssistant
@@ -69,7 +70,7 @@ class EntitiesCalendarData:
         """Initialize an Entities Calendar Data."""
         self.event = None
         self._hass = hass
-        self.entities = []
+        self.entities: List[str] = []
 
     def add_entity(self, entity_id: str) -> None:
         """Append entity ID to the calendar."""
@@ -83,9 +84,9 @@ class EntitiesCalendarData:
 
     async def async_get_events(
         self, hass: HomeAssistant, start_datetime: datetime, end_datetime: datetime
-    ) -> list:
+    ) -> List[dict]:
         """Get all tasks in a specific time frame."""
-        events = []
+        events: List[dict] = []
         if SENSOR_PLATFORM not in hass.data[DOMAIN]:
             return events
         start_date = start_datetime.date()
