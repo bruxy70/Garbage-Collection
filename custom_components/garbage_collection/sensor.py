@@ -118,10 +118,10 @@ class GarbageCollection(RestoreEntity):
         except ValueError:
             self._first_date = None
         self._collection_dates: List[date] = []
-        self._next_date = None
-        self._last_updated = None
-        self.last_collection = None
-        self._days = None
+        self._next_date: Optional[date] = None
+        self._last_updated: Optional[datetime] = None
+        self.last_collection: Optional[datetime] = None
+        self._days: Optional[int] = None
         self._date = config.get(const.CONF_DATE)
         self._entities = config.get(CONF_ENTITIES)
         self._verbose_state = config.get(const.CONF_VERBOSE_STATE)
@@ -323,9 +323,11 @@ class GarbageCollection(RestoreEntity):
     async def _async_daily_candidate(self, day1: date) -> date:
         """Calculate possible date, for every-n-days frequency."""
         try:
-            if (day1 - self._first_date).days % self._period == 0:
+            if (day1 - self._first_date).days % self._period == 0:  # type: ignore
                 return day1
-            offset = self._period - ((day1 - self._first_date).days % self._period)
+            offset = self._period - (
+                (day1 - self._first_date).days % self._period  # type: ignore
+            )
         except TypeError as error:
             raise ValueError(
                 f"({self._name}) Please configure first_date and period "
@@ -385,7 +387,7 @@ class GarbageCollection(RestoreEntity):
         elif self._frequency == "annual":
             return await self._async_annual_candidate(day1)
         elif self._frequency == "group":
-            candidate_date = None  # type: ignore
+            candidate_date = None
             try:
                 for entity_id in self._entities:
                     entity = self.hass.data[const.DOMAIN][const.SENSOR_PLATFORM][
@@ -415,7 +417,7 @@ class GarbageCollection(RestoreEntity):
         now = dt_util.now()
         today = now.date()
         try:
-            ready_for_update = bool(self._last_updated.date() != today)
+            ready_for_update = bool(self._last_updated.date() != today)  # type: ignore
         except AttributeError:
             ready_for_update = True
         if self._frequency == "group":
@@ -611,7 +613,7 @@ class GarbageCollection(RestoreEntity):
                 next_date_txt,
                 self._days,
             )
-            if self._days > 1:
+            if self._days > 1:  # type: ignore
                 if bool(self._verbose_state):
                     self._state = self._verbose_format.format(
                         date=next_date_txt, days=self._days
