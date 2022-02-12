@@ -19,7 +19,7 @@ jobs:
         with:
           python-version: 3.8
       - name: Install dependencies
-        run: pip install 'isort==5.*' black flake8 mypy pydocstyle
+        run: pip install 'isort==5.*' black flake8 mypy pydocstyle types-python-dateutil
       - name: Install requirements
         run: pip install -r requirements.txt
       - name: Change directory
