@@ -297,6 +297,11 @@ async def async_migrate_entry(_, config_entry: config_entries.ConfigEntry) -> bo
             if remove in new_options:
                 removed_options[remove] = new_options[remove]
                 del new_options[remove]
+        if new_data.get(const.CONF_COLLECTION_DAYS):
+            if isinstance(new_data.get(const.CONF_COLLECTION_DAYS), str):
+                new_data[const.CONF_COLLECTION_DAYS] = [
+                    new_data[const.CONF_COLLECTION_DAYS]
+                ]
         if new_data.get(const.CONF_FREQUENCY) in const.MONTHLY_FREQUENCY:
             if const.CONF_WEEK_ORDER_NUMBER in new_data:
                 new_data[const.CONF_WEEKDAY_ORDER_NUMBER] = new_data[

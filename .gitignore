@@ -353,3 +353,6 @@ MigrationBackup/
 
 # Virtual Environment
 venv/
+
+Mac OS
+*.DS_Store
