@@ -2,7 +2,7 @@
 import asyncio
 import logging
 from datetime import date, datetime, time, timedelta
-from typing import Any, List, Optional
+from typing import List, Optional
 
 import homeassistant.util.dt as dt_util
 from dateutil.parser import ParserError, parse
