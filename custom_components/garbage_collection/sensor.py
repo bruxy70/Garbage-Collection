@@ -80,7 +80,7 @@ def parse_datetime(text: str) -> Optional[datetime]:
 
 def dates_to_texts(dates: List[date]) -> List[str]:
     """Convert list of dates to texts."""
-    converted = []  # type: List[str]
+    converted: List[str] = []
     for day in dates:
         try:
             converted.append(day.isoformat())
@@ -127,10 +127,12 @@ class GarbageCollection(RestoreEntity):
         self._period = config.get(const.CONF_PERIOD)
         self._first_week = config.get(const.CONF_FIRST_WEEK)
         try:
-            self._first_date = to_date(config.get(const.CONF_FIRST_DATE))
+            self._first_date: Optional[date] = to_date(
+                config.get(const.CONF_FIRST_DATE)
+            )
         except ValueError:
             self._first_date = None
-        self._collection_dates = List[date]
+        self._collection_dates: List[date] = []
         self._next_date = None
         self._last_updated = None
         self.last_collection = None
@@ -361,7 +363,7 @@ class GarbageCollection(RestoreEntity):
             candidate_date = date(year + 1, conf_date.month, conf_date.day)
         return candidate_date
 
-    async def _async_find_candidate_date(self, day1: date):
+    async def _async_find_candidate_date(self, day1: date) -> Optional[date]:
         """Find the next possible date starting from day1.
 
         Only based on calendar, not looking at include/exclude days.
