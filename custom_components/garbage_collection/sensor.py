@@ -7,6 +7,7 @@ from typing import Any, List, Optional
 import homeassistant.util.dt as dt_util
 from dateutil.parser import ParserError, parse
 from dateutil.relativedelta import relativedelta
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
     ATTR_DEVICE_CLASS,
     ATTR_HIDDEN,
@@ -56,7 +57,8 @@ def nth_weekday_date(
     )
 
 
-# To do: Check if this is still needed, The configuratin shoudl include object data type...
+# To do: Check if this is still needed,
+# The configuratin shoudl include object data type...
 def to_date(day: Any) -> date:
     """Convert datetime or text to date, if not already datetime."""
     if day is None:
@@ -76,25 +78,6 @@ def parse_datetime(text: str) -> Optional[datetime]:
         return None
 
 
-# def parse_date(text: str) -> Optional[date]:
-#     """Parse text to date object."""
-#     try:
-#         return parse(text).date()
-#     except (ParserError, AttributeError, TypeError):
-#         return None
-
-
-# def to_dates(dates: List[Any]) -> List[date]:
-#     """Convert list of text to datetimes, if not already datetimes."""
-#     converted = []  # type: List[date]
-#     for day in dates:
-#         try:
-#             converted.append(to_date(day))
-#         except ValueError:
-#             continue
-#     return converted
-
-
 def dates_to_texts(dates: List[date]) -> List[str]:
     """Convert list of dates to texts."""
     converted = []  # type: List[str]
@@ -109,7 +92,7 @@ def dates_to_texts(dates: List[date]) -> List[str]:
 class GarbageCollection(RestoreEntity):
     """GarbageCollection Sensor class."""
 
-    def __init__(self, config_entry):
+    def __init__(self, config_entry: ConfigEntry):
         """Read configuration and initialise class variables."""
         config = config_entry.data
         self.config_entry = config_entry

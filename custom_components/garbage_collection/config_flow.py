@@ -2,7 +2,7 @@
 import logging
 import uuid
 from collections import OrderedDict
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
@@ -51,7 +51,7 @@ class GarbageCollectionShared:
             self.name = self._data[CONF_NAME]
             del self._data[CONF_NAME]
 
-    def required(self, key, options):
+    def required(self, key: str, options: Optional[dict]) -> vol.Required:
         """Return vol.Required."""
         if isinstance(options, dict) and key in options:
             suggested_value = options[key]
@@ -63,7 +63,7 @@ class GarbageCollectionShared:
             return vol.Required(key)
         return vol.Required(key, description={"suggested_value": suggested_value})
 
-    def optional(self, key, options):
+    def optional(self, key: str, options: Optional[dict]) -> vol.Optional:
         """Return vol.Optional."""
         if isinstance(options, dict) and key in options:
             suggested_value = options[key]
@@ -75,7 +75,7 @@ class GarbageCollectionShared:
             return vol.Optional(key)
         return vol.Optional(key, description={"suggested_value": suggested_value})
 
-    def step1_frequency(self, user_input: Dict, options=False):
+    def step1_frequency(self, user_input: Dict, options: bool = False) -> bool:
         """Step 1 - choose frequency and common parameters."""
         self.errors = {}
         if user_input is not None:
@@ -114,7 +114,7 @@ class GarbageCollectionShared:
         self.data_schema[self.optional(const.CONF_MANUAL, user_input)] = bool
         return False
 
-    def step2_detail(self, user_input: Dict):
+    def step2_detail(self, user_input: Dict) -> bool:
         """Step 2 - enter detail that depend on frequency."""
         self.errors = {}
         self.data_schema = {}
