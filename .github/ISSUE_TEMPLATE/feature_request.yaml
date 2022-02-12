@@ -2,6 +2,7 @@
 name: "Feature request"
 description: Suggest an idea for this project
 labels: "enhancement"
+assignees: "bruxy70"
 body:
   - type: checkboxes
     attributes:
