@@ -57,24 +57,6 @@ def nth_weekday_date(
     )
 
 
-# To do: Check if this is still needed,
-# The configuratin shoudl include object data type...
-def to_date(day: Any) -> date:
-    """Convert datetime or text to date, if not already datetime."""
-    if day is None:
-        raise ValueError
-    if isinstance(day, date):
-        return day
-    _LOGGER.error(
-        "Getting date in wrong format: %s."
-        "Converting, but raising error to get this reported.",
-        day,
-    )
-    if isinstance(day, datetime):
-        return day.date()
-    return date.fromisoformat(day)
-
-
 def parse_datetime(text: str) -> Optional[datetime]:
     """Parse text to datetime object."""
     try:
@@ -132,9 +114,7 @@ class GarbageCollection(RestoreEntity):
         self._period = config.get(const.CONF_PERIOD)
         self._first_week = config.get(const.CONF_FIRST_WEEK)
         try:
-            self._first_date: Optional[date] = to_date(
-                config.get(const.CONF_FIRST_DATE)
-            )
+            self._first_date: Optional[date] = config.get(const.CONF_FIRST_DATE)
         except ValueError:
             self._first_date = None
         self._collection_dates: List[date] = []
