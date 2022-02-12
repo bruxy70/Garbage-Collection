@@ -36,7 +36,9 @@ SENSOR_SCHEMA = vol.Schema(
         vol.Optional(const.CONF_MANUAL): cv.boolean,
         vol.Optional(const.CONF_DATE): const.month_day_text,
         vol.Optional(CONF_ENTITIES): cv.entity_ids,
-        vol.Optional(const.CONF_COLLECTION_DAYS): cv.multi_select(WEEKDAYS),
+        vol.Optional(const.CONF_COLLECTION_DAYS): vol.All(
+            cv.ensure_list, [vol.In(WEEKDAYS)]
+        ),
         vol.Optional(const.CONF_FIRST_MONTH): vol.In(const.MONTH_OPTIONS),
         vol.Optional(const.CONF_LAST_MONTH): vol.In(const.MONTH_OPTIONS),
         vol.Optional(const.CONF_WEEKDAY_ORDER_NUMBER): vol.All(
@@ -297,11 +299,6 @@ async def async_migrate_entry(_, config_entry: config_entries.ConfigEntry) -> bo
             if remove in new_options:
                 removed_options[remove] = new_options[remove]
                 del new_options[remove]
-        if new_data.get(const.CONF_COLLECTION_DAYS):
-            if isinstance(new_data.get(const.CONF_COLLECTION_DAYS), str):
-                new_data[const.CONF_COLLECTION_DAYS] = [
-                    new_data[const.CONF_COLLECTION_DAYS]
-                ]
         if new_data.get(const.CONF_FREQUENCY) in const.MONTHLY_FREQUENCY:
             if const.CONF_WEEK_ORDER_NUMBER in new_data:
                 new_data[const.CONF_WEEKDAY_ORDER_NUMBER] = new_data[
