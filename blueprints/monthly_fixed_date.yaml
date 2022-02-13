@@ -1,0 +1,64 @@
+blueprint:
+  name: Monthly fixed date
+  description: >-
+    This automation is triggered from the `garbage_collection` integration by event `garbage_collection_loaded`,
+    during the device state update. 
+
+    It PROCESSES DATA SENT WITH THE EVENT, and then FINISHES THE UPDATE.
+    DO NOT CALL THIS SERVICE MANUALLY, IT WON'T WORK (it won't have the data).
+
+    Also, make sure the INTEGRATION IS CONFIGURED FOR `manual_update`
+    (that will disable the state update by the integration and pass it to this automation).
+
+
+    This will schedule collection on a fixed date, each month.
+
+
+    After updating the list, make sure to trigger the entity update. 
+    The sensors are normally updated once a day, or when Home Assistant starts.
+    The update can be triggered by updating the integration configuration (just hit configure and submit).
+  domain: automation
+  source_url: https://github.com/bruxy70/Garbage-Collection/blob/master/blueprints/include.yaml
+  input:
+    garbage_collection_entity:
+      name: Garbage Collection Entity
+      description: Triggered by the event for this entity.
+      selector:
+        entity:
+          integration: garbage_collection
+    day:
+      name: The day
+      description: |-
+        For example: 3 will schedule event on the 3rd of each month.
+      selector:
+        number:
+          min: 1
+          max: 31
+          mode: box
+mode: parallel
+trigger:
+  - platform: event
+    event_type: garbage_collection_loaded
+    event_data:
+      entity_id: !input garbage_collection_entity
+action:
+  - variables:
+      day: !input day
+  - repeat:
+      count: 12
+      sequence:
+        - service: garbage_collection.add_date
+          data:
+            entity_id: "{{ trigger.event.data.entity_id }}"
+            date: "{{ '{:04}-{:02}-{:02}'.format(now().year-1,repeat.index, day) }}"
+        - service: garbage_collection.add_date
+          data:
+            entity_id: "{{ trigger.event.data.entity_id }}"
+            date: "{{ '{:04}-{:02}-{:02}'.format(now().year,repeat.index, day) }}"
+        - service: garbage_collection.add_date
+          data:
+            entity_id: "{{ trigger.event.data.entity_id }}"
+            date: "{{ '{:04}-{:02}-{:02}'.format(now().year+1,repeat.index, day) }}"
+  - service: garbage_collection.update_state
+    data:
+      entity_id: "{{ trigger.event.data.entity_id }}"
