@@ -22,9 +22,9 @@ class GarbageCollectionShared:
         """Create class attributes and set initial values."""
         self._data = data.copy()
         self.hass: HomeAssistant = None
-        self.name: str = None
+        self.name: Optional[str] = None
         self.errors: Dict = {}
-        self.data_schema: OrderedDict = {}
+        self.data_schema: OrderedDict = OrderedDict()
         self._defaults = {
             const.CONF_FREQUENCY: const.DEFAULT_FREQUENCY,
             const.CONF_ICON_NORMAL: const.DEFAULT_ICON_NORMAL,
