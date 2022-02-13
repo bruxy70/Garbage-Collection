@@ -2,10 +2,9 @@
 import asyncio
 import logging
 from datetime import date, datetime, time, timedelta
-from typing import Any, List, Optional
+from typing import List, Optional
 
 import homeassistant.util.dt as dt_util
-from dateutil.parser import ParserError, parse
 from dateutil.relativedelta import relativedelta
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
@@ -19,7 +18,7 @@ from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.discovery import async_load_platform
 from homeassistant.helpers.restore_state import RestoreEntity
 
-from . import const
+from . import const, helpers
 from .calendar import EntitiesCalendarData
 
 _LOGGER = logging.getLogger(__name__)
@@ -55,39 +54,6 @@ def nth_weekday_date(
     return first_of_month + relativedelta(
         days=7 - first_of_month.weekday() + collection_day + (weekday_number - 1) * 7
     )
-
-
-def to_date(day: Any) -> date:
-    """Convert datetime or text to date, if not already datetime.
-
-    Used for the first date for every_n_days (configured as text)
-    """
-    if day is None:
-        raise ValueError
-    if isinstance(day, date):
-        return day
-    if isinstance(day, datetime):
-        return day.date()
-    return date.fromisoformat(day)
-
-
-def parse_datetime(text: str) -> Optional[datetime]:
-    """Parse text to datetime object."""
-    try:
-        return parse(text)
-    except (ParserError, TypeError):
-        return None
-
-
-def dates_to_texts(dates: List[date]) -> List[str]:
-    """Convert list of dates to texts."""
-    converted: List[str] = []
-    for day in dates:
-        try:
-            converted.append(day.isoformat())
-        except ValueError:
-            continue
-    return converted
 
 
 class GarbageCollection(RestoreEntity):
@@ -133,7 +99,7 @@ class GarbageCollection(RestoreEntity):
         self._first_week = config.get(const.CONF_FIRST_WEEK)
         self._first_date: Optional[date]
         try:
-            self._first_date = to_date(config.get(const.CONF_FIRST_DATE))
+            self._first_date = helpers.to_date(config.get(const.CONF_FIRST_DATE))
         except ValueError:
             self._first_date = None
         self._collection_dates: List[date] = []
@@ -172,7 +138,7 @@ class GarbageCollection(RestoreEntity):
 
         state = await self.async_get_last_state()
         if state is not None:
-            self.last_collection = parse_datetime(
+            self.last_collection = helpers.parse_datetime(
                 state.attributes.get(const.ATTR_LAST_COLLECTION)
             )
 
@@ -608,7 +574,7 @@ class GarbageCollection(RestoreEntity):
         )
         event_data = {
             "entity_id": self.entity_id,
-            "collection_dates": dates_to_texts(self._collection_dates),
+            "collection_dates": helpers.dates_to_texts(self._collection_dates),
         }
         self.hass.bus.async_fire("garbage_collection_loaded", event_data)
         if not self._manual and self._frequency != "blank":

@@ -18,7 +18,7 @@ from homeassistant.const import (
 )
 from homeassistant.core import Config, HomeAssistant, ServiceCall
 
-from . import const
+from . import const, helpers
 
 MIN_TIME_BETWEEN_UPDATES = timedelta(seconds=30)
 
@@ -30,11 +30,11 @@ SENSOR_SCHEMA = vol.Schema(
         vol.Optional(const.CONF_ICON_NORMAL): cv.icon,
         vol.Optional(const.CONF_ICON_TODAY): cv.icon,
         vol.Optional(const.CONF_ICON_TOMORROW): cv.icon,
-        vol.Optional(const.CONF_EXPIRE_AFTER): const.time_text,
+        vol.Optional(const.CONF_EXPIRE_AFTER): helpers.time_text,
         vol.Optional(const.CONF_VERBOSE_STATE): cv.boolean,
         vol.Optional(ATTR_HIDDEN): cv.boolean,
         vol.Optional(const.CONF_MANUAL): cv.boolean,
-        vol.Optional(const.CONF_DATE): const.month_day_text,
+        vol.Optional(const.CONF_DATE): helpers.month_day_text,
         vol.Optional(CONF_ENTITIES): cv.entity_ids,
         vol.Optional(const.CONF_COLLECTION_DAYS): vol.All(
             cv.ensure_list, [vol.In(WEEKDAYS)]

@@ -10,7 +10,7 @@ from homeassistant import config_entries
 from homeassistant.const import ATTR_HIDDEN, CONF_ENTITIES, CONF_NAME, WEEKDAYS
 from homeassistant.core import HomeAssistant, callback
 
-from . import const
+from . import const, helpers
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -92,7 +92,7 @@ class GarbageCollectionShared:
             except vol.Invalid:
                 self.errors["base"] = "icon"
             try:
-                const.time_text(user_input.get(const.CONF_EXPIRE_AFTER))
+                helpers.time_text(user_input.get(const.CONF_EXPIRE_AFTER))
             except vol.Invalid:
                 self.errors["base"] = "time"
             if not self.errors:
@@ -123,7 +123,7 @@ class GarbageCollectionShared:
         if user_input is not None and user_input:
             if user_input.get(const.CONF_FREQUENCY) in const.ANNUAL_FREQUENCY:
                 try:
-                    const.month_day_text(user_input.get(const.CONF_DATE, ""))
+                    helpers.month_day_text(user_input.get(const.CONF_DATE, ""))
                 except vol.Invalid:
                     self.errors["base"] = "month_day"
             if user_input.get(const.CONF_FREQUENCY) in const.DAILY_FREQUENCY:
@@ -289,9 +289,6 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
     def async_get_options_flow(config_entry):
         """Return options flow handler, or empty options flow if no unique_id."""
         return OptionsFlowHandler(config_entry)
-
-
-# O P T I O N S   F L O W
 
 
 class OptionsFlowHandler(config_entries.OptionsFlow):
