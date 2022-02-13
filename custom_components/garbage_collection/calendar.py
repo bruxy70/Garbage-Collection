@@ -1,7 +1,7 @@
 """Garbage collection calendar."""
 
 from datetime import datetime, timedelta
-from typing import List
+from typing import Dict, List, Optional
 
 from homeassistant.components.calendar import CalendarEventDevice
 from homeassistant.core import HomeAssistant
@@ -28,7 +28,7 @@ class GarbageCollectionCalendar(CalendarEventDevice):
 
     def __init__(self):
         """Create empty calendar."""
-        self._cal_data = {}
+        self._cal_data: Dict = {}
         self._name = CALENDAR_NAME
         GarbageCollectionCalendar.instances = True
 
@@ -68,7 +68,7 @@ class EntitiesCalendarData:
 
     def __init__(self, hass: HomeAssistant):
         """Initialize an Entities Calendar Data."""
-        self.event = None
+        self.event: Optional[Dict] = None
         self._hass = hass
         self.entities: List[str] = []
 

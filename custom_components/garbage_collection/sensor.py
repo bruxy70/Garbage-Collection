@@ -107,18 +107,22 @@ class GarbageCollection(RestoreEntity):
         self._manual = config.get(const.CONF_MANUAL)
         self._collection_days = config.get(const.CONF_COLLECTION_DAYS)
         first_month = config.get(const.CONF_FIRST_MONTH)
-        if first_month in const.MONTH_OPTIONS:
-            self._first_month = const.MONTH_OPTIONS.index(first_month) + 1
-        else:
-            self._first_month = 1
+        self._first_month: int = (
+            const.MONTH_OPTIONS.index(first_month) + 1
+            if first_month in const.MONTH_OPTIONS
+            else 1
+        )
         last_month = config.get(const.CONF_LAST_MONTH)
-        if last_month in const.MONTH_OPTIONS:
-            self._last_month = const.MONTH_OPTIONS.index(last_month) + 1
-        else:
-            self._last_month = 12
+        self._last_month: int = (
+            const.MONTH_OPTIONS.index(last_month) + 1
+            if last_month in const.MONTH_OPTIONS
+            else 12
+        )
         self._monthly_force_week_numbers = config.get(
             const.CONF_FORCE_WEEK_NUMBERS, False
         )
+        self._weekday_order_numbers: List
+        self._week_order_numbers: List
         if self._monthly_force_week_numbers:
             self._weekday_order_numbers = []
             self._week_order_numbers = config.get(const.CONF_WEEKDAY_ORDER_NUMBER)
@@ -127,10 +131,9 @@ class GarbageCollection(RestoreEntity):
             self._week_order_numbers = []
         self._period = config.get(const.CONF_PERIOD)
         self._first_week = config.get(const.CONF_FIRST_WEEK)
+        self._first_date: Optional[date]
         try:
-            self._first_date: Optional[date] = to_date(
-                config.get(const.CONF_FIRST_DATE)
-            )
+            self._first_date = to_date(config.get(const.CONF_FIRST_DATE))
         except ValueError:
             self._first_date = None
         self._collection_dates: List[date] = []
@@ -146,6 +149,7 @@ class GarbageCollection(RestoreEntity):
         self._icon_today = config.get(const.CONF_ICON_TODAY)
         self._icon_tomorrow = config.get(const.CONF_ICON_TOMORROW)
         exp = config.get(const.CONF_EXPIRE_AFTER)
+        self.expire_after: Optional[time]
         self.expire_after = (
             None if exp is None else datetime.strptime(exp, "%H:%M").time()
         )
