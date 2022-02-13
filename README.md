@@ -184,7 +184,7 @@ This **blueprint** requires a `command_line` sensor reading content of a txt fil
 [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fmaster%2Fblueprints%2Fimport_txt.yaml)
 
 
-### Montly on a fixed date
+### Monthly on a fixed date
 
 This will create a schedule on a fixed date each month. For example on the 3rd each month. The integration does not allow it, as it is generally designed around paterns evolving around weekly schedules (since garbage collection typically happens on a set day in a week, rather than set day in a month). But few of you wanted that, so here you go.
 
