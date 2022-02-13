@@ -82,5 +82,5 @@ action:
             entity_id: "{{ trigger.event.data.entity_id }}"
             date: "{{ '{:04}-{:02}-{:02}'.format(now().year+1,repeat.index, day2) }}"
   - service: garbage_collection.update_state
-ß    data:
-  entity_id: "{{ trigger.event.data.entity_id }}"
+    data:
+      entity_id: "{{ trigger.event.data.entity_id }}"
