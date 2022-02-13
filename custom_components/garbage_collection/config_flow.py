@@ -8,7 +8,7 @@ import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.const import ATTR_HIDDEN, CONF_ENTITIES, CONF_NAME, WEEKDAYS
-from homeassistant.core import callback
+from homeassistant.core import HomeAssistant, callback
 
 from . import const
 
@@ -21,8 +21,8 @@ class GarbageCollectionShared:
     def __init__(self, data):
         """Create class attributes and set initial values."""
         self._data = data.copy()
-        self.hass = None
-        self.name = None
+        self.hass: HomeAssistant = None
+        self.name: str = None
         self.errors = {}
         self.data_schema = {}
         self._defaults = {
