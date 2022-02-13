@@ -2,7 +2,7 @@
 import asyncio
 import logging
 from datetime import date, datetime, time, timedelta
-from typing import List, Optional
+from typing import Any, List, Optional
 
 import homeassistant.util.dt as dt_util
 from dateutil.parser import ParserError, parse
@@ -55,6 +55,20 @@ def nth_weekday_date(
     return first_of_month + relativedelta(
         days=7 - first_of_month.weekday() + collection_day + (weekday_number - 1) * 7
     )
+
+
+def to_date(day: Any) -> date:
+    """Convert datetime or text to date, if not already datetime.
+
+    Used for the first date for every_n_days (configured as text)
+    """
+    if day is None:
+        raise ValueError
+    if isinstance(day, date):
+        return day
+    if isinstance(day, datetime):
+        return day.date()
+    return date.fromisoformat(day)
 
 
 def parse_datetime(text: str) -> Optional[datetime]:
@@ -114,7 +128,9 @@ class GarbageCollection(RestoreEntity):
         self._period = config.get(const.CONF_PERIOD)
         self._first_week = config.get(const.CONF_FIRST_WEEK)
         try:
-            self._first_date: Optional[date] = config.get(const.CONF_FIRST_DATE)
+            self._first_date: Optional[date] = to_date(
+                config.get(const.CONF_FIRST_DATE)
+            )
         except ValueError:
             self._first_date = None
         self._collection_dates: List[date] = []
