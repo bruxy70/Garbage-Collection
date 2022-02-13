@@ -23,8 +23,8 @@ class GarbageCollectionShared:
         self._data = data.copy()
         self.hass: HomeAssistant = None
         self.name: str = None
-        self.errors = {}
-        self.data_schema = {}
+        self.errors: Dict = {}
+        self.data_schema: OrderedDict = {}
         self._defaults = {
             const.CONF_FREQUENCY: const.DEFAULT_FREQUENCY,
             const.CONF_ICON_NORMAL: const.DEFAULT_ICON_NORMAL,
@@ -77,7 +77,7 @@ class GarbageCollectionShared:
 
     def step1_frequency(self, user_input: Dict, options: bool = False) -> bool:
         """Step 1 - choose frequency and common parameters."""
-        self.errors = {}
+        self.errors.clear()
         if user_input is not None:
             try:
                 cv.icon(
@@ -98,7 +98,7 @@ class GarbageCollectionShared:
             if not self.errors:
                 self.update_data(user_input)
                 return True
-        self.data_schema = OrderedDict()
+        self.data_schema.clear()
         # Do not show name for Options_Flow. The name cannot be changed here
         if not options:
             self.data_schema[self.required(CONF_NAME, user_input)] = str
@@ -116,8 +116,7 @@ class GarbageCollectionShared:
 
     def step2_detail(self, user_input: Dict) -> bool:
         """Step 2 - enter detail that depend on frequency."""
-        self.errors = {}
-        self.data_schema = {}
+        self.errors.clear()
         # Skip second step on blank frequency
         if self._data[const.CONF_FREQUENCY] in const.BLANK_FREQUENCY:
             return True
@@ -135,7 +134,7 @@ class GarbageCollectionShared:
             if not self.errors:
                 self.update_data(user_input)
                 return True
-        self.data_schema = OrderedDict()
+        self.data_schema.clear()
         if self._data[const.CONF_FREQUENCY] in const.ANNUAL_FREQUENCY:
             self.data_schema[self.required(const.CONF_DATE, user_input)] = str
         elif self._data[const.CONF_FREQUENCY] in const.GROUP_FREQUENCY:
