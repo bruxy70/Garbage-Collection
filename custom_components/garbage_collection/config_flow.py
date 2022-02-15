@@ -159,7 +159,8 @@ class GarbageCollectionShared:
                 const.MONTH_OPTIONS
             )
             if self._data[const.CONF_FREQUENCY] in const.MONTHLY_FREQUENCY:
-                # To do: multiselect should have Dict, not list. First value: key, second: display
+                # To do: multiselect should have Dict, not list.
+                # First value: key, second: display
                 self.data_schema[
                     self.optional(const.CONF_WEEKDAY_ORDER_NUMBER, user_input)
                 ] = cv.multi_select([1, 2, 3, 4, 5])
