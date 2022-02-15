@@ -139,18 +139,19 @@ class GarbageCollectionShared:
             self.data_schema[self.required(const.CONF_DATE, user_input)] = str
         elif self._data[const.CONF_FREQUENCY] in const.GROUP_FREQUENCY:
             entities = self.hass.data[const.DOMAIN][const.SENSOR_PLATFORM]
-            entity_ids = [
-                entity
+            entity_ids = {
+                entity: entity
                 for entity in entities
                 if entities[entity].unique_id != self._data["unique_id"]
-            ]
+            }
             self.data_schema[
                 self.required(CONF_ENTITIES, user_input)
             ] = cv.multi_select(entity_ids)
         elif self._data[const.CONF_FREQUENCY] not in const.BLANK_FREQUENCY:
+            weekdays_dict = {weekday: weekday for weekday in WEEKDAYS}
             self.data_schema[
                 self.required(const.CONF_COLLECTION_DAYS, user_input)
-            ] = cv.multi_select(WEEKDAYS)
+            ] = cv.multi_select(weekdays_dict)
             self.data_schema[
                 self.required(const.CONF_FIRST_MONTH, user_input)
             ] = vol.In(const.MONTH_OPTIONS)
@@ -158,6 +159,7 @@ class GarbageCollectionShared:
                 const.MONTH_OPTIONS
             )
             if self._data[const.CONF_FREQUENCY] in const.MONTHLY_FREQUENCY:
+                # To do: multiselect should have Dict, not list. First value: key, second: display
                 self.data_schema[
                     self.optional(const.CONF_WEEKDAY_ORDER_NUMBER, user_input)
                 ] = cv.multi_select([1, 2, 3, 4, 5])
