@@ -319,6 +319,15 @@ async def async_migrate_entry(_, config_entry: ConfigEntry) -> bool:
                 _LOGGER.info("Updated options config for week_order_number")
             else:
                 new_options[const.CONF_FORCE_WEEK_NUMBERS] = False
+    if config_entry.version <= 4:
+        if const.CONF_WEEKDAY_ORDER_NUMBER in new_data:
+            new_data[const.CONF_WEEKDAY_ORDER_NUMBER] = list(
+                map(str, new_data[const.CONF_WEEKDAY_ORDER_NUMBER])
+            )
+        if const.CONF_WEEKDAY_ORDER_NUMBER in new_options:
+            new_options[const.CONF_WEEKDAY_ORDER_NUMBER] = list(
+                map(str, new_options[const.CONF_WEEKDAY_ORDER_NUMBER])
+            )
     config_entry.version = const.VERSION
     config_entry.data = {**new_data}
     config_entry.options = {**new_options}

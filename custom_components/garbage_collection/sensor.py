@@ -89,11 +89,14 @@ class GarbageCollection(RestoreEntity):
         )
         self._weekday_order_numbers: List
         self._week_order_numbers: List
+        order_numbers: List = []
+        if const.CONF_WEEKDAY_ORDER_NUMBER in config:
+            order_numbers = list(map(int, config.get(const.CONF_WEEKDAY_ORDER_NUMBER)))
         if self._monthly_force_week_numbers:
             self._weekday_order_numbers = []
-            self._week_order_numbers = config.get(const.CONF_WEEKDAY_ORDER_NUMBER)
+            self._week_order_numbers = order_numbers
         else:
-            self._weekday_order_numbers = config.get(const.CONF_WEEKDAY_ORDER_NUMBER)
+            self._weekday_order_numbers = order_numbers
             self._week_order_numbers = []
         self._period = config.get(const.CONF_PERIOD)
         self._first_week = config.get(const.CONF_FIRST_WEEK)

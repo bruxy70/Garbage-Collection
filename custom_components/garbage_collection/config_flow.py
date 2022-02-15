@@ -159,11 +159,13 @@ class GarbageCollectionShared:
                 const.MONTH_OPTIONS
             )
             if self._data[const.CONF_FREQUENCY] in const.MONTHLY_FREQUENCY:
-                # To do: multiselect should have Dict, not list.
-                # First value: key, second: display
                 self.data_schema[
                     self.optional(const.CONF_WEEKDAY_ORDER_NUMBER, user_input)
-                ] = cv.multi_select([1, 2, 3, 4, 5])
+                ] = vol.All(
+                    cv.multi_select(
+                        {"1": "1st", "2": "2nd", "3": "3rd", "4": "4th", "5": "5th"}
+                    ),
+                )
                 self.data_schema[
                     self.optional(const.CONF_FORCE_WEEK_NUMBERS, user_input)
                 ] = bool
@@ -268,13 +270,16 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
                 del user_input[remove]
         if user_input.get(const.CONF_FREQUENCY) in const.MONTHLY_FREQUENCY:
             if const.CONF_WEEK_ORDER_NUMBER in user_input:
-                user_input[const.CONF_WEEKDAY_ORDER_NUMBER] = user_input[
-                    const.CONF_WEEK_ORDER_NUMBER
-                ]
+                user_input[const.CONF_WEEKDAY_ORDER_NUMBER] = list(
+                    map(str, user_input[const.CONF_WEEK_ORDER_NUMBER])
+                )
                 user_input[const.CONF_FORCE_WEEK_NUMBERS] = True
                 del user_input[const.CONF_WEEK_ORDER_NUMBER]
                 _LOGGER.debug("Updated data config for week_order_number")
             else:
+                user_input[const.CONF_WEEKDAY_ORDER_NUMBER] = list(
+                    map(str, user_input[const.CONF_WEEKDAY_ORDER_NUMBER])
+                )
                 user_input[const.CONF_FORCE_WEEK_NUMBERS] = False
         if removed_data:
             _LOGGER.error(
