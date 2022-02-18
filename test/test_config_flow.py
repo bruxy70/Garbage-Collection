@@ -2,9 +2,10 @@
 from unittest.mock import patch
 
 import pytest
-from custom_components.garbage_collection.const import DOMAIN
 from homeassistant import config_entries, data_entry_flow, setup
 from homeassistant.core import HomeAssistant
+
+from custom_components.garbage_collection.const import DOMAIN
 
 
 # This fixture bypasses the actual setup of the integration
