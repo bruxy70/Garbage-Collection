@@ -1,0 +1,4 @@
+# Do not check paths including `/tests/`:
+# they use `assert`, leading to B101 false positives.
+skips:
+  - B101 # skip "assert used" check since assertions are required in pytests

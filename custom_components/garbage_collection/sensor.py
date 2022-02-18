@@ -26,9 +26,11 @@ _LOGGER = logging.getLogger(__name__)
 SCAN_INTERVAL = timedelta(seconds=10)
 THROTTLE_INTERVAL = timedelta(seconds=60)
 
+
 def now():
     """Return current date and time. Needed for testing."""
     return dt_util.now()
+
 
 async def async_setup_entry(_, config_entry, async_add_devices):
     """Create garbage collection entities defined in config_flow and add them to HA."""
@@ -406,8 +408,8 @@ class GarbageCollection(RestoreEntity):
         Except for the sensors with with next date today and after the expiration time
         For group sensors wait for update of the sensors in the group
         """
-        now = now()
-        today = now.date()
+        current_date_time = now()
+        today = current_date_time.date()
         try:
             ready_for_update = bool(self._last_updated.date() != today)  # type: ignore
         except AttributeError:
@@ -442,7 +444,7 @@ class GarbageCollection(RestoreEntity):
                 if self._next_date == today and (
                     (
                         isinstance(self.expire_after, time)
-                        and now.time() >= self.expire_after
+                        and current_date_time.time() >= self.expire_after
                     )
                     or (
                         isinstance(self.last_collection, datetime)
@@ -549,20 +551,20 @@ class GarbageCollection(RestoreEntity):
         self, first_date: date, ignore_today=False
     ) -> Optional[date]:
         """Get next date from self._collection_dates."""
-        now = now()
+        current_date_time = now()
         for d in self._collection_dates:  # pylint: disable=invalid-name
             if d < first_date:
                 continue
-            if not ignore_today and d == now.date():
+            if not ignore_today and d == current_date_time.date():
                 expiration = (
                     self.expire_after
                     if self.expire_after is not None
                     else time(23, 59, 59)
                 )
-                if now.time() > expiration or (
+                if current_date_time.time() > expiration or (
                     self.last_collection is not None
-                    and self.last_collection.date() == now.date()
-                    and now.time() >= self.last_collection.time()
+                    and self.last_collection.date() == current_date_time.date()
+                    and current_date_time.time >= self.last_collection.time()
                 ):
                     continue
             return d
@@ -589,10 +591,9 @@ class GarbageCollection(RestoreEntity):
     async def async_update_state(self) -> None:
         """Pick the first event from collection dates, update attributes."""
         _LOGGER.debug("(%s) Looking for next collection", self._name)
-        now = now()
-        today = now.date()
+        today = now().date()
         self._next_date = await self.async_next_date(today)
-        self._last_updated = now
+        self._last_updated = now()
         if self._next_date is not None:
             _LOGGER.debug(
                 "(%s) next_date (%s), today (%s)", self._name, self._next_date, today
