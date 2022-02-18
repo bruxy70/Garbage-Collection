@@ -40,3 +40,5 @@ jobs:
       - uses: "actions/checkout@v2"
       - name: Bandit Check (Python security linter)
         uses: jpetrucciani/bandit-check@master
+        with:
+          path: '/custom_components/garbage_collection/'
