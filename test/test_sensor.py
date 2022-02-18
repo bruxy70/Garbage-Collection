@@ -1,5 +1,5 @@
 """Test calendar for simple integration."""
-from datetime import date, datetime
+from datetime import date
 
 from homeassistant.core import HomeAssistant
 from pytest_homeassistant_custom_component.common import MockConfigEntry
