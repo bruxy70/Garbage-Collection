@@ -26,6 +26,9 @@ _LOGGER = logging.getLogger(__name__)
 SCAN_INTERVAL = timedelta(seconds=10)
 THROTTLE_INTERVAL = timedelta(seconds=60)
 
+def now():
+    """Return current date and time. Needed for testing."""
+    return dt_util.now()
 
 async def async_setup_entry(_, config_entry, async_add_devices):
     """Create garbage collection entities defined in config_flow and add them to HA."""
@@ -403,7 +406,7 @@ class GarbageCollection(RestoreEntity):
         Except for the sensors with with next date today and after the expiration time
         For group sensors wait for update of the sensors in the group
         """
-        now = dt_util.now()
+        now = now()
         today = now.date()
         try:
             ready_for_update = bool(self._last_updated.date() != today)  # type: ignore
@@ -512,7 +515,7 @@ class GarbageCollection(RestoreEntity):
         """Fill the collection dates list."""
         if self._frequency == "blank":
             return
-        today = dt_util.now().date()
+        today = now().date()
         start_date = end_date = date(today.year - 1, 1, 1)
         end_date = date(today.year + 1, 12, 31)
 
@@ -546,7 +549,7 @@ class GarbageCollection(RestoreEntity):
         self, first_date: date, ignore_today=False
     ) -> Optional[date]:
         """Get next date from self._collection_dates."""
-        now = dt_util.now()
+        now = now()
         for d in self._collection_dates:  # pylint: disable=invalid-name
             if d < first_date:
                 continue
@@ -586,7 +589,7 @@ class GarbageCollection(RestoreEntity):
     async def async_update_state(self) -> None:
         """Pick the first event from collection dates, update attributes."""
         _LOGGER.debug("(%s) Looking for next collection", self._name)
-        now = dt_util.now()
+        now = now()
         today = now.date()
         self._next_date = await self.async_next_date(today)
         self._last_updated = now
