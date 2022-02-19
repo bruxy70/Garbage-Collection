@@ -1,7 +1,6 @@
 """Test the Simple Integration config flow."""
 from unittest.mock import patch
 
-import pytest
 from homeassistant import config_entries, data_entry_flow, setup
 from homeassistant.core import HomeAssistant
 from pytest_homeassistant_custom_component.common import MockConfigEntry
@@ -38,10 +37,10 @@ async def test_weekly_config_flow(hass: HomeAssistant) -> None:
     # ...add Wednesday
     with patch(
         "custom_components.garbage_collection.async_setup_entry", return_value=True
-    ) as mock_setup, patch(
+    ) as mock_setup_entry, patch(
         "custom_components.garbage_collection.async_setup",
         return_value=True,
-    ) as mock_setup_entry:
+    ) as mock_setup:
         result = await hass.config_entries.flow.async_configure(
             result["flow_id"],
             user_input={"collection_days": ["wed"]},
@@ -83,10 +82,10 @@ async def test_monthly_config_flow(hass: HomeAssistant) -> None:
     # ...add Wednesday
     with patch(
         "custom_components.garbage_collection.async_setup_entry", return_value=True
-    ) as mock_setup, patch(
+    ) as mock_setup_entry, patch(
         "custom_components.garbage_collection.async_setup",
         return_value=True,
-    ) as mock_setup_entry:
+    ) as mock_setup:
         result = await hass.config_entries.flow.async_configure(
             result["flow_id"],
             user_input={
@@ -136,10 +135,10 @@ async def test_annual_config_flow(hass: HomeAssistant) -> None:
     # ...add Wednesday
     with patch(
         "custom_components.garbage_collection.async_setup_entry", return_value=True
-    ) as mock_setup, patch(
+    ) as mock_setup_entry, patch(
         "custom_components.garbage_collection.async_setup",
         return_value=True,
-    ) as mock_setup_entry:
+    ) as mock_setup:
         result = await hass.config_entries.flow.async_configure(
             result["flow_id"],
             user_input={
