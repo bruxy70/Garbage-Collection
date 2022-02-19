@@ -121,12 +121,15 @@ class GarbageCollectionShared:
         if self._data[const.CONF_FREQUENCY] in const.BLANK_FREQUENCY:
             return True
         if user_input is not None and user_input:
+            # Validation
             if user_input.get(const.CONF_FREQUENCY) in const.ANNUAL_FREQUENCY:
+                # "annual"
                 try:
                     helpers.month_day_text(user_input.get(const.CONF_DATE, ""))
                 except vol.Invalid:
                     self.errors["base"] = "month_day"
             if user_input.get(const.CONF_FREQUENCY) in const.DAILY_FREQUENCY:
+                # "every-n-days"
                 try:
                     cv.date(user_input.get(const.CONF_FIRST_DATE, ""))
                 except vol.Invalid:
@@ -135,9 +138,12 @@ class GarbageCollectionShared:
                 self.update_data(user_input)
                 return True
         self.data_schema.clear()
+        # Build form
         if self._data[const.CONF_FREQUENCY] in const.ANNUAL_FREQUENCY:
+            # "annual"
             self.data_schema[self.required(const.CONF_DATE, user_input)] = str
         elif self._data[const.CONF_FREQUENCY] in const.GROUP_FREQUENCY:
+            # "group"
             entities = self.hass.data[const.DOMAIN][const.SENSOR_PLATFORM]
             entity_ids = {
                 entity: entity
@@ -148,17 +154,19 @@ class GarbageCollectionShared:
                 self.required(CONF_ENTITIES, user_input)
             ] = cv.multi_select(entity_ids)
         elif self._data[const.CONF_FREQUENCY] not in const.BLANK_FREQUENCY:
+            # everything else except "blank"
             weekdays_dict = {weekday: weekday for weekday in WEEKDAYS}
             self.data_schema[
                 self.required(const.CONF_COLLECTION_DAYS, user_input)
             ] = cv.multi_select(weekdays_dict)
             self.data_schema[
-                self.required(const.CONF_FIRST_MONTH, user_input)
+                self.optional(const.CONF_FIRST_MONTH, user_input)
             ] = vol.In(const.MONTH_OPTIONS)
-            self.data_schema[self.required(const.CONF_LAST_MONTH, user_input)] = vol.In(
+            self.data_schema[self.optional(const.CONF_LAST_MONTH, user_input)] = vol.In(
                 const.MONTH_OPTIONS
             )
             if self._data[const.CONF_FREQUENCY] in const.MONTHLY_FREQUENCY:
+                # "monthly"
                 self.data_schema[
                     self.optional(const.CONF_WEEKDAY_ORDER_NUMBER, user_input)
                 ] = vol.All(
@@ -170,16 +178,20 @@ class GarbageCollectionShared:
                     self.optional(const.CONF_FORCE_WEEK_NUMBERS, user_input)
                 ] = bool
             if self._data[const.CONF_FREQUENCY] in const.WEEKLY_DAILY_MONTHLY:
+                # "every-n-weeks", "every-n-days", "monthly"
                 self.data_schema[
                     self.required(const.CONF_PERIOD, user_input)
                 ] = vol.All(vol.Coerce(int), vol.Range(min=1, max=365))
             if self._data[const.CONF_FREQUENCY] in const.WEEKLY_FREQUENCY_X:
+                # every-n-weeks
                 self.data_schema[
                     self.required(const.CONF_FIRST_WEEK, user_input)
                 ] = vol.All(vol.Coerce(int), vol.Range(min=1, max=52))
             if self._data[const.CONF_FREQUENCY] in const.DAILY_FREQUENCY:
+                # every-n-days
                 self.data_schema[self.required(const.CONF_FIRST_DATE, user_input)] = str
         if self._data.get(const.CONF_VERBOSE_STATE, False):
+            # "verbose_state"
             self.data_schema[
                 self.required(const.CONF_VERBOSE_FORMAT, user_input)
             ] = cv.string

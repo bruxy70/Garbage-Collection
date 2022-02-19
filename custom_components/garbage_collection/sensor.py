@@ -27,7 +27,7 @@ SCAN_INTERVAL = timedelta(seconds=10)
 THROTTLE_INTERVAL = timedelta(seconds=60)
 
 
-def now():
+def now() -> datetime:
     """Return current date and time. Needed for testing."""
     return dt_util.now()
 

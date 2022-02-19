@@ -12,7 +12,7 @@ ERROR_STATE = "State should be {}, not {}."
 ERROR_DATE = "Next collection date shoudl be {}, not {}."
 
 
-async def test_weekly(hass: HomeAssistant):
+async def test_weekly(hass: HomeAssistant) -> None:
     """Weekly collection."""
 
     config_entry: MockConfigEntry = MockConfigEntry(
@@ -36,7 +36,7 @@ async def test_weekly(hass: HomeAssistant):
     )
 
 
-async def test_odd_weeks(hass: HomeAssistant):
+async def test_odd_weeks(hass: HomeAssistant) -> None:
     """Odd Weeks collection."""
 
     config_entry: MockConfigEntry = MockConfigEntry(
@@ -60,7 +60,7 @@ async def test_odd_weeks(hass: HomeAssistant):
     )
 
 
-async def test_even_weeks(hass: HomeAssistant):
+async def test_even_weeks(hass: HomeAssistant) -> None:
     """Even Weeks collection."""
 
     config_entry: MockConfigEntry = MockConfigEntry(
@@ -84,7 +84,7 @@ async def test_even_weeks(hass: HomeAssistant):
     )
 
 
-async def test_every_n_days(hass: HomeAssistant):
+async def test_every_n_days(hass: HomeAssistant) -> None:
     """Every n days collection."""
 
     config_entry: MockConfigEntry = MockConfigEntry(
@@ -112,7 +112,7 @@ async def test_every_n_days(hass: HomeAssistant):
     )
 
 
-async def test_every_n_weeks(hass: HomeAssistant):
+async def test_every_n_weeks(hass: HomeAssistant) -> None:
     """Every n weeks collection."""
 
     config_entry: MockConfigEntry = MockConfigEntry(
@@ -142,14 +142,14 @@ async def test_every_n_weeks(hass: HomeAssistant):
     )
 
 
-async def test_monthly(hass: HomeAssistant):
+async def test_monthly(hass: HomeAssistant) -> None:
     """Monthly collection."""
 
     config_entry: MockConfigEntry = MockConfigEntry(
         domain=const.DOMAIN,
         data={
             "frequency": "monthly",
-            "weekday_order_number": "2",
+            "weekday_order_number": ["2"],
             "collection_days": ["fri"],
         },
         title="sensor",
@@ -170,14 +170,14 @@ async def test_monthly(hass: HomeAssistant):
     )
 
 
-async def test_monthly2(hass: HomeAssistant):
+async def test_monthly2(hass: HomeAssistant) -> None:
     """Monday in 2nd week, not 2nd monday of month."""
 
     config_entry: MockConfigEntry = MockConfigEntry(
         domain=const.DOMAIN,
         data={
             "frequency": "monthly",
-            "weekday_order_number": "2",
+            "weekday_order_number": ["2"],
             "force_week_order_numbers": True,
             "collection_days": ["mon"],
         },
@@ -199,7 +199,7 @@ async def test_monthly2(hass: HomeAssistant):
     )
 
 
-async def test_annual(hass: HomeAssistant):
+async def test_annual(hass: HomeAssistant) -> None:
     """Annual collection."""
 
     config_entry: MockConfigEntry = MockConfigEntry(
