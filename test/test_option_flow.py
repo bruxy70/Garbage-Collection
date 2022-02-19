@@ -148,3 +148,112 @@ async def test_annual_options_flow(hass: HomeAssistant) -> None:
     # Should create entry
     assert result["type"] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
     assert result["data"] == {"frequency": "annual", "date": "04/01"}
+
+
+async def test_every_n_weeks_options_flow(hass: HomeAssistant) -> None:
+    """Test we get the form."""
+    await setup.async_setup_component(hass, "persistent_notification", {})
+
+    config_entry: MockConfigEntry = MockConfigEntry(
+        domain=const.DOMAIN,
+        data={
+            "name": "test",
+            "frequency": "every-n-weeks",
+            "period": 2,
+            "first_week": 3,
+            "collection_days": ["wed"],
+        },
+        title="sensor",
+        version=4.5,
+    )
+    config_entry.add_to_hass(hass)
+
+    # Initialise Options Flow
+    result = await hass.config_entries.options.async_init(config_entry.entry_id)
+    # Check that the config flow shows the user form as the first step
+    assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+    assert result["step_id"] == "init"
+
+    # If a user were to enter `weekly` for frequency
+    # it would result in this function call
+    result = await hass.config_entries.options.async_configure(
+        result["flow_id"],
+        user_input={"frequency": "every-n-weeks"},
+    )
+
+    # Check that the config flow is complete and a new entry is created with
+    # the input data
+    assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+    assert result["step_id"] == "detail"
+    assert result["errors"] == {}
+
+    # ...add Wednesday
+    result = await hass.config_entries.options.async_configure(
+        result["flow_id"],
+        user_input={
+            "period": 2,
+            "first_week": 3,
+            "collection_days": ["wed"],
+        },
+    )
+    # Should create entry
+    assert result["type"] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
+    assert result["data"] == {
+        "frequency": "every-n-weeks",
+        "period": 2,
+        "first_week": 3,
+        "collection_days": ["wed"],
+    }
+
+
+async def test_every_n_days_options_flow(hass: HomeAssistant) -> None:
+    """Test we get the form."""
+    await setup.async_setup_component(hass, "persistent_notification", {})
+
+    config_entry: MockConfigEntry = MockConfigEntry(
+        domain=const.DOMAIN,
+        data={
+            "name": "test",
+            "frequency": "every-n-days",
+            "period": 14,
+            "first_date": "2020-01-01",
+        },
+        title="sensor",
+        version=4.5,
+    )
+    config_entry.add_to_hass(hass)
+
+    # Initialise Options Flow
+    result = await hass.config_entries.options.async_init(config_entry.entry_id)
+    # Check that the config flow shows the user form as the first step
+    assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+    assert result["step_id"] == "init"
+
+    # If a user were to enter `weekly` for frequency
+    # it would result in this function call
+    result = await hass.config_entries.options.async_configure(
+        result["flow_id"],
+        user_input={"frequency": "every-n-days"},
+    )
+
+    # Check that the config flow is complete and a new entry is created with
+    # the input data
+    assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+    assert result["step_id"] == "detail"
+    assert result["errors"] == {}
+
+    # ...add Wednesday
+    result = await hass.config_entries.options.async_configure(
+        result["flow_id"],
+        user_input={
+            "period": 14,
+            "first_date": "2020-01-01",
+        },
+    )
+    # Should create entry
+    assert result["type"] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
+    assert result["data"] == {
+        "frequency": "every-n-days",
+        "period": 14,
+        "first_date": "2020-01-01",
+    }

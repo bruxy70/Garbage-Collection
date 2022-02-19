@@ -118,7 +118,10 @@ class GarbageCollectionShared:
         """Step 2 - enter detail that depend on frequency."""
         self.errors.clear()
         # Skip second step on blank frequency
-        if self._data[const.CONF_FREQUENCY] in const.BLANK_FREQUENCY:
+        if (
+            self._data[const.CONF_FREQUENCY] in const.BLANK_FREQUENCY
+            and not self._data[const.CONF_VERBOSE_FORMAT]
+        ):
             return True
         if user_input is not None and user_input:
             # Validation
@@ -154,11 +157,13 @@ class GarbageCollectionShared:
                 self.required(CONF_ENTITIES, user_input)
             ] = cv.multi_select(entity_ids)
         elif self._data[const.CONF_FREQUENCY] not in const.BLANK_FREQUENCY:
+            # everything else except "blank" and every-n-days
+            if self._data[const.CONF_FREQUENCY] not in const.DAILY_FREQUENCY:
+                weekdays_dict = {weekday: weekday for weekday in WEEKDAYS}
+                self.data_schema[
+                    self.required(const.CONF_COLLECTION_DAYS, user_input)
+                ] = cv.multi_select(weekdays_dict)
             # everything else except "blank"
-            weekdays_dict = {weekday: weekday for weekday in WEEKDAYS}
-            self.data_schema[
-                self.required(const.CONF_COLLECTION_DAYS, user_input)
-            ] = cv.multi_select(weekdays_dict)
             self.data_schema[
                 self.optional(const.CONF_FIRST_MONTH, user_input)
             ] = vol.In(const.MONTH_OPTIONS)

@@ -121,7 +121,6 @@ async def test_every_n_weeks(hass: HomeAssistant) -> None:
             "frequency": "every-n-weeks",
             "period": 2,
             "first_week": 3,
-            "weekday-order-number": ["3"],
             "collection_days": ["wed"],
         },
         title="sensor",
