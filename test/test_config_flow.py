@@ -35,15 +35,15 @@ async def test_form(hass: HomeAssistant):
     assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
     assert result["step_id"] == "user"
 
-    # # If a user were to enter `GB` for country and `England`
-    # # for subdiv, it would result in this function call
-    # result = await hass.config_entries.flow.async_configure(
-    #     result["flow_id"],
-    #     user_input={"name": "English calendar", "country": "GB"},
-    # )
+    # If a user were to enter `weekly` for frequency
+    # it would result in this function call
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"],
+        user_input={"name": "test", "frequency": "weekly"},
+    )
 
-    # # Check that the config flow is complete and a new entry is created with
-    # # the input data
-    # assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
-    # assert result["step_id"] == "subdiv"
-    # assert result["errors"] == {}
+    # Check that the config flow is complete and a new entry is created with
+    # the input data
+    assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+    assert result["step_id"] == "detail"
+    assert result["errors"] == {}
