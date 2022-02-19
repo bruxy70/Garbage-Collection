@@ -564,7 +564,7 @@ class GarbageCollection(RestoreEntity):
                 if current_date_time.time() > expiration or (
                     self.last_collection is not None
                     and self.last_collection.date() == current_date_time.date()
-                    and current_date_time.time >= self.last_collection.time()
+                    and current_date_time.time() >= self.last_collection.time()
                 ):
                     continue
             return d
@@ -606,7 +606,7 @@ class GarbageCollection(RestoreEntity):
                 next_date_txt,
                 self._days,
             )
-            if self._days > 1:  # type: ignore
+            if self._days > 1:
                 if bool(self._verbose_state):
                     self._state = self._verbose_format.format(
                         date=next_date_txt, days=self._days
