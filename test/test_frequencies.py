@@ -9,7 +9,28 @@ from custom_components.garbage_collection import const
 ERROR_DATETIME = "Next date shold be datetime, not {}."
 ERROR_DAYS = "Next collection should be in {} days, not {}."
 ERROR_STATE = "State should be {}, not {}."
-ERROR_DATE = "Next collection date shoudl be {}, not {}."
+ERROR_DATE = "Next collection date should be {}, not {}."
+
+
+async def test_calendar(hass: HomeAssistant) -> None:
+    """Weekly collection."""
+
+    config_entry: MockConfigEntry = MockConfigEntry(
+        domain=const.DOMAIN,
+        data={"frequency": "weekly", "collection_days": ["mon"]},
+        title="sensor",
+        version=4.5,
+    )
+    config_entry.add_to_hass(hass)
+    await hass.config_entries.async_setup(config_entry.entry_id)
+    await hass.async_block_till_done()
+    calendar = hass.states.get("calendar.garbage_collection")
+    assert calendar.attributes["message"] == "sensor"
+    assert calendar.state == "off"
+    start_time = calendar.attributes["start_time"]
+    end_time = calendar.attributes["end_time"]
+    assert start_time == "2020-04-06 00:00:00"
+    assert end_time == "2020-04-07 00:00:00"
 
 
 async def test_weekly(hass: HomeAssistant) -> None:
