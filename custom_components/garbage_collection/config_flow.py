@@ -118,9 +118,10 @@ class GarbageCollectionShared:
         """Step 2 - enter detail that depend on frequency."""
         self.errors.clear()
         # Skip second step on blank frequency
-        if (
-            self._data[const.CONF_FREQUENCY] in const.BLANK_FREQUENCY
-            and not self._data[const.CONF_VERBOSE_FORMAT]
+        if self._data[
+            const.CONF_FREQUENCY
+        ] in const.BLANK_FREQUENCY and not self._data.get(
+            const.CONF_VERBOSE_STATE, False
         ):
             return True
         if user_input is not None and user_input:
