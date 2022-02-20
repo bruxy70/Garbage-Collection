@@ -39,27 +39,6 @@ async def test_annual(hass: HomeAssistant) -> None:
     )
 
 
-# async def test_calendar(hass: HomeAssistant) -> None:
-#     """Weekly collection."""
-
-#     config_entry: MockConfigEntry = MockConfigEntry(
-#         domain=const.DOMAIN,
-#         data={"frequency": "weekly", "collection_days": ["mon"]},
-#         title="calendar",
-#         version=4.5,
-#     )
-#     config_entry.add_to_hass(hass)
-#     await hass.config_entries.async_setup(config_entry.entry_id)
-#     await hass.async_block_till_done()
-#     calendar = hass.states.get("calendar.garbage_collection")
-#     assert calendar.attributes["message"] == "calendar"
-#     assert calendar.state == "off"
-#     start_time = calendar.attributes["start_time"]
-#     end_time = calendar.attributes["end_time"]
-#     assert start_time == "2020-04-06 00:00:00"
-#     assert end_time == "2020-04-07 00:00:00"
-
-
 async def test_even_weeks(hass: HomeAssistant) -> None:
     """Even Weeks collection."""
 
