@@ -1,5 +1,5 @@
 blueprint:
-  name: Move on holiday
+  name: Move on holiday with include and exclude dates
   description: >-
     This automation is triggered from the `garbage_collection` integration by event `garbage_collection_loaded`,
     during the device state update. 
