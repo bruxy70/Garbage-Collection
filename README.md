@@ -74,7 +74,7 @@ Go to `Configuration`/`Devices & Services`, click on the `+ ADD INTEGRATION` but
 
 |Parameter |Required|Description |
 |:--- | --- | --- |
-| <img width=700/>`Friendly name` | Yes | Sensor friendly name |
+| <img width=600/>`Friendly name` | Yes | Sensor friendly name |
 | `Frequency` | Yes | `"weekly"`, `"even-weeks"`, `"odd-weeks"`, `"every-n-weeks"`, `"every-n-days"`, `"monthly"`, `"annual"`, `"group"` or `"blank"` |
 | `Icon` | No | Default icon **Default**:  `mdi:trash-can` |
 | `Icon today` | No | Icon if the collection is today **Default**: `mdi:delete-restore` |
@@ -92,27 +92,27 @@ Go to `Configuration`/`Devices & Services`, click on the `+ ADD INTEGRATION` but
 
 |Parameter |Required|Description |
 |:--- | --- | --- |
-| <img width=700/>`First month` | No | Month three letter abbreviation, e.g. `"jan"`, `"feb"`...<br/>**Default**: `"jan"` |
+| `First month` | No | Month three letter abbreviation, e.g. `"jan"`, `"feb"`...<br/>**Default**: `"jan"` |
 | `Last month` | No | Month three letter abbreviation.<br/>**Default**: `"dec"` |
 
 #### ...FOR ALL FREQUENCIES EXCEPT ANNUAL, EVERY-N-DAYS, GROUP and BLANK
 
 |Parameter |Required|Description |
 |:--- | --- | --- |
-| <img width=700/>`Collection days` | Yes | Day three letter abbreviation, list of `"mon"`, `"tue"`, `"wed"`, `"thu"`, `"fri"`, `"sat"`, `"sun"`. |
+| `Collection days` | Yes | Day three letter abbreviation, list of `"mon"`, `"tue"`, `"wed"`, `"thu"`, `"fri"`, `"sat"`, `"sun"`. |
 
 #### ...FOR COLLECTION EVERY-N-WEEKS
 
 |Parameter |Required|Description |
 |:--- | --- | --- |
-| <img width=700/>`Period` | No | Collection every `"period"` weeks (integer 1-53)<br/>**Default**: 1 |
+| <img width=600/>`Period` | No | Collection every `"period"` weeks (integer 1-53)<br/>**Default**: 1 |
 | `First week` | No | First collection on the `"first week"` week (integer 1-53)<br/>**Default**: 1<br/>*(The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representation of the week)<br/><br/>Note: This parameter cannot be used to set the beginning of the collection period (use the `first month` parameter for that). The purpose of `first week` is to simply 'offset' the week number, so the collection every ;'n' weeks does not always trigger on week numbers that are multiplication of 'n'. Technically, the value of this parameter shall be less than `period`, otherwise it will give weird results. Also note, that the week numbers restart each year. Use `every-n-days` frequency if you need a consistent period across the year ends.* |
 
 #### ...FOR COLLECTION EVERY-N-DAYS
 
 |Parameter |Required|Description |
 |:--- | --- | --- |
-| <img width=700/>`First date` | Yes | Repeats every n days from this first date<br/>(date in the international ISO format `'yyyy-mm-dd'`). |
+| `First date` | Yes | Repeats every n days from this first date<br/>(date in the international ISO format `'yyyy-mm-dd'`). |
 | `Period` | No | Collection every `"period"` days (warning - in this configuration, it is days, not weeks!)<br/>**Default**: 1 (daily, which makes no sense I suppose) |
 
 #### ...FOR MONTHLY COLLECTION
@@ -129,13 +129,13 @@ The monthly schedule has two flavors: it can trigger either on the **n<sup>th</s
 
 |Parameter |Required|Description |
 |:--- | --- | --- |
-| <img width=700/>`Date` | Yes | The date of collection, in format `'mm/dd'` (e.g. '11/24' for November 24 each year) |
+| `Date` | Yes | The date of collection, in format `'mm/dd'` (e.g. '11/24' for November 24 each year) |
 
 #### ...FOR GROUP
 
 |Parameter |Required|Description |
 |:--- | --- | --- |
-| <img width=700/>`List of entities` | Yes | A list of `entity_id`s to merge |
+| `List of entities` | Yes | A list of `entity_id`s to merge |
 
 ## Blueprints for Manual Update
 
@@ -166,7 +166,7 @@ A list of fixed dates to include and exclude from the calculated schedule.
 
 | <!-- --> | <!-- --> |
 |:--- | --- |
-| <img width=900/>[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fmaster%2Fblueprints%2Finclude_exclude.yaml) | Include and Exclude |
+| [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fmaster%2Fblueprints%2Finclude_exclude.yaml) | Include and Exclude |
 | [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fmaster%2Fblueprints%2Finclude.yaml) | Include |
 | [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fmaster%2Fblueprints%2Fexclude.yaml) | Exclude |
 
