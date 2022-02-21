@@ -72,11 +72,6 @@ Go to `Configuration`/`Devices & Services`, click on the `+ ADD INTEGRATION` but
 
 ### STEP 1 - Common Parameters
 
-<style>
-th:nth-of-type(1) {
-    width:150px;
-}
-</style>
 | Parameter | Required | Description |
 | :-- | :-- | :-- |
 | `Friendly name` | Yes | Sensor friendly name |
