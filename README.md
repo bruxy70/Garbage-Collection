@@ -99,7 +99,7 @@ Go to `Configuration`/`Devices & Services`, click on the `+ ADD INTEGRATION` but
 
 |Parameter |Required|Description |
 |:--- | --- | --- |
-| `Collection days` | Yes | Day three letter abbreviation, list of `"mon"`, `"tue"`, `"wed"`, `"thu"`, `"fri"`, `"sat"`, `"sun"`. |
+| <img width=80/>`Collection days` | Yes | Day three letter abbreviation, list of `"mon"`, `"tue"`, `"wed"`, `"thu"`, `"fri"`, `"sat"`, `"sun"`. |
 
 #### ...FOR COLLECTION EVERY-N-WEEKS
 
@@ -110,8 +110,8 @@ Go to `Configuration`/`Devices & Services`, click on the `+ ADD INTEGRATION` but
 
 #### ...FOR COLLECTION EVERY-N-DAYS
 
-|Parameter |Required|Description |
-|:--- | --- | --- |
+| Parameter | Required | Description |
+| :--- | --- | --- |
 | `First date` | Yes | Repeats every n days from this first date<br/>(date in the international ISO format `'yyyy-mm-dd'`). |
 | `Period` | No | Collection every `"period"` days (warning - in this configuration, it is days, not weeks!)<br/>**Default**: 1 (daily, which makes no sense I suppose) |
 
