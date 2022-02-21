@@ -74,17 +74,17 @@ Go to `Configuration`/`Devices & Services`, click on the `+ ADD INTEGRATION` but
 
 |Parameter |Required|Description |
 |:--- | --- | --- |
-| `name` | Yes | Sensor friendly name |
-| `frequency` | Yes | `"weekly"`, `"even-weeks"`, `"odd-weeks"`, `"every-n-weeks"`, `"every-n-days"`, `"monthly"`, `"annual"`, `"group"` or `"blank"` |
-| `manual_update` | No | (Advanced). Do not automatically update the status. Status is updated manualy by calling the service `garbage_collection.update_state` from an automation triggered by event `garbage_collection_loaded`, that could manually add or remove collection dates, and manually trigger the state update at the end. [See the example](#manual-update-examples).</br>**Default**: `False` |
-| `hidden` | No | Hide in calendar (useful for sensors that are used in groups)<br/>**Default**: `False` |
-| `icon_normal` | No | Default icon **Default**:  `mdi:trash-can` |
-| `icon_today` | No | Icon if the collection is today **Default**: `mdi:delete-restore` |
-| `icon_tomorrow` | No | Icon if the collection is tomorrow **Default**: `mdi:delete-circle` |
-| `expire_after` | No | Time in format format `HH:MM`. If the collection is due today, start looking for the next occurence after this time (i.e. if the weekly collection is in the morning, change the state from 'today' to next week in the afternoon) |
-| `verbose_state` | No | The sensor state will show collection date and remaining days, instead of number **Default**: `False` |
-| `verbose_format` | No | (relevant when `verbose_state` is `True`). Verbose status formatting string. Can use placeholders `{date}` and `{days}` to show the date of next collection and remaining days. **Default**: `'on {date}, in {days} days'`</br>*When the collection is today or tomorrow, it will show `Today` or `Tomorrow`*</br>*(currently in English, French, Czech and Italian).* |
-| `date_format` | No | In the `verbose_format`, you can configure the format of date (using [strftime](http://strftime.org/) format)  **Default**: `'%d-%b-%Y'` |
+| `Friendly name` | Yes | Sensor friendly name |
+| `Frequency` | Yes | `"weekly"`, `"even-weeks"`, `"odd-weeks"`, `"every-n-weeks"`, `"every-n-days"`, `"monthly"`, `"annual"`, `"group"` or `"blank"` |
+| `Icon` | No | Default icon **Default**:  `mdi:trash-can` |
+| `Icon today` | No | Icon if the collection is today **Default**: `mdi:delete-restore` |
+| `Icon tomorrow` | No | Icon if the collection is tomorrow **Default**: `mdi:delete-circle` |
+| `Expire After` | No | Time in format format `HH:MM`. If the collection is due today, start looking for the next occurence after this time (i.e. if the weekly collection is in the morning, change the state from 'today' to next week in the afternoon) |
+| `Verbose state` | No | The sensor state will show collection date and remaining days, instead of number **Default**: `False` |
+| `Hidde in calendar` | No | Hide in calendar (useful for sensors that are used in groups)<br/>**Default**: `False` |
+| `Manual update` | No | (Advanced). Do not automatically update the status. Status is updated manualy by calling the service `garbage_collection.update_state` from an automation triggered by event `garbage_collection_loaded`, that could manually add or remove collection dates, and manually trigger the state update at the end. [See the example](#manual-update-examples).</br>**Default**: `False` |
+| `Verbose format` | No | (relevant when `verbose_state` is `True`). Verbose status formatting string. Can use placeholders `{date}` and `{days}` to show the date of next collection and remaining days. **Default**: `'on {date}, in {days} days'`</br>*When the collection is today or tomorrow, it will show `Today` or `Tomorrow`*</br>*(currently in English, French, Czech and Italian).* |
+| `Date format` | No | In the `verbose_format`, you can configure the format of date (using [strftime](http://strftime.org/) format)  **Default**: `'%d-%b-%Y'` |
 
 ### STEP 2 - parameters depending on the selected frequency
 
@@ -92,28 +92,28 @@ Go to `Configuration`/`Devices & Services`, click on the `+ ADD INTEGRATION` but
 
 |Parameter |Required|Description |
 |:--- | --- | --- |
-| `first_month` | No | Month three letter abbreviation, e.g. `"jan"`, `"feb"`...<br/>**Default**: `"jan"` |
-| `last_month` | No | Month three letter abbreviation.<br/>**Default**: `"dec"` |
+| `First month` | No | Month three letter abbreviation, e.g. `"jan"`, `"feb"`...<br/>**Default**: `"jan"` |
+| `Last month` | No | Month three letter abbreviation.<br/>**Default**: `"dec"` |
 
 #### ...FOR ALL FREQUENCIES EXCEPT ANNUAL, EVERY-N-DAYS, GROUP and BLANK
 
 |Parameter |Required|Description |
 |:--- | --- | --- |
-| `collection_days` | Yes | Day three letter abbreviation, list of `"mon"`, `"tue"`, `"wed"`, `"thu"`, `"fri"`, `"sat"`, `"sun"`. |
+| `Collection days` | Yes | Day three letter abbreviation, list of `"mon"`, `"tue"`, `"wed"`, `"thu"`, `"fri"`, `"sat"`, `"sun"`. |
 
 #### ...FOR COLLECTION EVERY-N-WEEKS
 
 |Parameter |Required|Description |
 |:--- | --- | --- |
-|`period` | No | Collection every `"period"` weeks (integer 1-53)<br/>**Default**: 1 |
-|`first_week` | No | First collection on the `"first_week"` week (integer 1-53)<br/>**Default**: 1<br/>*(The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representation of the week)<br/><br/>Note: This parameter cannot be used to set the beginning of the collection period (use the `first_month` parameter for that). The purpose of `first_week` is to simply 'offset' the week number, so the collection every ;'n' weeks does not always trigger on week numbers that are multiplication of 'n'. Technically, the value of this parameter shall be less than `period`, otherwise it will give weird results. Also note, that the week numbers restart each year. Use `every-n-days` frequency if you need a consistent period across the year ends.* |
+|`Period` | No | Collection every `"period"` weeks (integer 1-53)<br/>**Default**: 1 |
+|`First week` | No | First collection on the `"first week"` week (integer 1-53)<br/>**Default**: 1<br/>*(The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representation of the week)<br/><br/>Note: This parameter cannot be used to set the beginning of the collection period (use the `first month` parameter for that). The purpose of `first week` is to simply 'offset' the week number, so the collection every ;'n' weeks does not always trigger on week numbers that are multiplication of 'n'. Technically, the value of this parameter shall be less than `period`, otherwise it will give weird results. Also note, that the week numbers restart each year. Use `every-n-days` frequency if you need a consistent period across the year ends.* |
 
 #### ...FOR COLLECTION EVERY-N-DAYS
 
 |Parameter |Required|Description |
 |:--- | --- | --- |
-|`first_date` | Yes | Repeats every n days from this first date<br/>(date in the international ISO format `'yyyy-mm-dd'`). |
-|`period` | No | Collection every `"period"` days (warning - in this configuration, it is days, not weeks!)<br/>**Default**: 1 (daily, which makes no sense I suppose) |
+|`First date` | Yes | Repeats every n days from this first date<br/>(date in the international ISO format `'yyyy-mm-dd'`). |
+|`Period` | No | Collection every `"period"` days (warning - in this configuration, it is days, not weeks!)<br/>**Default**: 1 (daily, which makes no sense I suppose) |
 
 #### ...FOR MONTHLY COLLECTION
 
@@ -121,27 +121,27 @@ The monthly schedule has two flavors: it can trigger either on the **n<sup>th</s
 
 |Parameter |Required|Description |
 |:--- | --- | --- |
-|`weekday_order_number` | Yes | List of week numbers of `collection_day` each month. E.g., if `collection_day` is `"sat"`, 1 will mean 1<sup>st</sup> Saturday each month (integer 1-5) |
-|`force_week_order_numbers` | No | **CONFIGURE THIS ONE ONLY IF YOU ARE SURE YOU NEED IT**. This will **alter** the behaviour of `weekday_order_number`, so that instead of n<sup>th</sup> weekday of each month, take the weekday of the n<sup>th</sup> week of each month.</br>So if the month starts on Friday, the Wednesday of the 1<sup>st</sup> week would actually be last Wednesday of the previous month and the Wednesday of 2<sup>nd</sup> week will be the 1<sup>st</sup> Wednesday of the month. So if you have just randomy clicked on the option, it might appear as if it calculates a wrong date! Yes, this is confusing, but there are apparently some use case for this. |
-|`period` | No | If `period` is not defined (or 1), the schedule will repeat monthly. If `period` is 2, it will be every 2<sup>nd</sup> month. If `period` is 3, it will be once per quarter, and so on.<br/>The `first_month` parameter will then define the starting month. So if the `first_month` is `jan` (or not defined), and `period` is 2, the collection will be in odd months (`jan`, `mar`, `may`, `jul`, `sep` and `nov`). If `first_month` is `feb`, it will be in even months. (integer 1-12)<br/>**Default**: 1 |
+|`Order of weekday` | Yes | List of week numbers of `collection day` each month. E.g., if `collection_day` is `"sat"`, 1 will mean 1<sup>st</sup> Saturday each month (integer 1-5) |
+|`Order of week, instead of weekday order` | No | **CONFIGURE THIS ONE ONLY IF YOU ARE SURE YOU NEED IT**. This will **alter** the behaviour of `order of weekday`, so that instead of n<sup>th</sup> weekday of each month, take the weekday of the n<sup>th</sup> week of each month.</br>So if the month starts on Friday, the Wednesday of the 1<sup>st</sup> week would actually be last Wednesday of the previous month and the Wednesday of 2<sup>nd</sup> week will be the 1<sup>st</sup> Wednesday of the month. So if you have just randomy clicked on the option, it might appear as if it calculates a wrong date! Yes, this is confusing, but there are apparently some use case for this. |
+|`Period` | No | If `period` is not defined (or 1), the schedule will repeat monthly. If `period` is 2, it will be every 2<sup>nd</sup> month. If `period` is 3, it will be once per quarter, and so on.<br/>The `first month` parameter will then define the starting month. So if the `first month` is `jan` (or not defined), and `period` is 2, the collection will be in odd months (`jan`, `mar`, `may`, `jul`, `sep` and `nov`). If `first month` is `feb`, it will be in even months. (integer 1-12)<br/>**Default**: 1 |
 
 #### ...FOR ANNUAL COLLECTION
 
 |Parameter |Required|Description |
 |:--- | --- | --- |
-|`date` | Yes | The date of collection, in format `'mm/dd'` (e.g. '11/24' for November 24 each year) |
+|`Date` | Yes | The date of collection, in format `'mm/dd'` (e.g. '11/24' for November 24 each year) |
 
 #### ...FOR GROUP
 
 |Parameter |Required|Description |
 |:--- | --- | --- |
-|`entities` | Yes | A list of `entity_id`s to merge |
+|`List of entities` | Yes | A list of `entity_id`s to merge |
 
 ## Blueprints for Manual Update
 
 ### Prerequisites
 
-1. To use the **blueprints**, you need to set the `garbage_collection` entity for `manual_update`, that will fire the `garbage_collection_loaded` event on each sensor update and trigger the automation **blueprint**.
+1. To use the **blueprints**, you need to set the `garbage_collection` entity for `Manual update`, that will fire the `garbage_collection_loaded` event on each sensor update and trigger the automation **blueprint**.
 2. Install/Import **blueprint**
 3. From the **blueprint**, create and configure the automation
 
