@@ -5,6 +5,7 @@
 		}
 	],
 	"settings": {
+		"python.analysis.typeCheckingMode": "basic",
 		"files.associations": {
 			"*.yaml": "home-assistant"
 		}
