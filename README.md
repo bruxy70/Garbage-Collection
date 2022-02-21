@@ -72,9 +72,9 @@ Go to `Configuration`/`Devices & Services`, click on the `+ ADD INTEGRATION` but
 
 ### STEP 1 - Common Parameters
 
-|Parameter |Required|Description |
-|:--- | --- | --- |
-| <img width=600/>`Friendly name` | Yes | Sensor friendly name |
+| <div style="width:150px">Parameter</div> | Required | Description |
+| :--- | --- | --- |
+| `Friendly name` | Yes | Sensor friendly name |
 | `Frequency` | Yes | `"weekly"`, `"even-weeks"`, `"odd-weeks"`, `"every-n-weeks"`, `"every-n-days"`, `"monthly"`, `"annual"`, `"group"` or `"blank"` |
 | `Icon` | No | Default icon **Default**:  `mdi:trash-can` |
 | `Icon today` | No | Icon if the collection is today **Default**: `mdi:delete-restore` |
@@ -90,27 +90,27 @@ Go to `Configuration`/`Devices & Services`, click on the `+ ADD INTEGRATION` but
 
 #### ...FOR ALL FREQUENCIES EXCEPT ANNUAL, GROUP and BLANK
 
-|Parameter |Required|Description |
-|:--- | --- | --- |
+| <div style="width:150px">Parameter</div> | Required | Description |
+| :--- | --- | --- |
 | `First month` | No | Month three letter abbreviation, e.g. `"jan"`, `"feb"`...<br/>**Default**: `"jan"` |
 | `Last month` | No | Month three letter abbreviation.<br/>**Default**: `"dec"` |
 
 #### ...FOR ALL FREQUENCIES EXCEPT ANNUAL, EVERY-N-DAYS, GROUP and BLANK
 
-|Parameter |Required|Description |
-|:--- | --- | --- |
-| <img width=80/>`Collection days` | Yes | Day three letter abbreviation, list of `"mon"`, `"tue"`, `"wed"`, `"thu"`, `"fri"`, `"sat"`, `"sun"`. |
+| <div style="width:150px">Parameter</div> | Required | Description |
+| :--- | --- | --- |
+| `Collection days` | Yes | Day three letter abbreviation, list of `"mon"`, `"tue"`, `"wed"`, `"thu"`, `"fri"`, `"sat"`, `"sun"`. |
 
 #### ...FOR COLLECTION EVERY-N-WEEKS
 
-|Parameter |Required|Description |
-|:--- | --- | --- |
-| <img width=600/>`Period` | No | Collection every `"period"` weeks (integer 1-53)<br/>**Default**: 1 |
+| <div style="width:150px">Parameter</div> | Required | Description |
+| :--- | --- | --- |
+| `Period` | No | Collection every `"period"` weeks (integer 1-53)<br/>**Default**: 1 |
 | `First week` | No | First collection on the `"first week"` week (integer 1-53)<br/>**Default**: 1<br/>*(The week number is using [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) numeric representation of the week)<br/><br/>Note: This parameter cannot be used to set the beginning of the collection period (use the `first month` parameter for that). The purpose of `first week` is to simply 'offset' the week number, so the collection every ;'n' weeks does not always trigger on week numbers that are multiplication of 'n'. Technically, the value of this parameter shall be less than `period`, otherwise it will give weird results. Also note, that the week numbers restart each year. Use `every-n-days` frequency if you need a consistent period across the year ends.* |
 
 #### ...FOR COLLECTION EVERY-N-DAYS
 
-| Parameter | Required | Description |
+| <div style="width:150px">Parameter</div> | Required | Description |
 | :--- | --- | --- |
 | `First date` | Yes | Repeats every n days from this first date<br/>(date in the international ISO format `'yyyy-mm-dd'`). |
 | `Period` | No | Collection every `"period"` days (warning - in this configuration, it is days, not weeks!)<br/>**Default**: 1 (daily, which makes no sense I suppose) |
@@ -119,22 +119,22 @@ Go to `Configuration`/`Devices & Services`, click on the `+ ADD INTEGRATION` but
 
 The monthly schedule has two flavors: it can trigger either on the **n<sup>th</sup> occurrence of the weekday** in a month, or on the weekday in the **n<sup>th</sup> week** of each month.
 
-|Parameter |Required|Description |
-|:--- | --- | --- |
-| <img width=700/>`Order of weekday` | Yes | List of week numbers of `collection day` each month. E.g., if `collection_day` is `"sat"`, 1 will mean 1<sup>st</sup> Saturday each month (integer 1-5) |
+| <div style="width:150px">Parameter</div> | Required | Description |
+| :--- | --- | --- |
+| `Order of weekday` | Yes | List of week numbers of `collection day` each month. E.g., if `collection_day` is `"sat"`, 1 will mean 1<sup>st</sup> Saturday each month (integer 1-5) |
 |`Order of week, instead of weekday order` | No | **CONFIGURE THIS ONE ONLY IF YOU ARE SURE YOU NEED IT**. This will **alter** the behaviour of `order of weekday`, so that instead of n<sup>th</sup> weekday of each month, take the weekday of the n<sup>th</sup> week of each month.</br>So if the month starts on Friday, the Wednesday of the 1<sup>st</sup> week would actually be last Wednesday of the previous month and the Wednesday of 2<sup>nd</sup> week will be the 1<sup>st</sup> Wednesday of the month. So if you have just randomy clicked on the option, it might appear as if it calculates a wrong date! Yes, this is confusing, but there are apparently some use case for this. |
 |`Period` | No | If `period` is not defined (or 1), the schedule will repeat monthly. If `period` is 2, it will be every 2<sup>nd</sup> month. If `period` is 3, it will be once per quarter, and so on.<br/>The `first month` parameter will then define the starting month. So if the `first month` is `jan` (or not defined), and `period` is 2, the collection will be in odd months (`jan`, `mar`, `may`, `jul`, `sep` and `nov`). If `first month` is `feb`, it will be in even months. (integer 1-12)<br/>**Default**: 1 |
 
 #### ...FOR ANNUAL COLLECTION
 
-|Parameter |Required|Description |
-|:--- | --- | --- |
+| <div style="width:150px">Parameter</div> | Required | Description |
+| :--- | --- | --- |
 | `Date` | Yes | The date of collection, in format `'mm/dd'` (e.g. '11/24' for November 24 each year) |
 
 #### ...FOR GROUP
 
-|Parameter |Required|Description |
-|:--- | --- | --- |
+| <div style="width:150px">Parameter</div> | Required | Description |
+| :--- | --- | --- |
 | `List of entities` | Yes | A list of `entity_id`s to merge |
 
 ## Blueprints for Manual Update
@@ -151,9 +151,9 @@ There are a couple of **blueprints**, automatically moving the collection fallin
 
 The Public Holidays **blueprints** use a separate custom integration **Holidays**, available through **HACS**, that you can configure for different countries.
 
-| <!-- --> | <!-- --> |
-|:--- | --- |
-| <img width=900/>[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fmaster%2Fblueprints%2Fmove_on_holiday.yaml) | Move the collection to the next day, if the collection falls on public holiday |
+| <div style="width:200px"><!-- --></div> | <!-- --> |
+| :--- | --- |
+| [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fmaster%2Fblueprints%2Fmove_on_holiday.yaml) | Move the collection to the next day, if the collection falls on public holiday |
 | [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fmaster%2Fblueprints%2Fmove_on_holiday_with_include_exclude.yaml) | Remove events falling on provided "exclude" list of dates. Then check the calendar of public holidays and move events that fall on a public holiday to the next day. Finally, add additional events on dates from "include" list. |
 | [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fmaster%2Fblueprints%2Fholiday_in_week.yaml) | Move forward one day if a public holiday was in the collection week, before or on the collection day (and keep moving if the new collection day also falls on a holiday) |
 | [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fmaster%2Fblueprints%2Fmultiple_holidays_in_week.yaml) | Move forward by a day for each public holiday was in the collection week, before or on the collection day (and keep moving if the new collection day also falls on a holiday). So if there were two public holidays, move by two days. |
@@ -165,7 +165,7 @@ The Public Holidays **blueprints** use a separate custom integration **Holidays*
 A list of fixed dates to include and exclude from the calculated schedule.
 
 | <!-- --> | <!-- --> |
-|:--- | --- |
+| :--- | --- |
 | [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fmaster%2Fblueprints%2Finclude_exclude.yaml) | Include and Exclude |
 | [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fmaster%2Fblueprints%2Finclude.yaml) | Include |
 | [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fmaster%2Fblueprints%2Fexclude.yaml) | Exclude |
