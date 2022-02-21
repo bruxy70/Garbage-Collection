@@ -72,7 +72,12 @@ Go to `Configuration`/`Devices & Services`, click on the `+ ADD INTEGRATION` but
 
 ### STEP 1 - Common Parameters
 
-| <div style="width:150px">Parameter</div> | Required | Description |
+<style>
+th:nth-of-type(1) {
+    width:150px;
+}
+</style>
+| Parameter</div> | Required | Description |
 | :-- | :-- | :-- |
 | `Friendly name` | Yes | Sensor friendly name |
 | `Frequency` | Yes | `"weekly"`, `"even-weeks"`, `"odd-weeks"`, `"every-n-weeks"`, `"every-n-days"`, `"monthly"`, `"annual"`, `"group"` or `"blank"` |
