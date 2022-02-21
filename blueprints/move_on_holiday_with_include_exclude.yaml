@@ -1,0 +1,108 @@
+blueprint:
+  name: Move on holiday
+  description: >-
+    This automation is triggered from the `garbage_collection` integration by event `garbage_collection_loaded`,
+    during the device state update. 
+
+    It PROCESSES DATA SENT WITH THE EVENT, and then FINISHES THE UPDATE.
+    DO NOT CALL THIS SERVICE MANUALLY, IT WON'T WORK (it won't have the data).
+
+    Also, make sure the INTEGRATION IS CONFIGURED FOR `manual_update`
+    (that will disable the state update by the integration and pass it to this automation).
+
+
+    First, it excludes events on the provided dated. Enter them one date per line. For example:
+
+    2022-01-03
+
+    2022-04-04
+
+
+    Then, it loops through the calculated dates and checks for a public holiday on the calculated collection date.
+    If found, it will move the event to the next day. It will keep moving if the new collection date also falls on a public holiday.
+
+
+    Finally, it will add the events provided in the second list. Agaon, one date per line.
+
+
+    The sensors are normally updated once a day, or when Home Assistant starts.
+    The update can be triggered by updating the integration configuration (just hit configure and submit).
+  domain: automation
+  source_url: https://github.com/bruxy70/Garbage-Collection/blob/master/blueprints/move_on_holiday_with_include_exclude.yaml
+  input:
+    garbage_collection_entity:
+      name: Garbage Collection Entity
+      description: Triggered by the event for this entity.
+      selector:
+        entity:
+          integration: garbage_collection
+    holiday_entity:
+      name: Holidays
+      description: Entity containing the holidays - an instance of Holidays custom integration (available through HACS)
+      selector:
+        entity:
+          integration: holidays
+mode: parallel
+trigger:
+  - platform: event
+    event_type: garbage_collection_loaded
+    event_data:
+      entity_id: !input garbage_collection_entity
+    exclude:
+      name: Set of dates to exclude
+      description: |-
+        List of dates in format yyyy-mm-dd, one date per line.
+      selector:
+        text:
+          multiline: true
+    include:
+      name: Set of dates to include
+      description: |-
+        List of dates in format yyyy-mm-dd, one date per line.
+      selector:
+        text:
+          multiline: true
+action:
+  - variables:
+      holiday_entity: !input holiday_entity
+      exclude: !input exclude
+      include: !input include
+  - repeat:
+      count: "{{ exclude.split('\n') | count }}"
+      sequence:
+        - service: garbage_collection.remove_date
+          data:
+            entity_id: "{{ trigger.event.data.entity_id }}"
+            date: "{{ exclude.split('\n')[repeat.index-1] }}"
+  - repeat:
+      count: "{{ trigger.event.data.collection_dates | count }}"
+      sequence:
+        - condition: template
+          value_template: >-
+            {{ (trigger.event.data.collection_dates[repeat.index-1] in state_attr(holiday_entity,'holidays')) and (trigger.event.data.collection_dates[repeat.index-1] not in exclude) }}
+        - service: garbage_collection.offset_date
+          data:
+            entity_id: "{{ trigger.event.data.entity_id }}"
+            date: "{{ trigger.event.data.collection_dates[repeat.index-1] }}"
+            offset: >-
+              {%- set collection_date = as_datetime(trigger.event.data.collection_dates[repeat.index-1]) %}
+              {%- set ns = namespace(offset=1, found=false) %}
+              {%- for _ in range(7) if not ns.found %}
+                {%- set d = ( collection_date + timedelta( days=ns.offset) ) | as_timestamp | timestamp_custom("%Y-%m-%d") %}
+                {%- if d in state_attr(holiday_entity,'holidays') %}
+                  {%- set ns.offset = ns.offset + 1 %}
+                {% else %}
+                  {%- set ns.found = true %}
+                {%- endif %}
+              {% endfor %}
+              {{ ns.offset }}
+  - repeat:
+      count: "{{ include.split('\n') | count }}"
+      sequence:
+        - service: garbage_collection.add_date
+          data:
+            entity_id: "{{ trigger.event.data.entity_id }}"
+            date: "{{ include.split('\n')[repeat.index-1] }}"
+  - service: garbage_collection.update_state
+    data:
+      entity_id: "{{ trigger.event.data.entity_id }}"
