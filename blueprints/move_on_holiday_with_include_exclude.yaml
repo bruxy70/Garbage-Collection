@@ -36,18 +36,6 @@ blueprint:
       selector:
         entity:
           integration: garbage_collection
-    holiday_entity:
-      name: Holidays
-      description: Entity containing the holidays - an instance of Holidays custom integration (available through HACS)
-      selector:
-        entity:
-          integration: holidays
-mode: parallel
-trigger:
-  - platform: event
-    event_type: garbage_collection_loaded
-    event_data:
-      entity_id: !input garbage_collection_entity
     exclude:
       name: Set of dates to exclude
       description: |-
@@ -55,6 +43,12 @@ trigger:
       selector:
         text:
           multiline: true
+    holiday_entity:
+      name: Holidays
+      description: Entity containing the holidays - an instance of Holidays custom integration (available through HACS)
+      selector:
+        entity:
+          integration: holidays
     include:
       name: Set of dates to include
       description: |-
@@ -62,6 +56,12 @@ trigger:
       selector:
         text:
           multiline: true
+mode: parallel
+trigger:
+  - platform: event
+    event_type: garbage_collection_loaded
+    event_data:
+      entity_id: !input garbage_collection_entity
 action:
   - variables:
       holiday_entity: !input holiday_entity
