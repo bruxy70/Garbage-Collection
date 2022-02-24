@@ -126,8 +126,8 @@ async def async_setup(hass: HomeAssistant, config: Config) -> bool:
                 await entity.remove_date(collection_date)
             except KeyError as err:
                 _LOGGER.error(
-                    "Failed removing date %s from %s. "
-                    "Most likely, it was removed by competing automation runing in parallel. "
+                    "Failed removing date %s from %s. Most likely, "
+                    "it was removed by competing automation runing in parallel. "
                     "(%s)",
                     collection_date,
                     entity_id,
