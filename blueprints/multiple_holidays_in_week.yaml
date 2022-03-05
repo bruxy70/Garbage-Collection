@@ -41,10 +41,12 @@ trigger:
 action:
   - variables:
       holiday_entity: !input holiday_entity
-  - repeat:
+  - alias: "Iterate through the dates"
+    repeat:
       count: "{{ trigger.event.data.collection_dates | count }}"
       sequence:
-        - condition: template
+        - alias: "Is there a public holiday on the week?"
+          condition: template
           value_template: >-
             {%- set collection_date = as_datetime(trigger.event.data.collection_dates[repeat.index-1]) %}
             {%- set ns = namespace(found=false) %}
@@ -55,13 +57,15 @@ action:
               {%- endif %}
             {%- endfor %}  
             {{ ns.found }}
-        - service: garbage_collection.offset_date
+        - alias: "Move the date"
+          service: garbage_collection.offset_date
           data:
             entity_id: "{{ trigger.event.data.entity_id }}"
             date: "{{ trigger.event.data.collection_dates[repeat.index-1] }}"
             offset: >-
               {%- set collection_date = as_datetime(trigger.event.data.collection_dates[repeat.index-1]) %}
               {%- set ns = namespace(found_free=false, offset=0) %}
+              {# Increase offset until we find a date that is not public holiday #}
               {%- for i in range(collection_date.weekday()+1) %}
                 {%- set d = ( collection_date + timedelta( days=-i) ) | as_timestamp | timestamp_custom("%Y-%m-%d") %}
                 {%- if d in state_attr(holiday_entity,'holidays') %}
@@ -77,6 +81,7 @@ action:
                 {%- endif %}
               {% endfor %}
               {{ ns.offset }}
-  - service: garbage_collection.update_state
+  - alias: "Update the garbage_collection entity"
+    service: garbage_collection.update_state
     data:
       entity_id: "{{ trigger.event.data.entity_id }}"
