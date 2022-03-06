@@ -59,20 +59,25 @@ action:
   - variables:
       exclude: !input exclude
       include: !input include
-  - repeat:
+  - alias: "Iterate through the lines to exclude"
+    repeat:
       count: "{{ exclude.split('\n') | count }}"
       sequence:
-        - service: garbage_collection.remove_date
+        - alias: "Remove the date"
+          service: garbage_collection.remove_date
           data:
             entity_id: "{{ trigger.event.data.entity_id }}"
             date: "{{ exclude.split('\n')[repeat.index-1] }}"
-  - repeat:
+  - alias: "Iterate through the lines to include"
+    repeat:
       count: "{{ include.split('\n') | count }}"
       sequence:
-        - service: garbage_collection.add_date
+        - alias: "Add the date"
+          service: garbage_collection.add_date
           data:
             entity_id: "{{ trigger.event.data.entity_id }}"
             date: "{{ include.split('\n')[repeat.index-1] }}"
-  - service: garbage_collection.update_state
+  - alias: "Update the garbage_collection entity"
+    service: garbage_collection.update_state
     data:
       entity_id: "{{ trigger.event.data.entity_id }}"

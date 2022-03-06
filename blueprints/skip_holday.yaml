@@ -40,16 +40,20 @@ trigger:
 action:
   - variables:
       holiday_entity: !input holiday_entity
-  - repeat:
+  - alias: "Iterate through the dates"
+    repeat:
       count: "{{ trigger.event.data.collection_dates | count }}"
       sequence:
-        - condition: template
+        - alias: "Is this date a public holiday?"
+          condition: template
           value_template: >-
             {{ trigger.event.data.collection_dates[repeat.index-1] in state_attr(holiday_entity,'holidays') }}
-        - service: garbage_collection.remove_date
+        - alias: "Remove the date"
+          service: garbage_collection.remove_date
           data:
             entity_id: "{{ trigger.event.data.entity_id }}"
             date: "{{ trigger.event.data.collection_dates[repeat.index-1] }}"
-  - service: garbage_collection.update_state
+  - alias: "Update the garbage_collection entity"
+    service: garbage_collection.update_state
     data:
       entity_id: "{{ trigger.event.data.entity_id }}"

@@ -54,7 +54,8 @@ action:
   - variables:
       day1: !input day1
       day2: !input day2
-  - repeat:
+  - alias: "Iterate through the year and add two dates for previous, this and next year"
+    repeat:
       count: 12
       sequence:
         - service: garbage_collection.add_date
@@ -81,6 +82,7 @@ action:
           data:
             entity_id: "{{ trigger.event.data.entity_id }}"
             date: "{{ '{:04}-{:02}-{:02}'.format(now().year+1,repeat.index, day2) }}"
-  - service: garbage_collection.update_state
+  - alias: "Update the garbage_collection entity"
+    service: garbage_collection.update_state
     data:
       entity_id: "{{ trigger.event.data.entity_id }}"

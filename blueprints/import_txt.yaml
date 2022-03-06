@@ -44,13 +44,16 @@ trigger:
 action:
   - variables:
       import: !input import
-  - repeat:
+  - alias: "Iterate through the lines"
+    repeat:
       count: "{{ states(import).split('\n') | count }}"
       sequence:
-        - service: garbage_collection.add_date
+        - alias: "Add the date"
+          service: garbage_collection.add_date
           data:
             entity_id: "{{ trigger.event.data.entity_id }}"
             date: "{{ states(import).split('\n')[repeat.index-1] }}"
-  - service: garbage_collection.update_state
+  - alias: "Update the garbage_collection entity"
+    service: garbage_collection.update_state
     data:
       entity_id: "{{ trigger.event.data.entity_id }}"

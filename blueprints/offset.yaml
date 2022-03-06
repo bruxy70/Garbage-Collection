@@ -45,14 +45,17 @@ trigger:
 action:
   - variables:
       offset: !input offset
-  - repeat:
+  - alias: "Iterate through the dates"
+    repeat:
       count: "{{ trigger.event.data.collection_dates | count }}"
       sequence:
-        - service: garbage_collection.offset_date
+        - alias: "Move the date"
+          service: garbage_collection.offset_date
           data:
             entity_id: "{{ trigger.event.data.entity_id }}"
             date: "{{ trigger.event.data.collection_dates[repeat.index-1] }}"
             offset: "{{ offset }}"
-  - service: garbage_collection.update_state
+  - alias: "Update the garbage_collection entity"
+    service: garbage_collection.update_state
     data:
       entity_id: "{{ trigger.event.data.entity_id }}"
