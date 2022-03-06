@@ -65,13 +65,14 @@ action:
             offset: >-
               {%- set collection_date = as_datetime(trigger.event.data.collection_dates[repeat.index-1]) %}
               {%- set ns = namespace(found_free=false, offset=0) %}
-              {# Increase offset until we find a date that is not public holiday #}
+              {# Count holidays in the week, increase offset for each found public holiday #}
               {%- for i in range(collection_date.weekday()+1) %}
                 {%- set d = ( collection_date + timedelta( days=-i) ) | as_timestamp | timestamp_custom("%Y-%m-%d") %}
                 {%- if d in state_attr(holiday_entity,'holidays') %}
                   {%- set ns.offset = ns.offset + 1 %}
                 {%- endif %}
-              {%- endfor %}  
+              {%- endfor %}
+              {# Increase offset until we find a date that is not public holiday #}
               {%- for _ in range(7) if not ns.found_free %}
                 {%- set d = ( collection_date + timedelta( days=ns.offset) ) | as_timestamp | timestamp_custom("%Y-%m-%d") %}
                 {%- if d in state_attr(holiday_entity,'holidays') %}
