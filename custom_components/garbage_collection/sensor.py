@@ -515,13 +515,12 @@ class GarbageCollection(RestoreEntity):
 
     async def _async_load_collection_dates(self) -> None:
         """Fill the collection dates list."""
+        self._collection_dates.clear()
         if self._frequency == "blank":
             return
         today = now().date()
         start_date = end_date = date(today.year - 1, 1, 1)
         end_date = date(today.year + 1, 12, 31)
-
-        self._collection_dates.clear()
         try:
             next_date = await self._async_find_next_date(start_date)
         except asyncio.TimeoutError:
