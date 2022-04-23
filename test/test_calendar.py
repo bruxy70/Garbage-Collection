@@ -1,9 +1,8 @@
 """Test all frequencies (except blank)."""
 
+from custom_components.garbage_collection import const
 from homeassistant.core import HomeAssistant
 from pytest_homeassistant_custom_component.common import MockConfigEntry
-
-from custom_components.garbage_collection import const
 
 
 async def test_calendar(hass: HomeAssistant) -> None:
@@ -19,6 +18,7 @@ async def test_calendar(hass: HomeAssistant) -> None:
     await hass.config_entries.async_setup(config_entry.entry_id)
     await hass.async_block_till_done()
     calendar = hass.states.get("calendar.garbage_collection")
+    assert calendar is not None
     assert calendar.attributes["message"] == "calendar"
     assert calendar.state == "off"
     start_time = calendar.attributes["start_time"]
