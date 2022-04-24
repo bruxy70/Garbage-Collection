@@ -272,6 +272,14 @@ To help you with creating custom automations, see the following examples:
 
 The following services are used within automations, triggered by the [garbage_collection_loaded](#garbage_collection_loaded) event. Don't use them anywhere else, it won't work. For the examples of their use, see the [examples](#manual-update-examples)
 
+```mermaid
+flowchart TD
+    A[HA updates entity] -->B[triggered garbage_collection_loaded event]
+    B --> C[calling services]
+    C --> D[garbage_collection.add_date] & E[garbage_collection.remove_date] & F[garbage_collection.offset_date] --> C
+    D & E & F --> G[manual update finished -> garbage_collection.update_state]
+```
+
 ### `garbage_collection.add_date`
 
 Add a date to the list of dates calculated automatically. To add multiple dates, call this service multiple-times with different dates.
