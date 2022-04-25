@@ -3,7 +3,7 @@
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional
 
-from homeassistant.components.calendar import CalendarEventDevice
+from homeassistant.components.calendar import CalendarEntity
 from homeassistant.core import HomeAssistant
 from homeassistant.util import Throttle
 
@@ -21,7 +21,7 @@ async def async_setup_platform(
         async_add_entities([GarbageCollectionCalendar()], True)
 
 
-class GarbageCollectionCalendar(CalendarEventDevice):
+class GarbageCollectionCalendar(CalendarEntity):
     """The garbage collection calendar class."""
 
     instances = False

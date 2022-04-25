@@ -3,5 +3,5 @@
   "zip_release": true,
   "filename": "garbage_collection.zip",
   "domains": ["sensor"],
-  "homeassistant": "0.110.0"
+  "homeassistant": "2022.5.0b0"
 }
