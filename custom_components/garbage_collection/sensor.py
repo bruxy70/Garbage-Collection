@@ -1,8 +1,9 @@
 """Sensor platform for garbage_collection."""
+from __future__ import annotations
+
 import asyncio
 import logging
 from datetime import date, datetime, time, timedelta
-from typing import Optional
 
 import homeassistant.util.dt as dt_util
 from dateutil.relativedelta import relativedelta
@@ -105,16 +106,16 @@ class GarbageCollection(RestoreEntity):
             self._week_order_numbers = []
         self._period = config.get(const.CONF_PERIOD)
         self._first_week = config.get(const.CONF_FIRST_WEEK)
-        self._first_date: Optional[date]
+        self._first_date: date | None
         try:
             self._first_date = helpers.to_date(config.get(const.CONF_FIRST_DATE))
         except ValueError:
             self._first_date = None
         self._collection_dates: list[date] = []
-        self._next_date: Optional[date] = None
-        self._last_updated: Optional[datetime] = None
-        self.last_collection: Optional[datetime] = None
-        self._days: Optional[int] = None
+        self._next_date: date | None = None
+        self._last_updated: datetime | None = None
+        self.last_collection: datetime | None = None
+        self._days: int | None = None
         self._date = config.get(const.CONF_DATE)
         self._entities = config.get(CONF_ENTITIES, [])
         self._verbose_state = config.get(const.CONF_VERBOSE_STATE)
@@ -123,7 +124,7 @@ class GarbageCollection(RestoreEntity):
         self._icon_today = config.get(const.CONF_ICON_TODAY)
         self._icon_tomorrow = config.get(const.CONF_ICON_TOMORROW)
         exp = config.get(const.CONF_EXPIRE_AFTER)
-        self.expire_after: Optional[time]
+        self.expire_after: time | None
         self.expire_after = (
             None if exp is None else datetime.strptime(exp, "%H:%M").time()
         )
@@ -344,7 +345,7 @@ class GarbageCollection(RestoreEntity):
             candidate_date = date(year + 1, conf_date.month, conf_date.day)
         return candidate_date
 
-    async def _async_find_candidate_date(self, day1: date) -> Optional[date]:
+    async def _async_find_candidate_date(self, day1: date) -> date | None:
         """Find the next possible date starting from day1.
 
         Only based on calendar, not looking at include/exclude days.
@@ -421,8 +422,9 @@ class GarbageCollection(RestoreEntity):
                 if state_object is None:
                     members_ready = False
                     break
-                last_updated = state_object.attributes.get(const.ATTR_LAST_UPDATED)
-                if last_updated is None:
+                if (
+                    last_updated := state_object.attributes.get(const.ATTR_LAST_UPDATED)
+                ) is None:
                     ready_for_update = True
                     continue
                 # Wait for all members to get updated
@@ -481,7 +483,7 @@ class GarbageCollection(RestoreEntity):
                 return date(year, self._first_month, 1)
         return day
 
-    async def _async_find_next_date(self, first_date: date) -> Optional[date]:
+    async def _async_find_next_date(self, first_date: date) -> date | None:
         """Get date within configured date range."""
         # Today's collection can be triggered by past collection with offset
         if self._frequency == "blank":
@@ -554,7 +556,7 @@ class GarbageCollection(RestoreEntity):
 
     async def async_next_date(
         self, first_date: date, ignore_today=False
-    ) -> Optional[date]:
+    ) -> date | None:
         """Get next date from self._collection_dates."""
         current_date_time = now()
         for d in self._collection_dates:  # pylint: disable=invalid-name

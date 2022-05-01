@@ -2,7 +2,7 @@
 
 import logging
 from datetime import timedelta
-from typing import Any, Dict
+from typing import Any
 
 import homeassistant.helpers.config_validation as cv
 import homeassistant.util.dt as dt_util
@@ -16,7 +16,8 @@ from homeassistant.const import (
     CONF_NAME,
     WEEKDAYS,
 )
-from homeassistant.core import Config, HomeAssistant, ServiceCall
+from homeassistant.core import HomeAssistant, ServiceCall
+from homeassistant.helpers.typing import ConfigType
 
 from . import const, helpers
 
@@ -100,12 +101,12 @@ OFFSET_DATE_SCHEMA = vol.Schema(
 )
 
 
-async def async_setup(hass: HomeAssistant, config: Config) -> bool:
+async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
     """Set up this component using YAML."""
 
     async def handle_add_date(call: ServiceCall) -> None:
         """Handle the add_date service call."""
-        for entity_id in call.data.get(CONF_ENTITY_ID):
+        for entity_id in call.data.get(CONF_ENTITY_ID, []):
             collection_date = call.data.get(const.CONF_DATE)
             _LOGGER.debug("called add_date %s from %s", collection_date, entity_id)
             try:
@@ -118,7 +119,7 @@ async def async_setup(hass: HomeAssistant, config: Config) -> bool:
 
     async def handle_remove_date(call: ServiceCall) -> None:
         """Handle the remove_date service call."""
-        for entity_id in call.data.get(CONF_ENTITY_ID):
+        for entity_id in call.data.get(CONF_ENTITY_ID, []):
             collection_date = call.data.get(const.CONF_DATE)
             _LOGGER.debug("called remove_date %s from %s", collection_date, entity_id)
             try:
@@ -136,7 +137,7 @@ async def async_setup(hass: HomeAssistant, config: Config) -> bool:
 
     async def handle_offset_date(call: ServiceCall) -> None:
         """Handle the offset_date service call."""
-        for entity_id in call.data.get(CONF_ENTITY_ID):
+        for entity_id in call.data.get(CONF_ENTITY_ID, []):
             offset = call.data.get(const.CONF_OFFSET)
             collection_date = call.data.get(const.CONF_DATE)
             _LOGGER.debug(
@@ -159,7 +160,7 @@ async def async_setup(hass: HomeAssistant, config: Config) -> bool:
 
     async def handle_update_state(call: ServiceCall) -> None:
         """Handle the update_state service call."""
-        for entity_id in call.data.get(CONF_ENTITY_ID):
+        for entity_id in call.data.get(CONF_ENTITY_ID, []):
             _LOGGER.debug("called update_state for %s", entity_id)
             try:
                 entity = hass.data[const.DOMAIN][const.SENSOR_PLATFORM][entity_id]
@@ -169,7 +170,7 @@ async def async_setup(hass: HomeAssistant, config: Config) -> bool:
 
     async def handle_collect_garbage(call: ServiceCall) -> None:
         """Handle the collect_garbage service call."""
-        for entity_id in call.data.get(CONF_ENTITY_ID):
+        for entity_id in call.data.get(CONF_ENTITY_ID, []):
             last_collection = call.data.get(const.ATTR_LAST_COLLECTION)
             _LOGGER.debug("called collect_garbage for %s", entity_id)
             try:
@@ -284,8 +285,8 @@ async def async_migrate_entry(_, config_entry: ConfigEntry) -> bool:
     )
     new_data = {**config_entry.data}
     new_options = {**config_entry.options}
-    removed_data: Dict[str, Any] = {}
-    removed_options: Dict[str, Any] = {}
+    removed_data: dict[str, Any] = {}
+    removed_options: dict[str, Any] = {}
     _LOGGER.debug("new_data %s", new_data)
     _LOGGER.debug("new_options %s", new_options)
     if config_entry.version == 1:

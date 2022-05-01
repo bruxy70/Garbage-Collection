@@ -1,7 +1,7 @@
 """Garbage collection calendar."""
+from __future__ import annotations
 
 from datetime import datetime, timedelta
-from typing import Optional
 
 from homeassistant.components.calendar import CalendarEntity, CalendarEvent
 from homeassistant.core import HomeAssistant
@@ -33,7 +33,7 @@ class GarbageCollectionCalendar(CalendarEntity):
         GarbageCollectionCalendar.instances = True
 
     @property
-    def event(self) -> Optional[CalendarEvent]:
+    def event(self) -> CalendarEvent | None:
         """Return the next upcoming event."""
         return self.hass.data[DOMAIN][CALENDAR_PLATFORM].event
 
@@ -55,7 +55,7 @@ class GarbageCollectionCalendar(CalendarEntity):
         )
 
     @property
-    def extra_state_attributes(self) -> Optional[dict]:
+    def extra_state_attributes(self) -> dict | None:
         """Return the device state attributes."""
         if self.hass.data[DOMAIN][CALENDAR_PLATFORM].event is None:
             # No tasks, we don't need to show anything.
@@ -68,7 +68,7 @@ class EntitiesCalendarData:
 
     def __init__(self, hass: HomeAssistant) -> None:
         """Initialize an Entities Calendar Data."""
-        self.event: Optional[CalendarEvent] = None
+        self.event: CalendarEvent | None = None
         self._hass = hass
         self.entities: list[str] = []
 
