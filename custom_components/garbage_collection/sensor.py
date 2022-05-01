@@ -2,7 +2,7 @@
 import asyncio
 import logging
 from datetime import date, datetime, time, timedelta
-from typing import List, Optional
+from typing import Optional
 
 import homeassistant.util.dt as dt_util
 from dateutil.relativedelta import relativedelta
@@ -76,7 +76,7 @@ class GarbageCollection(RestoreEntity):
         self._hidden = config.get(ATTR_HIDDEN, False)
         self._frequency = config.get(const.CONF_FREQUENCY)
         self._manual = config.get(const.CONF_MANUAL)
-        self._collection_days = config.get(const.CONF_COLLECTION_DAYS)
+        self._collection_days = config.get(const.CONF_COLLECTION_DAYS, [])
         first_month = config.get(const.CONF_FIRST_MONTH)
         self._first_month: int = (
             const.MONTH_OPTIONS.index(first_month) + 1
@@ -92,9 +92,9 @@ class GarbageCollection(RestoreEntity):
         self._monthly_force_week_numbers = config.get(
             const.CONF_FORCE_WEEK_NUMBERS, False
         )
-        self._weekday_order_numbers: List
-        self._week_order_numbers: List
-        order_numbers: List = []
+        self._weekday_order_numbers: list
+        self._week_order_numbers: list
+        order_numbers: list = []
         if const.CONF_WEEKDAY_ORDER_NUMBER in config:
             order_numbers = list(map(int, config.get(const.CONF_WEEKDAY_ORDER_NUMBER)))
         if self._monthly_force_week_numbers:
@@ -110,13 +110,13 @@ class GarbageCollection(RestoreEntity):
             self._first_date = helpers.to_date(config.get(const.CONF_FIRST_DATE))
         except ValueError:
             self._first_date = None
-        self._collection_dates: List[date] = []
+        self._collection_dates: list[date] = []
         self._next_date: Optional[date] = None
         self._last_updated: Optional[datetime] = None
         self.last_collection: Optional[datetime] = None
         self._days: Optional[int] = None
         self._date = config.get(const.CONF_DATE)
-        self._entities = config.get(CONF_ENTITIES)
+        self._entities = config.get(CONF_ENTITIES, [])
         self._verbose_state = config.get(const.CONF_VERBOSE_STATE)
         self._state = "" if bool(self._verbose_state) else 2
         self._icon_normal = config.get(const.CONF_ICON_NORMAL)
@@ -418,24 +418,19 @@ class GarbageCollection(RestoreEntity):
             members_ready = True
             for entity_id in self._entities:
                 state_object = self.hass.states.get(entity_id)
-                try:
-                    # Wait for all members to get updated
-                    if (
-                        state_object.attributes.get(const.ATTR_LAST_UPDATED).date()
-                        != today
-                    ):
-                        members_ready = False
-                        break
-                    # A member got updated after the group update
-                    if (
-                        state_object.attributes.get(const.ATTR_LAST_UPDATED)
-                        > self._last_updated
-                    ):
-                        ready_for_update = True
-                except AttributeError:
+                if state_object is None:
                     members_ready = False
                     break
-                except TypeError:
+                last_updated = state_object.attributes.get(const.ATTR_LAST_UPDATED)
+                if last_updated is None:
+                    ready_for_update = True
+                    continue
+                # Wait for all members to get updated
+                if last_updated.date() != today:
+                    members_ready = False
+                    break
+                # A member got updated after the group update
+                if last_updated > self._last_updated:
                     ready_for_update = True
             if ready_for_update and not members_ready:
                 ready_for_update = False
