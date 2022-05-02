@@ -2,6 +2,7 @@
 
 import logging
 from datetime import timedelta
+from types import MappingProxyType
 from typing import Any
 
 import homeassistant.helpers.config_validation as cv
@@ -106,8 +107,13 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
     async def handle_add_date(call: ServiceCall) -> None:
         """Handle the add_date service call."""
-        for entity_id in call.data.get(CONF_ENTITY_ID, []):
-            collection_date = call.data.get(const.CONF_DATE)
+        if not (entity_ids := call.data.get(CONF_ENTITY_ID, [])):
+            _LOGGER.error("add_date - missing Entity ID.")
+            return
+        if (collection_date := call.data.get(const.CONF_DATE)) is None:
+            _LOGGER.error("add_date - missing collection date.")
+            return
+        for entity_id in entity_ids:
             _LOGGER.debug("called add_date %s from %s", collection_date, entity_id)
             try:
                 entity = hass.data[const.DOMAIN][const.SENSOR_PLATFORM][entity_id]
@@ -119,8 +125,13 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
     async def handle_remove_date(call: ServiceCall) -> None:
         """Handle the remove_date service call."""
-        for entity_id in call.data.get(CONF_ENTITY_ID, []):
-            collection_date = call.data.get(const.CONF_DATE)
+        if not (entity_ids := call.data.get(CONF_ENTITY_ID, [])):
+            _LOGGER.error("remove_date - missing Entity ID.")
+            return
+        if (collection_date := call.data.get(const.CONF_DATE)) is None:
+            _LOGGER.error("remove_date - missing collection date.")
+            return
+        for entity_id in entity_ids:
             _LOGGER.debug("called remove_date %s from %s", collection_date, entity_id)
             try:
                 entity = hass.data[const.DOMAIN][const.SENSOR_PLATFORM][entity_id]
@@ -137,9 +148,16 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
     async def handle_offset_date(call: ServiceCall) -> None:
         """Handle the offset_date service call."""
-        for entity_id in call.data.get(CONF_ENTITY_ID, []):
-            offset = call.data.get(const.CONF_OFFSET)
-            collection_date = call.data.get(const.CONF_DATE)
+        if not (entity_ids := call.data.get(CONF_ENTITY_ID, [])):
+            _LOGGER.error("offset_date - missing Entity ID.")
+            return
+        if offset := call.data.get(const.CONF_OFFSET) is None:
+            _LOGGER.error("offset_date - missing offset.")
+            return
+        if (collection_date := call.data.get(const.CONF_DATE)) is None:
+            _LOGGER.error("offset_date - missing collection date.")
+            return
+        for entity_id in entity_ids:
             _LOGGER.debug(
                 "called offset_date %s by %d days for %s",
                 collection_date,
@@ -148,19 +166,19 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
             )
             try:
                 new_date = collection_date + relativedelta(days=offset)
-            except TypeError as err:
-                _LOGGER.error("Failed to offset the date - %s", err)
-                break
-            try:
                 entity = hass.data[const.DOMAIN][const.SENSOR_PLATFORM][entity_id]
                 await entity.remove_date(collection_date)
                 await entity.add_date(new_date)
-            except KeyError as err:
+            except (TypeError, KeyError) as err:
                 _LOGGER.error("Failed ofsetting date for %s - %s", entity_id, err)
+                break
 
     async def handle_update_state(call: ServiceCall) -> None:
         """Handle the update_state service call."""
-        for entity_id in call.data.get(CONF_ENTITY_ID, []):
+        if not (entity_ids := call.data.get(CONF_ENTITY_ID, [])):
+            _LOGGER.error("update_state - missing Entity ID.")
+            return
+        for entity_id in entity_ids:
             _LOGGER.debug("called update_state for %s", entity_id)
             try:
                 entity = hass.data[const.DOMAIN][const.SENSOR_PLATFORM][entity_id]
@@ -170,15 +188,15 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
     async def handle_collect_garbage(call: ServiceCall) -> None:
         """Handle the collect_garbage service call."""
-        for entity_id in call.data.get(CONF_ENTITY_ID, []):
-            last_collection = call.data.get(const.ATTR_LAST_COLLECTION)
+        if not (entity_ids := call.data.get(CONF_ENTITY_ID, [])):
+            _LOGGER.error("collect_garbage - missing Entity ID.")
+            return
+        last_collection = call.data.get(const.ATTR_LAST_COLLECTION, dt_util.now())
+        for entity_id in entity_ids:
             _LOGGER.debug("called collect_garbage for %s", entity_id)
             try:
                 entity = hass.data[const.DOMAIN][const.SENSOR_PLATFORM][entity_id]
-                if last_collection is None:
-                    entity.last_collection = dt_util.now()
-                else:
-                    entity.last_collection = dt_util.as_local(last_collection)
+                entity.last_collection = dt_util.as_local(last_collection)
                 await entity.async_update_state()
             except KeyError as err:
                 _LOGGER.error(
@@ -254,7 +272,7 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
         config_entry.data[const.CONF_FREQUENCY],
     )
     # Backward compatibility - clean-up (can be removed later?)
-    config_entry.options = {}
+    config_entry.options = MappingProxyType({})
     config_entry.add_update_listener(update_listener)
     # Add sensor
     hass.async_create_task(
@@ -339,8 +357,8 @@ async def async_migrate_entry(_, config_entry: ConfigEntry) -> bool:
                 map(str, new_options[const.CONF_WEEKDAY_ORDER_NUMBER])
             )
     config_entry.version = const.VERSION
-    config_entry.data = {**new_data}
-    config_entry.options = {**new_options}
+    config_entry.data = MappingProxyType({**new_data})
+    config_entry.options = MappingProxyType({**new_options})
     if removed_data:
         _LOGGER.error(
             "Removed data config %s. "
