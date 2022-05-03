@@ -52,13 +52,13 @@ action:
       exclude: !input exclude
   - alias: "Iterate through the lines to exclude"
     repeat:
-      count: "{{ exclude.split('\n') | count }}"
+      for_each: "{{ exclude.split('\n') }}"
       sequence:
         - alias: "Remove the date"
           service: garbage_collection.remove_date
           data:
             entity_id: "{{ trigger.event.data.entity_id }}"
-            date: "{{ exclude.split('\n')[repeat.index-1] }}"
+            date: "{{ repeat.item }}"
   - alias: "Update the garbage_collection entity"
     service: garbage_collection.update_state
     data:

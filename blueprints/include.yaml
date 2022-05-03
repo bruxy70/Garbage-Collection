@@ -52,13 +52,13 @@ action:
       include: !input include
   - alias: "Iterate through the lines to include"
     repeat:
-      count: "{{ include.split('\n') | count }}"
+      for_each: "{{ include.split('\n') }}"
       sequence:
         - alias: "Add the date"
           service: garbage_collection.add_date
           data:
             entity_id: "{{ trigger.event.data.entity_id }}"
-            date: "{{ include.split('\n')[repeat.index-1] }}"
+            date: "{{ repeat.item }}"
   - alias: "Update the garbage_collection entity"
     service: garbage_collection.update_state
     data:

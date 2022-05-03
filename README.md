@@ -377,13 +377,13 @@ trigger:
       entity_id: sensor.test
 action:
   - repeat:
-      count: "{{ trigger.event.data.collection_dates | count }}"
+      for_each: "{{ trigger.event.data.collection_dates }}"
       sequence:
         - service: garbage_collection.add_date
           data:
             entity_id: "{{ trigger.event.data.entity_id }}"
             date: >-
-              {{( as_datetime(trigger.event.data.collection_dates[repeat.index-1]) + timedelta( days = 1)) | as_timestamp | timestamp_custom("%Y-%m-%d") }}
+              {{( as_datetime(repeat.item) + timedelta( days = 1)) | as_timestamp | timestamp_custom("%Y-%m-%d") }}
   - service: garbage_collection.update_state
     data:
       entity_id: "{{ trigger.event.data.entity_id }}"
@@ -407,11 +407,11 @@ trigger:
       entity_id: sensor.test
 action:
   - repeat:
-      count: "{{ trigger.event.data.collection_dates | count }}"
+      for_each: "{{ trigger.event.data.collection_dates }}"
       sequence:
         - condition: template
           value_template: >-
-            {%- set collection_date = as_datetime(trigger.event.data.collection_dates[repeat.index-1]) %}
+            {%- set collection_date = as_datetime(repeat.item) %}
             {%- set ns = namespace(found=false) %}
             {%- for i in range(collection_date.weekday()+1) %}
               {%- set d = ( collection_date + timedelta( days=-i) ) | as_timestamp | timestamp_custom("%Y-%m-%d") %}
@@ -423,7 +423,7 @@ action:
         - service: garbage_collection.offset_date
           data:
             entity_id: "{{ trigger.event.data.entity_id }}"
-            date: "{{ trigger.event.data.collection_dates[repeat.index-1] }}"
+            date: "{{ repeat.item }}"
             offset: 1
   - service: garbage_collection.update_state
     data:

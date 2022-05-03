@@ -45,12 +45,12 @@ action:
       holiday_entity: !input holiday_entity
   - alias: "Iterate through the dates"
     repeat:
-      count: "{{ trigger.event.data.collection_dates | count }}"
+      for_each: "{{ trigger.event.data.collection_dates }}"
       sequence:
         - alias: "Was there a public holiday in last two weeks or this week?"
           condition: template
           value_template: >-
-            {%- set collection_date = as_datetime(trigger.event.data.collection_dates[repeat.index-1]) %}
+            {%- set collection_date = as_datetime(repeat.item) %}
             {%- set ns = namespace(week_0 = 0, week_1 = 0, week_2 = 0) %}
             {# Check last two weeks #}
             {%- for i in range(5) %}
@@ -75,9 +75,9 @@ action:
           service: garbage_collection.offset_date
           data:
             entity_id: "{{ trigger.event.data.entity_id }}"
-            date: "{{ trigger.event.data.collection_dates[repeat.index-1] }}"
+            date: "{{ repeat.item }}"
             offset: >-
-              {%- set collection_date = as_datetime(trigger.event.data.collection_dates[repeat.index-1]) %}
+              {%- set collection_date = as_datetime(repeat.item) %}
               {%- set ns = namespace(offset = 1, found_free=false) %}
               {# Increase offset until we find a date that is not public holiday #}
               {%- for _ in range(7) if not ns.found_free %}

@@ -43,19 +43,19 @@ action:
       holiday_entity: !input holiday_entity
   - alias: "Iterate through the dates"
     repeat:
-      count: "{{ trigger.event.data.collection_dates | count }}"
+      for_each: "{{ trigger.event.data.collection_dates }}"
       sequence:
         - alias: "Is this date a public holiday?"
           condition: template
           value_template: >-
-            {{ trigger.event.data.collection_dates[repeat.index-1] in state_attr(holiday_entity,'holidays') }}
+            {{ repeat.item in state_attr(holiday_entity,'holidays') }}
         - alias: "Move the date"
           service: garbage_collection.offset_date
           data:
             entity_id: "{{ trigger.event.data.entity_id }}"
-            date: "{{ trigger.event.data.collection_dates[repeat.index-1] }}"
+            date: "{{ repeat.item }}"
             offset: >-
-              {%- set collection_date = as_datetime(trigger.event.data.collection_dates[repeat.index-1]) %}
+              {%- set collection_date = as_datetime(repeat.item) %}
               {%- set ns = namespace(offset=1, found=false) %}
               {# Increase offset until we find a date that is not public holiday #}
               {%- for _ in range(7) if not ns.found %}
