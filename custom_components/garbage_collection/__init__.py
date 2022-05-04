@@ -1,4 +1,5 @@
 """Component to integrate with garbage_colection."""
+from __future__ import annotations
 
 import logging
 from datetime import timedelta
