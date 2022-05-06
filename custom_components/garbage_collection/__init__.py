@@ -236,9 +236,8 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
         # We get here if the integration is set up using config flow
         return True
 
-    platform_config = config[const.DOMAIN].get(const.CONF_SENSORS, {})
     # If platform is not enabled, skip.
-    if not platform_config:
+    if not (platform_config := config[const.DOMAIN].get(const.CONF_SENSORS, {})):
         return False
 
     for entry in hass.config_entries.async_entries(const.DOMAIN):

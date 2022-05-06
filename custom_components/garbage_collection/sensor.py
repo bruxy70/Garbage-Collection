@@ -340,8 +340,7 @@ class GarbageCollection(RestoreEntity):
                 f"({self._name}) Please configure the date "
                 "for annual collection frequency."
             ) from error
-        candidate_date = date(year, conf_date.month, conf_date.day)
-        if candidate_date < day1:
+        if (candidate_date := date(year, conf_date.month, conf_date.day)) < day1:
             candidate_date = date(year + 1, conf_date.month, conf_date.day)
         return candidate_date
 
@@ -498,9 +497,7 @@ class GarbageCollection(RestoreEntity):
                 return None
             if next_date is None:
                 return None
-            # Check if the date is within the range
-            new_date = self.move_to_range(next_date)
-            if new_date != next_date:
+            if (new_date := self.move_to_range(next_date)) != next_date:
                 day1 = new_date  # continue from next year
                 next_date = None
             else:
@@ -599,8 +596,8 @@ class GarbageCollection(RestoreEntity):
         """Pick the first event from collection dates, update attributes."""
         _LOGGER.debug("(%s) Looking for next collection", self._name)
         today = now().date()
-        self._next_date = await self.async_next_date(today)
         self._last_updated = now()
+        self._next_date = await self.async_next_date(today)
         if self._next_date is not None:
             _LOGGER.debug(
                 "(%s) next_date (%s), today (%s)", self._name, self._next_date, today
