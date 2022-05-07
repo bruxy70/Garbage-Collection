@@ -17,6 +17,7 @@ from homeassistant.const import (
 )
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.discovery import async_load_platform
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.restore_state import RestoreEntity
 
 from . import const, helpers
@@ -33,7 +34,9 @@ def now() -> datetime:
     return dt_util.now()
 
 
-async def async_setup_entry(_, config_entry, async_add_devices):
+async def async_setup_entry(
+    _, config_entry: ConfigEntry, async_add_devices: AddEntitiesCallback
+) -> None:
     """Create garbage collection entities defined in config_flow and add them to HA."""
     frequency = config_entry.data.get(const.CONF_FREQUENCY)
     name = (
@@ -60,26 +63,26 @@ class GarbageCollection(RestoreEntity):
     """GarbageCollection Sensor class."""
 
     __slots__ = (
-        "config_entry",
-        "_name",
-        "_hidden",
-        "_manual",
-        "_first_month",
-        "_last_month",
         "_collection_dates",
-        "_next_date",
-        "_last_updated",
-        "last_collection",
+        "_date_format",
         "_days",
-        "_verbose_state",
-        "_state",
+        "_first_month",
+        "_hidden",
         "_icon_normal",
         "_icon_today",
         "_icon_tomorrow",
-        "expire_after",
-        "_date_format",
-        "_verbose_format",
         "_icon",
+        "_last_month",
+        "_last_updated",
+        "_manual",
+        "_name",
+        "_next_date",
+        "_state",
+        "_verbose_format",
+        "_verbose_state",
+        "config_entry",
+        "expire_after",
+        "last_collection",
     )
 
     def __init__(self, config_entry: ConfigEntry) -> None:
@@ -468,7 +471,7 @@ class GarbageCollection(RestoreEntity):
 class WeeklyCollection(GarbageCollection):
     """Collection every n weeks, odd weeks or even weeks."""
 
-    __slots__ = "_collection_days", "_period", "_first_week"
+    __slots__ = "_collection_days", "_first_week", "_period"
 
     def __init__(self, config_entry: ConfigEntry) -> None:
         """Read parameters specific for Weekly Collection Frequency."""
@@ -516,7 +519,7 @@ class WeeklyCollection(GarbageCollection):
 class DailyCollection(GarbageCollection):
     """Collection every n days."""
 
-    __slots__ = ("_first_date", "_period")
+    __slots__ = "_first_date", "_period"
 
     def __init__(self, config_entry: ConfigEntry) -> None:
         """Read parameters specific for Daily Collection Frequency."""
@@ -551,9 +554,9 @@ class MonthlyCollection(GarbageCollection):
     __slots__ = (
         "_collection_days",
         "_monthly_force_week_numbers",
+        "_period",
         "_weekday_order_numbers",
         "_week_order_numbers",
-        "_period",
     )
 
     def __init__(self, config_entry: ConfigEntry) -> None:
