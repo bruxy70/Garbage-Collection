@@ -14,8 +14,9 @@ MIN_TIME_BETWEEN_UPDATES = timedelta(minutes=1)
 
 async def async_setup_platform(
     hass, config, async_add_entities, discovery_info=None
-) -> None:  # pylint: disable=unused-argument
+) -> None:
     """Add calendar entities to HA, of there are calendar instances."""
+    # pylint: disable=unused-argument
     # Only single instance allowed
     if not GarbageCollectionCalendar.instances:
         async_add_entities([GarbageCollectionCalendar()], True)

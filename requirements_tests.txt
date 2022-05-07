@@ -1,4 +1,4 @@
 python-dateutil>=2.8.2
-homeassistant>=2022.5.0b0
+homeassistant>=2022.5.0
 pytest-homeassistant-custom-component>=0.8.5
 aiohttp_cors>=0.7.0
