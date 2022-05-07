@@ -471,6 +471,7 @@ class WeeklyCollection(GarbageCollection):
     __slots__ = "_collection_days", "_period", "_first_week"
 
     def __init__(self, config_entry: ConfigEntry) -> None:
+        """Read parameters specific for Weekly Collection Frequency."""
         super().__init__(config_entry)
         config = config_entry.data
         self._collection_days = config.get(const.CONF_COLLECTION_DAYS, [])
@@ -518,6 +519,7 @@ class DailyCollection(GarbageCollection):
     __slots__ = ("_first_date", "_period")
 
     def __init__(self, config_entry: ConfigEntry) -> None:
+        """Read parameters specific for Daily Collection Frequency."""
         super().__init__(config_entry)
         config = config_entry.data
         self._period = config.get(const.CONF_PERIOD)
@@ -555,6 +557,7 @@ class MonthlyCollection(GarbageCollection):
     )
 
     def __init__(self, config_entry: ConfigEntry) -> None:
+        """Read parameters specific for Monthly Collection Frequency."""
         super().__init__(config_entry)
         config = config_entry.data
         self._collection_days = config.get(const.CONF_COLLECTION_DAYS, [])
@@ -659,6 +662,7 @@ class AnnualCollection(GarbageCollection):
     __slots__ = ("_date",)
 
     def __init__(self, config_entry: ConfigEntry) -> None:
+        """Read parameters specific for Annual Collection Frequency."""
         super().__init__(config_entry)
         config = config_entry.data
         self._date = config.get(const.CONF_DATE)
@@ -684,6 +688,7 @@ class GroupCollection(GarbageCollection):
     __slots__ = ("_entities",)
 
     def __init__(self, config_entry: ConfigEntry) -> None:
+        """Read parameters specific for Group Collection Frequency."""
         super().__init__(config_entry)
         config = config_entry.data
         self._entities = config.get(CONF_ENTITIES, [])
@@ -744,6 +749,7 @@ class BlankCollection(GarbageCollection):
     """No collection - for mnual update."""
 
     async def _async_find_candidate_date(self, day1: date) -> date | None:
+        """Do not return any date for blank frequency."""
         return None
 
     async def _async_find_next_date(self, first_date: date) -> date | None:
@@ -768,6 +774,6 @@ class BlankCollection(GarbageCollection):
         )
         event_data = {
             "entity_id": self.entity_id,
-            "collection_dates": helpers.dates_to_texts(self._collection_dates),
+            "collection_dates": [],
         }
         self.hass.bus.async_fire("garbage_collection_loaded", event_data)
