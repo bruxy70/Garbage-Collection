@@ -65,6 +65,40 @@ def nth_weekday_date(
 class GarbageCollection(RestoreEntity):
     """GarbageCollection Sensor class."""
 
+    __slots__ = (
+        "config_entry",
+        "_name",
+        "_hidden",
+        "_frequency",
+        "_manual",
+        "_collection_days",
+        "_month",
+        "_first_month",
+        "_last_month",
+        "_monthly_force_week_numbers",
+        "_week_order_numbers",
+        "_weekday_order_numbers",
+        "_first_date",
+        "_first_week",
+        "_period",
+        "_collection_dates",
+        "_next_date",
+        "_last_updated",
+        "last_collection",
+        "_days",
+        "_date",
+        "_entities",
+        "_verbose_state",
+        "_state",
+        "_icon_normal",
+        "_icon_today",
+        "_icon_tomorrow",
+        "expire_after",
+        "_date_format",
+        "_verbose_format",
+        "_icon",
+    )
+
     def __init__(self, config_entry: ConfigEntry):
         """Read configuration and initialise class variables."""
         config = config_entry.data
