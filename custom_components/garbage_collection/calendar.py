@@ -66,7 +66,7 @@ class GarbageCollectionCalendar(CalendarEntity):
 class EntitiesCalendarData:
     """Class used by the Entities Calendar class to hold all entity events."""
 
-    __slots__ = "_hass", "event", "entities"
+    __slots__ = "_hass", "event", "entities", "_throttle"
 
     def __init__(self, hass: HomeAssistant) -> None:
         """Initialize an Entities Calendar Data."""
