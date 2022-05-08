@@ -14,7 +14,7 @@ ERROR_DATE = "Next collection date should be {}, not {}."
 
 
 async def test_manual_update(hass: HomeAssistant) -> None:
-    """Annual collection."""
+    """Blank collection."""
 
     config_entry: MockConfigEntry = MockConfigEntry(
         domain=const.DOMAIN,
@@ -30,6 +30,7 @@ async def test_manual_update(hass: HomeAssistant) -> None:
     await hass.config_entries.async_setup(config_entry.entry_id)
     await hass.async_block_till_done()
     sensor = hass.states.get("sensor.blank")
+    assert sensor is not None
     assert sensor.state == "2"
     assert sensor.attributes["days"] is None
     assert sensor.attributes["next_date"] is None

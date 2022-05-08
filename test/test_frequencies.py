@@ -28,6 +28,7 @@ async def test_annual(hass: HomeAssistant) -> None:
     await hass.config_entries.async_setup(config_entry.entry_id)
     await hass.async_block_till_done()
     sensor = hass.states.get("sensor.annual")
+    assert sensor is not None
     state = sensor.state
     days = sensor.attributes["days"]
     next_date = sensor.attributes["next_date"]
@@ -52,6 +53,7 @@ async def test_even_weeks(hass: HomeAssistant) -> None:
     await hass.config_entries.async_setup(config_entry.entry_id)
     await hass.async_block_till_done()
     sensor = hass.states.get("sensor.even_weeks")
+    assert sensor is not None
     state = sensor.state
     days = sensor.attributes["days"]
     next_date = sensor.attributes["next_date"]
@@ -80,6 +82,7 @@ async def test_every_n_days(hass: HomeAssistant) -> None:
     await hass.config_entries.async_setup(config_entry.entry_id)
     await hass.async_block_till_done()
     sensor = hass.states.get("sensor.every_n_days")
+    assert sensor is not None
     state = sensor.state
     days = sensor.attributes["days"]
     next_date = sensor.attributes["next_date"]
@@ -109,6 +112,7 @@ async def test_every_n_weeks(hass: HomeAssistant) -> None:
     await hass.config_entries.async_setup(config_entry.entry_id)
     await hass.async_block_till_done()
     sensor = hass.states.get("sensor.every_n_weeks")
+    assert sensor is not None
     state = sensor.state
     days = sensor.attributes["days"]
     next_date = sensor.attributes["next_date"]
@@ -137,6 +141,7 @@ async def test_monthly(hass: HomeAssistant) -> None:
     await hass.config_entries.async_setup(config_entry.entry_id)
     await hass.async_block_till_done()
     sensor = hass.states.get("sensor.monthly")
+    assert sensor is not None
     state = sensor.state
     days = sensor.attributes["days"]
     next_date = sensor.attributes["next_date"]
@@ -166,6 +171,7 @@ async def test_monthly2(hass: HomeAssistant) -> None:
     await hass.config_entries.async_setup(config_entry.entry_id)
     await hass.async_block_till_done()
     sensor = hass.states.get("sensor.monthly_2")
+    assert sensor is not None
     state = sensor.state
     days = sensor.attributes["days"]
     next_date = sensor.attributes["next_date"]
@@ -190,6 +196,7 @@ async def test_odd_weeks(hass: HomeAssistant) -> None:
     await hass.config_entries.async_setup(config_entry.entry_id)
     await hass.async_block_till_done()
     sensor = hass.states.get("sensor.odd_weeks")
+    assert sensor is not None
     state = sensor.state
     days = sensor.attributes["days"]
     next_date = sensor.attributes["next_date"]
@@ -214,6 +221,7 @@ async def test_weekly(hass: HomeAssistant) -> None:
     await hass.config_entries.async_setup(config_entry.entry_id)
     await hass.async_block_till_done()
     sensor = hass.states.get("sensor.weekly")
+    assert sensor is not None
     state = sensor.state
     days = sensor.attributes["days"]
     next_date = sensor.attributes["next_date"]

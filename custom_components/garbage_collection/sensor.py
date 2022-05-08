@@ -49,11 +49,13 @@ async def async_setup_entry(
     elif frequency == "every-n-days":
         async_add_devices([DailyCollection(config_entry)], True)
     elif frequency == "monthly":
-        async_add_devices([DailyCollection(config_entry)], True)
+        async_add_devices([MonthlyCollection(config_entry)], True)
     elif frequency == "annual":
         async_add_devices([AnnualCollection(config_entry)], True)
     elif frequency == "group":
         async_add_devices([GroupCollection(config_entry)], True)
+    elif frequency == "blank":
+        async_add_devices([BlankCollection(config_entry)], True)
     else:
         _LOGGER.error("(%s) Unknown frequency %s", name, frequency)
         raise ValueError

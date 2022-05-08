@@ -15,6 +15,8 @@ async def test_annual_config_flow(hass: HomeAssistant) -> None:
     result = await hass.config_entries.flow.async_init(
         DOMAIN, context={"source": config_entries.SOURCE_USER}
     )
+    assert "type" in result and "step_id" in result and "flow_id" in result
+
     # Check that the config flow shows the user form as the first step
     assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
     assert result["step_id"] == "user"
@@ -24,6 +26,12 @@ async def test_annual_config_flow(hass: HomeAssistant) -> None:
     result = await hass.config_entries.flow.async_configure(
         result["flow_id"],
         user_input={"name": "test", "frequency": "annual"},
+    )
+    assert (
+        "type" in result
+        and "step_id" in result
+        and "flow_id" in result
+        and "errors" in result
     )
 
     # Check that the config flow is complete and a new entry is created with
@@ -45,6 +53,7 @@ async def test_annual_config_flow(hass: HomeAssistant) -> None:
                 "date": "04/01",
             },
         )
+    assert "type" in result and "data" in result
     # Should create entry
     assert result["type"] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
     del result["data"]["unique_id"]
@@ -61,6 +70,7 @@ async def test_blank_config_flow(hass: HomeAssistant) -> None:
     result = await hass.config_entries.flow.async_init(
         DOMAIN, context={"source": config_entries.SOURCE_USER}
     )
+    assert "type" in result and "step_id" in result and "flow_id" in result
     # Check that the config flow shows the user form as the first step
     assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
     assert result["step_id"] == "user"
@@ -70,6 +80,12 @@ async def test_blank_config_flow(hass: HomeAssistant) -> None:
     result = await hass.config_entries.flow.async_configure(
         result["flow_id"],
         user_input={"name": "test", "frequency": "blank", "verbose_state": True},
+    )
+    assert (
+        "type" in result
+        and "step_id" in result
+        and "flow_id" in result
+        and "errors" in result
     )
 
     # Check that the config flow is complete and a new entry is created with
@@ -92,6 +108,7 @@ async def test_blank_config_flow(hass: HomeAssistant) -> None:
                 "verbose_format": "on {date}, in {days} days",
             },
         )
+    assert "type" in result and "data" in result
     # Should create entry
     assert result["type"] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
     del result["data"]["unique_id"]
@@ -113,6 +130,7 @@ async def test_every_n_days_config_flow(hass: HomeAssistant) -> None:
     result = await hass.config_entries.flow.async_init(
         DOMAIN, context={"source": config_entries.SOURCE_USER}
     )
+    assert "type" in result and "step_id" in result and "flow_id" in result
     # Check that the config flow shows the user form as the first step
     assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
     assert result["step_id"] == "user"
@@ -122,6 +140,12 @@ async def test_every_n_days_config_flow(hass: HomeAssistant) -> None:
     result = await hass.config_entries.flow.async_configure(
         result["flow_id"],
         user_input={"name": "test", "frequency": "every-n-days"},
+    )
+    assert (
+        "type" in result
+        and "step_id" in result
+        and "flow_id" in result
+        and "errors" in result
     )
 
     # Check that the config flow is complete and a new entry is created with
@@ -144,6 +168,7 @@ async def test_every_n_days_config_flow(hass: HomeAssistant) -> None:
                 "first_date": "2020-01-01",
             },
         )
+    assert "type" in result and "data" in result
     # Should create entry
     assert result["type"] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
     del result["data"]["unique_id"]
@@ -164,6 +189,7 @@ async def test_every_n_weeks_config_flow(hass: HomeAssistant) -> None:
     result = await hass.config_entries.flow.async_init(
         DOMAIN, context={"source": config_entries.SOURCE_USER}
     )
+    assert "type" in result and "step_id" in result and "flow_id" in result
     # Check that the config flow shows the user form as the first step
     assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
     assert result["step_id"] == "user"
@@ -173,6 +199,12 @@ async def test_every_n_weeks_config_flow(hass: HomeAssistant) -> None:
     result = await hass.config_entries.flow.async_configure(
         result["flow_id"],
         user_input={"name": "test", "frequency": "every-n-weeks"},
+    )
+    assert (
+        "type" in result
+        and "step_id" in result
+        and "flow_id" in result
+        and "errors" in result
     )
 
     # Check that the config flow is complete and a new entry is created with
@@ -196,6 +228,7 @@ async def test_every_n_weeks_config_flow(hass: HomeAssistant) -> None:
                 "collection_days": ["wed"],
             },
         )
+    assert "type" in result and "data" in result
     # Should create entry
     assert result["type"] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
     del result["data"]["unique_id"]
@@ -217,6 +250,7 @@ async def test_monthly_config_flow(hass: HomeAssistant) -> None:
     result = await hass.config_entries.flow.async_init(
         DOMAIN, context={"source": config_entries.SOURCE_USER}
     )
+    assert "type" in result and "step_id" in result and "flow_id" in result
     # Check that the config flow shows the user form as the first step
     assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
     assert result["step_id"] == "user"
@@ -226,6 +260,12 @@ async def test_monthly_config_flow(hass: HomeAssistant) -> None:
     result = await hass.config_entries.flow.async_configure(
         result["flow_id"],
         user_input={"name": "test", "frequency": "monthly"},
+    )
+    assert (
+        "type" in result
+        and "step_id" in result
+        and "flow_id" in result
+        and "errors" in result
     )
 
     # Check that the config flow is complete and a new entry is created with
@@ -249,6 +289,7 @@ async def test_monthly_config_flow(hass: HomeAssistant) -> None:
                 "period": 1,
             },
         )
+    assert "type" in result and "data" in result
     # Should create entry
     assert result["type"] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
     del result["data"]["unique_id"]
@@ -270,6 +311,7 @@ async def test_weekly_config_flow(hass: HomeAssistant) -> None:
     result = await hass.config_entries.flow.async_init(
         DOMAIN, context={"source": config_entries.SOURCE_USER}
     )
+    assert "type" in result and "step_id" in result and "flow_id" in result
     # Check that the config flow shows the user form as the first step
     assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
     assert result["step_id"] == "user"
@@ -279,6 +321,12 @@ async def test_weekly_config_flow(hass: HomeAssistant) -> None:
     result = await hass.config_entries.flow.async_configure(
         result["flow_id"],
         user_input={"name": "test", "frequency": "weekly"},
+    )
+    assert (
+        "type" in result
+        and "step_id" in result
+        and "flow_id" in result
+        and "errors" in result
     )
 
     # Check that the config flow is complete and a new entry is created with
@@ -298,6 +346,7 @@ async def test_weekly_config_flow(hass: HomeAssistant) -> None:
             result["flow_id"],
             user_input={"collection_days": ["wed"]},
         )
+    assert "type" in result and "data" in result
     # Should create entry
     assert result["type"] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
     del result["data"]["unique_id"]
