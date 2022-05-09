@@ -1,11 +1,12 @@
 """Test manual update services."""
+import logging
 from datetime import date, datetime
-
-from homeassistant.core import HomeAssistant
-from pytest_homeassistant_custom_component.common import MockConfigEntry
+from unittest.mock import patch
 
 from custom_components.garbage_collection import const
 from custom_components.garbage_collection.sensor import GarbageCollection
+from homeassistant.core import HomeAssistant
+from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 ERROR_DATETIME = "Next date shold be datetime, not {}."
 ERROR_DAYS = "Next collection should be in {} days, not {}."
@@ -35,18 +36,29 @@ async def test_manual_update(hass: HomeAssistant) -> None:
     assert sensor.attributes["days"] is None
     assert sensor.attributes["next_date"] is None
 
-    await hass.services.async_call(
-        const.DOMAIN,
-        "add_date",
-        service_data={"entity_id": "sensor.blank", "date": date(2020, 4, 1)},
-        blocking=True,
-    )
-    await hass.services.async_call(
-        const.DOMAIN,
-        "add_date",
-        service_data={"entity_id": "sensor.blank", "date": date(2020, 4, 2)},
-        blocking=True,
-    )
+    logger = logging.getLogger("custom_components.garbage_collection.sensor")
+    with patch.object(logger, "error") as mock_error_log:
+        await hass.services.async_call(
+            const.DOMAIN,
+            "add_date",
+            service_data={"entity_id": "sensor.blank", "date": date(2020, 4, 1)},
+            blocking=True,
+        )
+        assert mock_error_log.call_count == 0
+        await hass.services.async_call(
+            const.DOMAIN,
+            "add_date",
+            service_data={"entity_id": "sensor.blank", "date": date(2020, 4, 2)},
+            blocking=True,
+        )
+        assert mock_error_log.call_count == 0
+        await hass.services.async_call(
+            const.DOMAIN,
+            "add_date",
+            service_data={"entity_id": "sensor.blank", "date": date(2020, 4, 2)},
+            blocking=True,
+        )
+        assert mock_error_log.call_count == 1
     await hass.services.async_call(
         const.DOMAIN,
         "update_state",
