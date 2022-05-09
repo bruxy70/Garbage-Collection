@@ -45,14 +45,14 @@ async def test_manual_update(hass: HomeAssistant) -> None:
             service_data={"entity_id": "sensor.blank", "date": date(2020, 4, 1)},
             blocking=True,
         )
-        assert mock_error_log.call_count == 0
+        assert mock_error_log.call_count == 0, "Adding a date should not trigger error."
         await hass.services.async_call(
             const.DOMAIN,
             "add_date",
             service_data={"entity_id": "sensor.blank", "date": date(2020, 4, 2)},
             blocking=True,
         )
-        assert mock_error_log.call_count == 0
+        assert mock_error_log.call_count == 0, "Adding a date should not trigger error."
         # Trying to add date again. Should trigger error.
         await hass.services.async_call(
             const.DOMAIN,
@@ -60,7 +60,9 @@ async def test_manual_update(hass: HomeAssistant) -> None:
             service_data={"entity_id": "sensor.blank", "date": date(2020, 4, 2)},
             blocking=True,
         )
-        assert mock_error_log.call_count == 1
+        assert (
+            mock_error_log.call_count == 1
+        ), "Adding same date twice should trigger error."
     await hass.services.async_call(
         const.DOMAIN,
         "update_state",
@@ -81,7 +83,7 @@ async def test_manual_update(hass: HomeAssistant) -> None:
             service_data={"entity_id": "sensor.blank", "date": date(2020, 4, 1)},
             blocking=True,
         )
-        assert mock_error_log.call_count == 0
+        assert mock_error_log.call_count == 0, "Removing date should not trigger error."
         # Try removing the same date again. Shoudl trigger error
         await hass.services.async_call(
             const.DOMAIN,
@@ -89,7 +91,9 @@ async def test_manual_update(hass: HomeAssistant) -> None:
             service_data={"entity_id": "sensor.blank", "date": date(2020, 4, 1)},
             blocking=True,
         )
-        assert mock_error_log.call_count == 1
+        assert (
+            mock_error_log.call_count == 1
+        ), "Removing date that does not exist should trigger error."
     await hass.services.async_call(
         const.DOMAIN,
         "update_state",
