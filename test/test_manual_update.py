@@ -52,6 +52,7 @@ async def test_manual_update(hass: HomeAssistant) -> None:
             blocking=True,
         )
         assert mock_error_log.call_count == 0
+        # Trying to add date again. Should trigger error.
         await hass.services.async_call(
             const.DOMAIN,
             "add_date",
@@ -72,12 +73,22 @@ async def test_manual_update(hass: HomeAssistant) -> None:
     assert entity.extra_state_attributes["days"] == 0
     assert isinstance(entity.extra_state_attributes["next_date"], datetime)
     assert entity.extra_state_attributes["next_date"].date() == date(2020, 4, 1)
-    await hass.services.async_call(
-        const.DOMAIN,
-        "remove_date",
-        service_data={"entity_id": "sensor.blank", "date": date(2020, 4, 1)},
-        blocking=True,
-    )
+    with patch.object(logger, "error") as mock_error_log:
+        await hass.services.async_call(
+            const.DOMAIN,
+            "remove_date",
+            service_data={"entity_id": "sensor.blank", "date": date(2020, 4, 1)},
+            blocking=True,
+        )
+        assert mock_error_log.call_count == 0
+        # Try removing the same date again. Shoudl trigger error
+        await hass.services.async_call(
+            const.DOMAIN,
+            "remove_date",
+            service_data={"entity_id": "sensor.blank", "date": date(2020, 4, 1)},
+            blocking=True,
+        )
+        assert mock_error_log.call_count == 1
     await hass.services.async_call(
         const.DOMAIN,
         "update_state",
