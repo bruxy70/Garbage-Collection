@@ -358,7 +358,7 @@ async def async_migrate_entry(_, config_entry: ConfigEntry) -> bool:
             new_options[const.CONF_WEEKDAY_ORDER_NUMBER] = list(
                 map(str, new_options[const.CONF_WEEKDAY_ORDER_NUMBER])
             )
-    config_entry.version = const.VERSION
+    config_entry.version = const.CONFIG_VERSION
     config_entry.data = MappingProxyType({**new_data})
     config_entry.options = MappingProxyType({**new_options})
     if removed_data:
