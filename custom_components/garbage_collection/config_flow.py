@@ -231,7 +231,7 @@ class GarbageCollectionShared:
 class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
     """Config flow for garbage_collection."""
 
-    VERSION = const.VERSION
+    VERSION = const.CONFIG_VERSION
     CONNECTION_CLASS = config_entries.CONN_CLASS_LOCAL_POLL
 
     def __init__(self):
