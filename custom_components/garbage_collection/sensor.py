@@ -260,7 +260,7 @@ class GarbageCollection(RestoreEntity):
         """
         raise NotImplementedError
 
-    async def _async_ready_for_update(self) -> bool:
+    def _ready_for_update(self) -> bool:
         """Check if the entity is ready for the update.
 
         Skip the update if the sensor was updated today
@@ -410,7 +410,7 @@ class GarbageCollection(RestoreEntity):
 
     async def async_update(self) -> None:
         """Get the latest data and updates the states."""
-        if not await self._async_ready_for_update() or not self.hass.is_running:
+        if not self._ready_for_update() or not self.hass.is_running:
             return
 
         _LOGGER.debug("(%s) Calling update", self._name)
@@ -716,7 +716,7 @@ class GroupCollection(GarbageCollection):
             raise ValueError from error
         return candidate_date
 
-    async def _async_ready_for_update(self) -> bool:
+    def _ready_for_update(self) -> bool:
         """Check if the entity is ready for the update.
 
         For group sensors wait for update of the sensors in the group
@@ -769,7 +769,7 @@ class BlankCollection(GarbageCollection):
 
     async def async_update(self) -> None:
         """Get the latest data and updates the states."""
-        if not await self._async_ready_for_update() or not self.hass.is_running:
+        if not self._ready_for_update() or not self.hass.is_running:
             return
 
         _LOGGER.debug("(%s) Calling update", self._name)
