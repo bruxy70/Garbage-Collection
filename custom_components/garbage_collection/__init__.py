@@ -200,7 +200,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
             try:
                 entity = hass.data[const.DOMAIN][const.SENSOR_PLATFORM][entity_id]
                 entity.last_collection = dt_util.as_local(last_collection)
-                await entity.async_update_state()
+                entity.update_state()
             except KeyError as err:
                 _LOGGER.error(
                     "Failed setting last collection for %s - %s", entity_id, err
