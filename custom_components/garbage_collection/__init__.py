@@ -185,7 +185,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
             _LOGGER.debug("called update_state for %s", entity_id)
             try:
                 entity = hass.data[const.DOMAIN][const.SENSOR_PLATFORM][entity_id]
-                await entity.async_update_state()
+                entity.update_state()
             except KeyError as err:
                 _LOGGER.error("Failed updating state for %s - %s", entity_id, err)
 

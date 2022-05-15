@@ -422,9 +422,9 @@ class GarbageCollection(RestoreEntity):
         }
         self.hass.bus.async_fire("garbage_collection_loaded", event_data)
         if not self._manual:
-            await self.async_update_state()
+            self.update_state()
 
-    async def async_update_state(self) -> None:
+    def update_state(self) -> None:
         """Pick the first event from collection dates, update attributes."""
         _LOGGER.debug("(%s) Looking for next collection", self._name)
         self._last_updated = now()
