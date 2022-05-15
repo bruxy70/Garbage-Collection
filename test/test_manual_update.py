@@ -104,3 +104,31 @@ async def test_manual_update(hass: HomeAssistant) -> None:
     assert entity.extra_state_attributes["days"] == 1
     assert isinstance(entity.extra_state_attributes["next_date"], datetime)
     assert entity.extra_state_attributes["next_date"].date() == date(2020, 4, 2)
+
+
+async def test_collect_garbage(hass: HomeAssistant) -> None:
+    """Test Calling Collect Garbage Service."""
+
+    config_entry: MockConfigEntry = MockConfigEntry(
+        domain=const.DOMAIN,
+        data={"frequency": "weekly", "collection_days": ["wed"]},
+        title="weekly",
+        version=4.5,
+    )
+    config_entry.add_to_hass(hass)
+    await hass.config_entries.async_setup(config_entry.entry_id)
+    await hass.async_block_till_done()
+    sensor = hass.states.get("sensor.weekly")
+    assert sensor is not None
+    days = sensor.attributes["days"]
+    assert days == 0
+    await hass.services.async_call(
+        const.DOMAIN,
+        "collect_garbage",
+        service_data={"entity_id": "sensor.weekly"},
+        blocking=True,
+    )
+    entity: GarbageCollection = hass.data["garbage_collection"]["sensor"][
+        "sensor.weekly"
+    ]
+    assert entity.extra_state_attributes["days"] == 7
