@@ -385,9 +385,7 @@ class GarbageCollection(RestoreEntity):
                 self.name,
             )
 
-    async def async_next_date(
-        self, first_date: date, ignore_today=False
-    ) -> date | None:
+    def get_next_date(self, first_date: date, ignore_today=False) -> date | None:
         """Get next date from self._collection_dates."""
         current_date_time = now()
         for d in self._collection_dates:  # pylint: disable=invalid-name
@@ -431,7 +429,7 @@ class GarbageCollection(RestoreEntity):
         _LOGGER.debug("(%s) Looking for next collection", self._name)
         self._last_updated = now()
         today = self._last_updated.date()
-        self._next_date = await self.async_next_date(today)
+        self._next_date = self.get_next_date(today)
         if self._next_date is not None:
             _LOGGER.debug(
                 "(%s) next_date (%s), today (%s)", self._name, self._next_date, today
