@@ -31,7 +31,7 @@ THROTTLE_INTERVAL = timedelta(seconds=60)
 
 def now() -> datetime:
     """Return current date and time. Needed for testing."""
-    return dt_util.as_local(dt_util.now())
+    return dt_util.now()
 
 
 async def async_setup_entry(
