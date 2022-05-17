@@ -260,7 +260,7 @@ class GarbageCollection(RestoreEntity):
         """
         raise NotImplementedError
 
-    def _ready_for_update(self) -> bool:
+    async def _async_ready_for_update(self) -> bool:
         """Check if the entity is ready for the update.
 
         Skip the update if the sensor was updated today
@@ -408,7 +408,7 @@ class GarbageCollection(RestoreEntity):
 
     async def async_update(self) -> None:
         """Get the latest data and updates the states."""
-        if not self._ready_for_update() or not self.hass.is_running:
+        if not await self._async_ready_for_update() or not self.hass.is_running:
             return
 
         _LOGGER.debug("(%s) Calling update", self._name)
@@ -714,7 +714,7 @@ class GroupCollection(GarbageCollection):
             raise ValueError from error
         return candidate_date
 
-    def _ready_for_update(self) -> bool:
+    async def _async_ready_for_update(self) -> bool:
         """Check if the entity is ready for the update.
 
         For group sensors wait for update of the sensors in the group
@@ -729,7 +729,7 @@ class GroupCollection(GarbageCollection):
         for entity_id in self._entities:
             try:
                 entity = self.hass.data[const.DOMAIN][const.SENSOR_PLATFORM][entity_id]
-                asyncio.run(entity.async_update())
+                await entity.async_update()
             except KeyError:
                 pass
             state_object = self.hass.states.get(entity_id)
@@ -772,7 +772,7 @@ class BlankCollection(GarbageCollection):
 
     async def async_update(self) -> None:
         """Get the latest data and updates the states."""
-        if not self._ready_for_update() or not self.hass.is_running:
+        if not await self._async_ready_for_update() or not self.hass.is_running:
             return
 
         _LOGGER.debug("(%s) Calling update", self._name)
