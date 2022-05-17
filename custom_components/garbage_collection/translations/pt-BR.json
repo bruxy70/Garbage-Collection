@@ -1,0 +1,105 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "title": "Coleta de lixo - Frequência de coleta (1/2)",
+                "description": "Insira o nome do sensor e configure os parâmetros do sensor. Mais informações em https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "name": "Nome fantasia",
+                    "hidden": "Ocultar no calendário",
+                    "frequency": "Frequência",
+                    "manual_update": "Atualização manual - estado do sensor atualizado manualmente por um serviço (Blueprint)",
+                    "icon_normal": "Ícone (mdi:trash-can) - opcional",
+                    "icon_tomorrow": "ícones para coleta de amanhã (mdi:delete-restore) - opcional",
+                    "icon_today": "Ícones para coleta de hoje (mdi:delete-circle) - opcional",
+                    "expire_after": "Expirar depois (HH:MM) - opcional",
+                    "verbose_state": "Estado detalhado (texto, em vez de número)"
+                }
+            },
+            "detail": {
+                "title": "Coleta de lixo - Parâmetros adicionais (2/2)",
+                "description": "Mais detalhes aqui: https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "date": "Data (mm/dd)",
+                    "entities": "Lista de entidades (separadas por vírgulas)",
+                    "collection_days": "Dias de coleta",
+                    "first_month": "Primeiro mês de coletah",
+                    "last_month": "Último mês de coleta",
+                    "period": "Coleta a cada n semanas/dias: (1-365)",
+                    "first_week": "Primeira semana de coleta (1-52)",
+                    "first_date": "Primeira data",
+                    "weekday_order_number": "Ordem do dia da semana no mês (por exemplo, primeira quarta-feira do mês)",
+                    "force_week_order_numbers": "Ordem da semana em um mês em vez da ordem do dia da semana (por exemplo, na quarta-feira da primeira semana)",
+                    "verbose_format": "Formato detalhado (usando variáveis ​​`date` e `days` (entre colchetes))",
+                    "date_format": "Formato de data (consulte http://strftime.org/)"
+                }
+            }
+        },
+        "error": {
+            "value": "Valor inválido. Por favor, verifique sua entrada!",
+            "icon": "Os ícones devem ser especificados no formato 'prefix:name'.",
+            "days": "Selecione 1 ou mais dias!",
+            "entities": "A entidade não existe!",
+            "month_day": "Formato de data inválido!",
+            "time": "Formato de hora inválido!",
+            "weekday_order_number": "Selecione 1 ou mais dias",
+            "week_order_number": "Selecione 1 ou mais semanas",
+            "period": "O período deve ser um número entre 1 e 365",
+            "first_week": "A primeira semana deve ser um número entre 1 e 52",
+            "date": "Formato de data inválido!"
+        },
+        "abort": {
+            "single_instance_allowed": "Apenas uma única configuração de Coleta de Lixo é permitida."
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "title": "Coleta de lixo - Frequência de coleta (1/2)",
+                "description": "Altere os parâmetros do sensor. Mais informações em https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "hidden": "Ocultar no calendário",
+                    "frequency": "Frequência",
+                    "manual_update": "Atualização manual - estado do sensor atualizado manualmente por um serviço (Blueprint)",
+                    "icon_normal": "Ícone (mdi:trash-can) - opcional",
+                    "icon_tomorrow": "Ícones para coleta de amanhã (mdi:delete-restore) - opcional",
+                    "icon_today": "Ícones para coleta de hoje (mdi:delete-circle) - opcional",
+                    "expire_after": "Expirar depois (HH:MM) - opcional",
+                    "verbose_state": "Estado detalhado (texto, em vez de número)"
+                }
+            },
+            "detail": {
+                "title": "Coleta de lixo - Parâmetros adicionais (2/2)",
+                "description": "Mais detalhes aqui: https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "date": "Data (mm/dd)",
+                    "entities": "Lista de entidades (separadas por vírgulas)",
+                    "collection_days": "Dias de coleta",
+                    "first_month": "Primeiro mês de coleta",
+                    "last_month": "Último mês de coleta",
+                    "period": "Coleta a cada n semanas/dias: (1-365)",
+                    "first_week": "Primeira semana de coleta (1-52)",
+                    "first_date": "Primeira data",
+                    "weekday_order_number": "Ordem do dia da semana no mês (por exemplo, primeira quarta-feira do mês)",
+                    "force_week_order_numbers": "Ordem da semana em um mês em vez da ordem do dia da semana (por exemplo, na quarta-feira da primeira semana)",
+                    "verbose_format": "Formato detalhado (usando variáveis ​​`date` e `days` (entre colchetes))",
+                    "date_format": "Formato de data (consulte http://strftime.org/)"
+                }
+            }
+        },
+        "error": {
+            "value": "Valor inválido. Por favor, verifique sua entrada!",
+            "icon": "Os ícones devem ser especificados no formato 'prefix:name'.",
+            "days": "Selecione 1 ou mais dias!",
+            "entities": "A entidade não existe!",
+            "month_day": "Formato de data inválido!",
+            "time": "Formato de hora inválido!",
+            "weekday_order_number": "Selecione 1 ou mais dias",
+            "week_order_number": "Selecione 1 ou mais semanas",
+            "period": "O período deve ser um número entre 1 e 365",
+            "first_week": "A primeira semana deve ser um número entre 1 e 52",
+            "date": "Formato de data inválido!"
+        }
+    }
+
+}
