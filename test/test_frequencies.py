@@ -5,7 +5,6 @@ from homeassistant.core import HomeAssistant
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.garbage_collection import const
-from custom_components.garbage_collection.sensor import GarbageCollection
 
 ERROR_DATETIME = "Next date shold be datetime, not {}."
 ERROR_DAYS = "Next collection should be in {} days, not {}."
