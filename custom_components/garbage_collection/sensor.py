@@ -729,7 +729,7 @@ class GroupCollection(GarbageCollection):
         for entity_id in self._entities:
             try:
                 entity = self.hass.data[const.DOMAIN][const.SENSOR_PLATFORM][entity_id]
-                await entity.async_update(self)
+                await entity.async_update()
             except KeyError:
                 pass
             state_object = self.hass.states.get(entity_id)
