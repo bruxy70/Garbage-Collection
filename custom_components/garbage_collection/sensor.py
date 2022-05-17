@@ -727,6 +727,11 @@ class GroupCollection(GarbageCollection):
             ready_for_update = True
         members_ready = True
         for entity_id in self._entities:
+            try:
+                entity = self.hass.data[const.DOMAIN][const.SENSOR_PLATFORM][entity_id]
+                async_to_sync(entity.async_update(self))()
+            except KeyError:
+                pass
             state_object = self.hass.states.get(entity_id)
             if state_object is None:
                 members_ready = False
