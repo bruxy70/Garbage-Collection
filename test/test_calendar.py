@@ -13,7 +13,7 @@ async def test_calendar(hass: HomeAssistant) -> None:
         domain=const.DOMAIN,
         data={"frequency": "weekly", "collection_days": ["mon"]},
         title="calendar",
-        version=4.5,
+        version=5,
     )
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)

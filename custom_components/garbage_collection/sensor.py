@@ -702,7 +702,7 @@ class GroupCollection(GarbageCollection):
         try:
             for entity_id in self._entities:
                 entity = self.hass.data[const.DOMAIN][const.SENSOR_PLATFORM][entity_id]
-                next_date = await entity.async_next_date(day1)
+                next_date = entity.get_next_date(day1)
                 if next_date is not None and (
                     candidate_date is None or next_date < candidate_date
                 ):
@@ -741,7 +741,7 @@ class GroupCollection(GarbageCollection):
                 members_ready = False
                 break
             # A member got updated after the group update
-            if last_updated > self._last_updated:
+            if self._last_updated is None or last_updated > self._last_updated:
                 ready_for_update = True
         if ready_for_update and not members_ready:
             ready_for_update = False

@@ -26,7 +26,7 @@ async def test_manual_update(hass: HomeAssistant) -> None:
             "manual_update": True,
         },
         title="blank",
-        version=4.5,
+        version=5,
     )
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
@@ -113,7 +113,7 @@ async def test_collect_garbage(hass: HomeAssistant) -> None:
         domain=const.DOMAIN,
         data={"frequency": "weekly", "collection_days": ["wed"]},
         title="weekly",
-        version=4.5,
+        version=5,
     )
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)

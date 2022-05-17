@@ -5,6 +5,7 @@ from homeassistant.core import HomeAssistant
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.garbage_collection import const
+from custom_components.garbage_collection.sensor import GarbageCollection
 
 ERROR_DATETIME = "Next date shold be datetime, not {}."
 ERROR_DAYS = "Next collection should be in {} days, not {}."
@@ -22,7 +23,7 @@ async def test_annual(hass: HomeAssistant) -> None:
             "date": "05/01",
         },
         title="annual",
-        version=4.5,
+        version=5,
     )
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
@@ -47,7 +48,7 @@ async def test_even_weeks(hass: HomeAssistant) -> None:
         domain=const.DOMAIN,
         data={"frequency": "even-weeks", "collection_days": ["wed"]},
         title="even weeks",
-        version=4.5,
+        version=5,
     )
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
@@ -76,7 +77,7 @@ async def test_every_n_days(hass: HomeAssistant) -> None:
             "first_date": "2020-01-01",
         },
         title="every n days",
-        version=4.5,
+        version=5,
     )
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
@@ -106,7 +107,7 @@ async def test_every_n_weeks(hass: HomeAssistant) -> None:
             "collection_days": ["wed"],
         },
         title="every n weeks",
-        version=4.5,
+        version=5,
     )
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
@@ -135,7 +136,7 @@ async def test_monthly(hass: HomeAssistant) -> None:
             "collection_days": ["fri"],
         },
         title="monthly",
-        version=4.5,
+        version=5,
     )
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
@@ -165,7 +166,7 @@ async def test_monthly2(hass: HomeAssistant) -> None:
             "collection_days": ["mon"],
         },
         title="monthly 2",
-        version=4.5,
+        version=5,
     )
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
@@ -190,7 +191,7 @@ async def test_odd_weeks(hass: HomeAssistant) -> None:
         domain=const.DOMAIN,
         data={"frequency": "odd-weeks", "collection_days": ["tue"]},
         title="odd weeks",
-        version=4.5,
+        version=5,
     )
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
@@ -215,7 +216,7 @@ async def test_weekly(hass: HomeAssistant) -> None:
         domain=const.DOMAIN,
         data={"frequency": "weekly", "collection_days": ["mon"]},
         title="weekly",
-        version=4.5,
+        version=5,
     )
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
@@ -230,4 +231,58 @@ async def test_weekly(hass: HomeAssistant) -> None:
     assert days == 5, ERROR_DAYS.format(5, days)
     assert next_date.date() == date(2020, 4, 6), ERROR_DATE.format(
         "April 6, 2020", next_date.date()
+    )
+
+
+async def test_group(hass: HomeAssistant) -> None:
+    """Group collection."""
+
+    config_entry1: MockConfigEntry = MockConfigEntry(
+        domain=const.DOMAIN,
+        data={"frequency": "weekly", "collection_days": ["thu"]},
+        title="weekly1",
+        version=5,
+    )
+    config_entry1.add_to_hass(hass)
+    await hass.config_entries.async_setup(config_entry1.entry_id)
+    await hass.async_block_till_done()
+    sensor = hass.states.get("sensor.weekly1")
+    assert sensor is not None
+    days1 = sensor.attributes["days"]
+    assert days1 == 1, ERROR_DAYS.format(1, days1)
+
+    config_entry2: MockConfigEntry = MockConfigEntry(
+        domain=const.DOMAIN,
+        data={"frequency": "weekly", "collection_days": ["fri"]},
+        title="weekly2",
+        version=5,
+    )
+    config_entry2.add_to_hass(hass)
+    await hass.config_entries.async_setup(config_entry2.entry_id)
+    await hass.async_block_till_done()
+    sensor = hass.states.get("sensor.weekly2")
+    assert sensor is not None
+    days2 = sensor.attributes["days"]
+    assert days2 == 2, ERROR_DAYS.format(2, days2)
+
+    config_entry3: MockConfigEntry = MockConfigEntry(
+        domain=const.DOMAIN,
+        data={"frequency": "group", "entities": ["sensor.weekly1", "sensor.weekly2"]},
+        title="group",
+        version=5,
+    )
+    config_entry3.add_to_hass(hass)
+    await hass.config_entries.async_setup(config_entry3.entry_id)
+    await hass.async_block_till_done()
+
+    sensor = hass.states.get("sensor.group")
+    assert sensor is not None
+    state = sensor.state
+    days = sensor.attributes["days"]
+    next_date = sensor.attributes["next_date"]
+    assert isinstance(next_date, datetime), ERROR_DATETIME.format(type(next_date))
+    assert state == "1", ERROR_STATE.format(1, state)
+    assert days == 1, ERROR_DAYS.format(2, days)
+    assert next_date.date() == date(2020, 4, 2), ERROR_DATE.format(
+        "April 2, 2020", next_date.date()
     )

@@ -18,7 +18,7 @@ async def test_annual_options_flow(hass: HomeAssistant) -> None:
             "date": "04/01",
         },
         title="sensor",
-        version=4.5,
+        version=5,
     )
     config_entry.add_to_hass(hass)
 
@@ -77,7 +77,7 @@ async def test_blank_options_flow(hass: HomeAssistant) -> None:
             "verbose_format": "on {date}, in {days} days",
         },
         title="sensor",
-        version=4.5,
+        version=5,
     )
     config_entry.add_to_hass(hass)
 
@@ -143,7 +143,7 @@ async def test_every_n_days_options_flow(hass: HomeAssistant) -> None:
             "first_date": "2020-01-01",
         },
         title="sensor",
-        version=4.5,
+        version=5,
     )
     config_entry.add_to_hass(hass)
 
@@ -206,7 +206,7 @@ async def test_every_n_weeks_options_flow(hass: HomeAssistant) -> None:
             "collection_days": ["wed"],
         },
         title="sensor",
-        version=4.5,
+        version=5,
     )
     config_entry.add_to_hass(hass)
 
@@ -270,7 +270,7 @@ async def test_monthly_options_flow(hass: HomeAssistant) -> None:
             "period": 1,
         },
         title="sensor",
-        version=4.5,
+        version=5,
     )
     config_entry.add_to_hass(hass)
 
@@ -326,7 +326,7 @@ async def test_weekly_options_flow(hass: HomeAssistant) -> None:
         domain=const.DOMAIN,
         data={"name": "test", "frequency": "weekly", "collection_days": ["wed"]},
         title="sensor",
-        version=4.5,
+        version=5,
     )
     config_entry.add_to_hass(hass)
 
