@@ -5,7 +5,6 @@ import asyncio
 import logging
 from datetime import date, datetime, time, timedelta
 
-from asgiref.sync import async_to_sync
 import homeassistant.util.dt as dt_util
 from dateutil.relativedelta import relativedelta
 from homeassistant.config_entries import ConfigEntry
@@ -730,7 +729,7 @@ class GroupCollection(GarbageCollection):
         for entity_id in self._entities:
             try:
                 entity = self.hass.data[const.DOMAIN][const.SENSOR_PLATFORM][entity_id]
-                async_to_sync(entity.async_update(self))()
+                asyncio.run(entity.async_update(self))()
             except KeyError:
                 pass
             state_object = self.hass.states.get(entity_id)
