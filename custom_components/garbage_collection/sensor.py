@@ -5,6 +5,7 @@ import asyncio
 import logging
 from datetime import date, datetime, time, timedelta
 
+from asgiref.sync import async_to_sync
 import homeassistant.util.dt as dt_util
 from dateutil.relativedelta import relativedelta
 from homeassistant.config_entries import ConfigEntry
