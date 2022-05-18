@@ -1,9 +1,10 @@
 """Test all frequencies (except blank)."""
 
-from homeassistant.core import HomeAssistant
-from pytest_homeassistant_custom_component.common import MockConfigEntry
+from datetime import datetime
 
 from custom_components.garbage_collection import const
+from homeassistant.core import HomeAssistant
+from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 
 async def test_calendar(hass: HomeAssistant) -> None:
@@ -26,3 +27,9 @@ async def test_calendar(hass: HomeAssistant) -> None:
     end_time = calendar.attributes["end_time"]
     assert start_time == "2020-04-06 00:00:00"
     assert end_time == "2020-04-07 00:00:00"
+    start_date = datetime(2020, 4, 1)
+    end_date = datetime(2020, 5, 1)
+    events = await hass.data["garbage_collection"]["calendar"].async_get_events(
+        hass, start_date, end_date
+    )
+    assert len(events) == 4
