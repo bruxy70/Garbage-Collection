@@ -248,7 +248,7 @@ class GarbageCollection(RestoreEntity):
         return (
             f"{self.__class__.__name__}(name={self._name}, "
             f"entity_id={self.entity_id}, "
-            f"state={self.state}\n"
+            f"state={self.state}, "
             f"attributes={self.extra_state_attributes})"
         )
 
@@ -292,15 +292,15 @@ class GarbageCollection(RestoreEntity):
         """Check if the date is inside first and last date."""
         month = dat.month
         if self._first_month <= self._last_month:
-            return bool(month >= self._first_month and month <= self._last_month)
-        return bool(month <= self._last_month or month >= self._first_month)
+            return bool(self._first_month <= month <= self._last_month)
+        return bool(self._first_month <= month or month <= self._last_month)
 
     def move_to_range(self, day: date) -> date:
         """If the date is not in range, move to the range."""
         if not self.date_inside(day):
             year = day.year
             month = day.month
-            if self._first_month <= self._last_month and month > self._last_month:
+            if self._first_month <= self._last_month < month:
                 _LOGGER.debug(
                     "(%s) %s outside the range, lookig from %s next year",
                     self._name,
@@ -308,14 +308,13 @@ class GarbageCollection(RestoreEntity):
                     const.MONTH_OPTIONS[self._first_month - 1],
                 )
                 return date(year + 1, self._first_month, 1)
-            else:
-                _LOGGER.debug(
-                    "(%s) %s outside the range, searching from %s",
-                    self._name,
-                    day,
-                    const.MONTH_OPTIONS[self._first_month - 1],
-                )
-                return date(year, self._first_month, 1)
+            _LOGGER.debug(
+                "(%s) %s outside the range, searching from %s",
+                self._name,
+                day,
+                const.MONTH_OPTIONS[self._first_month - 1],
+            )
+            return date(year, self._first_month, 1)
         return day
 
     async def _async_find_next_date(self, first_date: date) -> date | None:
@@ -353,9 +352,7 @@ class GarbageCollection(RestoreEntity):
             _LOGGER.error("(%s) Timeout loading collection dates", self._name)
             return
 
-        while (
-            next_date is not None and next_date >= start_date and next_date <= end_date
-        ):
+        while next_date is not None and start_date <= next_date <= end_date:
             self._collection_dates.append(next_date)
             next_date = await self._async_find_next_date(
                 next_date + relativedelta(days=1)
