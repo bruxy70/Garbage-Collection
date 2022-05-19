@@ -65,6 +65,9 @@ class GarbageCollection(RestoreEntity):
     """GarbageCollection Sensor class."""
 
     __slots__ = (
+        "_attr_icon",
+        "_attr_name",
+        "_attr_state",
         "_collection_dates",
         "_date_format",
         "_days",
@@ -73,13 +76,10 @@ class GarbageCollection(RestoreEntity):
         "_icon_normal",
         "_icon_today",
         "_icon_tomorrow",
-        "_icon",
         "_last_month",
         "_last_updated",
         "_manual",
-        "_name",
         "_next_date",
-        "_state",
         "_verbose_format",
         "_verbose_state",
         "config_entry",
@@ -91,7 +91,7 @@ class GarbageCollection(RestoreEntity):
         """Read configuration and initialise class variables."""
         config = config_entry.data
         self.config_entry = config_entry
-        self._name = (
+        self._attr_name = (
             config_entry.title
             if config_entry.title is not None
             else config.get(CONF_NAME)
@@ -130,8 +130,8 @@ class GarbageCollection(RestoreEntity):
         self._last_updated: datetime | None = None
         self.last_collection: datetime | None = None
         self._days: int | None = None
-        self._state = "" if bool(self._verbose_state) else 2
-        self._icon = self._icon_normal
+        self._attr_state = "" if bool(self._verbose_state) else 2
+        self._attr_icon = self._icon_normal
 
     async def async_added_to_hass(self):
         """When sensor is added to hassio, add it to calendar."""
@@ -151,7 +151,7 @@ class GarbageCollection(RestoreEntity):
         device_registry.async_get_or_create(
             config_entry_id=self.config_entry.entry_id,
             identifiers={(const.DOMAIN, self.unique_id)},
-            name=self.name,
+            name=self._attr_name,
             manufacturer="bruxy70",
         )
 
@@ -197,9 +197,9 @@ class GarbageCollection(RestoreEntity):
         }
 
     @property
-    def name(self):
+    def name(self) -> str | None:
         """Return the name of the sensor."""
-        return self._name
+        return self._attr_name
 
     @property
     def next_date(self):
@@ -214,12 +214,12 @@ class GarbageCollection(RestoreEntity):
     @property
     def state(self):
         """Return the state of the sensor."""
-        return self._state
+        return self._attr_state
 
     @property
     def icon(self):
         """Return the entity icon."""
-        return self._icon
+        return self._attr_icon
 
     @property
     def extra_state_attributes(self):
@@ -246,7 +246,7 @@ class GarbageCollection(RestoreEntity):
     def __repr__(self):
         """Return main sensor parameters."""
         return (
-            f"{self.__class__.__name__}(name={self._name}, "
+            f"{self.__class__.__name__}(name={self._attr_name}, "
             f"entity_id={self.entity_id}, "
             f"state={self.state}, "
             f"attributes={self.extra_state_attributes})"
@@ -303,14 +303,14 @@ class GarbageCollection(RestoreEntity):
             if self._first_month <= self._last_month < month:
                 _LOGGER.debug(
                     "(%s) %s outside the range, lookig from %s next year",
-                    self._name,
+                    self._attr_name,
                     day,
                     const.MONTH_OPTIONS[self._first_month - 1],
                 )
                 return date(year + 1, self._first_month, 1)
             _LOGGER.debug(
                 "(%s) %s outside the range, searching from %s",
-                self._name,
+                self._attr_name,
                 day,
                 const.MONTH_OPTIONS[self._first_month - 1],
             )
@@ -349,7 +349,7 @@ class GarbageCollection(RestoreEntity):
         try:
             next_date = await self._async_find_next_date(start_date)
         except asyncio.TimeoutError:
-            _LOGGER.error("(%s) Timeout loading collection dates", self._name)
+            _LOGGER.error("(%s) Timeout loading collection dates", self._attr_name)
             return
 
         while next_date is not None and start_date <= next_date <= end_date:
@@ -408,10 +408,11 @@ class GarbageCollection(RestoreEntity):
         if not await self._async_ready_for_update() or not self.hass.is_running:
             return
 
-        _LOGGER.debug("(%s) Calling update", self._name)
+        _LOGGER.debug("(%s) Calling update", self._attr_name)
         await self._async_load_collection_dates()
         _LOGGER.debug(
-            "(%s) Dates loaded, firing a garbage_collection_loaded event", self._name
+            "(%s) Dates loaded, firing a garbage_collection_loaded event",
+            self._attr_name,
         )
         event_data = {
             "entity_id": self.entity_id,
@@ -423,44 +424,47 @@ class GarbageCollection(RestoreEntity):
 
     def update_state(self) -> None:
         """Pick the first event from collection dates, update attributes."""
-        _LOGGER.debug("(%s) Looking for next collection", self._name)
+        _LOGGER.debug("(%s) Looking for next collection", self._attr_name)
         self._last_updated = now()
         today = self._last_updated.date()
         self._next_date = self.get_next_date(today)
         if self._next_date is not None:
             _LOGGER.debug(
-                "(%s) next_date (%s), today (%s)", self._name, self._next_date, today
+                "(%s) next_date (%s), today (%s)",
+                self._attr_name,
+                self._next_date,
+                today,
             )
             self._days = (self._next_date - today).days
             next_date_txt = self._next_date.strftime(self._date_format)
             _LOGGER.debug(
                 "(%s) Found next collection date: %s, that is in %d days",
-                self._name,
+                self._attr_name,
                 next_date_txt,
                 self._days,
             )
             if self._days > 1:
                 if bool(self._verbose_state):
-                    self._state = self._verbose_format.format(
+                    self._attr_state = self._verbose_format.format(
                         date=next_date_txt, days=self._days
                     )
-                    # self._state = "on_date"
+                    # self._attr_state = "on_date"
                 else:
-                    self._state = 2
-                self._icon = self._icon_normal
+                    self._attr_state = 2
+                self._attr_icon = self._icon_normal
             else:
                 if self._days == 0:
                     if bool(self._verbose_state):
-                        self._state = const.STATE_TODAY
+                        self._attr_state = const.STATE_TODAY
                     else:
-                        self._state = self._days
-                    self._icon = self._icon_today
+                        self._attr_state = self._days
+                    self._attr_icon = self._icon_today
                 elif self._days == 1:
                     if bool(self._verbose_state):
-                        self._state = const.STATE_TOMORROW
+                        self._attr_state = const.STATE_TOMORROW
                     else:
-                        self._state = self._days
-                    self._icon = self._icon_tomorrow
+                        self._attr_state = self._days
+                    self._attr_icon = self._icon_tomorrow
         else:
             self._days = None
 
@@ -539,7 +543,7 @@ class DailyCollection(GarbageCollection):
             )
         except TypeError as error:
             raise ValueError(
-                f"({self._name}) Please configure first_date and period "
+                f"({self._attr_name}) Please configure first_date and period "
                 "for every-n-days collection frequency."
             ) from error
         return day1 + relativedelta(days=offset)
@@ -674,7 +678,7 @@ class AnnualCollection(GarbageCollection):
             conf_date = datetime.strptime(self._date, "%m/%d").date()
         except TypeError as error:
             raise ValueError(
-                f"({self._name}) Please configure the date "
+                f"({self._attr_name}) Please configure the date "
                 "for annual collection frequency."
             ) from error
         if (candidate_date := date(year, conf_date.month, conf_date.day)) < day1:
@@ -707,7 +711,7 @@ class GroupCollection(GarbageCollection):
         except KeyError as error:
             raise ValueError from error
         except TypeError as error:
-            _LOGGER.error("(%s) Please add entities for the group.", self._name)
+            _LOGGER.error("(%s) Please add entities for the group.", self._attr_name)
             raise ValueError from error
         return candidate_date
 
@@ -772,10 +776,11 @@ class BlankCollection(GarbageCollection):
         if not await self._async_ready_for_update() or not self.hass.is_running:
             return
 
-        _LOGGER.debug("(%s) Calling update", self._name)
+        _LOGGER.debug("(%s) Calling update", self._attr_name)
         await self._async_load_collection_dates()
         _LOGGER.debug(
-            "(%s) Dates loaded, firing a garbage_collection_loaded event", self._name
+            "(%s) Dates loaded, firing a garbage_collection_loaded event",
+            self._attr_name,
         )
         event_data = {
             "entity_id": self.entity_id,
