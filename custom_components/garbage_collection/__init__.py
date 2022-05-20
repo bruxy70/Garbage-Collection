@@ -109,12 +109,8 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
     async def handle_add_date(call: ServiceCall) -> None:
         """Handle the add_date service call."""
-        if not (entity_ids := call.data.get(CONF_ENTITY_ID, [])):
-            _LOGGER.error("add_date - missing Entity ID.")
-            return
-        if (collection_date := call.data.get(const.CONF_DATE)) is None:
-            _LOGGER.error("add_date - missing collection date.")
-            return
+        entity_ids = call.data.get(CONF_ENTITY_ID, [])
+        collection_date = call.data.get(const.CONF_DATE)
         for entity_id in entity_ids:
             _LOGGER.debug("called add_date %s from %s", collection_date, entity_id)
             try:
@@ -130,12 +126,8 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
     async def handle_remove_date(call: ServiceCall) -> None:
         """Handle the remove_date service call."""
-        if not (entity_ids := call.data.get(CONF_ENTITY_ID, [])):
-            _LOGGER.error("remove_date - missing Entity ID.")
-            return
-        if (collection_date := call.data.get(const.CONF_DATE)) is None:
-            _LOGGER.error("remove_date - missing collection date.")
-            return
+        entity_ids = call.data.get(CONF_ENTITY_ID, [])
+        collection_date = call.data.get(const.CONF_DATE)
         for entity_id in entity_ids:
             _LOGGER.debug("called remove_date %s from %s", collection_date, entity_id)
             try:
@@ -151,15 +143,9 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
     async def handle_offset_date(call: ServiceCall) -> None:
         """Handle the offset_date service call."""
-        if not (entity_ids := call.data.get(CONF_ENTITY_ID, [])):
-            _LOGGER.error("offset_date - missing Entity ID.")
-            return
-        if (offset := call.data.get(const.CONF_OFFSET)) is None:
-            _LOGGER.error("offset_date - missing offset.")
-            return
-        if (collection_date := call.data.get(const.CONF_DATE)) is None:
-            _LOGGER.error("offset_date - missing collection date.")
-            return
+        entity_ids = call.data.get(CONF_ENTITY_ID, [])
+        offset = call.data.get(const.CONF_OFFSET)
+        collection_date = call.data.get(const.CONF_DATE)
         for entity_id in entity_ids:
             _LOGGER.debug(
                 "called offset_date %s by %d days for %s",
@@ -168,7 +154,9 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
                 entity_id,
             )
             try:
-                new_date = collection_date + relativedelta(days=offset)
+                new_date = collection_date + relativedelta(
+                    days=offset
+                )  # pyright: reportOptionalOperand=false
                 entity = hass.data[const.DOMAIN][const.SENSOR_PLATFORM][entity_id]
                 await asyncio.gather(
                     entity.remove_date(collection_date), entity.add_date(new_date)
@@ -179,9 +167,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
     async def handle_update_state(call: ServiceCall) -> None:
         """Handle the update_state service call."""
-        if not (entity_ids := call.data.get(CONF_ENTITY_ID, [])):
-            _LOGGER.error("update_state - missing Entity ID.")
-            return
+        entity_ids = call.data.get(CONF_ENTITY_ID, [])
         for entity_id in entity_ids:
             _LOGGER.debug("called update_state for %s", entity_id)
             try:
@@ -192,9 +178,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
     async def handle_collect_garbage(call: ServiceCall) -> None:
         """Handle the collect_garbage service call."""
-        if not (entity_ids := call.data.get(CONF_ENTITY_ID, [])):
-            _LOGGER.error("collect_garbage - missing Entity ID.")
-            return
+        entity_ids = call.data.get(CONF_ENTITY_ID, [])
         last_collection = call.data.get(const.ATTR_LAST_COLLECTION, sensor.now())
         for entity_id in entity_ids:
             _LOGGER.debug("called collect_garbage for %s", entity_id)
