@@ -707,7 +707,9 @@ class GroupCollection(GarbageCollection):
         candidate_date = None
         try:
             for entity_id in self._entities:
-                entity = self.hass.data[const.DOMAIN][const.SENSOR_PLATFORM][entity_id]
+                entity: GarbageCollection = self.hass.data[const.DOMAIN][
+                    const.SENSOR_PLATFORM
+                ][entity_id]
                 next_date = entity.get_next_date(day1)
                 if next_date is not None and (
                     candidate_date is None or next_date < candidate_date
@@ -734,7 +736,9 @@ class GroupCollection(GarbageCollection):
         members_ready = True
         for entity_id in self._entities:
             try:
-                entity = self.hass.data[const.DOMAIN][const.SENSOR_PLATFORM][entity_id]
+                entity: GarbageCollection = self.hass.data[const.DOMAIN][
+                    const.SENSOR_PLATFORM
+                ][entity_id]
                 await entity.async_update()
             except KeyError:
                 members_ready = False
