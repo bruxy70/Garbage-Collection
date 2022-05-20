@@ -8,7 +8,6 @@ from homeassistant.core import HomeAssistant
 from homeassistant.util import Throttle
 
 from .const import CALENDAR_NAME, CALENDAR_PLATFORM, DOMAIN, SENSOR_PLATFORM
-from .sensor import GarbageCollection
 
 MIN_TIME_BETWEEN_UPDATES = timedelta(minutes=1)
 
@@ -101,11 +100,9 @@ class EntitiesCalendarData:
                 or hass.data[DOMAIN][SENSOR_PLATFORM][entity].hidden
             ):
                 continue
-            garbage_collection: GarbageCollection = hass.data[DOMAIN][SENSOR_PLATFORM][
-                entity
-            ]
+            garbage_collection = hass.data[DOMAIN][SENSOR_PLATFORM][entity]
             start = garbage_collection.get_next_date(start_date, True)
-            while start is not None and start >= start_date and start <= end_date:
+            while start is not None and start_date <= start <= end_date:
                 try:
                     end = start + timedelta(days=1)
                 except TypeError:
