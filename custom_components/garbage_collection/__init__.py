@@ -122,7 +122,10 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
                 await entity.add_date(collection_date)
             except KeyError as err:
                 _LOGGER.error(
-                    "Failed adding date %s to %s (%s)", collection_date, entity_id, err
+                    "Failed adding date %s to %s (%s)",
+                    collection_date,
+                    entity_id,
+                    err,
                 )
 
     async def handle_remove_date(call: ServiceCall) -> None:
@@ -140,9 +143,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
                 await entity.remove_date(collection_date)
             except KeyError as err:
                 _LOGGER.error(
-                    "Failed removing date %s from %s. Most likely, "
-                    "it was removed by competing automation runing in parallel. "
-                    "(%s)",
+                    "Failed removing date %s from %s (%s)",
                     collection_date,
                     entity_id,
                     err,

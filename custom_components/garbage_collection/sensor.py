@@ -365,7 +365,7 @@ class GarbageCollection(RestoreEntity):
             self._collection_dates.append(collection_date)
             self._collection_dates.sort()
         else:
-            _LOGGER.error(
+            _LOGGER.warning(
                 "%s not added to %s - already on the collection schedule",
                 collection_date,
                 self.name,
@@ -376,7 +376,7 @@ class GarbageCollection(RestoreEntity):
         try:
             self._collection_dates.remove(collection_date)
         except ValueError:
-            _LOGGER.error(
+            _LOGGER.warning(
                 "%s not removed from %s - not in the collection schedule",
                 collection_date,
                 self.name,

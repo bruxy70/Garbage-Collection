@@ -38,21 +38,25 @@ async def test_manual_update(hass: HomeAssistant) -> None:
     assert sensor.attributes["next_date"] is None
 
     logger = logging.getLogger("custom_components.garbage_collection.sensor")
-    with patch.object(logger, "error") as mock_error_log:
+    with patch.object(logger, "warning") as mock_warning_log:
         await hass.services.async_call(
             const.DOMAIN,
             "add_date",
             service_data={"entity_id": "sensor.blank", "date": date(2020, 4, 1)},
             blocking=True,
         )
-        assert mock_error_log.call_count == 0, "Adding a date should not trigger error."
+        assert (
+            mock_warning_log.call_count == 0
+        ), "Adding a date should not trigger error."
         await hass.services.async_call(
             const.DOMAIN,
             "add_date",
             service_data={"entity_id": "sensor.blank", "date": date(2020, 4, 2)},
             blocking=True,
         )
-        assert mock_error_log.call_count == 0, "Adding a date should not trigger error."
+        assert (
+            mock_warning_log.call_count == 0
+        ), "Adding a date should not trigger error."
         # Trying to add date again. Should trigger error.
         await hass.services.async_call(
             const.DOMAIN,
@@ -61,7 +65,7 @@ async def test_manual_update(hass: HomeAssistant) -> None:
             blocking=True,
         )
         assert (
-            mock_error_log.call_count == 1
+            mock_warning_log.call_count == 1
         ), "Adding same date twice should trigger error."
     await hass.services.async_call(
         const.DOMAIN,
@@ -76,14 +80,16 @@ async def test_manual_update(hass: HomeAssistant) -> None:
     assert entity.extra_state_attributes["days"] == 0
     assert isinstance(entity.extra_state_attributes["next_date"], datetime)
     assert entity.extra_state_attributes["next_date"].date() == date(2020, 4, 1)
-    with patch.object(logger, "error") as mock_error_log:
+    with patch.object(logger, "warning") as mock_warning_log:
         await hass.services.async_call(
             const.DOMAIN,
             "remove_date",
             service_data={"entity_id": "sensor.blank", "date": date(2020, 4, 1)},
             blocking=True,
         )
-        assert mock_error_log.call_count == 0, "Removing date should not trigger error."
+        assert (
+            mock_warning_log.call_count == 0
+        ), "Removing date should not trigger error."
         # Try removing the same date again. Shoudl trigger error
         await hass.services.async_call(
             const.DOMAIN,
@@ -92,7 +98,7 @@ async def test_manual_update(hass: HomeAssistant) -> None:
             blocking=True,
         )
         assert (
-            mock_error_log.call_count == 1
+            mock_warning_log.call_count == 1
         ), "Removing date that does not exist should trigger error."
     await hass.services.async_call(
         const.DOMAIN,
