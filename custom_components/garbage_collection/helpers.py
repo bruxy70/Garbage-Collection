@@ -41,16 +41,6 @@ def dates_to_texts(dates: list[date]) -> list[str]:
     return converted
 
 
-def date_text(value: Any) -> str:
-    """Have to store date as text - datetime is not JSON serialisable."""
-    if value is None or value == "":
-        return ""
-    try:
-        return datetime.strptime(value, "%Y-%m-%d").date().strftime("%Y-%m-%d")
-    except ValueError as error:
-        raise vol.Invalid(f"Invalid date: {value}") from error
-
-
 def time_text(value: Any) -> str:
     """Have to store time as text - datetime is not JSON serialisable."""
     if value is None or value == "":
@@ -61,15 +51,6 @@ def time_text(value: Any) -> str:
         raise vol.Invalid(f"Invalid date: {value}") from error
 
 
-def string_to_list(string) -> list:
-    """Convert comma separated text to list."""
-    if isinstance(string, list):
-        return string  # Already list
-    if string is None or string == "":
-        return []
-    return list(map(lambda x: x.strip("'\" "), string.split(",")))
-
-
 def month_day_text(value: Any) -> str:
     """Validate format month/day."""
     if value is None or value == "":
@@ -78,34 +59,3 @@ def month_day_text(value: Any) -> str:
         return datetime.strptime(value, "%m/%d").date().strftime("%m/%d")
     except ValueError as error:
         raise vol.Invalid(f"Invalid date: {value}") from error
-
-
-def is_date(record: str) -> bool:
-    """Validate yyyy-mm-dd format."""
-    if date == "":
-        return True
-    try:
-        datetime.strptime(record, "%Y-%m-%d")
-        return True
-    except ValueError:
-        return False
-
-
-def is_dates(dates: list) -> bool:
-    """Validate list of dates (yyyy-mm-dd, yyyy-mm-dd)."""
-    if not dates:
-        return True
-    check = True
-    for record in dates:
-        if not is_date(record):
-            check = False
-    return check
-
-
-def is_month_day(record) -> bool:
-    """Validate mm/dd format."""
-    try:
-        datetime.strptime(record, "%m/%d")
-        return True
-    except ValueError:
-        return False

@@ -37,9 +37,9 @@ async def test_manual_update(hass: HomeAssistant) -> None:
     assert sensor.attributes["days"] is None
     assert sensor.attributes["next_date"] is None
 
-    logger = logging.getLogger("custom_components.garbage_collection.sensor")
+    logger_sensor = logging.getLogger("custom_components.garbage_collection.sensor")
     # test adding a date
-    with patch.object(logger, "warning") as mock_warning_log:
+    with patch.object(logger_sensor, "warning") as mock_warning_log:
         await hass.services.async_call(
             const.DOMAIN,
             "add_date",
@@ -84,7 +84,7 @@ async def test_manual_update(hass: HomeAssistant) -> None:
     assert entity.extra_state_attributes["next_date"].date() == date(2020, 4, 1)
 
     # Test removing a date
-    with patch.object(logger, "warning") as mock_warning_log:
+    with patch.object(logger_sensor, "warning") as mock_warning_log:
         await hass.services.async_call(
             const.DOMAIN,
             "remove_date",
@@ -137,6 +137,50 @@ async def test_manual_update(hass: HomeAssistant) -> None:
     assert isinstance(entity.extra_state_attributes["next_date"], datetime)
     assert entity.extra_state_attributes["next_date"].date() == date(2020, 4, 3)
 
+    # Test calling wih wrong entity_id
+    logger_init = logging.getLogger("custom_components.garbage_collection")
+    with patch.object(logger_init, "error") as mock_error_log:
+        await hass.services.async_call(
+            const.DOMAIN,
+            "add_date",
+            service_data={"entity_id": "sensor.bad", "date": date(2020, 4, 4)},
+            blocking=True,
+        )
+        assert (
+            mock_error_log.call_count == 1
+        ), "Adding a date with wrong entity_id should trigger an error."
+        await hass.services.async_call(
+            const.DOMAIN,
+            "remove_date",
+            service_data={"entity_id": "sensor.bad", "date": date(2020, 4, 3)},
+            blocking=True,
+        )
+        assert (
+            mock_error_log.call_count == 2
+        ), "Removing a date with wrong entity_id should trigger an error."
+        await hass.services.async_call(
+            const.DOMAIN,
+            "offset_date",
+            service_data={
+                "entity_id": "sensor.bad",
+                "date": date(2020, 4, 3),
+                "offset": 1,
+            },
+            blocking=True,
+        )
+        assert (
+            mock_error_log.call_count == 3
+        ), "Offsetting a date with wrong entity_id should trigger an error."
+        await hass.services.async_call(
+            const.DOMAIN,
+            "update_state",
+            service_data={"entity_id": "sensor.bad"},
+            blocking=True,
+        )
+        assert (
+            mock_error_log.call_count == 4
+        ), "Updating state with wrong entity_id should trigger an error."
+
 
 async def test_collect_garbage(hass: HomeAssistant) -> None:
     """Test Calling Collect Garbage Service."""
@@ -164,3 +208,16 @@ async def test_collect_garbage(hass: HomeAssistant) -> None:
         "sensor.weekly"
     ]
     assert entity.extra_state_attributes["days"] == 7
+
+    # Test with wrong entity_id
+    logger_init = logging.getLogger("custom_components.garbage_collection")
+    with patch.object(logger_init, "error") as mock_error_log:
+        await hass.services.async_call(
+            const.DOMAIN,
+            "collect_garbage",
+            service_data={"entity_id": "sensor.bad"},
+            blocking=True,
+        )
+        assert (
+            mock_error_log.call_count == 1
+        ), "Collecting garbage with wrong entity_id should trigger an error."
