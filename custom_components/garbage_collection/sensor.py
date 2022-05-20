@@ -217,6 +217,11 @@ class GarbageCollection(RestoreEntity):
         return self._attr_state
 
     @property
+    def last_updated(self):
+        """Return when the sensor was last updated."""
+        return self._last_updated
+
+    @property
     def icon(self):
         """Return the entity icon."""
         return self._attr_icon
@@ -732,14 +737,9 @@ class GroupCollection(GarbageCollection):
                 entity = self.hass.data[const.DOMAIN][const.SENSOR_PLATFORM][entity_id]
                 await entity.async_update()
             except KeyError:
-                pass
-            state_object = self.hass.states.get(entity_id)
-            if state_object is None:
                 members_ready = False
                 break
-            if (
-                last_updated := state_object.attributes.get(const.ATTR_LAST_UPDATED)
-            ) is None:
+            if (last_updated := entity.last_updated) is None:
                 ready_for_update = True
                 continue
             # Wait for all members to get updated
