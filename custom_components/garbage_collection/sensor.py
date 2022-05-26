@@ -1,9 +1,9 @@
 """Sensor platform for garbage_collection."""
 from __future__ import annotations
 
-import asyncio
 import logging
 from datetime import date, datetime, time, timedelta
+from typing import Generator
 
 from dateutil.relativedelta import relativedelta
 from homeassistant.config_entries import ConfigEntry
@@ -53,12 +53,6 @@ async def async_setup_entry(
     else:
         _LOGGER.error("(%s) Unknown frequency %s", name, frequency)
         raise ValueError
-
-
-# TO DO
-# Create abstract class for schedules
-# Create individual itterators for schedule types
-# GarbageCollection just go through and adds them, calculates next etc.
 
 
 class GarbageCollection(RestoreEntity):
@@ -257,7 +251,7 @@ class GarbageCollection(RestoreEntity):
             f"attributes={self.extra_state_attributes})"
         )
 
-    async def _async_find_candidate_date(self, day1: date) -> date | None:
+    def _find_candidate_date(self, day1: date) -> date | None:
         """Find the next possible date starting from day1.
 
         Only based on calendar, not looking at include/exclude days.
@@ -322,47 +316,33 @@ class GarbageCollection(RestoreEntity):
             return date(year, self._first_month, 1)
         return day
 
-    async def _async_find_next_date(self, first_date: date) -> date | None:
-        """Get date within configured date range."""
-        # Today's collection can be triggered by past collection with offset
-        # Move starting date if today is out of range
-        day1 = self.move_to_range(first_date)
-        next_date = None
-        while next_date is None:
+    def collection_schedule(
+        self, first_date: date | None = None, last_date: date | None = None
+    ) -> Generator[date, None, None]:
+        """Get dates within configured date range."""
+        today = helpers.now().date()
+        first_date = date(today.year - 1, 1, 1) if first_date is None else first_date
+        last_date = date(today.year + 1, 12, 31) if last_date is None else last_date
+        first_date = self.move_to_range(first_date)
+        while True:
             try:
-                next_date = await self._async_find_candidate_date(day1)
+                next_date = self._find_candidate_date(first_date)
             except (TypeError, ValueError):
-                return None
-            if next_date is None:
-                return None
+                return
+            if next_date is None or next_date > last_date:
+                return
             if (new_date := self.move_to_range(next_date)) != next_date:
-                day1 = new_date  # continue from next year
-                next_date = None
+                first_date = new_date  # continue from next year
             else:
-                # Date is before starting date
-                if next_date < first_date:
-                    next_date = None
-                day1 += relativedelta(days=1)  # look from the next day
-        return next_date
+                yield next_date
+                first_date = next_date + relativedelta(days=1)  # look from the next day
 
     async def _async_load_collection_dates(self) -> None:
         """Fill the collection dates list."""
         self._collection_dates.clear()
-        today = helpers.now().date()
-        start_date = end_date = date(today.year - 1, 1, 1)
-        end_date = date(today.year + 1, 12, 31)
-        try:
-            next_date = await self._async_find_next_date(start_date)
-        except asyncio.TimeoutError:
-            _LOGGER.error("(%s) Timeout loading collection dates", self._attr_name)
-            return
-
-        while next_date is not None and start_date <= next_date <= end_date:
-            self._collection_dates.append(next_date)
-            next_date = await self._async_find_next_date(
-                next_date + relativedelta(days=1)
-            )
-        self._collection_dates.sort()
+        for collection_date in self.collection_schedule():
+            self._collection_dates.append(collection_date)
+        # self._collection_dates.sort()
 
     async def add_date(self, collection_date: date) -> None:
         """Add date to _collection_dates."""
@@ -500,7 +480,7 @@ class WeeklyCollection(GarbageCollection):
             self._period = config.get(const.CONF_PERIOD, 1)
             self._first_week = config.get(const.CONF_FIRST_WEEK, 1)
 
-    async def _async_find_candidate_date(self, day1: date) -> date | None:
+    def _find_candidate_date(self, day1: date) -> date | None:
         """Calculate possible date, for weekly frequency."""
         week = day1.isocalendar()[1]
         weekday = day1.weekday()
@@ -538,7 +518,7 @@ class DailyCollection(GarbageCollection):
         except ValueError:
             self._first_date = None
 
-    async def _async_find_candidate_date(self, day1: date) -> date | None:
+    def _find_candidate_date(self, day1: date) -> date | None:
         """Calculate possible date, for every-n-days frequency."""
         try:
             if (day1 - self._first_date).days % self._period == 0:  # type: ignore
@@ -617,7 +597,7 @@ class MonthlyCollection(GarbageCollection):
             + (weekday_number - 1) * 7
         )
 
-    async def _async_monthly_candidate(self, day1: date) -> date:
+    def _monthly_candidate(self, day1: date) -> date:
         """Calculate possible date, for monthly frequency."""
         if self._monthly_force_week_numbers:
             for week_order_number in self._week_order_numbers:
@@ -653,13 +633,13 @@ class MonthlyCollection(GarbageCollection):
             WEEKDAYS.index(self._collection_days[0]),
         )
 
-    async def _async_find_candidate_date(self, day1: date) -> date | None:
+    def _find_candidate_date(self, day1: date) -> date | None:
         if self._period is None or self._period == 1:
-            return await self._async_monthly_candidate(day1)
+            return self._monthly_candidate(day1)
         else:
-            candidate_date = await self._async_monthly_candidate(day1)
+            candidate_date = self._monthly_candidate(day1)
             while (candidate_date.month - self._first_month) % self._period != 0:
-                candidate_date = await self._async_monthly_candidate(
+                candidate_date = self._monthly_candidate(
                     candidate_date + relativedelta(days=1)
                 )
             return candidate_date
@@ -676,7 +656,7 @@ class AnnualCollection(GarbageCollection):
         config = config_entry.data
         self._date = config.get(const.CONF_DATE)
 
-    async def _async_find_candidate_date(self, day1: date) -> date | None:
+    def _find_candidate_date(self, day1: date) -> date | None:
         """Calculate possible date, for annual frequency."""
         year = day1.year
         try:
@@ -702,7 +682,7 @@ class GroupCollection(GarbageCollection):
         config = config_entry.data
         self._entities = config.get(CONF_ENTITIES, [])
 
-    async def _async_find_candidate_date(self, day1: date) -> date | None:
+    def _find_candidate_date(self, day1: date) -> date | None:
         """Calculate possible date, for group frequency."""
         candidate_date = None
         try:
@@ -761,13 +741,8 @@ class GroupCollection(GarbageCollection):
 class BlankCollection(GarbageCollection):
     """No collection - for mnual update."""
 
-    async def _async_find_candidate_date(self, day1: date) -> date | None:
+    def _find_candidate_date(self, day1: date) -> date | None:
         """Do not return any date for blank frequency."""
-        return None
-
-    async def _async_find_next_date(self, first_date: date) -> date | None:
-        """Get date within configured date range."""
-        # Blank frequency always returns None.
         return None
 
     async def _async_load_collection_dates(self) -> None:
