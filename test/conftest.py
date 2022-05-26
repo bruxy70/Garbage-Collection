@@ -5,7 +5,7 @@ from unittest.mock import patch
 import pytest
 
 TEST_PLUGINS = "pytest_homeassistant_custom_component"  # pylint: disable=invalid-name
-FUNCTION_PATH = "custom_components.garbage_collection.sensor.now"
+FUNCTION_PATH = "custom_components.garbage_collection.helpers.now"
 
 
 # Fix current date to June 1st, 2020

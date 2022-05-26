@@ -22,7 +22,7 @@ from homeassistant.const import (
 from homeassistant.core import HomeAssistant, ServiceCall
 from homeassistant.helpers.typing import ConfigType
 
-from . import const, helpers, sensor
+from . import const, helpers
 
 MIN_TIME_BETWEEN_UPDATES = timedelta(seconds=30)
 
@@ -179,7 +179,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
     async def handle_collect_garbage(call: ServiceCall) -> None:
         """Handle the collect_garbage service call."""
         entity_ids = call.data.get(CONF_ENTITY_ID, [])
-        last_collection = call.data.get(const.ATTR_LAST_COLLECTION, sensor.now())
+        last_collection = call.data.get(const.ATTR_LAST_COLLECTION, helpers.now())
         for entity_id in entity_ids:
             _LOGGER.debug("called collect_garbage for %s", entity_id)
             try:

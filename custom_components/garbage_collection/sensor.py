@@ -5,7 +5,6 @@ import asyncio
 import logging
 from datetime import date, datetime, time, timedelta
 
-import homeassistant.util.dt as dt_util
 from dateutil.relativedelta import relativedelta
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
@@ -27,11 +26,6 @@ _LOGGER = logging.getLogger(__name__)
 
 SCAN_INTERVAL = timedelta(seconds=10)
 THROTTLE_INTERVAL = timedelta(seconds=60)
-
-
-def now() -> datetime:
-    """Return current date and time. Needed for testing."""
-    return dt_util.now()
 
 
 async def async_setup_entry(
@@ -59,6 +53,12 @@ async def async_setup_entry(
     else:
         _LOGGER.error("(%s) Unknown frequency %s", name, frequency)
         raise ValueError
+
+
+# TO DO
+# Create abstract class for schedules
+# Create individual itterators for schedule types
+# GarbageCollection just go through and adds them, calculates next etc.
 
 
 class GarbageCollection(RestoreEntity):
@@ -271,7 +271,7 @@ class GarbageCollection(RestoreEntity):
         Skip the update if the sensor was updated today
         Except for the sensors with with next date today and after the expiration time
         """
-        current_date_time = now()
+        current_date_time = helpers.now()
         today = current_date_time.date()
         try:
             ready_for_update = bool(self._last_updated.date() != today)  # type: ignore
@@ -348,7 +348,7 @@ class GarbageCollection(RestoreEntity):
     async def _async_load_collection_dates(self) -> None:
         """Fill the collection dates list."""
         self._collection_dates.clear()
-        today = now().date()
+        today = helpers.now().date()
         start_date = end_date = date(today.year - 1, 1, 1)
         end_date = date(today.year + 1, 12, 31)
         try:
@@ -389,7 +389,7 @@ class GarbageCollection(RestoreEntity):
 
     def get_next_date(self, first_date: date, ignore_today=False) -> date | None:
         """Get next date from self._collection_dates."""
-        current_date_time = now()
+        current_date_time = helpers.now()
         for d in self._collection_dates:  # pylint: disable=invalid-name
             if d < first_date:
                 continue
@@ -430,7 +430,7 @@ class GarbageCollection(RestoreEntity):
     def update_state(self) -> None:
         """Pick the first event from collection dates, update attributes."""
         _LOGGER.debug("(%s) Looking for next collection", self._attr_name)
-        self._last_updated = now()
+        self._last_updated = helpers.now()
         today = self._last_updated.date()
         self._next_date = self.get_next_date(today)
         if self._next_date is not None:
@@ -727,7 +727,7 @@ class GroupCollection(GarbageCollection):
 
         For group sensors wait for update of the sensors in the group
         """
-        current_date_time = now()
+        current_date_time = helpers.now()
         today = current_date_time.date()
         try:
             ready_for_update = bool(self._last_updated.date() != today)  # type: ignore

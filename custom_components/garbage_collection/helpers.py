@@ -4,8 +4,14 @@ from __future__ import annotations
 from datetime import date, datetime
 from typing import Any
 
+import homeassistant.util.dt as dt_util
 import voluptuous as vol
 from dateutil.parser import ParserError, parse
+
+
+def now() -> datetime:
+    """Return current date and time. Needed for testing."""
+    return dt_util.now()
 
 
 def to_date(day: Any) -> date:
