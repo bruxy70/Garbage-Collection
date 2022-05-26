@@ -239,7 +239,7 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
         self.shared_class = GarbageCollectionShared({"unique_id": str(uuid.uuid4())})
 
     async def async_step_user(
-        self, user_input: dict = {}
+        self, user_input: dict | None = None
     ):  # pylint: disable=dangerous-default-value
         """Step 1 - set general parameters."""
         next_step = self.shared_class.step1_frequency(user_input)
@@ -254,7 +254,7 @@ class GarbageCollectionFlowHandler(config_entries.ConfigFlow):
         )
 
     async def async_step_detail(
-        self, user_input: dict = {}
+        self, user_input: dict | None = None
     ):  # pylint: disable=dangerous-default-value
         """Step 2 - enter detail depending on frequency."""
         self.shared_class.hass = self.hass
@@ -343,7 +343,7 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         )
 
     async def async_step_detail(
-        self, user_input: dict = {}
+        self, user_input: dict | None = None
     ):  # pylint: disable=dangerous-default-value
         """Step 2 - annual or group (no week days)."""
         self.shared_class.hass = self.hass
