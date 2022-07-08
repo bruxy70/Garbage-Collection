@@ -322,12 +322,8 @@ class GarbageCollection(RestoreEntity):
     ) -> Generator[date, None, None]:
         """Get dates within configured date range."""
         today = helpers.now().date()
-        first_date: date = (
-            date(today.year - 1, 1, 1) if date1 is None else date1
-        )
-        last_date: date = (
-            date(today.year + 1, 12, 31) if date2 is None else date2
-        )
+        first_date: date = date(today.year - 1, 1, 1) if date1 is None else date1
+        last_date: date = date(today.year + 1, 12, 31) if date2 is None else date2
         first_date = self.move_to_range(first_date)
         while True:
             try:
