@@ -5,7 +5,6 @@ import logging
 
 # import uuid
 from collections.abc import Mapping
-from distutils.command.config import config
 from typing import Any, Dict, cast
 
 import homeassistant.helpers.config_validation as cv
