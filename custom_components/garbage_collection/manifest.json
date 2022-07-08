@@ -5,6 +5,7 @@
   "documentation": "https://github.com/bruxy70/Garbage-Collection/",
   "issue_tracker": "https://github.com/bruxy70/Garbage-Collection/issues",
   "iot_class": "calculated",
+  "integration_type": "helper",
   "dependencies": [],
   "config_flow": true,
   "codeowners": [

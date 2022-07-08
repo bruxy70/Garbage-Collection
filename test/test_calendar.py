@@ -13,9 +13,9 @@ async def test_calendar(hass: HomeAssistant) -> None:
 
     config_entry: MockConfigEntry = MockConfigEntry(
         domain=const.DOMAIN,
-        data={"frequency": "weekly", "collection_days": ["mon"]},
+        options={"frequency": "weekly", "collection_days": ["mon"]},
         title="calendar",
-        version=5,
+        version=6,
     )
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)

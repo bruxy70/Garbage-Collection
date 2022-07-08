@@ -19,12 +19,12 @@ async def test_annual(hass: HomeAssistant) -> None:
 
     config_entry: MockConfigEntry = MockConfigEntry(
         domain=const.DOMAIN,
-        data={
+        options={
             "frequency": "annual",
             "date": "05/01",
         },
         title="annual",
-        version=5,
+        version=6,
     )
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
@@ -47,9 +47,9 @@ async def test_even_weeks(hass: HomeAssistant) -> None:
 
     config_entry: MockConfigEntry = MockConfigEntry(
         domain=const.DOMAIN,
-        data={"frequency": "even-weeks", "collection_days": ["wed"]},
+        options={"frequency": "even-weeks", "collection_days": ["wed"]},
         title="even weeks",
-        version=5,
+        version=6,
     )
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
@@ -72,13 +72,13 @@ async def test_every_n_days(hass: HomeAssistant) -> None:
 
     config_entry: MockConfigEntry = MockConfigEntry(
         domain=const.DOMAIN,
-        data={
+        options={
             "frequency": "every-n-days",
             "period": 14,
             "first_date": "2020-01-01",
         },
         title="every n days",
-        version=5,
+        version=6,
     )
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
@@ -101,14 +101,14 @@ async def test_every_n_weeks(hass: HomeAssistant) -> None:
 
     config_entry: MockConfigEntry = MockConfigEntry(
         domain=const.DOMAIN,
-        data={
+        options={
             "frequency": "every-n-weeks",
             "period": 2,
             "first_week": 3,
             "collection_days": ["wed"],
         },
         title="every n weeks",
-        version=5,
+        version=6,
     )
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
@@ -131,13 +131,13 @@ async def test_monthly(hass: HomeAssistant) -> None:
 
     config_entry: MockConfigEntry = MockConfigEntry(
         domain=const.DOMAIN,
-        data={
+        options={
             "frequency": "monthly",
             "weekday_order_number": ["2"],
             "collection_days": ["fri"],
         },
         title="monthly",
-        version=5,
+        version=6,
     )
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
@@ -160,14 +160,14 @@ async def test_monthly2(hass: HomeAssistant) -> None:
 
     config_entry: MockConfigEntry = MockConfigEntry(
         domain=const.DOMAIN,
-        data={
+        options={
             "frequency": "monthly",
             "weekday_order_number": ["2"],
             "force_week_order_numbers": True,
             "collection_days": ["mon"],
         },
         title="monthly 2",
-        version=5,
+        version=6,
     )
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
@@ -190,9 +190,9 @@ async def test_odd_weeks(hass: HomeAssistant) -> None:
 
     config_entry: MockConfigEntry = MockConfigEntry(
         domain=const.DOMAIN,
-        data={"frequency": "odd-weeks", "collection_days": ["tue"]},
+        options={"frequency": "odd-weeks", "collection_days": ["tue"]},
         title="odd weeks",
-        version=5,
+        version=6,
     )
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
@@ -215,9 +215,9 @@ async def test_weekly(hass: HomeAssistant) -> None:
 
     config_entry: MockConfigEntry = MockConfigEntry(
         domain=const.DOMAIN,
-        data={"frequency": "weekly", "collection_days": ["mon"]},
+        options={"frequency": "weekly", "collection_days": ["mon"]},
         title="weekly",
-        version=5,
+        version=6,
     )
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
@@ -240,9 +240,9 @@ async def test_group(hass: HomeAssistant) -> None:
 
     config_entry1: MockConfigEntry = MockConfigEntry(
         domain=const.DOMAIN,
-        data={"frequency": "weekly", "collection_days": ["thu"]},
+        options={"frequency": "weekly", "collection_days": ["thu"]},
         title="weekly1",
-        version=5,
+        version=6,
     )
     config_entry1.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry1.entry_id)
@@ -254,9 +254,9 @@ async def test_group(hass: HomeAssistant) -> None:
 
     config_entry2: MockConfigEntry = MockConfigEntry(
         domain=const.DOMAIN,
-        data={"frequency": "weekly", "collection_days": ["fri"]},
+        options={"frequency": "weekly", "collection_days": ["fri"]},
         title="weekly2",
-        version=5,
+        version=6,
     )
     config_entry2.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry2.entry_id)
@@ -268,9 +268,12 @@ async def test_group(hass: HomeAssistant) -> None:
 
     config_entry3: MockConfigEntry = MockConfigEntry(
         domain=const.DOMAIN,
-        data={"frequency": "group", "entities": ["sensor.weekly1", "sensor.weekly2"]},
+        options={
+            "frequency": "group",
+            "entities": ["sensor.weekly1", "sensor.weekly2"],
+        },
         title="group",
-        version=5,
+        version=6,
     )
     config_entry3.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry3.entry_id)
@@ -296,11 +299,11 @@ async def test_invalid(hass: HomeAssistant) -> None:
     with patch.object(logger, "error") as mock_error_log:
         config_entry: MockConfigEntry = MockConfigEntry(
             domain=const.DOMAIN,
-            data={
+            options={
                 "frequency": "invalid",
             },
             title="invalid",
-            version=5,
+            version=6,
         )
         config_entry.add_to_hass(hass)
         await hass.config_entries.async_setup(config_entry.entry_id)

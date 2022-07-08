@@ -12,14 +12,14 @@ async def test_verbose_state(hass: HomeAssistant) -> None:
 
     config_entry: MockConfigEntry = MockConfigEntry(
         domain=const.DOMAIN,
-        data={
+        options={
             "frequency": "weekly",
             "collection_days": ["mon"],
             "verbose_state": True,
             "verbose_format": "on {date}, in {days} days",
         },
         title="weekly",
-        version=5,
+        version=6,
     )
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)

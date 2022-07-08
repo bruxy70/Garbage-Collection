@@ -5,7 +5,7 @@ import asyncio
 import logging
 from datetime import timedelta
 from types import MappingProxyType
-from typing import Any
+from typing import Any, Dict
 
 import homeassistant.helpers.config_validation as cv
 import homeassistant.util.dt as dt_util
@@ -256,10 +256,8 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
     _LOGGER.debug(
         "Setting %s (%s) from ConfigFlow",
         config_entry.title,
-        config_entry.data[const.CONF_FREQUENCY],
+        config_entry.options[const.CONF_FREQUENCY],
     )
-    # Backward compatibility - clean-up (can be removed later?)
-    config_entry.options = MappingProxyType({})
     config_entry.add_update_listener(update_listener)
     # Add sensor
     hass.async_create_task(
@@ -288,6 +286,8 @@ async def async_migrate_entry(_, config_entry: ConfigEntry) -> bool:
     _LOGGER.info(
         "Migrating %s from version %s", config_entry.title, config_entry.version
     )
+    new_data: Dict[str, Any]
+    new_options: Dict[str, Any]
     new_data = {**config_entry.data}
     new_options = {**config_entry.options}
     removed_data: dict[str, Any] = {}
@@ -343,6 +343,41 @@ async def async_migrate_entry(_, config_entry: ConfigEntry) -> bool:
             new_options[const.CONF_WEEKDAY_ORDER_NUMBER] = list(
                 map(str, new_options[const.CONF_WEEKDAY_ORDER_NUMBER])
             )
+    if config_entry.version <= 5:
+        for conf in [
+            const.CONF_FREQUENCY,
+            const.CONF_ICON_NORMAL,
+            const.CONF_ICON_TODAY,
+            const.CONF_ICON_TOMORROW,
+            const.CONF_MANUAL,
+            const.CONF_OFFSET,
+            const.CONF_EXPIRE_AFTER,
+            const.CONF_VERBOSE_STATE,
+            const.CONF_FIRST_MONTH,
+            const.CONF_LAST_MONTH,
+            const.CONF_COLLECTION_DAYS,
+            const.CONF_WEEKDAY_ORDER_NUMBER,
+            const.CONF_FORCE_WEEK_NUMBERS,
+            const.CONF_WEEK_ORDER_NUMBER,
+            const.CONF_DATE,
+            const.CONF_PERIOD,
+            const.CONF_FIRST_WEEK,
+            const.CONF_FIRST_DATE,
+            const.CONF_SENSORS,
+            const.CONF_VERBOSE_FORMAT,
+            const.CONF_DATE_FORMAT,
+        ]:
+            if conf in new_data:
+                new_options[conf] = new_data.get(conf)
+                del new_data[conf]
+        if (
+            const.CONF_EXPIRE_AFTER in new_options
+            and len(new_options[const.CONF_EXPIRE_AFTER]) == 5
+        ):
+            new_options[const.CONF_EXPIRE_AFTER] = (
+                new_options[const.CONF_EXPIRE_AFTER] + ":00"
+            )
+
     config_entry.version = const.CONFIG_VERSION
     config_entry.data = MappingProxyType({**new_data})
     config_entry.options = MappingProxyType({**new_options})
@@ -367,12 +402,7 @@ async def async_migrate_entry(_, config_entry: ConfigEntry) -> bool:
 
 
 async def update_listener(hass, entry):
-    """Update listener."""
-    # The OptionsFlow saves data to options.
-    # Move them back to data and clean options (dirty, but not sure how else to do that)
-    if len(entry.options) > 0:
-        entry.data = entry.options
-        entry.options = {}
+    """Update listener - to re-create device after options update."""
     await hass.config_entries.async_forward_entry_unload(entry, const.SENSOR_PLATFORM)
     hass.async_add_job(
         hass.config_entries.async_forward_entry_setup(entry, const.SENSOR_PLATFORM)

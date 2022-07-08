@@ -38,7 +38,7 @@ async def test_annual_config_flow(hass: HomeAssistant) -> None:
     # the input data
     assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
     assert result["step_id"] == "detail"
-    assert result["errors"] == {}
+    assert not result["errors"]
 
     # ...add Wednesday
     with patch(
@@ -53,11 +53,10 @@ async def test_annual_config_flow(hass: HomeAssistant) -> None:
                 "date": "04/01",
             },
         )
-    assert "type" in result and "data" in result
+    assert "type" in result and "options" in result
     # Should create entry
     assert result["type"] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
-    del result["data"]["unique_id"]
-    assert result["data"] == {"frequency": "annual", "date": "04/01"}
+    assert result["options"] == {"name": "test", "frequency": "annual", "date": "04/01"}
     assert len(mock_setup.mock_calls) == 1
     assert len(mock_setup_entry.mock_calls) == 1
 
@@ -92,7 +91,7 @@ async def test_blank_config_flow(hass: HomeAssistant) -> None:
     # the input data
     assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
     assert result["step_id"] == "detail"
-    assert result["errors"] == {}
+    assert not result["errors"]
 
     # ...add Wednesday
     with patch(
@@ -108,11 +107,11 @@ async def test_blank_config_flow(hass: HomeAssistant) -> None:
                 "verbose_format": "on {date}, in {days} days",
             },
         )
-    assert "type" in result and "data" in result
+    assert "type" in result and "options" in result
     # Should create entry
     assert result["type"] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
-    del result["data"]["unique_id"]
-    assert result["data"] == {
+    assert result["options"] == {
+        "name": "test",
         "frequency": "blank",
         "verbose_state": True,
         "date_format": "%d-%b-%Y",
@@ -152,7 +151,7 @@ async def test_every_n_days_config_flow(hass: HomeAssistant) -> None:
     # the input data
     assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
     assert result["step_id"] == "detail"
-    assert result["errors"] == {}
+    assert not result["errors"]
 
     # ...add Wednesday
     with patch(
@@ -168,11 +167,11 @@ async def test_every_n_days_config_flow(hass: HomeAssistant) -> None:
                 "first_date": "2020-01-01",
             },
         )
-    assert "type" in result and "data" in result
+    assert "type" in result and "options" in result
     # Should create entry
     assert result["type"] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
-    del result["data"]["unique_id"]
-    assert result["data"] == {
+    assert result["options"] == {
+        "name": "test",
         "frequency": "every-n-days",
         "period": 14,
         "first_date": "2020-01-01",
@@ -211,7 +210,7 @@ async def test_every_n_weeks_config_flow(hass: HomeAssistant) -> None:
     # the input data
     assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
     assert result["step_id"] == "detail"
-    assert result["errors"] == {}
+    assert not result["errors"]
 
     # ...add Wednesday
     with patch(
@@ -228,11 +227,11 @@ async def test_every_n_weeks_config_flow(hass: HomeAssistant) -> None:
                 "collection_days": ["wed"],
             },
         )
-    assert "type" in result and "data" in result
+    assert "type" in result and "options" in result
     # Should create entry
     assert result["type"] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
-    del result["data"]["unique_id"]
-    assert result["data"] == {
+    assert result["options"] == {
+        "name": "test",
         "frequency": "every-n-weeks",
         "period": 2,
         "first_week": 3,
@@ -272,7 +271,7 @@ async def test_monthly_config_flow(hass: HomeAssistant) -> None:
     # the input data
     assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
     assert result["step_id"] == "detail"
-    assert result["errors"] == {}
+    assert not result["errors"]
 
     # ...add Wednesday
     with patch(
@@ -289,11 +288,11 @@ async def test_monthly_config_flow(hass: HomeAssistant) -> None:
                 "period": 1,
             },
         )
-    assert "type" in result and "data" in result
+    assert "type" in result and "options" in result
     # Should create entry
     assert result["type"] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
-    del result["data"]["unique_id"]
-    assert result["data"] == {
+    assert result["options"] == {
+        "name": "test",
         "frequency": "monthly",
         "collection_days": ["wed"],
         "weekday_order_number": ["1"],
@@ -333,7 +332,7 @@ async def test_weekly_config_flow(hass: HomeAssistant) -> None:
     # the input data
     assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
     assert result["step_id"] == "detail"
-    assert result["errors"] == {}
+    assert not result["errors"]
 
     # ...add Wednesday
     with patch(
@@ -346,11 +345,14 @@ async def test_weekly_config_flow(hass: HomeAssistant) -> None:
             result["flow_id"],
             user_input={"collection_days": ["wed"]},
         )
-    assert "type" in result and "data" in result
+    assert "type" in result and "options" in result
     # Should create entry
     assert result["type"] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
-    del result["data"]["unique_id"]
-    assert result["data"] == {"frequency": "weekly", "collection_days": ["wed"]}
+    assert result["options"] == {
+        "name": "test",
+        "frequency": "weekly",
+        "collection_days": ["wed"],
+    }
     await hass.async_block_till_done()
     assert len(mock_setup.mock_calls) == 1
     assert len(mock_setup_entry.mock_calls) == 1

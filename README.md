@@ -22,7 +22,7 @@
 
 # Garbage Collection
 
-The `garbage_collection` component is a Home Assistant integration that creates a custom sensor for monitoring a regular garbage collection schedule. The sensor can be configured for a number of different patterns:
+The `garbage_collection` component is a Home Assistant helper that creates a custom sensor for monitoring a regular garbage collection schedule. The sensor can be configured for a number of different patterns:
 
 - `weekly` schedule (including multiple collection days, e.g. on Tuesday and Thursday)
 - `every-n-weeks` repeats every `period` of weeks, starting from the week number `first_week`. It uses the week number - therefore, it restarts each year, as the weeks start from number 1 each year.
@@ -54,18 +54,18 @@ These are some examples using this sensor. The Lovelace config examples are incl
    into the `custom_components` directory of your Home Assistant
    installation.
 3. Restart Home Assistant.
-4. Configure the `garbage_collection` sensor.
+4. Configure the `garbage_collection` helper.
 
 ### INSTALLATION VIA Home Assistant Community Store (HACS)
 
 1. Ensure that [HACS](https://hacs.xyz/) is installed.
 2. Search for and install the "Garbage Collection" integration.
 3. Restart Home Assistant.
-4. Configure the `garbage_collection` sensor.
+4. Configure the `garbage_collection` helper.
 
 ## Configuration
 
-Go to `Configuration`/`Devices & Services`, click on the `+ ADD INTEGRATION` button, select `Garbage Collection` and configure the integration.<br />If you would like to add more than one collection schedule, click on the `+ ADD INTEGRATION` button again and add another `Garbage Collection` integration instance.
+Go to `Settings`/`Devices & Services`/`Helpers`, click on the `+ CREATE HELPER` button, select `Garbage Collection` and configure the helper.<br />If you would like to add more than one collection schedule, click on the `+ CREATE HELPER` button again and add another `Garbage Collection` helper instance.
 
 **The configuration hapend in 2 steps.** In the first step, you select the `frequency` and common parameters. In the second step you configure additional parameters depending on the selected frequency.
 
@@ -150,7 +150,7 @@ The monthly schedule has two flavors: it can trigger either on the **n<sup>th</s
 
 There are a couple of **blueprints**, automatically moving the collection falling on a public holiday. Or if there was a public holiday in the week before the scheduled collection.
 
-The Public Holidays **blueprints** use a separate custom integration **Holidays**, available through **HACS**, that you can configure for different countries.
+The Public Holidays **blueprints** use a separate custom helper **Holidays**, available through **HACS**, that you can configure for different countries.
 
 | <!-- -->                                                                                                                                                                                                                                                                                                                                                                            | <!-- -->                                                                                                                                                                                                                                                                                                                                                                                                   |
 | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -217,7 +217,7 @@ sensor:
 
 ### Monthly on a fixed date
 
-This will create a schedule on a fixed date each month. For example on the 3rd each month. The integration does not allow it, as it is generally designed around paterns evolving around weekly schedules (since garbage collection typically happens on a set day in a week, rather than set day in a month). But few of you wanted that, so here you go.
+This will create a schedule on a fixed date each month. For example on the 3rd each month. The helper does not allow it, as it is generally designed around paterns evolving around weekly schedules (since garbage collection typically happens on a set day in a week, rather than set day in a month). But few of you wanted that, so here you go.
 
 [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fbruxy70%2FGarbage-Collection%2Fblob%2Fmaster%2Fblueprints%2Fmonthly_fixed_date.yaml) One fixed date
 

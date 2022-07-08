@@ -17,14 +17,14 @@ async def test_june_july(hass: HomeAssistant) -> None:
 
     config_entry: MockConfigEntry = MockConfigEntry(
         domain=const.DOMAIN,
-        data={
+        options={
             "frequency": "weekly",
             "collection_days": ["mon"],
             "first_month": "jun",
             "last_month": "jul",
         },
         title="weekly",
-        version=5,
+        version=6,
     )
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
@@ -47,14 +47,14 @@ async def test_dec_jan(hass: HomeAssistant) -> None:
 
     config_entry: MockConfigEntry = MockConfigEntry(
         domain=const.DOMAIN,
-        data={
+        options={
             "frequency": "weekly",
             "collection_days": ["mon"],
             "first_month": "dec",
             "last_month": "jan",
         },
         title="weekly",
-        version=5,
+        version=6,
     )
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)

@@ -12,15 +12,16 @@ async def test_annual_options_flow(hass: HomeAssistant) -> None:
 
     config_entry: MockConfigEntry = MockConfigEntry(
         domain=const.DOMAIN,
-        data={
-            "name": "test",
+        options={
             "frequency": "annual",
             "date": "04/01",
         },
         title="sensor",
-        version=5,
+        version=6,
     )
     config_entry.add_to_hass(hass)
+    await hass.config_entries.async_setup(config_entry.entry_id)
+    await hass.async_block_till_done()
 
     # Initialise Options Flow
     result = await hass.config_entries.options.async_init(config_entry.entry_id)
@@ -47,7 +48,7 @@ async def test_annual_options_flow(hass: HomeAssistant) -> None:
     # the input data
     assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
     assert result["step_id"] == "detail"
-    assert result["errors"] == {}
+    assert not result["errors"]
 
     # ...add Wednesday
     result = await hass.config_entries.options.async_configure(
@@ -69,17 +70,18 @@ async def test_blank_options_flow(hass: HomeAssistant) -> None:
 
     config_entry: MockConfigEntry = MockConfigEntry(
         domain=const.DOMAIN,
-        data={
-            "name": "test",
+        options={
             "frequency": "blank",
             "verbose_state": True,
             "date_format": "%d-%b-%Y",
             "verbose_format": "on {date}, in {days} days",
         },
         title="sensor",
-        version=5,
+        version=6,
     )
     config_entry.add_to_hass(hass)
+    await hass.config_entries.async_setup(config_entry.entry_id)
+    await hass.async_block_till_done()
 
     # Initialise Options Flow
     result = await hass.config_entries.options.async_init(config_entry.entry_id)
@@ -109,7 +111,7 @@ async def test_blank_options_flow(hass: HomeAssistant) -> None:
     # the input data
     assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
     assert result["step_id"] == "detail"
-    assert result["errors"] == {}
+    assert not result["errors"]
 
     # ...add Wednesday
     result = await hass.config_entries.options.async_configure(
@@ -136,16 +138,17 @@ async def test_every_n_days_options_flow(hass: HomeAssistant) -> None:
 
     config_entry: MockConfigEntry = MockConfigEntry(
         domain=const.DOMAIN,
-        data={
-            "name": "test",
+        options={
             "frequency": "every-n-days",
             "period": 14,
             "first_date": "2020-01-01",
         },
         title="sensor",
-        version=5,
+        version=6,
     )
     config_entry.add_to_hass(hass)
+    await hass.config_entries.async_setup(config_entry.entry_id)
+    await hass.async_block_till_done()
 
     # Initialise Options Flow
     result = await hass.config_entries.options.async_init(config_entry.entry_id)
@@ -172,7 +175,7 @@ async def test_every_n_days_options_flow(hass: HomeAssistant) -> None:
     # the input data
     assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
     assert result["step_id"] == "detail"
-    assert result["errors"] == {}
+    assert not result["errors"]
 
     # ...add Wednesday
     result = await hass.config_entries.options.async_configure(
@@ -198,17 +201,18 @@ async def test_every_n_weeks_options_flow(hass: HomeAssistant) -> None:
 
     config_entry: MockConfigEntry = MockConfigEntry(
         domain=const.DOMAIN,
-        data={
-            "name": "test",
+        options={
             "frequency": "every-n-weeks",
             "period": 2,
             "first_week": 3,
             "collection_days": ["wed"],
         },
         title="sensor",
-        version=5,
+        version=6,
     )
     config_entry.add_to_hass(hass)
+    await hass.config_entries.async_setup(config_entry.entry_id)
+    await hass.async_block_till_done()
 
     # Initialise Options Flow
     result = await hass.config_entries.options.async_init(config_entry.entry_id)
@@ -234,7 +238,7 @@ async def test_every_n_weeks_options_flow(hass: HomeAssistant) -> None:
     # the input data
     assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
     assert result["step_id"] == "detail"
-    assert result["errors"] == {}
+    assert not result["errors"]
 
     # ...add Wednesday
     result = await hass.config_entries.options.async_configure(
@@ -262,17 +266,18 @@ async def test_monthly_options_flow(hass: HomeAssistant) -> None:
 
     config_entry: MockConfigEntry = MockConfigEntry(
         domain=const.DOMAIN,
-        data={
-            "name": "test",
+        options={
             "frequency": "monthly",
             "collection_days": ["wed"],
             "weekday_order_number": ["1"],
             "period": 1,
         },
         title="sensor",
-        version=5,
+        version=6,
     )
     config_entry.add_to_hass(hass)
+    await hass.config_entries.async_setup(config_entry.entry_id)
+    await hass.async_block_till_done()
 
     # Initialise Options Flow
     result = await hass.config_entries.options.async_init(config_entry.entry_id)
@@ -298,7 +303,7 @@ async def test_monthly_options_flow(hass: HomeAssistant) -> None:
     # the input data
     assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
     assert result["step_id"] == "detail"
-    assert result["errors"] == {}
+    assert not result["errors"]
 
     # ...add Wednesday
     result = await hass.config_entries.options.async_configure(
@@ -324,11 +329,13 @@ async def test_weekly_options_flow(hass: HomeAssistant) -> None:
     """Test we get the form."""
     config_entry: MockConfigEntry = MockConfigEntry(
         domain=const.DOMAIN,
-        data={"name": "test", "frequency": "weekly", "collection_days": ["wed"]},
+        options={"frequency": "weekly", "collection_days": ["wed"]},
         title="sensor",
-        version=5,
+        version=6,
     )
     config_entry.add_to_hass(hass)
+    await hass.config_entries.async_setup(config_entry.entry_id)
+    await hass.async_block_till_done()
 
     # Initialise Options Flow
     result = await hass.config_entries.options.async_init(config_entry.entry_id)
@@ -355,7 +362,7 @@ async def test_weekly_options_flow(hass: HomeAssistant) -> None:
     # the input data
     assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
     assert result["step_id"] == "detail"
-    assert result["errors"] == {}
+    assert not result["errors"]
 
     # ...add Wednesday
     result = await hass.config_entries.options.async_configure(

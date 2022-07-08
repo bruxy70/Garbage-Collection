@@ -20,13 +20,13 @@ async def test_manual_update(hass: HomeAssistant) -> None:
 
     config_entry: MockConfigEntry = MockConfigEntry(
         domain=const.DOMAIN,
-        data={
+        options={
             "name": "test",
             "frequency": "blank",
             "manual_update": True,
         },
         title="blank",
-        version=5,
+        version=6,
     )
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
@@ -187,9 +187,9 @@ async def test_collect_garbage(hass: HomeAssistant) -> None:
 
     config_entry: MockConfigEntry = MockConfigEntry(
         domain=const.DOMAIN,
-        data={"frequency": "weekly", "collection_days": ["wed"]},
+        options={"frequency": "weekly", "collection_days": ["wed"]},
         title="weekly",
-        version=5,
+        version=6,
     )
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)

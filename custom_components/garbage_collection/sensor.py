@@ -32,7 +32,7 @@ async def async_setup_entry(
     _, config_entry: ConfigEntry, async_add_devices: AddEntitiesCallback
 ) -> None:
     """Create garbage collection entities defined in config_flow and add them to HA."""
-    frequency = config_entry.data.get(const.CONF_FREQUENCY)
+    frequency = config_entry.options.get(const.CONF_FREQUENCY)
     name = (
         config_entry.title
         if config_entry.title is not None
@@ -83,7 +83,7 @@ class GarbageCollection(RestoreEntity):
 
     def __init__(self, config_entry: ConfigEntry) -> None:
         """Read configuration and initialise class variables."""
-        config = config_entry.data
+        config = config_entry.options
         self.config_entry = config_entry
         self._attr_name = (
             config_entry.title
@@ -92,13 +92,13 @@ class GarbageCollection(RestoreEntity):
         )
         self._hidden = config.get(ATTR_HIDDEN, False)
         self._manual = config.get(const.CONF_MANUAL)
-        first_month = config.get(const.CONF_FIRST_MONTH)
+        first_month = config.get(const.CONF_FIRST_MONTH, const.DEFAULT_FIRST_MONTH)
         self._first_month: int = (
             const.MONTH_OPTIONS.index(first_month) + 1
             if first_month in const.MONTH_OPTIONS
             else 1
         )
-        last_month = config.get(const.CONF_LAST_MONTH)
+        last_month = config.get(const.CONF_LAST_MONTH, const.DEFAULT_LAST_MONTH)
         self._last_month: int = (
             const.MONTH_OPTIONS.index(last_month) + 1
             if last_month in const.MONTH_OPTIONS
@@ -109,9 +109,8 @@ class GarbageCollection(RestoreEntity):
         self._icon_today = config.get(const.CONF_ICON_TODAY)
         self._icon_tomorrow = config.get(const.CONF_ICON_TOMORROW)
         exp = config.get(const.CONF_EXPIRE_AFTER)
-        self.expire_after: time | None
-        self.expire_after = (
-            None if exp is None else datetime.strptime(exp, "%H:%M").time()
+        self.expire_after: time | None = (
+            None if exp is None else datetime.strptime(exp, "%H:%M:%S").time()
         )
         self._date_format = config.get(
             const.CONF_DATE_FORMAT, const.DEFAULT_DATE_FORMAT
@@ -138,7 +137,7 @@ class GarbageCollection(RestoreEntity):
 
         if (state := await self.async_get_last_state()) is not None:
             self.last_collection = helpers.parse_datetime(
-                state.attributes.get(const.ATTR_LAST_COLLECTION)
+                state.attributes[const.ATTR_LAST_COLLECTION]
             )
 
         device_registry = dr.async_get(self.hass)
@@ -177,9 +176,11 @@ class GarbageCollection(RestoreEntity):
         )
 
     @property
-    def unique_id(self):
+    def unique_id(self) -> str:
         """Return a unique ID to use for this sensor."""
-        return self.config_entry.data.get("unique_id", None)
+        if "unique_id" in self.config_entry.data:  # From legacy config
+            return self.config_entry.data["unique_id"]
+        return self.config_entry.entry_id
 
     @property
     def device_info(self):
@@ -317,12 +318,16 @@ class GarbageCollection(RestoreEntity):
         return day
 
     def collection_schedule(
-        self, first_date: date | None = None, last_date: date | None = None
+        self, date1: date | None = None, date2: date | None = None
     ) -> Generator[date, None, None]:
         """Get dates within configured date range."""
         today = helpers.now().date()
-        first_date = date(today.year - 1, 1, 1) if first_date is None else first_date
-        last_date = date(today.year + 1, 12, 31) if last_date is None else last_date
+        first_date: date = (
+            date(today.year - 1, 1, 1) if date1 is None else date1
+        )
+        last_date: date = (
+            date(today.year + 1, 12, 31) if date2 is None else date2
+        )
         first_date = self.move_to_range(first_date)
         while True:
             try:
@@ -462,7 +467,7 @@ class WeeklyCollection(GarbageCollection):
     def __init__(self, config_entry: ConfigEntry) -> None:
         """Read parameters specific for Weekly Collection Frequency."""
         super().__init__(config_entry)
-        config = config_entry.data
+        config = config_entry.options
         self._collection_days = config.get(const.CONF_COLLECTION_DAYS, [])
         self._period: int
         self._first_week: int
@@ -510,7 +515,7 @@ class DailyCollection(GarbageCollection):
     def __init__(self, config_entry: ConfigEntry) -> None:
         """Read parameters specific for Daily Collection Frequency."""
         super().__init__(config_entry)
-        config = config_entry.data
+        config = config_entry.options
         self._period = config.get(const.CONF_PERIOD)
         self._first_date: date | None
         try:
@@ -548,7 +553,7 @@ class MonthlyCollection(GarbageCollection):
     def __init__(self, config_entry: ConfigEntry) -> None:
         """Read parameters specific for Monthly Collection Frequency."""
         super().__init__(config_entry)
-        config = config_entry.data
+        config = config_entry.options
         self._collection_days = config.get(const.CONF_COLLECTION_DAYS, [])
         self._monthly_force_week_numbers = config.get(
             const.CONF_FORCE_WEEK_NUMBERS, False
@@ -557,7 +562,7 @@ class MonthlyCollection(GarbageCollection):
         self._week_order_numbers: list
         order_numbers: list = []
         if const.CONF_WEEKDAY_ORDER_NUMBER in config:
-            order_numbers = list(map(int, config.get(const.CONF_WEEKDAY_ORDER_NUMBER)))
+            order_numbers = list(map(int, config[const.CONF_WEEKDAY_ORDER_NUMBER]))
         if self._monthly_force_week_numbers:
             self._weekday_order_numbers = []
             self._week_order_numbers = order_numbers
@@ -653,7 +658,7 @@ class AnnualCollection(GarbageCollection):
     def __init__(self, config_entry: ConfigEntry) -> None:
         """Read parameters specific for Annual Collection Frequency."""
         super().__init__(config_entry)
-        config = config_entry.data
+        config = config_entry.options
         self._date = config.get(const.CONF_DATE)
 
     def _find_candidate_date(self, day1: date) -> date | None:
@@ -679,7 +684,7 @@ class GroupCollection(GarbageCollection):
     def __init__(self, config_entry: ConfigEntry) -> None:
         """Read parameters specific for Group Collection Frequency."""
         super().__init__(config_entry)
-        config = config_entry.data
+        config = config_entry.options
         self._entities = config.get(CONF_ENTITIES, [])
 
     def _find_candidate_date(self, day1: date) -> date | None:
