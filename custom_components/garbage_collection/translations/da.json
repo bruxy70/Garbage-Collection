@@ -1,0 +1,105 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "title": "Garbage Collection - Afhentningsfrekvens (1/2)",
+                "description": "Angiv navnet på sensoren og konfigurer sensorparametre. For mere info se: https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "name": "Visningsnavn",
+                    "hidden": "Skjul i kalender",
+                    "frequency": "Frekvens",
+                    "manual_update": "Manuel opdatering - sensortilstand opdateres manuelt af en service (blueprint)",
+                    "icon_normal": "Ikon (mdi:trash-can) - ikke påkrævet",
+                    "icon_tomorrow": "Ikon ved afhentning i morgen (mdi:delete-restore) - ikke påkrævet",
+                    "icon_today": "Ikon ved afhentning i dag (mdi:delete-circle) - ikke påkrævet",
+                    "expire_after": "Forældes efter (HH:MM) - ikke påkrævet",
+                    "verbose_state": "Verbos tilstand (tekst i stedet for tal)"
+                }
+            },
+            "detail": {
+                "title": "Garbage Collection - Yderligere parametre (2/2)",
+                "description": "For mere info se: https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "date": "Dato (mm/dd)",
+                    "entities": "Liste af enheder (kommasepareret)",
+                    "collection_days": "Afhentningsdage",
+                    "first_month": "Første afhentningsmåned",
+                    "last_month": "Sidste afhentningsmåned",
+                    "period": "Afhentning sker hver n uger/dage: (1-365)",
+                    "first_week": "Første afhentningsuge (1-52)",
+                    "first_date": "Første dato",
+                    "weekday_order_number": "Specifikke ugedage i måneden (fx første onsdag i måneden)",
+                    "force_week_order_numbers": "Brug specifik uge i måneden i stedet for specifik ugedag (fx onsdag i første uge i måneden)",
+                    "verbose_format": "Verbost format (anvend `date` og `days` variablerne (i tuborgklammer))",
+                    "date_format": "Datoformat (se http://strftime.org/)"
+                }
+            }
+        },
+        "error": {
+            "value": "Ugyldig værdi. Check dit input!",
+            "icon": "Ikoner skal angives i formen 'præfiks:navn'.",
+            "days": "Vælg en eller flere dage!",
+            "entities": "Enheden findes ikke!",
+            "month_day": "Ugyldigt dato format!",
+            "time": "Ugyldigt tids format!",
+            "weekday_order_number": "Vælg en eller flere dage",
+            "week_order_number": "Vælg en eller flere uger",
+            "period": "Afhentningsperioden skal være et tal mellem 1 og 365",
+            "first_week": "Første afhentningsuge skal være et tal mellem 1 and 52",
+            "date": "Ugyldigt dato format!"
+        },
+        "abort": {
+            "single_instance_allowed": "Det er kun tilladt at have én konfiguration af Garbage Collection."
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "title": "Garbage Collection - Afhentningsfrekvens (1/2)",
+                "description": "Ændr sensorparametre. More info on https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "hidden": "Skjul i kalender",
+                    "frequency": "Frekvens",
+                    "manual_update": "Manuel opdatering - sensortilstand opdateres manuelt af en service (blueprint)",
+                    "icon_normal": "Ikon (mdi:trash-can) - ikke påkrævet",
+                    "icon_tomorrow": "Ikon ved afhentning i morgen (mdi:delete-restore) - ikke påkrævet",
+                    "icon_today": "Ikon ved afhentning i dag (mdi:delete-circle) - ikke påkrævet",
+                    "expire_after": "Forældes efter (HH:MM) - ikke påkrævet",
+                    "verbose_state": "Verbos tilstand (tekst i stedet for tal)"
+                }
+            },
+            "detail": {
+                "title": "Garbage Collection - Yderligere parametre (2/2)",
+                "description": "For mere info se: https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "date": "Dato (mm/dd)",
+                    "entities": "Liste af enheder (kommasepareret)",
+                    "collection_days": "Afhentningsdage",
+                    "first_month": "Første afhentningsmåned",
+                    "last_month": "Sidste afhentningsmåned",
+                    "period": "Afhentning sker hver n uger/dage: (1-365)",
+                    "first_week": "Første afhentningsuge (1-52)",
+                    "first_date": "Første dato",
+                    "weekday_order_number": "Specifikke ugedage i måneden (fx første onsdag i måneden)",
+                    "force_week_order_numbers": "Brug specifik uge i måneden i stedet for specifik ugedag (fx onsdag i første uge i måneden)",
+                    "verbose_format": "Verbost format (anvend `date` og `days` variablerne (i tuborgklammer))",
+                    "date_format": "Datoformat (se http://strftime.org/)"
+                }
+            }
+        },
+        "error": {
+            "value": "Ugyldig værdi. Check dit input!",
+            "icon": "Ikoner skal angives i formen 'præfiks:navn'.",
+            "days": "Vælg en eller flere dage!",
+            "entities": "Enheden findes ikke!",
+            "month_day": "Ugyldigt dato format!",
+            "time": "Ugyldigt tids format!",
+            "weekday_order_number": "Vælg en eller flere dage",
+            "week_order_number": "Vælg en eller flere uger",
+            "period": "Afhentningsperioden skal være et tal mellem 1 og 365",
+            "first_week": "Første afhentningsuge skal være et tal mellem 1 and 52",
+            "date": "Ugyldigt dato format!"
+        }
+    }
+
+}
