@@ -9,8 +9,6 @@ from typing import Any, Dict, cast
 
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
-
-# from homeassistant import config_entries
 from homeassistant.const import ATTR_HIDDEN, CONF_ENTITIES, CONF_NAME, WEEKDAYS
 from homeassistant.core import callback
 from homeassistant.helpers import selector
@@ -38,7 +36,7 @@ def _validate_config(data: Any) -> Any:
 
 
 def required(
-    key: str, options: dict[str, Any], default: Any | None = None
+    key: str, options: Dict[str, Any], default: Any | None = None
 ) -> vol.Required:
     """Return vol.Required."""
     if isinstance(options, dict) and key in options:
@@ -51,7 +49,7 @@ def required(
 
 
 def optional(
-    key: str, options: dict[str, Any], default: Any | None = None
+    key: str, options: Dict[str, Any], default: Any | None = None
 ) -> vol.Optional:
     """Return vol.Optional."""
     if isinstance(options, dict) and key in options:
@@ -65,7 +63,7 @@ def optional(
 
 def general_options_schema(
     _,
-    options: dict[str, Any],
+    options: Dict[str, Any],
 ) -> vol.Schema:
     """Generate options schema."""
     return vol.Schema(
@@ -94,7 +92,7 @@ def general_options_schema(
 
 def general_config_schema(
     handler: SchemaConfigFlowHandler | SchemaOptionsFlowHandler,
-    options: dict[str, Any],
+    options: Dict[str, Any],
 ) -> vol.Schema:
     """Generate config schema."""
     return vol.Schema(
@@ -106,7 +104,7 @@ def general_config_schema(
 
 def detail_config_schema(
     _,
-    options: dict[str, Any],
+    options: Dict[str, Any],
 ) -> vol.Schema:
     """Generate options schema."""
     options_schema: Dict[vol.Optional | vol.Required, Any] = {}
@@ -168,13 +166,13 @@ def detail_config_schema(
     return vol.Schema(options_schema)
 
 
-CONFIG_FLOW: dict[str, SchemaFlowFormStep | SchemaFlowMenuStep] = {
+CONFIG_FLOW: Dict[str, SchemaFlowFormStep | SchemaFlowMenuStep] = {
     "user": SchemaFlowFormStep(general_config_schema, next_step=lambda x: "detail"),
     "detail": SchemaFlowFormStep(
         detail_config_schema, validate_user_input=_validate_config
     ),
 }
-OPTIONS_FLOW: dict[str, SchemaFlowFormStep | SchemaFlowMenuStep] = {
+OPTIONS_FLOW: Dict[str, SchemaFlowFormStep | SchemaFlowMenuStep] = {
     "init": SchemaFlowFormStep(general_options_schema, next_step=lambda x: "detail"),
     "detail": SchemaFlowFormStep(
         detail_config_schema, validate_user_input=_validate_config
