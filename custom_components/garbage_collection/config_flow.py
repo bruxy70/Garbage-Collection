@@ -114,7 +114,9 @@ def detail_config_schema(
     elif options[const.CONF_FREQUENCY] in const.GROUP_FREQUENCY:
         # "group"
         options_schema[required(CONF_ENTITIES, options)] = selector.EntitySelector(
-            selector.EntitySelectorConfig(domain=const.DOMAIN, multiple=True),
+            selector.EntitySelectorConfig(
+                domain="sensor", integration=const.DOMAIN, multiple=True
+            ),
         )
     elif options[const.CONF_FREQUENCY] not in const.BLANK_FREQUENCY:
         # everything else except "blank" and every-n-days
