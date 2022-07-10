@@ -14,7 +14,6 @@ from dateutil.relativedelta import relativedelta
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import ATTR_HIDDEN, CONF_ENTITIES, CONF_ENTITY_ID, WEEKDAYS
 from homeassistant.core import HomeAssistant, ServiceCall
-from homeassistant.helpers.typing import ConfigType
 
 from . import const, helpers
 
@@ -98,7 +97,7 @@ OFFSET_DATE_SCHEMA = vol.Schema(
 )
 
 
-async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
+async def async_setup(hass: HomeAssistant, _) -> bool:
     """Set up this component using YAML."""
 
     async def handle_add_date(call: ServiceCall) -> None:
