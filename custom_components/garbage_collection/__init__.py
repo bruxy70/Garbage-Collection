@@ -11,14 +11,8 @@ import homeassistant.helpers.config_validation as cv
 import homeassistant.util.dt as dt_util
 import voluptuous as vol
 from dateutil.relativedelta import relativedelta
-from homeassistant.config_entries import SOURCE_IMPORT, ConfigEntry
-from homeassistant.const import (
-    ATTR_HIDDEN,
-    CONF_ENTITIES,
-    CONF_ENTITY_ID,
-    CONF_NAME,
-    WEEKDAYS,
-)
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import ATTR_HIDDEN, CONF_ENTITIES, CONF_ENTITY_ID, WEEKDAYS
 from homeassistant.core import HomeAssistant, ServiceCall
 from homeassistant.helpers.typing import ConfigType
 
