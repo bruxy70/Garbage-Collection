@@ -3,6 +3,7 @@ import logging
 from datetime import date, datetime
 from unittest.mock import patch
 
+from homeassistant import config_entries
 from homeassistant.core import HomeAssistant
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
@@ -309,3 +310,21 @@ async def test_invalid(hass: HomeAssistant) -> None:
         await hass.config_entries.async_setup(config_entry.entry_id)
         await hass.async_block_till_done()
         assert mock_error_log.call_count == 1, "Invalid frequency shoudl trigger error."
+
+
+async def test_load(hass: HomeAssistant) -> None:
+    """Weekly collection."""
+
+    config_entry: MockConfigEntry = MockConfigEntry(
+        domain=const.DOMAIN,
+        options={"frequency": "weekly", "collection_days": ["mon"]},
+        title="weekly",
+        version=6,
+    )
+    config_entry.add_to_hass(hass)
+    await hass.config_entries.async_setup(config_entry.entry_id)
+    await hass.async_block_till_done()
+    assert config_entry.state == config_entries.ConfigEntryState.LOADED
+    # await hass.config_entries.async_unload(config_entry.entry_id)
+    # await hass.async_block_till_done()
+    # assert config_entry.state == config_entries.ConfigEntryState.NOT_LOADED

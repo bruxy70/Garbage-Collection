@@ -136,6 +136,11 @@ class GarbageCollection(RestoreEntity):
         self.hass.data[const.DOMAIN][const.SENSOR_PLATFORM][self.entity_id] = self
 
         if (state := await self.async_get_last_state()) is not None:
+            self._attr_state = state.state
+            self._days = state.attributes[const.ATTR_DAYS]
+            self._next_date = helpers.parse_datetime(
+                state.attributes[const.ATTR_NEXT_DATE]
+            )
             self.last_collection = helpers.parse_datetime(
                 state.attributes[const.ATTR_LAST_COLLECTION]
             )
