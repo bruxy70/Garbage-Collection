@@ -30,6 +30,7 @@ async def test_annual(hass: HomeAssistant) -> None:
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
     await hass.async_block_till_done()
+    assert config_entry.state == config_entries.ConfigEntryState.LOADED
     sensor = hass.states.get("sensor.annual")
     assert sensor is not None
     state = sensor.state
@@ -55,6 +56,7 @@ async def test_even_weeks(hass: HomeAssistant) -> None:
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
     await hass.async_block_till_done()
+    assert config_entry.state == config_entries.ConfigEntryState.LOADED
     sensor = hass.states.get("sensor.even_weeks")
     assert sensor is not None
     state = sensor.state
@@ -84,6 +86,7 @@ async def test_every_n_days(hass: HomeAssistant) -> None:
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
     await hass.async_block_till_done()
+    assert config_entry.state == config_entries.ConfigEntryState.LOADED
     sensor = hass.states.get("sensor.every_n_days")
     assert sensor is not None
     state = sensor.state
@@ -114,6 +117,7 @@ async def test_every_n_weeks(hass: HomeAssistant) -> None:
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
     await hass.async_block_till_done()
+    assert config_entry.state == config_entries.ConfigEntryState.LOADED
     sensor = hass.states.get("sensor.every_n_weeks")
     assert sensor is not None
     state = sensor.state
@@ -143,6 +147,7 @@ async def test_monthly(hass: HomeAssistant) -> None:
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
     await hass.async_block_till_done()
+    assert config_entry.state == config_entries.ConfigEntryState.LOADED
     sensor = hass.states.get("sensor.monthly")
     assert sensor is not None
     state = sensor.state
@@ -173,6 +178,7 @@ async def test_monthly2(hass: HomeAssistant) -> None:
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
     await hass.async_block_till_done()
+    assert config_entry.state == config_entries.ConfigEntryState.LOADED
     sensor = hass.states.get("sensor.monthly_2")
     assert sensor is not None
     state = sensor.state
@@ -198,6 +204,7 @@ async def test_odd_weeks(hass: HomeAssistant) -> None:
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
     await hass.async_block_till_done()
+    assert config_entry.state == config_entries.ConfigEntryState.LOADED
     sensor = hass.states.get("sensor.odd_weeks")
     assert sensor is not None
     state = sensor.state
@@ -223,6 +230,7 @@ async def test_weekly(hass: HomeAssistant) -> None:
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
     await hass.async_block_till_done()
+    assert config_entry.state == config_entries.ConfigEntryState.LOADED
     sensor = hass.states.get("sensor.weekly")
     assert sensor is not None
     state = sensor.state
@@ -248,6 +256,7 @@ async def test_group(hass: HomeAssistant) -> None:
     config_entry1.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry1.entry_id)
     await hass.async_block_till_done()
+    assert config_entry1.state == config_entries.ConfigEntryState.LOADED
     sensor = hass.states.get("sensor.weekly1")
     assert sensor is not None
     days1 = sensor.attributes["days"]
@@ -262,6 +271,7 @@ async def test_group(hass: HomeAssistant) -> None:
     config_entry2.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry2.entry_id)
     await hass.async_block_till_done()
+    assert config_entry2.state == config_entries.ConfigEntryState.LOADED
     sensor = hass.states.get("sensor.weekly2")
     assert sensor is not None
     days2 = sensor.attributes["days"]
@@ -279,7 +289,7 @@ async def test_group(hass: HomeAssistant) -> None:
     config_entry3.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry3.entry_id)
     await hass.async_block_till_done()
-
+    assert config_entry3.state == config_entries.ConfigEntryState.LOADED
     sensor = hass.states.get("sensor.group")
     assert sensor is not None
     state = sensor.state
@@ -310,21 +320,3 @@ async def test_invalid(hass: HomeAssistant) -> None:
         await hass.config_entries.async_setup(config_entry.entry_id)
         await hass.async_block_till_done()
         assert mock_error_log.call_count == 1, "Invalid frequency shoudl trigger error."
-
-
-async def test_load(hass: HomeAssistant) -> None:
-    """Weekly collection."""
-
-    config_entry: MockConfigEntry = MockConfigEntry(
-        domain=const.DOMAIN,
-        options={"frequency": "weekly", "collection_days": ["mon"]},
-        title="weekly",
-        version=6,
-    )
-    config_entry.add_to_hass(hass)
-    await hass.config_entries.async_setup(config_entry.entry_id)
-    await hass.async_block_till_done()
-    assert config_entry.state == config_entries.ConfigEntryState.LOADED
-    # await hass.config_entries.async_unload(config_entry.entry_id)
-    # await hass.async_block_till_done()
-    # assert config_entry.state == config_entries.ConfigEntryState.NOT_LOADED

@@ -216,38 +216,34 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
         hass.services.async_register(
             const.DOMAIN, "offset_date", handle_offset_date, schema=OFFSET_DATE_SCHEMA
         )
-    else:
-        _LOGGER.debug("Services already registered")
 
-    if config.get(const.DOMAIN) is None:
-        # We get here if the integration is set up using config flow
-        return True
+    if config.get(const.DOMAIN) is not None:
+        # Legacy - import from configuration.yaml
+        # If platform is not enabled, skip.
+        if not (platform_config := config[const.DOMAIN].get(const.CONF_SENSORS, {})):
+            return False
 
-    # If platform is not enabled, skip.
-    if not (platform_config := config[const.DOMAIN].get(const.CONF_SENSORS, {})):
-        return False
-
-    for entry in hass.config_entries.async_entries(const.DOMAIN):
-        if entry.source == SOURCE_IMPORT:
-            _LOGGER.error(
-                "garbage_collection already imported. "
-                "Remove it from configuration.yaml now!"
+        for entry in hass.config_entries.async_entries(const.DOMAIN):
+            if entry.source == SOURCE_IMPORT:
+                _LOGGER.error(
+                    "garbage_collection already imported. "
+                    "Remove it from configuration.yaml now!"
+                )
+                return True
+        for entry in platform_config:
+            _LOGGER.debug(
+                "Importing %s(%s) from YAML configuration",
+                entry[CONF_NAME],
+                entry[const.CONF_FREQUENCY],
             )
-            return True
-    for entry in platform_config:
-        _LOGGER.debug(
-            "Importing %s(%s) from YAML configuration",
-            entry[CONF_NAME],
-            entry[const.CONF_FREQUENCY],
-        )
-        # Import YAML to ConfigFlow
-        hass.async_create_task(
-            hass.config_entries.flow.async_init(
-                const.DOMAIN,
-                context={"source": SOURCE_IMPORT},
-                data=entry,
+            # Import YAML to ConfigFlow
+            hass.async_create_task(
+                hass.config_entries.flow.async_init(
+                    const.DOMAIN,
+                    context={"source": SOURCE_IMPORT},
+                    data=entry,
+                )
             )
-        )
     return True
 
 
