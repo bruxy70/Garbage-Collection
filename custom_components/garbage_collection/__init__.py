@@ -394,7 +394,7 @@ async def async_migrate_entry(_, config_entry: ConfigEntry) -> bool:
     return True
 
 
-async def update_listener(hass, entry):
+async def update_listener(hass: HomeAssistant, entry: ConfigEntry) -> None:
     """Update listener - to re-create device after options update."""
     await hass.config_entries.async_forward_entry_unload(entry, const.SENSOR_PLATFORM)
     hass.async_add_job(
