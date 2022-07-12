@@ -14,8 +14,8 @@ from homeassistant.const import (
     CONF_NAME,
     WEEKDAYS,
 )
+from homeassistant.core import HomeAssistant
 from homeassistant.helpers import device_registry as dr
-from homeassistant.helpers.discovery import async_load_platform
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.restore_state import RestoreEntity
 
@@ -29,7 +29,7 @@ THROTTLE_INTERVAL = timedelta(seconds=60)
 
 
 async def async_setup_entry(
-    _, config_entry: ConfigEntry, async_add_devices: AddEntitiesCallback
+    _: HomeAssistant, config_entry: ConfigEntry, async_add_devices: AddEntitiesCallback
 ) -> None:
     """Create garbage collection entities defined in config_flow and add them to HA."""
     frequency = config_entry.options.get(const.CONF_FREQUENCY)
@@ -129,12 +129,9 @@ class GarbageCollection(RestoreEntity):
     async def async_added_to_hass(self):
         """When sensor is added to hassio, add it to calendar."""
         await super().async_added_to_hass()
-        if const.DOMAIN not in self.hass.data:
-            self.hass.data[const.DOMAIN] = {}
-        if const.SENSOR_PLATFORM not in self.hass.data[const.DOMAIN]:
-            self.hass.data[const.DOMAIN][const.SENSOR_PLATFORM] = {}
         self.hass.data[const.DOMAIN][const.SENSOR_PLATFORM][self.entity_id] = self
 
+        # Restore stored state
         if (state := await self.async_get_last_state()) is not None:
             self._attr_state = state.state
             self._days = state.attributes[const.ATTR_DAYS]
@@ -145,6 +142,7 @@ class GarbageCollection(RestoreEntity):
                 state.attributes[const.ATTR_LAST_COLLECTION]
             )
 
+        # Create device
         device_registry = dr.async_get(self.hass)
         device_registry.async_get_or_create(
             config_entry_id=self.config_entry.entry_id,
@@ -153,21 +151,17 @@ class GarbageCollection(RestoreEntity):
             manufacturer="bruxy70",
         )
 
+        # Create or add to calendar
         if not self.hidden:
             if const.CALENDAR_PLATFORM not in self.hass.data[const.DOMAIN]:
                 self.hass.data[const.DOMAIN][
                     const.CALENDAR_PLATFORM
                 ] = EntitiesCalendarData(self.hass)
                 _LOGGER.debug("Creating garbage_collection calendar")
-                self.hass.async_create_task(
-                    async_load_platform(
-                        self.hass,
-                        const.CALENDAR_PLATFORM,
-                        const.DOMAIN,
-                        {"name": const.CALENDAR_NAME},
-                        {"name": const.CALENDAR_NAME},
-                    )
+                await self.hass.config_entries.async_forward_entry_setup(
+                    self.config_entry, const.CALENDAR_PLATFORM
                 )
+
             self.hass.data[const.DOMAIN][const.CALENDAR_PLATFORM].add_entity(
                 self.entity_id
             )

@@ -62,7 +62,7 @@ def optional(
 
 
 def general_options_schema(
-    _,
+    _: SchemaConfigFlowHandler | SchemaOptionsFlowHandler,
     options: Dict[str, Any],
 ) -> vol.Schema:
     """Generate options schema."""

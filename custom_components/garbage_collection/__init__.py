@@ -14,6 +14,7 @@ from dateutil.relativedelta import relativedelta
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import ATTR_HIDDEN, CONF_ENTITIES, CONF_ENTITY_ID, WEEKDAYS
 from homeassistant.core import HomeAssistant, ServiceCall
+from homeassistant.helpers.typing import ConfigType
 
 from . import const, helpers
 
@@ -97,7 +98,7 @@ OFFSET_DATE_SCHEMA = vol.Schema(
 )
 
 
-async def async_setup(hass: HomeAssistant, _) -> bool:
+async def async_setup(hass: HomeAssistant, _: ConfigType) -> bool:
     """Set up this component using YAML."""
 
     async def handle_add_date(call: ServiceCall) -> None:
@@ -184,31 +185,32 @@ async def async_setup(hass: HomeAssistant, _) -> bool:
                     "Failed setting last collection for %s - %s", entity_id, err
                 )
 
-    if const.DOMAIN not in hass.services.async_services():
-        hass.services.async_register(
-            const.DOMAIN,
-            "collect_garbage",
-            handle_collect_garbage,
-            schema=COLLECT_NOW_SCHEMA,
-        )
-        hass.services.async_register(
-            const.DOMAIN,
-            "update_state",
-            handle_update_state,
-            schema=UPDATE_STATE_SCHEMA,
-        )
-        hass.services.async_register(
-            const.DOMAIN, "add_date", handle_add_date, schema=ADD_REMOVE_DATE_SCHEMA
-        )
-        hass.services.async_register(
-            const.DOMAIN,
-            "remove_date",
-            handle_remove_date,
-            schema=ADD_REMOVE_DATE_SCHEMA,
-        )
-        hass.services.async_register(
-            const.DOMAIN, "offset_date", handle_offset_date, schema=OFFSET_DATE_SCHEMA
-        )
+    hass.data.setdefault(const.DOMAIN, {})
+    hass.data[const.DOMAIN].setdefault(const.SENSOR_PLATFORM, {})
+    hass.services.async_register(
+        const.DOMAIN,
+        "collect_garbage",
+        handle_collect_garbage,
+        schema=COLLECT_NOW_SCHEMA,
+    )
+    hass.services.async_register(
+        const.DOMAIN,
+        "update_state",
+        handle_update_state,
+        schema=UPDATE_STATE_SCHEMA,
+    )
+    hass.services.async_register(
+        const.DOMAIN, "add_date", handle_add_date, schema=ADD_REMOVE_DATE_SCHEMA
+    )
+    hass.services.async_register(
+        const.DOMAIN,
+        "remove_date",
+        handle_remove_date,
+        schema=ADD_REMOVE_DATE_SCHEMA,
+    )
+    hass.services.async_register(
+        const.DOMAIN, "offset_date", handle_offset_date, schema=OFFSET_DATE_SCHEMA
+    )
     return True
 
 
@@ -242,7 +244,7 @@ async def async_remove_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> 
         pass
 
 
-async def async_migrate_entry(_, config_entry: ConfigEntry) -> bool:
+async def async_migrate_entry(_: HomeAssistant, config_entry: ConfigEntry) -> bool:
     """Migrate old entry."""
     _LOGGER.info(
         "Migrating %s from version %s", config_entry.title, config_entry.version
