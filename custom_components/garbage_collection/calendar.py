@@ -18,7 +18,7 @@ async def async_setup_entry(
     _: HomeAssistant, config_entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
     # pylint: disable=unused-argument
-    """Add calendar entity to HA"""
+    """Add calendar entity to HA."""
     async_add_entities([GarbageCollectionCalendar()], True)
 
 
