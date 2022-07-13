@@ -233,7 +233,7 @@ class GarbageCollection(RestoreEntity):
             const.ATTR_LAST_COLLECTION: self.last_collection,
             const.ATTR_LAST_UPDATED: self._last_updated,
             const.ATTR_NEXT_DATE: None
-            if self._next_date is not None
+            if self._next_date is None
             else datetime(
                 self._next_date.year, self._next_date.month, self._next_date.day
             ).astimezone(),
