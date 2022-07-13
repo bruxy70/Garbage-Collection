@@ -206,7 +206,12 @@ class GarbageCollection(RestoreEntity):
         return self._hidden
 
     @property
-    def state(self):
+    def native_unit_of_measurement(self):
+        """Return unit of measurement - None for numerical value."""
+        return None
+
+    @property
+    def native_value(self):
         """Return the state of the sensor."""
         return self._attr_state
 
