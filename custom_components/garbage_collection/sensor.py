@@ -228,19 +228,19 @@ class GarbageCollection(RestoreEntity):
     @property
     def extra_state_attributes(self):
         """Return the state attributes."""
-        res = {}
-        if self._next_date is None:
-            res[const.ATTR_NEXT_DATE] = None
-        else:
-            res[const.ATTR_NEXT_DATE] = datetime(
+        state_attr = {
+            const.ATTR_DAYS: self._days,
+            const.ATTR_LAST_COLLECTION: self.last_collection,
+            const.ATTR_LAST_UPDATED: self._last_updated,
+            const.ATTR_NEXT_DATE: None
+            if self._next_date is not None
+            else datetime(
                 self._next_date.year, self._next_date.month, self._next_date.day
-            ).astimezone()
-        res[const.ATTR_DAYS] = self._days
-        res[const.ATTR_LAST_COLLECTION] = self.last_collection
-        res[const.ATTR_LAST_UPDATED] = self._last_updated
-        # Needed for translations to work
-        res[ATTR_DEVICE_CLASS] = self.DEVICE_CLASS
-        return res
+            ).astimezone(),
+            # Needed for translations to work
+            ATTR_DEVICE_CLASS: self.DEVICE_CLASS,
+        }
+        return state_attr
 
     @property
     def DEVICE_CLASS(self):  # pylint: disable=C0103
