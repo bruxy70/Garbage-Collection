@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import logging
 from datetime import date, datetime, time, timedelta
-from typing import Generator
+from typing import Any, Dict, Generator
 
 from dateutil.relativedelta import relativedelta
 from homeassistant.config_entries import ConfigEntry
@@ -126,7 +126,7 @@ class GarbageCollection(RestoreEntity):
         self._attr_state = "" if bool(self._verbose_state) else 2
         self._attr_icon = self._icon_normal
 
-    async def async_added_to_hass(self):
+    async def async_added_to_hass(self) -> None:
         """When sensor is added to hassio, add it to calendar."""
         await super().async_added_to_hass()
         self.hass.data[const.DOMAIN][const.SENSOR_PLATFORM][self.entity_id] = self
@@ -166,7 +166,7 @@ class GarbageCollection(RestoreEntity):
                 self.entity_id
             )
 
-    async def async_will_remove_from_hass(self):
+    async def async_will_remove_from_hass(self) -> None:
         """When sensor is added to hassio, remove it."""
         await super().async_will_remove_from_hass()
         del self.hass.data[const.DOMAIN][const.SENSOR_PLATFORM][self.entity_id]
@@ -182,7 +182,7 @@ class GarbageCollection(RestoreEntity):
         return self.config_entry.entry_id
 
     @property
-    def device_info(self):
+    def device_info(self) -> Dict[str, Any]:
         """Return device info."""
         return {
             "identifiers": {(const.DOMAIN, self.unique_id)},
@@ -196,37 +196,37 @@ class GarbageCollection(RestoreEntity):
         return self._attr_name
 
     @property
-    def next_date(self):
+    def next_date(self) -> date | None:
         """Return next date attribute."""
         return self._next_date
 
     @property
-    def hidden(self):
+    def hidden(self) -> bool:
         """Return the hidden attribute."""
         return self._hidden
 
     @property
-    def native_unit_of_measurement(self):
+    def native_unit_of_measurement(self) -> str | None:
         """Return unit of measurement - None for numerical value."""
         return None
 
     @property
-    def native_value(self):
+    def native_value(self) -> object:
         """Return the state of the sensor."""
         return self._attr_state
 
     @property
-    def last_updated(self):
+    def last_updated(self) -> datetime | None:
         """Return when the sensor was last updated."""
         return self._last_updated
 
     @property
-    def icon(self):
+    def icon(self) -> str:
         """Return the entity icon."""
         return self._attr_icon
 
     @property
-    def extra_state_attributes(self):
+    def extra_state_attributes(self) -> Dict[str, Any]:
         """Return the state attributes."""
         state_attr = {
             const.ATTR_DAYS: self._days,
@@ -243,11 +243,11 @@ class GarbageCollection(RestoreEntity):
         return state_attr
 
     @property
-    def DEVICE_CLASS(self):  # pylint: disable=C0103
+    def DEVICE_CLASS(self) -> str:  # pylint: disable=C0103
         """Return the class of the sensor."""
         return const.DEVICE_CLASS
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """Return main sensor parameters."""
         return (
             f"{self.__class__.__name__}(name={self._attr_name}, "
