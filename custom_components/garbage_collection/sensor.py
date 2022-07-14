@@ -110,7 +110,12 @@ class GarbageCollection(RestoreEntity):
         self._icon_tomorrow = config.get(const.CONF_ICON_TOMORROW)
         exp = config.get(const.CONF_EXPIRE_AFTER)
         self.expire_after: time | None = (
-            None if exp is None else datetime.strptime(exp, "%H:%M:%S").time()
+            None
+            if (
+                exp is None
+                or datetime.strptime(exp, "%H:%M:%S").time() == time(0, 0, 0)
+            )
+            else datetime.strptime(exp, "%H:%M:%S").time()
         )
         self._date_format = config.get(
             const.CONF_DATE_FORMAT, const.DEFAULT_DATE_FORMAT
@@ -135,9 +140,8 @@ class GarbageCollection(RestoreEntity):
         if (state := await self.async_get_last_state()) is not None:
             self._attr_state = state.state
             self._days = state.attributes[const.ATTR_DAYS]
-            self._next_date = helpers.parse_datetime(
-                state.attributes[const.ATTR_NEXT_DATE]
-            )
+            next_date = helpers.parse_datetime(state.attributes[const.ATTR_NEXT_DATE])
+            self._next_date = None if next_date is None else next_date.date()
             self.last_collection = helpers.parse_datetime(
                 state.attributes[const.ATTR_LAST_COLLECTION]
             )
