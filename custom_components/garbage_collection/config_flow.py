@@ -62,7 +62,7 @@ def optional(
 
 
 def general_options_schema(
-    _,
+    _: SchemaConfigFlowHandler | SchemaOptionsFlowHandler,
     options: Dict[str, Any],
 ) -> vol.Schema:
     """Generate options schema."""
@@ -183,8 +183,8 @@ OPTIONS_FLOW: Dict[str, SchemaFlowFormStep | SchemaFlowMenuStep] = {
 
 
 # mypy: ignore-errors
-class HolidaysConfigFlowHandler(SchemaConfigFlowHandler, domain=const.DOMAIN):
-    """Handle a config or options flow for Holdays."""
+class GarbageCollectionConfigFlowHandler(SchemaConfigFlowHandler, domain=const.DOMAIN):
+    """Handle a config or options flow for GarbageCollection."""
 
     config_flow = CONFIG_FLOW
     options_flow = OPTIONS_FLOW

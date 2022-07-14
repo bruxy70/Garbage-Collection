@@ -4,7 +4,9 @@ from __future__ import annotations
 from datetime import datetime, timedelta
 
 from homeassistant.components.calendar import CalendarEntity, CalendarEvent
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.util import Throttle
 
 from .const import CALENDAR_NAME, CALENDAR_PLATFORM, DOMAIN, SENSOR_PLATFORM
@@ -12,14 +14,12 @@ from .const import CALENDAR_NAME, CALENDAR_PLATFORM, DOMAIN, SENSOR_PLATFORM
 MIN_TIME_BETWEEN_UPDATES = timedelta(minutes=1)
 
 
-async def async_setup_platform(
-    hass, config, async_add_entities, discovery_info=None
+async def async_setup_entry(
+    _: HomeAssistant, config_entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
-    """Add calendar entities to HA, of there are calendar instances."""
     # pylint: disable=unused-argument
-    # Only single instance allowed
-    if not GarbageCollectionCalendar.instances:
-        async_add_entities([GarbageCollectionCalendar()], True)
+    """Add calendar entity to HA."""
+    async_add_entities([GarbageCollectionCalendar()], True)
 
 
 class GarbageCollectionCalendar(CalendarEntity):
