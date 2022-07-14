@@ -138,10 +138,11 @@ class GarbageCollection(RestoreEntity):
 
         # Restore stored state
         if (state := await self.async_get_last_state()) is not None:
-            self._attr_state = state.state
-            self._days = state.attributes[const.ATTR_DAYS]
-            next_date = helpers.parse_datetime(state.attributes[const.ATTR_NEXT_DATE])
-            self._next_date = None if next_date is None else next_date.date()
+            # TBD - This will prevent update when options change
+            # self._attr_state = state.state
+            # self._days = state.attributes[const.ATTR_DAYS]
+            # next_date = helpers.parse_datetime(state.attributes[const.ATTR_NEXT_DATE])
+            # self._next_date = None if next_date is None else next_date.date()
             self.last_collection = helpers.parse_datetime(
                 state.attributes[const.ATTR_LAST_COLLECTION]
             )
