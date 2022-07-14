@@ -10,7 +10,7 @@ from typing import Any, Dict, cast
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 from homeassistant.const import ATTR_HIDDEN, CONF_ENTITIES, CONF_NAME, WEEKDAYS
-from homeassistant.core import HomeAssistant, callback
+from homeassistant.core import callback
 from homeassistant.helpers import selector
 from homeassistant.helpers.schema_config_entry_flow import (
     SchemaConfigFlowHandler,
