@@ -170,6 +170,12 @@ class GarbageCollection(RestoreEntity):
                 self.entity_id
             )
 
+    def clear_state(self) -> None:
+        """Erase the stored state (called when configuration change)."""
+        self._attr_state = ""
+        self._days = None
+        self._next_date = None
+
     async def async_will_remove_from_hass(self) -> None:
         """When sensor is added to hassio, remove it."""
         await super().async_will_remove_from_hass()

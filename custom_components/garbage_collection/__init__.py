@@ -363,6 +363,10 @@ async def async_migrate_entry(_: HomeAssistant, config_entry: ConfigEntry) -> bo
 
 async def update_listener(hass: HomeAssistant, entry: ConfigEntry) -> None:
     """Update listener - to re-create device after options update."""
+    for entity in hass.data["garbage_collection"]["sensor"].values():
+        if entity.unique_id == entry.entry_id:
+            entity.clear_state()
+            break
     await hass.config_entries.async_forward_entry_unload(entry, const.SENSOR_PLATFORM)
     hass.async_add_job(
         hass.config_entries.async_forward_entry_setup(entry, const.SENSOR_PLATFORM)
