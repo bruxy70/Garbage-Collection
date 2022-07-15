@@ -281,7 +281,7 @@ class GarbageCollection(RestoreEntity):
         try:
             ready_for_update = bool(self._last_updated.date() != today)  # type: ignore
         except AttributeError:
-            ready_for_update = True
+            return True
         try:
             if self._next_date == today and (
                 (
@@ -293,7 +293,7 @@ class GarbageCollection(RestoreEntity):
                     and self.last_collection.date() == today
                 )
             ):
-                ready_for_update = True
+                return True
         except (AttributeError, TypeError):
             pass
         return ready_for_update
