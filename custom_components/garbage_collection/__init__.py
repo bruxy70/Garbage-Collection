@@ -99,7 +99,7 @@ OFFSET_DATE_SCHEMA = vol.Schema(
 
 
 async def async_setup(hass: HomeAssistant, _: ConfigType) -> bool:
-    """Set up this component using YAML."""
+    """Set up platform - register services, inicialize data structure."""
 
     async def handle_add_date(call: ServiceCall) -> None:
         """Handle the add_date service call."""
