@@ -25,7 +25,7 @@
                     "collection_days": "Días de recogida",
                     "first_month": "Primer mes de recogida",
                     "last_month": "Último mes de recogida",
-                    "period": "Recolección cada n semanas / días: (1-365)",
+                    "period": "Recolección cada n semanas / días: (1-1000)",
                     "first_week": "Primera semana de recolección (1-52)",
                     "first_date": "Primera fecha",
                     "weekday_order_number": "Orden del día de la semana en el mes (por ejemplo, primer miércoles del mes)",
@@ -44,7 +44,7 @@
             "time": "Formato de hora inválido!",
             "weekday_order_number": "Seleccione 1 o más días",
             "week_order_number": "Seleccione 1 o más semanas",
-            "period": "El período debe ser un número entre 1 y 365",
+            "period": "El período debe ser un número entre 1 y 1000",
             "first_week": "La primera semana debe ser un número entre 1 y 52",
             "date": "Formato de fecha inválido!"
         },
@@ -77,7 +77,7 @@
                     "collection_days": "Días de recogida",
                     "first_month": "Primer mes de recogida",
                     "last_month": "Último mes de recogida",
-                    "period": "Recolección cada n semanas / días: (1-365)",
+                    "period": "Recolección cada n semanas / días: (1-1000)",
                     "first_week": "Primera semana de recolección (1-52)",
                     "first_date": "Primera fecha",
                     "weekday_order_number": "Orden del día de la semana en el mes (por ejemplo, primer miércoles del mes)",
@@ -96,7 +96,7 @@
             "time": "Formato de hora inválido!",
             "weekday_order_number": "Seleccione 1 o más días",
             "week_order_number": "Seleccione 1 o más semanas",
-            "period": "El período debe ser un número entre 1 y 365",
+            "period": "El período debe ser un número entre 1 y 1000",
             "first_week": "La primera semana debe ser un número entre 1 y 52",
             "date": "Formato de fecha inválido!"
         }

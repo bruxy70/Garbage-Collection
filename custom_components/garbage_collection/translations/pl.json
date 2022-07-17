@@ -25,7 +25,7 @@
                     "collection_days": "Dni wywozu",
                     "first_month": "Miesiąc pierwszego wywozu",
                     "last_month": "Miesiąc ostatniego wywozu",
-                    "period": "Wywóz co n dni/tygodni: (1-365)",
+                    "period": "Wywóz co n dni/tygodni: (1-1000)",
                     "first_week": "Tydzień pierwszego wywozu: (1-52)",
                     "first_date": "Pierwsza data",
                     "weekday_order_number": "Kolejność dni tygodnia w miesiącu (np. pierwsza środa miesiąca)",
@@ -44,7 +44,7 @@
             "time": "Nieprawidłowy format czasu!",
             "weekday_order_number": "Wybierz 1 lub więcej dni!",
             "week_order_number": "Wybierz 1 lub więcej tydzieńi!",
-            "period": "Okres musi być liczbą od 1 do 365.",
+            "period": "Okres musi być liczbą od 1 do 1000.",
             "first_week": "Pierwszy tydzień musi być liczbą między 1 a 52.",
             "date": "Nieprawidłowy format daty!"
         },
@@ -77,7 +77,7 @@
                     "collection_days": "Dni wywozu",
                     "first_month": "Miesiąc pierwszego wywozu",
                     "last_month": "Miesiąc ostatniego wywozu",
-                    "period": "Wywóz co n dni/tygodni: (1-365)",
+                    "period": "Wywóz co n dni/tygodni: (1-1000)",
                     "first_week": "Tydzień pierwszego wywozu: (1-52)",
                     "first_date": "Pierwsza data",
                     "weekday_order_number": "Kolejność dni tygodnia w miesiącu (np. pierwsza środa miesiąca)",
@@ -96,7 +96,7 @@
             "time": "Nieprawidłowy format czasu!",
             "weekday_order_number": "Wybierz 1 lub więcej dni!",
             "week_order_number": "Wybierz 1 lub więcej tydzieńi!",
-            "period": "Okres musi być liczbą od 1 do 365.",
+            "period": "Okres musi być liczbą od 1 do 1000.",
             "first_week": "Pierwszy tydzień musi być liczbą między 1 a 52.",
             "date": "Nieprawidłowy format daty!"
         }

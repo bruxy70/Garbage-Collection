@@ -25,7 +25,7 @@
                     "collection_days": "Tühjendamise nädalapäevad",
                     "first_month": "Esimene prügiveo kuu",
                     "last_month": "Viimane prügiveo kuu",
-                    "period": "Prügivedu iga n päeva/nädala tagant: (1-365)",
+                    "period": "Prügivedu iga n päeva/nädala tagant: (1-1000)",
                     "first_week": "Esimese prügiveo nädal (1-52)",
                     "first_date": "Esimese prügiveo kuupäev",
                     "weekday_order_number": "Kuu nädalapäevade järjekord (nt kuu esimene kolmapäev)",
@@ -44,7 +44,7 @@
             "time": "Vigane kellaaja formaat!",
             "weekday_order_number": "Valige üks või rohkem päevi",
             "week_order_number": "Valige üks või rohkem nädalat",
-            "period": "Välp peab olema number 1 ja 365 vahel",
+            "period": "Välp peab olema number 1 ja 1000 vahel",
             "first_week": "Esimene nädal peab olema number 1 ja 52 vahel",
             "date": "Vigane kuupäeva formaat!!"
         },
@@ -77,7 +77,7 @@
                     "collection_days": "Tühjendamise nädalapäevad",
                     "first_month": "Esimene prügiveo kuu",
                     "last_month": "Viimane prügiveo kuu",
-                    "period": "Prügivedu iga n päeva/nädala tagant: (1-365)",
+                    "period": "Prügivedu iga n päeva/nädala tagant: (1-1000)",
                     "first_week": "Esimese prügiveo nädal (1-52)",
                     "first_date": "Esimese prügiveo kuupäev",
                     "weekday_order_number": "Kuu nädalapäevade järjekord (nt kuu esimene kolmapäev)",
@@ -96,7 +96,7 @@
             "time": "Vigane kellaaja formaat!",
             "weekday_order_number": "Valige üks või rohkem päevi",
             "week_order_number": "Valige üks või rohkem nädalat",
-            "period": "Välp peab olema number 1 ja 365 vahel",
+            "period": "Välp peab olema number 1 ja 1000 vahel",
             "first_week": "Esimene nädal peab olema number 1 ja 52 vahel",
             "date": "Vigane kuupäeva formaat!!"
         }

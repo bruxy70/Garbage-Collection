@@ -25,7 +25,7 @@
                     "collection_days": "Afhentningsdage",
                     "first_month": "Første afhentningsmåned",
                     "last_month": "Sidste afhentningsmåned",
-                    "period": "Afhentning sker hver n uger/dage: (1-365)",
+                    "period": "Afhentning sker hver n uger/dage: (1-1000)",
                     "first_week": "Første afhentningsuge (1-52)",
                     "first_date": "Første dato",
                     "weekday_order_number": "Specifikke ugedage i måneden (fx første onsdag i måneden)",
@@ -44,7 +44,7 @@
             "time": "Ugyldigt tids format!",
             "weekday_order_number": "Vælg en eller flere dage",
             "week_order_number": "Vælg en eller flere uger",
-            "period": "Afhentningsperioden skal være et tal mellem 1 og 365",
+            "period": "Afhentningsperioden skal være et tal mellem 1 og 1000",
             "first_week": "Første afhentningsuge skal være et tal mellem 1 and 52",
             "date": "Ugyldigt dato format!"
         },
@@ -77,7 +77,7 @@
                     "collection_days": "Afhentningsdage",
                     "first_month": "Første afhentningsmåned",
                     "last_month": "Sidste afhentningsmåned",
-                    "period": "Afhentning sker hver n uger/dage: (1-365)",
+                    "period": "Afhentning sker hver n uger/dage: (1-1000)",
                     "first_week": "Første afhentningsuge (1-52)",
                     "first_date": "Første dato",
                     "weekday_order_number": "Specifikke ugedage i måneden (fx første onsdag i måneden)",
@@ -96,7 +96,7 @@
             "time": "Ugyldigt tids format!",
             "weekday_order_number": "Vælg en eller flere dage",
             "week_order_number": "Vælg en eller flere uger",
-            "period": "Afhentningsperioden skal være et tal mellem 1 og 365",
+            "period": "Afhentningsperioden skal være et tal mellem 1 og 1000",
             "first_week": "Første afhentningsuge skal være et tal mellem 1 and 52",
             "date": "Ugyldigt dato format!"
         }
