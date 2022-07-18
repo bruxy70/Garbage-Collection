@@ -25,7 +25,7 @@
                     "collection_days": "Collection days",
                     "first_month": "First collection month",
                     "last_month": "Last collection month",
-                    "period": "Collection every n weeks/days: (1-365)",
+                    "period": "Collection every n weeks/days: (1-1000)",
                     "first_week": "First collection week (1-52)",
                     "first_date": "First date",
                     "weekday_order_number": "Order of the weekday in the month (e.g. first Wednesday of the month)",
@@ -44,7 +44,7 @@
             "time": "Invalid time format!",
             "weekday_order_number": "Select 1 or more days",
             "week_order_number": "Select 1 or more weeks",
-            "period": "Period must be a number between 1 and 365",
+            "period": "Period must be a number between 1 and 1000",
             "first_week": "First week must be a number between 1 and 52",
             "date": "Invalid date format!"
         },
@@ -77,7 +77,7 @@
                     "collection_days": "Collection days",
                     "first_month": "First collection month",
                     "last_month": "Last collection month",
-                    "period": "Collection every n weeks/days: (1-365)",
+                    "period": "Collection every n weeks/days: (1-1000)",
                     "first_week": "First collection week (1-52)",
                     "first_date": "First date",
                     "weekday_order_number": "Order of the weekday in the month (e.g. first Wednesday of the month)",
@@ -96,7 +96,7 @@
             "time": "Invalid time format!",
             "weekday_order_number": "Select 1 or more days",
             "week_order_number": "Select 1 or more weeks",
-            "period": "Period must be a number between 1 and 365",
+            "period": "Period must be a number between 1 and 1000",
             "first_week": "First week must be a number between 1 and 52",
             "date": "Invalid date format!"
         }

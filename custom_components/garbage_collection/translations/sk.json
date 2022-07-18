@@ -48,7 +48,7 @@
                 "data": {
                     "first_month": "Prvý mesiac zvozu",
                     "last_month": "Posledný mesiac zvozu",
-                    "period": "Perióda (zvoz každých n týždňov/dní): (1-365)",
+                    "period": "Perióda (zvoz každých n týždňov/dní): (1-1000)",
                     "first_week": "Prvý týždeň zvozu (1-52)",
                     "first_date": "Prvý dátum",
                     "weekday_order_number_1": "Prvý deň v mesiaci",
@@ -81,7 +81,7 @@
             "time": "Zlý formát času!",
             "weekday_order_number": "Vyber jeden nebo viacej dní!",
             "week_order_number": "Vyber jeden nebo viacej týždňov!",
-            "period": "Perióda musí být číslo medzi 1 a 365",
+            "period": "Perióda musí být číslo medzi 1 a 1000",
             "first_week": "Prvý týždeň musí být číslo medzi 1 a 52",
             "date": "Zlý formát dátumu!"
         },
@@ -138,7 +138,7 @@
                 "data": {
                     "first_month": "Prvý mesiac zvozu",
                     "last_month": "Posledný mesiac zvozu",
-                    "period": "Perióda (zvoz každých n týždňov/dní): (1-365)",
+                    "period": "Perióda (zvoz každých n týždňov/dní): (1-1000)",
                     "first_week": "Prvý týždeň zvozu (1-52)",
                     "first_date": "Prvý dátum",
                     "weekday_order_number_1": "Prvý deň v mesiaci",
@@ -170,7 +170,7 @@
             "time": "Zlý formát času!",
             "weekday_order_number": "Vyber jeden nebo viacej dní!",
             "week_order_number": "Vyber jeden nebo viacej týždňov!",
-            "period": "Perióda musí být číslo medzi 1 a 365",
+            "period": "Perióda musí být číslo medzi 1 a 1000",
             "first_week": "Prvý týždeň musí být číslo medzi 1 a 52",
             "date": "Zlý formát dátumu!"
         }

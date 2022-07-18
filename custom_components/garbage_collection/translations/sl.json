@@ -49,7 +49,7 @@
                 "data": {
                     "first_month": "Prvi mesec odvoza",
                     "last_month": "Zadnji mesec odvoza",
-                    "period": "Odvoz vsakih v tednov/dni: (1-365)",
+                    "period": "Odvoz vsakih v tednov/dni: (1-1000)",
                     "first_week": "Prvi teden odvoza (1-52)",
                     "first_date": "Prvi datum",
                     "weekday_order_number_1": "1. dan tedna v mesecu",
@@ -81,7 +81,7 @@
             "time": "Neveljaven format časa!",
             "weekday_order_number": "Izberite enega ali več dni",
             "week_order_number": "Izberite enega ali več tednov",
-            "period": "Interval mora biti številka med 1 in 365",
+            "period": "Interval mora biti številka med 1 in 1000",
             "first_week": "Prvi teden mora biti številka med 1 in 52",
             "date": "Neveljaven format datuma!"
         },
@@ -138,7 +138,7 @@
                 "data": {
                     "first_month": "Prvi mesec odvoza",
                     "last_month": "Zdnji mesec odvoza",
-                    "period": "Odvoz vsakih n tednov/dni: (1-365)",
+                    "period": "Odvoz vsakih n tednov/dni: (1-1000)",
                     "first_week": "Prvi teden odvoza (1-52)",
                     "first_date": "Prvi datum",
                     "weekday_order_number_1": "1. dan tedna v mesecu",
@@ -170,7 +170,7 @@
             "time": "Neveljaven format časa!",
             "weekday_order_number": "Izberite enega ali več dni",
             "week_order_number": "Izberite enega ali več tednov",
-            "period": "Interval mora biti številka med 1 in 365",
+            "period": "Interval mora biti številka med 1 in 1000",
             "first_week": "Prvi teden mora biti številka med 1 in 52",
             "date": "Neveljaven format datuma!"
         }

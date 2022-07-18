@@ -26,7 +26,7 @@
                     "collection_days": "Jours de collecte",
                     "first_month": "Premier mois de la collecte",
                     "last_month": "Dernier mois de la collecte",
-                    "period": "Collecte toutes les n semaines/jours: (1-365)",
+                    "period": "Collecte toutes les n semaines/jours: (1-1000)",
                     "first_week": "Première semaine de la collecte (1-52)",
                     "first_date": "Première date",
                     "weekday_order_number": "Ordre du jour de la semaine dans le mois (par exemple, premier mercredi du mois)",
@@ -45,7 +45,7 @@
             "time": "Format d'heure invalide !",
             "weekday_order_number": "Choisir un ou plusieurs jours",
             "week_order_number": "Choisir une ou plusieurs semaines",
-            "period": "La semaine doit être un nombre entre 1 et 365",
+            "period": "La semaine doit être un nombre entre 1 et 1000",
             "first_week": "La première semaine doit être un nombre entre 1 et 52",
             "date": "Format de date invalide !"
         },
@@ -79,7 +79,7 @@
                     "collection_days": "Jours de collecte",
                     "first_month": "Premier mois de la collecte",
                     "last_month": "Dernier mois de la collecte",
-                    "period": "Collecte toutes les n semaines/jours: (1-365)",
+                    "period": "Collecte toutes les n semaines/jours: (1-1000)",
                     "first_week": "Première semaine de la collecte (1-52)",
                     "first_date": "Première date",
                     "weekday_order_number": "Ordre du jour de la semaine dans le mois (par exemple, premier mercredi du mois)",
@@ -98,7 +98,7 @@
             "time": "Format d'heure invalide !",
             "weekday_order_number": "Choisir un ou plusieurs jours",
             "week_order_number": "Choisir une ou plusieurs semaines",
-            "period": "La semaine doit être un nombre entre 1 et 365",
+            "period": "La semaine doit être un nombre entre 1 et 1000",
             "first_week": "La première semaine doit être un nombre entre 1 et 52",
             "date": "Format de date invalide !"
         }
