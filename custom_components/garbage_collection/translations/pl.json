@@ -3,7 +3,7 @@
         "step": {
             "user": {
                 "title": "Wywóz Śmieci - Częstotliwość wywozu (1/2)",
-                "description": "Wprowadź nazwę dla sensora i zkonfiguruj jego parametry. Więcej informacji na stronie https://github.com/bruxy70/Garbage-Collection",
+                "description": "Wprowadź nazwę dla sensora i skonfiguruj jego parametry. Więcej informacji na stronie https://github.com/bruxy70/Garbage-Collection",
                 "data": {
                     "name": "Przyjazna nazwa",
                     "hidden": "Ukryj w kalendarzu",
@@ -11,7 +11,7 @@
                     "manual_update": "Stan czujnika aktualizowany ręcznie poprzez wywołanie usługi",
                     "icon_normal": "Ikona (mdi:trash-can) - opcjonalnie",
                     "icon_tomorrow": "Ikona wywozu jutro (mdi:delete-restore) - opcjonalnie",
-                    "icon_today": "Ikona wywozu dzisiaj (mdi:delete-circle)- opcjonalnie",
+                    "icon_today": "Ikona wywozu dzisiaj (mdi:delete-circle) - opcjonalnie",
                     "expire_after": "Wygasają po (HH:MM) - opcjonalnie",
                     "verbose_state": "Tryb gadatliwy (tekst, zamiast liczb)"
                 }
@@ -63,7 +63,7 @@
                     "manual_update": "Stan czujnika aktualizowany ręcznie poprzez wywołanie usługi",
                     "icon_normal": "Ikona (mdi:trash-can) - opcjonalnie",
                     "icon_tomorrow": "Ikona wywozu jutro (mdi:delete-restore) - opcjonalnie",
-                    "icon_today": "Ikona wywozu dzisiaj (mdi:delete-circle)- opcjonalnie",
+                    "icon_today": "Ikona wywozu dzisiaj (mdi:delete-circle) - opcjonalnie",
                     "expire_after": "Wygasają po (HH:MM) - opcjonalnie",
                     "verbose_state": "Tryb gadatliwy (tekst, zamiast liczb)"
                 }
