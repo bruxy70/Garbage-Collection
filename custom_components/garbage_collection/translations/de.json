@@ -1,0 +1,104 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "title": "Müllabfuhr - Häufigkeit der Abholung (1/2)",
+                "description": "Geben Sie den Sensornamen ein und konfigurieren Sie die Sensorparameter. Mehr Informationen unter https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "name": "Friendly Name",
+                    "hidden": "Im Kalender ausblenden",
+                    "frequency": "Häufigkeit",
+                    "manual_update": "Manual update - sensor state updated manually by a service (Blueprint)",
+                    "icon_normal": "Icon (mdi:trash-can) - optional",
+                    "icon_tomorrow": "Icon collection tomorrow (mdi:delete-restore) - optional",
+                    "icon_today": "Icon collection today (mdi:delete-circle) - optional",
+                    "expire_after": "Expire after (HH:MM) - optional",
+                    "verbose_state": "Verbose state (text, instead of number)"
+                }
+            },
+            "detail": {
+                "title": "Müllabfuhr - Zusätzliche Parameter (2/2)",
+                "description": "Mehr Details hier: https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "date": "Datum (mm/dd)",
+                    "entities": "List of entities (comma separated)",
+                    "collection_days": "Collection days",
+                    "first_month": "First collection month",
+                    "last_month": "Last collection month",
+                    "period": "Collection every n weeks/days: (1-1000)",
+                    "first_week": "First collection week (1-52)",
+                    "first_date": "First date",
+                    "weekday_order_number": "Order of the weekday in the month (e.g. first Wednesday of the month)",
+                    "force_week_order_numbers": "Order of week in a month instead of order of weekday (e.g. on Wednesday of the first week)",
+                    "verbose_format": "Verbose format (using `date` and `days` variables (in squary brackets))",
+                    "date_format": "Date format (see http://strftime.org/)"
+                }
+            }
+        },
+        "error": {
+            "value": "Invalid value. Please check your input!",
+            "icon": "Icons should be specified in the form 'prefix:name'.",
+            "days": "Select 1 or more days!",
+            "entities": "Entity does not exist!",
+            "month_day": "Invalid date format!",
+            "time": "Invalid time format!",
+            "weekday_order_number": "Select 1 or more days",
+            "week_order_number": "Select 1 or more weeks",
+            "period": "Period must be a number between 1 and 1000",
+            "first_week": "First week must be a number between 1 and 52",
+            "date": "Invalid date format!"
+        },
+        "abort": {
+            "single_instance_allowed": "Only a single configuration of Garbage Collection is allowed."
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "title": "Garbage Collection - Collection frequency (1/2)",
+                "description": "Change sensor parameters. More info on https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "hidden": "Hide in calendar",
+                    "frequency": "Frequency",
+                    "manual_update": "Manual update - sensor state updated manually by a service (Blueprint)",
+                    "icon_normal": "Icon (mdi:trash-can) - optional",
+                    "icon_tomorrow": "Icon collection tomorrow (mdi:delete-restore) - optional",
+                    "icon_today": "Icon collection today (mdi:delete-circle) - optional",
+                    "expire_after": "Expire after (HH:MM) - optional",
+                    "verbose_state": "Verbose state (text, instead of number)"
+                }
+            },
+            "detail": {
+                "title": "Garbage Collection - Additional parameters (2/2)",
+                "description": "More details here: https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "date": "Date (mm/dd)",
+                    "entities": "List of entities (comma separated)",
+                    "collection_days": "Collection days",
+                    "first_month": "First collection month",
+                    "last_month": "Last collection month",
+                    "period": "Collection every n weeks/days: (1-1000)",
+                    "first_week": "First collection week (1-52)",
+                    "first_date": "First date",
+                    "weekday_order_number": "Order of the weekday in the month (e.g. first Wednesday of the month)",
+                    "force_week_order_numbers": "Order of week in a month instead of order of weekday (e.g. on Wednesday of the first week)",
+                    "verbose_format": "Verbose format (using `date` and `days` variables (in squary brackets))",
+                    "date_format": "Date format (see http://strftime.org/)"
+                }
+            }
+        },
+        "error": {
+            "value": "Invalid value. Please check your input!",
+            "icon": "Icons should be specified in the form 'prefix:name'.",
+            "days": "Select 1 or more days!",
+            "entities": "Entity does not exist!",
+            "month_day": "Invalid date format!",
+            "time": "Invalid time format!",
+            "weekday_order_number": "Select 1 or more days",
+            "week_order_number": "Select 1 or more weeks",
+            "period": "Period must be a number between 1 and 1000",
+            "first_week": "First week must be a number between 1 and 52",
+            "date": "Invalid date format!"
+        }
+    }
+}
