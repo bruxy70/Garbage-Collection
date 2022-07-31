@@ -21,17 +21,17 @@
                 "description": "Mehr Details hier: https://github.com/bruxy70/Garbage-Collection",
                 "data": {
                     "date": "Datum (mm/dd)",
-                    "entities": "List of entities (comma separated)",
-                    "collection_days": "Collection days",
-                    "first_month": "First collection month",
-                    "last_month": "Last collection month",
-                    "period": "Collection every n weeks/days: (1-1000)",
-                    "first_week": "First collection week (1-52)",
-                    "first_date": "First date",
-                    "weekday_order_number": "Order of the weekday in the month (e.g. first Wednesday of the month)",
-                    "force_week_order_numbers": "Order of week in a month instead of order of weekday (e.g. on Wednesday of the first week)",
-                    "verbose_format": "Verbose format (using `date` and `days` variables (in squary brackets))",
-                    "date_format": "Date format (see http://strftime.org/)"
+                    "entities": "Liste der Entitäten (durch Komma getrennt)",
+                    "collection_days": "Tage der Abholung",
+                    "first_month": "Erster Abholungsmonat",
+                    "last_month": "Letzter Abholungsmonat",
+                    "period": "Abholung alle n Wochen/Tage: (1-1000)",
+                    "first_week": "Erste Abholungswoche (1-52)",
+                    "first_date": "Erstes Datum",
+                    "weekday_order_number": "Reihenfolge der Wochentage im Monat (z. B. erster Mittwoch im Monat)",
+                    "force_week_order_numbers": "Wochenreihenfolge eines Monats statt Wochentagsreihenfolge (z. B. am Mittwoch der ersten Woche)",
+                    "verbose_format": "Ausführliches Format (unter Verwendung der Variablen `Datum` und `Tage` (in eckigen Klammern))",
+                    "date_format": "Datumsformat (siehe http://strftime.org/)"
                 }
             }
         },
