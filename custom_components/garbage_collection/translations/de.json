@@ -1,0 +1,104 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "title": "Müllabfuhr - Häufigkeit der Abholung (1/2)",
+                "description": "Geben Sie den Sensornamen ein und konfigurieren Sie die Sensorparameter. Mehr Informationen unter https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "name": "Friendly Name",
+                    "hidden": "Im Kalender ausblenden",
+                    "frequency": "Häufigkeit",
+                    "manual_update": "Manuelle Aktualisierung - Sensorstatus wird manuell durch einen Dienst aktualisiert (Vorlage)",
+                    "icon_normal": "Icon (mdi:trash-can) - optional",
+                    "icon_tomorrow": "Icon Abfuhr morgen (mdi:delete-restore) - optional",
+                    "icon_today": "Icon Abfuhr heute (mdi:delete-circle) - optional",
+                    "expire_after": "Ablauf nach (HH:MM) - optional",
+                    "verbose_state": "Ausführlicher Status (Text, statt Zahl)"
+                }
+            },
+            "detail": {
+                "title": "Müllabfuhr - Zusätzliche Parameter (2/2)",
+                "description": "Mehr Details hier: https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "date": "Datum (mm/dd)",
+                    "entities": "Liste der Entitäten (durch Komma getrennt)",
+                    "collection_days": "Tage der Abholung",
+                    "first_month": "Erster Abholungsmonat",
+                    "last_month": "Letzter Abholungsmonat",
+                    "period": "Abholung alle n Wochen/Tage: (1-1000)",
+                    "first_week": "Erste Abholungswoche (1-52)",
+                    "first_date": "Erstes Datum",
+                    "weekday_order_number": "Reihenfolge der Wochentage im Monat (z. B. erster Mittwoch im Monat)",
+                    "force_week_order_numbers": "Reihenfolge der Woche im Monat statt Wochentagsreihenfolge (z. B. am Mittwoch der ersten Woche)",
+                    "verbose_format": "Ausführliches Format (unter Verwendung der Variablen 'Datum' und 'Tage' (in eckigen Klammern))",
+                    "date_format": "Datumsformat (siehe http://strftime.org/)"
+                }
+            }
+        },
+        "error": {
+            "value": "Ungültiger Wert. Bitte überprüfen Sie Ihre Eingabe!",
+            "icon": "Icons sollten in der Form 'Präfix:Name' angegeben werden.",
+            "days": "Wählen Sie 1 oder mehrere Tage aus!",
+            "entities": "Entität existiert nicht!",
+            "month_day": "Ungültiges Datumsformat!",
+            "time": "Ungültiges Zeitformat!",
+            "weekday_order_number": "Wählen Sie 1 oder mehrere Tage aus",
+            "week_order_number": "Wählen Sie 1 oder mehrere Wochen aus",
+            "period": "Zeitraum muss eine Zahl zwischen 1 und 1000 sein",
+            "first_week": "Erste Woche muss eine Zahl zwischen 1 und 52 sein",
+            "date": "Ungültiges Datumsformat!"
+        },
+        "abort": {
+            "single_instance_allowed": "Es ist nur eine einzige Konfiguration von Garbage Collection erlaubt."
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "title": "Müllabfuhr - Häufigkeit der Abholung (1/2)",
+                "description": "Sensorparameter ändern. Mehr Informationen unter https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "hidden": "Im Kalender ausblenden",
+                    "frequency": "Häufigkeit",
+                    "manual_update": "Manuelle Aktualisierung - Sensorstatus wird manuell durch einen Dienst aktualisiert (Vorlage)",
+                    "icon_normal": "Icon (mdi:trash-can) - optional",
+                    "icon_tomorrow": "Icon Abfuhr morgen (mdi:delete-restore) - optional",
+                    "icon_today": "Icon Abfuhr heute (mdi:delete-circle) - optional",
+                    "expire_after": "Ablauf nach (HH:MM) - optional",
+                    "verbose_state": "Ausführlicher Status (Text, statt Zahl)"
+                }
+            },
+            "detail": {
+                "title": "Müllabfuhr - Zusätzliche Parameter (2/2)",
+                "description": "Mehr Details hier: https://github.com/bruxy70/Garbage-Collection",
+                "data": {
+                    "date": "Datum (mm/dd)",
+                    "entities": "Liste der Entitäten (durch Komma getrennt)",
+                    "collection_days": "Tage der Abholung",
+                    "first_month": "Erster Abholungsmonat",
+                    "last_month": "Letzter Abholungsmonat",
+                    "period": "Abholung alle n Wochen/Tage: (1-1000)",
+                    "first_week": "Erste Abholungswoche (1-52)",
+                    "first_date": "Erstes Datum",
+                    "weekday_order_number": "Reihenfolge der Wochentage im Monat (z. B. erster Mittwoch im Monat)",
+                    "force_week_order_numbers": "Reihenfolge der Woche im Monat statt Wochentagsreihenfolge (z. B. am Mittwoch der ersten Woche)",
+                    "verbose_format": "Ausführliches Format (unter Verwendung der Variablen 'Datum' und 'Tage' (in eckigen Klammern))",
+                    "date_format": "Datumsformat (siehe http://strftime.org/)"
+                }
+            }
+        },
+        "error": {
+            "value": "Ungültiger Wert. Bitte überprüfen Sie Ihre Eingabe!",
+            "icon": "Icons sollten in der Form 'Präfix:Name' angegeben werden.",
+            "days": "Wählen Sie 1 oder mehrere Tage aus!",
+            "entities": "Entität existiert nicht!",
+            "month_day": "Ungültiges Datumsformat!",
+            "time": "Ungültiges Zeitformat!",
+            "weekday_order_number": "Wählen Sie 1 oder mehrere Tage aus",
+            "week_order_number": "Wählen Sie 1 oder mehrere Wochen aus",
+            "period": "Zeitraum muss eine Zahl zwischen 1 und 1000 sein",
+            "first_week": "Erste Woche muss eine Zahl zwischen 1 und 52 sein",
+            "date": "Ungültiges Datumsformat!"
+        }
+    }
+}
