@@ -30,26 +30,26 @@
                     "first_date": "Erstes Datum",
                     "weekday_order_number": "Reihenfolge der Wochentage im Monat (z. B. erster Mittwoch im Monat)",
                     "force_week_order_numbers": "Wochenreihenfolge eines Monats statt Wochentagsreihenfolge (z. B. am Mittwoch der ersten Woche)",
-                    "verbose_format": "Ausführliches Format (unter Verwendung der Variablen `Datum` und `Tage` (in eckigen Klammern))",
+                    "verbose_format": "Ausführliches Format (unter Verwendung der Variablen 'Datum' und 'Tage' (in eckigen Klammern))",
                     "date_format": "Datumsformat (siehe http://strftime.org/)"
                 }
             }
         },
         "error": {
-            "value": "Invalid value. Please check your input!",
-            "icon": "Icons should be specified in the form 'prefix:name'.",
-            "days": "Select 1 or more days!",
-            "entities": "Entity does not exist!",
-            "month_day": "Invalid date format!",
-            "time": "Invalid time format!",
-            "weekday_order_number": "Select 1 or more days",
-            "week_order_number": "Select 1 or more weeks",
-            "period": "Period must be a number between 1 and 1000",
-            "first_week": "First week must be a number between 1 and 52",
-            "date": "Invalid date format!"
+            "value": "Ungültiger Wert. Bitte überprüfen Sie Ihre Eingabe!",
+            "icon": "Icons sollten in der Form 'Präfix:Name' angegeben werden.",
+            "days": "Wählen Sie 1 oder mehr Tage aus!",
+            "entities": "Entität existiert nicht!",
+            "month_day": "Ungültiges Datumsformat!",
+            "time": "Ungültiges Zeitformat!",
+            "weekday_order_number": "Wählen Sie 1 oder mehrere Tage aus",
+            "week_order_number": "Wählen Sie 1 oder mehrere Wochen aus",
+            "period": "Zeitraum muss eine Zahl zwischen 1 und 1000 sein",
+            "first_week": "Erste Woche muss eine Zahl zwischen 1 und 52 sein",
+            "date": "Ungültiges Datumsformat!"
         },
         "abort": {
-            "single_instance_allowed": "Only a single configuration of Garbage Collection is allowed."
+            "single_instance_allowed": "Es ist nur eine einzige Konfiguration von Garbage Collection erlaubt."
         }
     },
     "options": {
