@@ -13,7 +13,7 @@
                     "icon_tomorrow": "Icon Abfuhr morgen (mdi:delete-restore) - optional",
                     "icon_today": "Icon Abfuhr heute (mdi:delete-circle) - optional",
                     "expire_after": "Ablauf nach (HH:MM) - optional",
-                    "verbose_state": "Ausführlicher Status (Text, statt Nummer)"
+                    "verbose_state": "Ausführlicher Status (Text, statt Zahl)"
                 }
             },
             "detail": {
@@ -55,17 +55,17 @@
     "options": {
         "step": {
             "init": {
-                "title": "Garbage Collection - Collection frequency (1/2)",
-                "description": "Change sensor parameters. More info on https://github.com/bruxy70/Garbage-Collection",
+                "title": "Müllabfuhr - Häufigkeit der Abholung (1/2)",
+                "description": "Sensorparameter ändern. Mehr Informationen unter https://github.com/bruxy70/Garbage-Collection",
                 "data": {
-                    "hidden": "Hide in calendar",
-                    "frequency": "Frequency",
-                    "manual_update": "Manual update - sensor state updated manually by a service (Blueprint)",
+                    "hidden": "Im Kalender ausblenden",
+                    "frequency": "Häufigkeit",
+                    "manual_update": "Manuelle Aktualisierung - Sensorstatus wird manuell durch einen Dienst aktualisiert (Vorlage)",
                     "icon_normal": "Icon (mdi:trash-can) - optional",
-                    "icon_tomorrow": "Icon collection tomorrow (mdi:delete-restore) - optional",
-                    "icon_today": "Icon collection today (mdi:delete-circle) - optional",
-                    "expire_after": "Expire after (HH:MM) - optional",
-                    "verbose_state": "Verbose state (text, instead of number)"
+                    "icon_tomorrow": "Icon Abfuhr morgen (mdi:delete-restore) - optional",
+                    "icon_today": "Icon Abfuhr heute (mdi:delete-circle) - optional",
+                    "expire_after": "Ablauf nach (HH:MM) - optional",
+                    "verbose_state": "Ausführlicher Status (Text, statt Zahl)"
                 }
             },
             "detail": {
