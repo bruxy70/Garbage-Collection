@@ -38,7 +38,7 @@
         "error": {
             "value": "Ungültiger Wert. Bitte überprüfen Sie Ihre Eingabe!",
             "icon": "Icons sollten in der Form 'Präfix:Name' angegeben werden.",
-            "days": "Wählen Sie 1 oder mehr Tage aus!",
+            "days": "Wählen Sie 1 oder mehrere Tage aus!",
             "entities": "Entität existiert nicht!",
             "month_day": "Ungültiges Datumsformat!",
             "time": "Ungültiges Zeitformat!",
@@ -88,17 +88,17 @@
             }
         },
         "error": {
-            "value": "Invalid value. Please check your input!",
-            "icon": "Icons should be specified in the form 'prefix:name'.",
-            "days": "Select 1 or more days!",
-            "entities": "Entity does not exist!",
-            "month_day": "Invalid date format!",
-            "time": "Invalid time format!",
-            "weekday_order_number": "Select 1 or more days",
-            "week_order_number": "Select 1 or more weeks",
-            "period": "Period must be a number between 1 and 1000",
-            "first_week": "First week must be a number between 1 and 52",
-            "date": "Invalid date format!"
+            "value": "Ungültiger Wert. Bitte überprüfen Sie Ihre Eingabe!",
+            "icon": "Icons sollten in der Form 'Präfix:Name' angegeben werden.",
+            "days": "Wählen Sie 1 oder mehrere Tage aus!",
+            "entities": "Entität existiert nicht!",
+            "month_day": "Ungültiges Datumsformat!",
+            "time": "Ungültiges Zeitformat!",
+            "weekday_order_number": "Wählen Sie 1 oder mehrere Tage aus",
+            "week_order_number": "Wählen Sie 1 oder mehrere Wochen aus",
+            "period": "Zeitraum muss eine Zahl zwischen 1 und 1000 sein",
+            "first_week": "Erste Woche muss eine Zahl zwischen 1 und 52 sein",
+            "date": "Ungültiges Datumsformat!"
         }
     }
 }
