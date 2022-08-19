@@ -39,18 +39,20 @@ async def async_setup_entry(
         if config_entry.title is not None
         else config_entry.data.get(CONF_NAME)
     )
-    if frequency in ["weekly", "even-weeks", "odd-weeks", "every-n-weeks"]:
-        async_add_devices([WeeklyCollection(config_entry)], True)
-    elif frequency == "every-n-days":
-        async_add_devices([DailyCollection(config_entry)], True)
-    elif frequency == "monthly":
-        async_add_devices([MonthlyCollection(config_entry)], True)
-    elif frequency == "annual":
-        async_add_devices([AnnualCollection(config_entry)], True)
-    elif frequency == "group":
-        async_add_devices([GroupCollection(config_entry)], True)
-    elif frequency == "blank":
-        async_add_devices([BlankCollection(config_entry)], True)
+    _frequency_function = {
+        "weekly": WeeklyCollection,
+        "even-weeks": WeeklyCollection,
+        "odd-weeks": WeeklyCollection,
+        "every-n-weeks": WeeklyCollection,
+        "every-n-days": DailyCollection,
+        "monthly": MonthlyCollection,
+        "annual": AnnualCollection,
+        "group": GroupCollection,
+        "blank": BlankCollection,
+    }
+    if frequency in _frequency_function:
+        add_devices = _frequency_function[frequency]
+        async_add_devices([add_devices(config_entry)], True)
     else:
         _LOGGER.error("(%s) Unknown frequency %s", name, frequency)
         raise ValueError
