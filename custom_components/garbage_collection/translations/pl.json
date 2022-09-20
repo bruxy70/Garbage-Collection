@@ -43,7 +43,7 @@
             "month_day": "Nieprawidłowy format daty!",
             "time": "Nieprawidłowy format czasu!",
             "weekday_order_number": "Wybierz 1 lub więcej dni!",
-            "week_order_number": "Wybierz 1 lub więcej tydzieńi!",
+            "week_order_number": "Wybierz 1 lub więcej tygodni!",
             "period": "Okres musi być liczbą od 1 do 1000.",
             "first_week": "Pierwszy tydzień musi być liczbą między 1 a 52.",
             "date": "Nieprawidłowy format daty!"
@@ -82,7 +82,7 @@
                     "first_date": "Pierwsza data",
                     "weekday_order_number": "Kolejność dni tygodnia w miesiącu (np. pierwsza środa miesiąca)",
                     "force_week_order_numbers": "Kolejność tygodni w miesiącu zamiast kolejności dni tygodnia (np. w środę pierwszego tygodnia)",
-                    "verbose_format": "Format trybu gadatliwego (używa zmiennych `date` oraz `days` (w nawiasach klamerkowych))",
+                    "verbose_format": "Format trybu gadatliwego (używa zmiennych `date` oraz `days` (w nawiasach klamrowych))",
                     "date_format": "Format daty (patrz http://strftime.org/)"
                 }
             }
@@ -95,7 +95,7 @@
             "month_day": "Nieprawidłowy format daty!",
             "time": "Nieprawidłowy format czasu!",
             "weekday_order_number": "Wybierz 1 lub więcej dni!",
-            "week_order_number": "Wybierz 1 lub więcej tydzieńi!",
+            "week_order_number": "Wybierz 1 lub więcej tygodni!",
             "period": "Okres musi być liczbą od 1 do 1000.",
             "first_week": "Pierwszy tydzień musi być liczbą między 1 a 52.",
             "date": "Nieprawidłowy format daty!"
