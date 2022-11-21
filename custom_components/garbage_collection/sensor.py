@@ -143,11 +143,21 @@ class GarbageCollection(RestoreEntity):
         if (state := await self.async_get_last_state()) is not None:
             self._last_updated = None  # Unblock update - after options change
             self._attr_state = state.state
-            self._days = state.attributes[const.ATTR_DAYS]
-            next_date = helpers.parse_datetime(state.attributes[const.ATTR_NEXT_DATE])
+            self._days = (
+                state.attributes[const.ATTR_DAYS]
+                if const.ATTR_DAYS in state.attributes
+                else None
+            )
+            next_date = (
+                helpers.parse_datetime(state.attributes[const.ATTR_NEXT_DATE])
+                if const.ATTR_NEXT_DATE in state.attributes
+                else None
+            )
             self._next_date = None if next_date is None else next_date.date()
-            self.last_collection = helpers.parse_datetime(
-                state.attributes[const.ATTR_LAST_COLLECTION]
+            self.last_collection = (
+                helpers.parse_datetime(state.attributes[const.ATTR_LAST_COLLECTION])
+                if const.ATTR_LAST_COLLECTION in state.attributes
+                else None
             )
 
         # Create device
