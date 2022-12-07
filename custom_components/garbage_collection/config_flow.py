@@ -9,7 +9,7 @@ from typing import Any, Dict, cast
 
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
-from homeassistant.const import ATTR_HIDDEN, CONF_ENTITIES, CONF_NAME, WEEKDAYS
+from homeassistant.const import ATTR_HIDDEN, CONF_ENTITIES, CONF_NAME
 from homeassistant.core import callback
 from homeassistant.helpers import selector
 from homeassistant.helpers.schema_config_entry_flow import (
@@ -63,15 +63,18 @@ def optional(
     return vol.Optional(key, description={"suggested_value": suggested_value})
 
 
-async def general_options_schema(
+async def general_config_schema(
     handler: SchemaConfigFlowHandler | SchemaOptionsFlowHandler,
 ) -> vol.Schema:
-    """Generate options schema."""
+    """Generate config schema."""
     return vol.Schema(
         {
+            optional(CONF_NAME, handler.options): selector.TextSelector(),
             required(
                 const.CONF_FREQUENCY, handler.options, const.DEFAULT_FREQUENCY
-            ): vol.In(const.FREQUENCY_OPTIONS),
+            ): selector.SelectSelector(
+                selector.SelectSelectorConfig(options=const.FREQUENCY_OPTIONS)
+            ),
             optional(
                 const.CONF_ICON_NORMAL, handler.options, const.DEFAULT_ICON_NORMAL
             ): selector.IconSelector(),
@@ -91,16 +94,17 @@ async def general_options_schema(
     )
 
 
-async def general_config_schema(
+async def general_options_schema(
     handler: SchemaConfigFlowHandler | SchemaOptionsFlowHandler,
 ) -> vol.Schema:
-    """Generate config schema."""
+    """Generate options schema."""
     return vol.Schema(
         {
-            optional(CONF_NAME, handler.options): selector.TextSelector(),
             required(
                 const.CONF_FREQUENCY, handler.options, const.DEFAULT_FREQUENCY
-            ): vol.In(const.FREQUENCY_OPTIONS),
+            ): selector.SelectSelector(
+                selector.SelectSelectorConfig(options=const.FREQUENCY_OPTIONS)
+            ),
             optional(
                 const.CONF_ICON_NORMAL, handler.options, const.DEFAULT_ICON_NORMAL
             ): selector.IconSelector(),
@@ -127,7 +131,9 @@ async def detail_config_schema(
     options_schema: Dict[vol.Optional | vol.Required, Any] = {}
     if handler.options[const.CONF_FREQUENCY] in const.ANNUAL_FREQUENCY:
         # "annual"
-        options_schema[required(const.CONF_DATE, handler.options)] = str
+        options_schema[
+            required(const.CONF_DATE, handler.options)
+        ] = selector.TextSelector()
     elif handler.options[const.CONF_FREQUENCY] in const.GROUP_FREQUENCY:
         # "group"
         options_schema[
@@ -140,33 +146,52 @@ async def detail_config_schema(
     elif handler.options[const.CONF_FREQUENCY] not in const.BLANK_FREQUENCY:
         # everything else except "blank" and every-n-days
         if handler.options[const.CONF_FREQUENCY] not in const.DAILY_FREQUENCY:
-            weekdays_dict = {weekday: weekday for weekday in WEEKDAYS}
             options_schema[
                 required(const.CONF_COLLECTION_DAYS, handler.options)
-            ] = cv.multi_select(weekdays_dict)
+            ] = selector.SelectSelector(
+                selector.SelectSelectorConfig(
+                    options=const.WEEKDAY_OPTIONS,
+                    multiple=True,
+                    mode=selector.SelectSelectorMode.LIST,
+                )
+            )
         # everything else except "blank"
         options_schema[
             optional(const.CONF_FIRST_MONTH, handler.options, const.DEFAULT_FIRST_MONTH)
-        ] = vol.In(const.MONTH_OPTIONS)
+        ] = selector.SelectSelector(
+            selector.SelectSelectorConfig(options=const.MONTH_OPTIONS)
+        )
         options_schema[
             optional(const.CONF_LAST_MONTH, handler.options, const.DEFAULT_LAST_MONTH)
-        ] = vol.In(const.MONTH_OPTIONS)
+        ] = selector.SelectSelector(
+            selector.SelectSelectorConfig(options=const.MONTH_OPTIONS)
+        )
         if handler.options[const.CONF_FREQUENCY] in const.MONTHLY_FREQUENCY:
             # "monthly"
             options_schema[
                 optional(const.CONF_WEEKDAY_ORDER_NUMBER, handler.options)
-            ] = vol.All(
-                cv.multi_select(
-                    {"1": "1st", "2": "2nd", "3": "3rd", "4": "4th", "5": "5th"}
-                ),
+            ] = selector.SelectSelector(
+                selector.SelectSelectorConfig(
+                    options=const.ORDER_OPTIONS,
+                    multiple=True,
+                    mode=selector.SelectSelectorMode.LIST,
+                )
             )
             options_schema[
                 optional(const.CONF_FORCE_WEEK_NUMBERS, handler.options)
-            ] = bool
+            ] = selector.BooleanSelector()
         if handler.options[const.CONF_FREQUENCY] in const.WEEKLY_DAILY_MONTHLY:
             # "every-n-weeks", "every-n-days", "monthly"
-            options_schema[required(const.CONF_PERIOD, handler.options)] = vol.All(
-                vol.Coerce(int), vol.Range(min=1, max=1000)
+            uom = {"every-n-weeks": "weeks", "every-n-days": "days", "monthly": "month"}
+            options_schema[
+                required(const.CONF_PERIOD, handler.options)
+            ] = selector.NumberSelector(
+                selector.NumberSelectorConfig(
+                    min=1,
+                    max=1000,
+                    mode=selector.NumberSelectorMode.BOX,
+                    unit_of_measurement=uom[handler.options[const.CONF_FREQUENCY]],
+                )
             )
         if handler.options[const.CONF_FREQUENCY] in const.WEEKLY_FREQUENCY_X:
             # every-n-weeks
@@ -174,7 +199,14 @@ async def detail_config_schema(
                 required(
                     const.CONF_FIRST_WEEK, handler.options, const.DEFAULT_FIRST_WEEK
                 )
-            ] = vol.All(vol.Coerce(int), vol.Range(min=1, max=52))
+            ] = selector.NumberSelector(
+                selector.NumberSelectorConfig(
+                    min=1,
+                    max=52,
+                    mode=selector.NumberSelectorMode.BOX,
+                    unit_of_measurement="weeks",
+                )
+            )
         if handler.options[const.CONF_FREQUENCY] in const.DAILY_FREQUENCY:
             # every-n-days
             options_schema[
@@ -186,10 +218,10 @@ async def detail_config_schema(
             required(
                 const.CONF_VERBOSE_FORMAT, handler.options, const.DEFAULT_VERBOSE_FORMAT
             )
-        ] = cv.string
+        ] = selector.TextSelector()
         options_schema[
             required(const.CONF_DATE_FORMAT, handler.options, const.DEFAULT_DATE_FORMAT)
-        ] = cv.string
+        ] = selector.TextSelector()
     return vol.Schema(options_schema)
 
 
