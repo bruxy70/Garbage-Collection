@@ -7,7 +7,6 @@ import logging
 from collections.abc import Mapping
 from typing import Any, Dict, cast
 
-import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 from homeassistant.const import ATTR_HIDDEN, CONF_ENTITIES, CONF_NAME
 from homeassistant.core import callback
