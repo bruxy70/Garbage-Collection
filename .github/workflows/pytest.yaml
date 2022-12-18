@@ -27,4 +27,4 @@ jobs:
           pip install -r requirements_tests.txt
       - name: Test with pytest
         run: |
-          pytest test
+          pytest test --asyncio-mode=auto
