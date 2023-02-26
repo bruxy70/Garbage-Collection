@@ -1,17 +1,17 @@
 {
   "domain": "garbage_collection",
   "name": "Garbage Collection",
-  "version": "3.21",
-  "documentation": "https://github.com/bruxy70/Garbage-Collection/",
-  "issue_tracker": "https://github.com/bruxy70/Garbage-Collection/issues",
-  "iot_class": "calculated",
-  "integration_type": "helper",
-  "dependencies": [],
-  "config_flow": true,
   "codeowners": [
     "@bruxy70"
   ],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/bruxy70/Garbage-Collection/",
+  "integration_type": "helper",
+  "iot_class": "calculated",
+  "issue_tracker": "https://github.com/bruxy70/Garbage-Collection/issues",
   "requirements": [
     "python-dateutil>=2.8.2"
-  ]
+  ],
+  "version": "3.21"
 }
