@@ -1,4 +1,5 @@
 """Test migration from older version."""
+import pytest
 from homeassistant import config_entries
 from homeassistant.core import HomeAssistant
 from pytest_homeassistant_custom_component.common import MockConfigEntry
@@ -6,6 +7,7 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 from custom_components.garbage_collection import const
 
 
+@pytest.mark.asyncio
 async def test_version1(hass: HomeAssistant) -> None:
     """Migration from version 1."""
 
@@ -22,7 +24,7 @@ async def test_version1(hass: HomeAssistant) -> None:
     assert config_entry.data == {}
     assert config_entry.state == config_entries.ConfigEntryState.LOADED
 
-
+@pytest.mark.asyncio
 async def test_version4(hass: HomeAssistant) -> None:
     """Migration from version 4."""
 
@@ -47,7 +49,7 @@ async def test_version4(hass: HomeAssistant) -> None:
     assert config_entry.data == {}
     assert config_entry.state == config_entries.ConfigEntryState.LOADED
 
-
+@pytest.mark.asyncio
 async def test_version5(hass: HomeAssistant) -> None:
     """Migration from version 5."""
 

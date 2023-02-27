@@ -1,4 +1,5 @@
 """Test Options flow."""
+import pytest
 from homeassistant import data_entry_flow, setup
 from homeassistant.core import HomeAssistant
 from pytest_homeassistant_custom_component.common import MockConfigEntry
@@ -6,6 +7,7 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 from custom_components.garbage_collection import const
 
 
+@pytest.mark.asyncio
 async def test_annual_options_flow(hass: HomeAssistant) -> None:
     """Test we get the form."""
     await setup.async_setup_component(hass, "persistent_notification", {})
@@ -63,7 +65,7 @@ async def test_annual_options_flow(hass: HomeAssistant) -> None:
     assert result["type"] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
     assert result["data"] == {"frequency": "annual", "date": "04/01"}
 
-
+@pytest.mark.asyncio
 async def test_blank_options_flow(hass: HomeAssistant) -> None:
     """Test we get the form."""
     await setup.async_setup_component(hass, "persistent_notification", {})
@@ -131,7 +133,7 @@ async def test_blank_options_flow(hass: HomeAssistant) -> None:
         "verbose_format": "on {date}, in {days} days",
     }
 
-
+@pytest.mark.asyncio
 async def test_every_n_days_options_flow(hass: HomeAssistant) -> None:
     """Test we get the form."""
     await setup.async_setup_component(hass, "persistent_notification", {})
@@ -194,7 +196,7 @@ async def test_every_n_days_options_flow(hass: HomeAssistant) -> None:
         "first_date": "2020-01-01",
     }
 
-
+@pytest.mark.asyncio
 async def test_every_n_weeks_options_flow(hass: HomeAssistant) -> None:
     """Test we get the form."""
     await setup.async_setup_component(hass, "persistent_notification", {})
@@ -259,7 +261,7 @@ async def test_every_n_weeks_options_flow(hass: HomeAssistant) -> None:
         "collection_days": ["wed"],
     }
 
-
+@pytest.mark.asyncio
 async def test_monthly_options_flow(hass: HomeAssistant) -> None:
     """Test we get the form."""
     await setup.async_setup_component(hass, "persistent_notification", {})
@@ -324,7 +326,7 @@ async def test_monthly_options_flow(hass: HomeAssistant) -> None:
         "period": 1,
     }
 
-
+@pytest.mark.asyncio
 async def test_weekly_options_flow(hass: HomeAssistant) -> None:
     """Test we get the form."""
     config_entry: MockConfigEntry = MockConfigEntry(

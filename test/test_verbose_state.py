@@ -1,4 +1,5 @@
 """Test verbose state."""
+import pytest
 from homeassistant.core import HomeAssistant
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
@@ -6,7 +7,7 @@ from custom_components.garbage_collection import const
 
 ERROR_STATE = "State should be {}, not {}."
 
-
+@pytest.mark.asyncio
 async def test_verbose_state(hass: HomeAssistant) -> None:
     """Start in June."""
 

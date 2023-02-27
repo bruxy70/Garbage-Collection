@@ -3,6 +3,7 @@ import logging
 from datetime import date, datetime
 from unittest.mock import patch
 
+import pytest
 from homeassistant import config_entries
 from homeassistant.core import HomeAssistant
 from pytest_homeassistant_custom_component.common import MockConfigEntry
@@ -14,7 +15,7 @@ ERROR_DAYS = "Next collection should be in {} days, not {}."
 ERROR_STATE = "State should be {}, not {}."
 ERROR_DATE = "Next collection date should be {}, not {}."
 
-
+@pytest.mark.asyncio
 async def test_annual(hass: HomeAssistant) -> None:
     """Annual collection."""
 
@@ -43,7 +44,7 @@ async def test_annual(hass: HomeAssistant) -> None:
         "May 1, 2020", next_date.date()
     )
 
-
+@pytest.mark.asyncio
 async def test_even_weeks(hass: HomeAssistant) -> None:
     """Even Weeks collection."""
 
@@ -69,7 +70,7 @@ async def test_even_weeks(hass: HomeAssistant) -> None:
         "April 1, 2020", next_date.date()
     )
 
-
+@pytest.mark.asyncio
 async def test_every_n_days(hass: HomeAssistant) -> None:
     """Every n days collection."""
 
@@ -99,7 +100,7 @@ async def test_every_n_days(hass: HomeAssistant) -> None:
         "April 8, 2020", next_date.date()
     )
 
-
+@pytest.mark.asyncio
 async def test_every_n_weeks(hass: HomeAssistant) -> None:
     """Every n weeks collection."""
 
@@ -130,7 +131,7 @@ async def test_every_n_weeks(hass: HomeAssistant) -> None:
         "April 8, 2020", next_date.date()
     )
 
-
+@pytest.mark.asyncio
 async def test_monthly(hass: HomeAssistant) -> None:
     """Monthly collection."""
 
@@ -160,7 +161,7 @@ async def test_monthly(hass: HomeAssistant) -> None:
         "April 10, 2020", next_date.date()
     )
 
-
+@pytest.mark.asyncio
 async def test_monthly2(hass: HomeAssistant) -> None:
     """Monday in 2nd week, not 2nd monday of month."""
 
@@ -191,7 +192,7 @@ async def test_monthly2(hass: HomeAssistant) -> None:
         "April 6, 2020", next_date.date()
     )
 
-
+@pytest.mark.asyncio
 async def test_odd_weeks(hass: HomeAssistant) -> None:
     """Odd Weeks collection."""
 
@@ -217,7 +218,7 @@ async def test_odd_weeks(hass: HomeAssistant) -> None:
         "April 7, 2020", next_date.date()
     )
 
-
+@pytest.mark.asyncio
 async def test_weekly(hass: HomeAssistant) -> None:
     """Weekly collection."""
 
@@ -243,7 +244,7 @@ async def test_weekly(hass: HomeAssistant) -> None:
         "April 6, 2020", next_date.date()
     )
 
-
+@pytest.mark.asyncio
 async def test_group(hass: HomeAssistant) -> None:
     """Group collection."""
 
@@ -302,7 +303,7 @@ async def test_group(hass: HomeAssistant) -> None:
         "April 2, 2020", next_date.date()
     )
 
-
+@pytest.mark.asyncio
 async def test_invalid(hass: HomeAssistant) -> None:
     """Invalid frequency."""
 

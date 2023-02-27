@@ -3,6 +3,7 @@ import logging
 from datetime import date, datetime
 from unittest.mock import patch
 
+import pytest
 from homeassistant.core import HomeAssistant
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
@@ -14,7 +15,7 @@ ERROR_DAYS = "Next collection should be in {} days, not {}."
 ERROR_STATE = "State should be {}, not {}."
 ERROR_DATE = "Next collection date should be {}, not {}."
 
-
+@pytest.mark.asyncio
 async def test_manual_update(hass: HomeAssistant) -> None:
     """Blank collection."""
 
@@ -181,7 +182,7 @@ async def test_manual_update(hass: HomeAssistant) -> None:
             mock_error_log.call_count == 4
         ), "Updating state with wrong entity_id should trigger an error."
 
-
+@pytest.mark.asyncio
 async def test_collect_garbage(hass: HomeAssistant) -> None:
     """Test Calling Collect Garbage Service."""
 

@@ -1,7 +1,7 @@
 """Test all frequencies (except blank)."""
-
 from datetime import datetime
 
+import pytest
 from homeassistant import config_entries
 from homeassistant.core import HomeAssistant
 from pytest_homeassistant_custom_component.common import MockConfigEntry
@@ -9,6 +9,7 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 from custom_components.garbage_collection import const
 
 
+@pytest.mark.asyncio
 async def test_calendar(hass: HomeAssistant) -> None:
     """Weekly collection."""
 

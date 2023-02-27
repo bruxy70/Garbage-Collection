@@ -1,6 +1,7 @@
 """Test start and end date."""
 from datetime import date, datetime
 
+import pytest
 from homeassistant.core import HomeAssistant
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
@@ -11,7 +12,7 @@ ERROR_DAYS = "Next collection should be in {} days, not {}."
 ERROR_STATE = "State should be {}, not {}."
 ERROR_DATE = "Next collection date should be {}, not {}."
 
-
+@pytest.mark.asyncio
 async def test_june_july(hass: HomeAssistant) -> None:
     """Start in June."""
 
@@ -41,7 +42,7 @@ async def test_june_july(hass: HomeAssistant) -> None:
         "June 1, 2020", next_date.date()
     )
 
-
+@pytest.mark.asyncio
 async def test_dec_jan(hass: HomeAssistant) -> None:
     """Start in Dec."""
 

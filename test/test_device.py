@@ -1,4 +1,5 @@
 """Test all frequencies (except blank)."""
+import pytest
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers import entity_registry as er
@@ -7,6 +8,7 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 from custom_components.garbage_collection import const
 
 
+@pytest.mark.asyncio
 async def test_device(hass: HomeAssistant) -> None:
     """Test device registry."""
 
@@ -27,7 +29,7 @@ async def test_device(hass: HomeAssistant) -> None:
     assert device.manufacturer == "bruxy70"
     assert device.name == "weekly"
 
-
+@pytest.mark.asyncio
 async def test_device_info(hass: HomeAssistant) -> None:
     """Test device info."""
 
@@ -47,7 +49,7 @@ async def test_device_info(hass: HomeAssistant) -> None:
         "manufacturer": "bruxy70",
     }
 
-
+@pytest.mark.asyncio
 async def test_entity(hass: HomeAssistant) -> None:
     """Test entity registry."""
 
