@@ -65,6 +65,7 @@ async def test_annual_options_flow(hass: HomeAssistant) -> None:
     assert result["type"] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
     assert result["data"] == {"frequency": "annual", "date": "04/01"}
 
+
 @pytest.mark.asyncio
 async def test_blank_options_flow(hass: HomeAssistant) -> None:
     """Test we get the form."""
@@ -133,6 +134,7 @@ async def test_blank_options_flow(hass: HomeAssistant) -> None:
         "verbose_format": "on {date}, in {days} days",
     }
 
+
 @pytest.mark.asyncio
 async def test_every_n_days_options_flow(hass: HomeAssistant) -> None:
     """Test we get the form."""
@@ -195,6 +197,7 @@ async def test_every_n_days_options_flow(hass: HomeAssistant) -> None:
         "period": 14,
         "first_date": "2020-01-01",
     }
+
 
 @pytest.mark.asyncio
 async def test_every_n_weeks_options_flow(hass: HomeAssistant) -> None:
@@ -261,6 +264,7 @@ async def test_every_n_weeks_options_flow(hass: HomeAssistant) -> None:
         "collection_days": ["wed"],
     }
 
+
 @pytest.mark.asyncio
 async def test_monthly_options_flow(hass: HomeAssistant) -> None:
     """Test we get the form."""
@@ -325,6 +329,7 @@ async def test_monthly_options_flow(hass: HomeAssistant) -> None:
         "weekday_order_number": ["1"],
         "period": 1,
     }
+
 
 @pytest.mark.asyncio
 async def test_weekly_options_flow(hass: HomeAssistant) -> None:

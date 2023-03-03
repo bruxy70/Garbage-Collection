@@ -24,6 +24,7 @@ async def test_version1(hass: HomeAssistant) -> None:
     assert config_entry.data == {}
     assert config_entry.state == config_entries.ConfigEntryState.LOADED
 
+
 @pytest.mark.asyncio
 async def test_version4(hass: HomeAssistant) -> None:
     """Migration from version 4."""
@@ -48,6 +49,7 @@ async def test_version4(hass: HomeAssistant) -> None:
     }
     assert config_entry.data == {}
     assert config_entry.state == config_entries.ConfigEntryState.LOADED
+
 
 @pytest.mark.asyncio
 async def test_version5(hass: HomeAssistant) -> None:

@@ -15,6 +15,7 @@ ERROR_DAYS = "Next collection should be in {} days, not {}."
 ERROR_STATE = "State should be {}, not {}."
 ERROR_DATE = "Next collection date should be {}, not {}."
 
+
 @pytest.mark.asyncio
 async def test_manual_update(hass: HomeAssistant) -> None:
     """Blank collection."""
@@ -181,6 +182,7 @@ async def test_manual_update(hass: HomeAssistant) -> None:
         assert (
             mock_error_log.call_count == 4
         ), "Updating state with wrong entity_id should trigger an error."
+
 
 @pytest.mark.asyncio
 async def test_collect_garbage(hass: HomeAssistant) -> None:

@@ -12,6 +12,7 @@ ERROR_DAYS = "Next collection should be in {} days, not {}."
 ERROR_STATE = "State should be {}, not {}."
 ERROR_DATE = "Next collection date should be {}, not {}."
 
+
 @pytest.mark.asyncio
 async def test_june_july(hass: HomeAssistant) -> None:
     """Start in June."""
@@ -41,6 +42,7 @@ async def test_june_july(hass: HomeAssistant) -> None:
     assert next_date.date() == date(2020, 6, 1), ERROR_DATE.format(
         "June 1, 2020", next_date.date()
     )
+
 
 @pytest.mark.asyncio
 async def test_dec_jan(hass: HomeAssistant) -> None:
