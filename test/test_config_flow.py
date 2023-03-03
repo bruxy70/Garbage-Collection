@@ -62,6 +62,7 @@ async def test_annual_config_flow(hass: HomeAssistant) -> None:
     assert len(mock_setup.mock_calls) == 1
     assert len(mock_setup_entry.mock_calls) == 1
 
+
 @pytest.mark.asyncio
 async def test_blank_config_flow(hass: HomeAssistant) -> None:
     """Test we get the form."""
@@ -122,6 +123,7 @@ async def test_blank_config_flow(hass: HomeAssistant) -> None:
     assert len(mock_setup.mock_calls) == 1
     assert len(mock_setup_entry.mock_calls) == 1
 
+
 @pytest.mark.asyncio
 async def test_every_n_days_config_flow(hass: HomeAssistant) -> None:
     """Test we get the form."""
@@ -180,6 +182,7 @@ async def test_every_n_days_config_flow(hass: HomeAssistant) -> None:
     }
     assert len(mock_setup.mock_calls) == 1
     assert len(mock_setup_entry.mock_calls) == 1
+
 
 @pytest.mark.asyncio
 async def test_every_n_weeks_config_flow(hass: HomeAssistant) -> None:
@@ -242,6 +245,7 @@ async def test_every_n_weeks_config_flow(hass: HomeAssistant) -> None:
     assert len(mock_setup.mock_calls) == 1
     assert len(mock_setup_entry.mock_calls) == 1
 
+
 @pytest.mark.asyncio
 async def test_monthly_config_flow(hass: HomeAssistant) -> None:
     """Test we get the form."""
@@ -302,6 +306,7 @@ async def test_monthly_config_flow(hass: HomeAssistant) -> None:
     }
     assert len(mock_setup.mock_calls) == 1
     assert len(mock_setup_entry.mock_calls) == 1
+
 
 @pytest.mark.asyncio
 async def test_weekly_config_flow(hass: HomeAssistant) -> None:

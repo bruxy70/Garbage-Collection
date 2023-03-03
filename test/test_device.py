@@ -29,6 +29,7 @@ async def test_device(hass: HomeAssistant) -> None:
     assert device.manufacturer == "bruxy70"
     assert device.name == "weekly"
 
+
 @pytest.mark.asyncio
 async def test_device_info(hass: HomeAssistant) -> None:
     """Test device info."""
@@ -48,6 +49,7 @@ async def test_device_info(hass: HomeAssistant) -> None:
         "name": None,
         "manufacturer": "bruxy70",
     }
+
 
 @pytest.mark.asyncio
 async def test_entity(hass: HomeAssistant) -> None:
