@@ -2,7 +2,7 @@
 name: "Question"
 description: I have a question, or need a help with the configuration of the integration or Lovelace
 labels: "question"
-assignees: "bruxy70"
+assignees: "cjramseyer"
 body:
   - type: checkboxes
     attributes:
